@@ -1,0 +1,129 @@
+<?xml version="1.0" ?>
+<cherrytree>
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1619168455.86" unique_id="1">
+		<rich_text></rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="04_22_first" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168455.86" ts_lastsave="1619595361.65" unique_id="2">
+			<rich_text scale="h2">Discussion points</rich_text>
+			<rich_text>
+
+More details on the tasks in the thesis description:
+
+• Task 0
+   ◇ ~2 weeks
+   ◇ Also hello world enclave in SGX dev environment, with i/o and r/w from disk
+
+• Task 3
+   ◇ depends on the results from 1 and 2
+
+• Task 4
+   ◇ Running the algorithm multiple times on the same input, can weaken the randomness/privacy guarantees of the privacy-preserving part. we need to avoid that. Kari and Esfandiari have ideas.
+
+• Task 5
+   ◇ we'll see how much time we have for this
+
+• Task ...
+   ◇ Where “real research” resp new things would happen
+   ◇ This could very well be the hardest task if we get here
+
+• Task n
+   ◇ 1 month for writing
+
+
+</rich_text>
+			<rich_text scale="h2">Organization</rich_text>
+			<rich_text>
+
+• Weekly thursday meetings 3PM
+   ◇ maybe daily updates to mattermost?
+
+
+</rich_text>
+			<rich_text scale="h2">Next steps</rich_text>
+			<rich_text>
+
+• Read about the ML algorithm
+• Fully read the papers
+• Hello world enclave as described above.
+• prepare eth paperwork for thesis start
+</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="04_29" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619595361.65" ts_lastsave="1619704705.59" unique_id="3">
+			<rich_text scale="h2">What I did the past week</rich_text>
+			<rich_text>
+
+• Reading “Intel SGX explained” paper (120 pages, from MIT)
+   ◇ gone through background on computer architecture (CPU and memory)
+
+• Read Theos thesis (except synthetic data generation)
+   ◇ understand the idea of  Decision Trees and Gradient Boosting, Differential privacy
+      ▪ how exactly the formulas are derived, not clear
+
+• Working/backup private github repo
+   ◇ because no permission for ethz gitlab
+   ◇ add and share link with you in mettermost?
+      ▪ would need github names
+   ◇ Time log excel
+   ◇ </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">write in mattermost whenever I finished a task</rich_text>
+			<rich_text>
+      ▪ then you can add something if you want
+
+• Read side channel papers
+   ◇ finished 2/6 (oldest ones)
+
+• can run enclaves in my OS
+   ◇ not yet created my own enclave
+   ◇ but checked out and ran the SampleEnclave that installation comes with
+
+----------------------------- still TODO ----------------------------------
+
+• read the GBDT paper
+• run theos algorithm to understand it better
+   ◇ compare code and thesis
+   ◇ understand what's new compared to the GBDT paper
+• need to read the rest of the side-channel papers
+• play around with the hello world enclave
+
+-------------------------------------------------------------------------------
+
+</rich_text>
+			<rich_text scale="h2">Questions</rich_text>
+			<rich_text>   </rich_text>
+			<rich_text background="#ffffffff0000" foreground="#1a1a1a1a1a1a">TODO</rich_text>
+			<rich_text>
+
+• Looking at the the python code.... when generating a cpp algorithm
+   ◇ math, ML and other libraries?
+      ▪ just use whatever cpp libraries I can find?
+      ▪ or what's the strategy here
+      ▪ other recommandations from you guys, maybe you've already done it?
+
+==========================================
+
+</rich_text>
+			<rich_text scale="h2">Discussion Points</rich_text>
+			<rich_text>
+
+• Order for reading papers:
+   ◇ </rich_text>
+			<rich_text link="webs https://docs.google.com/document/d/1ht7h--tp0ivNH9Z8S1tpoRoyzN_Q7DVU3sHaoRdDktw/edit?ts=608aacbd#">https://docs.google.com/document/d/1ht7h--tp0ivNH9Z8S1tpoRoyzN_Q7DVU3sHaoRdDktw/edit?ts=608aacbd#</rich_text>
+			<rich_text>
+   ◇ skip rollback paper for now
+
+• Take notes when reading!
+
+• ML: do Tutorials
+
+• Theo could explain his code
+
+• Can officially start mid May
+
+</rich_text>
+			<rich_text scale="h3">Next steps</rich_text>
+			<rich_text>
+
+• Read read read and make notes
+• submit thesis proposal</rich_text>
+		</node>
+	</node>
+</cherrytree>
