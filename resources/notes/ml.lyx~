@@ -73,7 +73,16 @@
 \index_command default
 \paperfontsize default
 \spacing single
-\use_hyperref false
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks true
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
 \papersize a4paper
 \use_geometry false
 \use_package amsmath 1
@@ -228,7 +237,7 @@ status open
 
 
 \backslash
-vspace{-2cm}
+vspace{-2.3cm}
 \end_layout
 
 \end_inset
@@ -236,20 +245,41 @@ vspace{-2cm}
 
 \end_layout
 
-\begin_layout Subsection
+\begin_layout Section
 Decision Trees
 \end_layout
 
 \begin_layout Paragraph
-Source
+Sources
 \end_layout
 
-\begin_layout Itemize
-https://gdcoder.com/decision-tree-regressor-explained-in-depth/
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset CommandInset href
+LatexCommand href
+target "https://gdcoder.com/decision-tree-regressor-explained-in-depth/"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Itemize
-https://www.kdnuggets.com/2020/01/decision-tree-algorithm-explained.html
+\begin_layout Standard
+(
+\begin_inset CommandInset href
+LatexCommand href
+target "https://www.kdnuggets.com/2020/01/decision-tree-algorithm-explained.html"
+
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Paragraph
@@ -357,6 +387,10 @@ If there is a high non-linearity & complex relationship between dependent
 It's kinda robust to outliers
 \end_layout
 
+\begin_layout Itemize
+easy to explain
+\end_layout
+
 \begin_layout Paragraph
 Cons
 \end_layout
@@ -425,7 +459,7 @@ ensemble learning
 \end_layout
 
 \begin_layout Subsubsection
-DT vs (Logit) Regression Trick
+DT vs (Logit) Regression
 \end_layout
 
 \begin_layout Itemize
@@ -635,6 +669,84 @@ can be Entropy, Information Gain, Gini Index, Gain Ratio, Reduction in Variance,
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Gradient Boosted DT
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "https://towardsdatascience.com/machine-learning-part-18-boosting-algorithms-gradient-boosting-in-python-ef5ae6965be4"
+target "https://towardsdatascience.com/machine-learning-part-18-boosting-algorithms-gradient-boosting-in-python-ef5ae6965be4"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similar to AdaBoost in the sense that both use ensemble of trees to predict
+ a target label.
+ However, unlike AdaBoost, GB trees have depth larger than 1.
+ In practice, you’ll typically see GB being used with a maximum number of
+ leaves of between 8 and 32.
+\end_layout
+
+\begin_layout Enumerate
+When tackling regression problems, we start with a leaf that is the 
+\bar under
+average value
+\bar default
+ of the variable we want to predict.
+\end_layout
+
+\begin_layout Enumerate
+Calculate residuals (actual value vs predicted)
+\end_layout
+
+\begin_layout Enumerate
+Build a tree with the goal of predicting the residuals.
+ Take average if there's more residuals than leafs.
+\end_layout
+
+\begin_layout Enumerate
+Pass samples through the tree
+\end_layout
+
+\begin_layout Enumerate
+Prediction = average/init price + learning rate * residual predicted by
+ the tree
+\end_layout
+
+\begin_layout Enumerate
+Compute new residuals by subtracting actual values from predicted value
+ in 5.
+\end_layout
+
+\begin_layout Enumerate
+repeat 3 - 5 until the hyperparam 
+\family typewriter
+numtrees
+\family default
+ is reached
+\end_layout
+
+\begin_layout Standard
+to prevent overfitting, we introduce a hyperparameter called 
+\bar under
+learning rate
+\bar default
+.
+ When we make a prediction, each residual is multiplied by the learning
+ rate.
+ This forces us to use more decision trees, each taking a 
+\bar under
+small step
+\bar default
+ towards the final solution.
 \end_layout
 
 \begin_layout Subsection
