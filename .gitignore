@@ -9,3 +9,5 @@ ppml-insurance/results/synthetic/
 **/*.py[cod]
 **/.ipynb_checkpoints/
 
+# lyx autosave file
+**/*.lyx[#]
