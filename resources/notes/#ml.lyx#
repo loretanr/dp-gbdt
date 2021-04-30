@@ -245,6 +245,10 @@ Source
 \end_layout
 
 \begin_layout Itemize
+https://gdcoder.com/decision-tree-regressor-explained-in-depth/
+\end_layout
+
+\begin_layout Itemize
 https://www.kdnuggets.com/2020/01/decision-tree-algorithm-explained.html
 \end_layout
 
@@ -254,6 +258,129 @@ Keywords
 
 \begin_layout Itemize
 supervised learning
+\end_layout
+
+\begin_layout Itemize
+DT can be used for classification and regression (our use case)
+\end_layout
+
+\begin_layout Itemize
+Decision trees are predictive models that use a set of binary rules to calculate
+ a target value.
+\end_layout
+
+\begin_layout Paragraph
+How it works
+\end_layout
+
+\begin_layout Standard
+A decision tree is arriving at an estimate by asking a series of questions
+ to the data, each question narrowing our possible values until the model
+ get confident enough to make a single prediction.
+ The order of the questions (True/false form) as well as their content are
+ being determined by the model.
+\end_layout
+
+\begin_layout Paragraph
+Splitting
+\end_layout
+
+\begin_layout Standard
+deciding the splits affects the trees accuracy.
+\end_layout
+
+\begin_layout Itemize
+regression DTs normally use mean squared error (MSE) to decide to split
+ a node in two or more sub-nodes.
+\end_layout
+
+\begin_layout Itemize
+we need to pick an attribute and a value to split on.
+ 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ try out all combinations.
+ Find the best one by taking the weighted average of the two new nodes.
+\end_layout
+
+\begin_layout Itemize
+Do that until you hit 
+\family typewriter
+max_depth
+\family default
+ or when you're left with only 1 element.
+\end_layout
+
+\begin_layout Itemize
+It is never necessary to do more than one split at a level because you can
+ just split them again.
+\end_layout
+
+\begin_layout Itemize
+Instead of using the average (MSE) we could also use the median or...
+ or even run a linear regression model (
+\begin_inset Quotes eld
+\end_inset
+
+fitting a line into points
+\begin_inset Quotes erd
+\end_inset
+
+) to make a decision.
+\end_layout
+
+\begin_layout Paragraph
+Prediction
+\end_layout
+
+\begin_layout Itemize
+Traverse tree until you end up in leaf.
+ The prediction is the average of the value of the 
+\bar under
+dependent variable
+\bar default
+ in that leaf node.
+\end_layout
+
+\begin_layout Paragraph
+When to use
+\end_layout
+
+\begin_layout Itemize
+DTs are prone to overfitting.
+ That's why they are rarely used and instead other tree based models are
+ preferred like Random Forest and XGBoost.
+\end_layout
+
+\begin_layout Itemize
+Mostly for classifiction.
+ For regression only if the range of the target variable is inside the range
+ of values seen in training.
+\end_layout
+
+\begin_layout Subsubsection
+DT vs (Logit) Regression
+\end_layout
+
+\begin_layout Itemize
+Example: chance of buying a BWM with regard to salary and age.
+\end_layout
+
+\begin_layout Standard
+Converting variables into buckets (DT) might make the analysis simpler,
+ but it makes the model lose some predictive power because of its indifference
+ for data points lying in the same bucket.
+\end_layout
+
+\begin_layout Standard
+Logistic regression is a statistical model that uses a logistic function
+ to model a binary dependent variable.
+ Sth like this:
+\end_layout
+
+\begin_layout Standard
+
 \end_layout
 
 \begin_layout Subsubsection
@@ -388,7 +515,60 @@ https://www.youtube.com/watch?v=MOcTGM_UteM
 \end_layout
 
 \begin_layout Itemize
+Differential Privacy protects the data 
+\bar under
+before
+\bar default
+ it enters the model.
+\end_layout
 
+\begin_layout Itemize
+Example fitness data, and Eve wants to find out whether Bob is in the data.
+\end_layout
+
+\begin_layout Standard
+We want to create a function 
+\begin_inset Formula $f$
+\end_inset
+
+ that wenn applied to the whole dataset, should be as similar as possible
+ to the function applied to the dataset w/o Bob: 
+\begin_inset Formula $f(D_{n})=f(D_{n-1})$
+\end_inset
+
+.
+ In terms of probability distributions: 
+\begin_inset Formula $\frac{P(f(D_{n}))}{P(f(D_{n-1}))}=e^{\epsilon}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\epsilon=0$
+\end_inset
+
+ would achieve peak privacy.
+ 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ Add random noise to the data.
+ 
+\begin_inset Formula $f(D_{n})$
+\end_inset
+
+=D
+\begin_inset Formula $_{n}+\text{noise}$
+\end_inset
+
+.
+ But the more noise you add the less accurate the data becomes.
+ That means 
+\begin_inset Formula $\epsilon=0$
+\end_inset
+
+ would add so much noise that the data would not be useful anymore.
+ Therefore it works best for last datasets, as good privacy in small ones
+ makes them kinda unusable.
 \end_layout
 
 \begin_layout Section

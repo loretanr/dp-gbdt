@@ -245,6 +245,10 @@ Source
 \end_layout
 
 \begin_layout Itemize
+https://gdcoder.com/decision-tree-regressor-explained-in-depth/
+\end_layout
+
+\begin_layout Itemize
 https://www.kdnuggets.com/2020/01/decision-tree-algorithm-explained.html
 \end_layout
 
@@ -256,60 +260,196 @@ Keywords
 supervised learning
 \end_layout
 
-\begin_layout Subsubsection
-ID3
+\begin_layout Itemize
+DT can be used for classification and regression (our use case)
 \end_layout
 
-\begin_layout Standard
-The ID3 algorithm builds decision trees using a top-down greedy search approach
- through the space of possible branches with no backtracking.
-\end_layout
-
-\begin_layout Enumerate
-It begins with the original set S as the root node.
-\end_layout
-
-\begin_layout Enumerate
-On each iteration of the algorithm, it iterates through the very unused
- attribute of the set S and calculates 
-\series bold
-Entropy(H)
-\series default
- and 
-\series bold
-Information gain(IG)
-\series default
- of this attribute.
-\end_layout
-
-\begin_layout Enumerate
-It then selects the attribute which has the smallest Entropy Largest Information
- gain.
-\end_layout
-
-\begin_layout Enumerate
-The set S is then split by the selected attribute to produce a subset of
- the data.
-\end_layout
-
-\begin_layout Enumerate
-The algorithm continues to recur on each subset, considering only attributes
- never selected before.
+\begin_layout Itemize
+Decision trees are predictive models that use a set of binary rules to calculate
+ a target value.
 \end_layout
 
 \begin_layout Paragraph
-Attribute Selection Method
+How it works
 \end_layout
 
 \begin_layout Standard
-\begin_inset space ~
+A decision tree is arriving at an estimate by asking a series of questions
+ to the data, each question narrowing our possible values until the model
+ get confident enough to make a single prediction.
+ The order of the questions (True/false form) as well as their content are
+ being determined by the model.
+\end_layout
+
+\begin_layout Paragraph
+Splitting
+\end_layout
+
+\begin_layout Standard
+deciding the splits affects the trees accuracy.
+\end_layout
+
+\begin_layout Itemize
+regression DTs normally use mean squared error (MSE) to decide to split
+ a node in two or more sub-nodes.
+\end_layout
+
+\begin_layout Itemize
+we need to pick an attribute and a value to split on.
+ 
+\begin_inset Formula $\rightarrow$
 \end_inset
 
+ try out all combinations.
+ Find the best one by taking the weighted average of the two new nodes.
+\end_layout
 
-\begin_inset Newline newline
+\begin_layout Itemize
+Do that until you hit 
+\family typewriter
+max_depth
+\family default
+ or when you're left with only 1 element.
+\end_layout
+
+\begin_layout Itemize
+It is never necessary to do more than one split at a level because you can
+ just split them again.
+\end_layout
+
+\begin_layout Itemize
+Instead of using the average (MSE) we could also use the median or...
+ or even run a linear regression model (
+\begin_inset Quotes eld
 \end_inset
 
+fitting a line into points
+\begin_inset Quotes erd
+\end_inset
 
+) to make a decision.
+\end_layout
+
+\begin_layout Paragraph
+Prediction
+\end_layout
+
+\begin_layout Itemize
+Traverse tree until you end up in leaf.
+ The prediction is the average of the value of the 
+\bar under
+dependent variable
+\bar default
+ in that leaf node.
+\end_layout
+
+\begin_layout Paragraph
+Pros
+\end_layout
+
+\begin_layout Itemize
+If there is a high non-linearity & complex relationship between dependent
+ & independent variables, a tree model will outperform a classical regression
+ method
+\end_layout
+
+\begin_layout Itemize
+It's kinda robust to outliers
+\end_layout
+
+\begin_layout Itemize
+easy to explain
+\end_layout
+
+\begin_layout Paragraph
+Cons
+\end_layout
+
+\begin_layout Itemize
+DTs are prone to overfitting.
+ That's why they are rarely used and instead other tree based models are
+ preferred like Random Forest and XGBoost.
+\end_layout
+
+\begin_layout Itemize
+Mostly for classifiction.
+ For regression only if the range of the target variable is inside the range
+ of values seen in training.
+\end_layout
+
+\begin_layout Itemize
+Unstable, small changes can change entire tree (variance)
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ can be improved by bagging or boosting
+\end_layout
+
+\begin_layout Paragraph
+Avoiding Overfitting
+\end_layout
+
+\begin_layout Enumerate
+Setting constraints on tree size (hyperparameters)
+\end_layout
+
+\begin_layout Standard
+e.g.
+ min-sample-for-node-split, min-leaf-size, max-depth, max-features to consider
+ for split.
+ 
+\bar under
+sklearn
+\bar default
+ lets you define many of these.
+\end_layout
+
+\begin_layout Enumerate
+Pruning
+\end_layout
+
+\begin_layout Enumerate
+Random Forest
+\end_layout
+
+\begin_layout Standard
+
+\bar under
+Random Forest
+\bar default
+ is an example of 
+\bar under
+ensemble learning
+\bar default
+, in which we combine multiple machine learning algorithms to obtain better
+ predictive performance.
+ RF can be fast to train, but quite slow to create predictions.
+ Due to the fact that it has to run predictions on each individual tree
+ and then average to create the final prediction.
+\end_layout
+
+\begin_layout Subsubsection
+DT vs (Logit) Regression Trick
+\end_layout
+
+\begin_layout Itemize
+Bsp: chance of buying BWM with regard to salary and age.
+\end_layout
+
+\begin_layout Standard
+Converting variables into buckets (DT) might make the analysis simpler,
+ but it makes the model lose some predictive power because of its indifference
+ for data points lying in the same bucket.
+\end_layout
+
+\begin_layout Standard
+Logistic regression is a statistical model that uses a logistic function
+ to model a binary dependent variable.
+ Sth.
+ like this:
+\end_layout
+
+\begin_layout Standard
 \begin_inset Box Boxed
 position "t"
 hor_pos "c"
@@ -330,7 +470,68 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /home/loretanr/ma/resources/notes/lyx_images/2021-04-26-092405_1330x496_scrot.png
+	filename lyx_images/2021-04-30-102246_690x535_scrot.png
+	lyxscale 20
+	scale 10
+
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+
+\begin_inset space \thinspace{}
+\end_inset
+
+ 
+\begin_inset Graphics
+	filename lyx_images/2021-04-30-102445_835x318_scrot.png
+	lyxscale 20
 	scale 20
 
 \end_inset
@@ -344,39 +545,100 @@ status open
 \end_layout
 
 \begin_layout Standard
-If we take entropy as selection, ID3 follows the rule — A branch with an
- entropy of zero is a leaf node and A brach with entropy more than zero
- needs further splitting.
-\end_layout
-
-\begin_layout Itemize
-For details on using the other selection methods for decision trees, visit
- the website
+Now assuming we have an exceptionally high buy rate for people between 100k
+ and 200k salary that are younger than 35.
+ Both techniques cannot handle this well.
+ DT will fail because it splits one-dimentional.
+ Regression fails as well.
 \end_layout
 
 \begin_layout Paragraph
-Avoiding Overfitting
-\end_layout
-
-\begin_layout Enumerate
-Pruning
-\end_layout
-
-\begin_layout Enumerate
-Random Forest
+Trick: Combine the upsides of both methods
 \end_layout
 
 \begin_layout Standard
+Two possible ways:
+\end_layout
 
-\series bold
-Random Forest
-\series default
- is an example of 
-\series bold
-ensemble learning
-\series default
-, in which we combine multiple machine learning algorithms to obtain better
- predictive performance.
+\begin_layout Enumerate
+Introduce a new covariant variable:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $Z=\begin{cases}
+1 & \text{if 100k<salary<200k \,\&\&\, Age\ensuremath{\geq35}}\\
+0 & \text{o/w}
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Make two alternative models and add the functions in the regression formula
+ as following 
+\begin_inset Formula $H(x)=(1-z)*f_{x}+z*g_{x}$
+\end_inset
+
+, where z is the split in 1.
+\end_layout
+
+\begin_layout Standard
+Note: this technique fails when overall covariance between two terms is
+ high.
+ This is because we will have to create too many buckets and, therefore,
+ too many variables to be introduced in the regression model.
+\end_layout
+
+\begin_layout Subsubsection
+ID3
+\end_layout
+
+\begin_layout Standard
+The ID3 algorithm builds decision trees using a top-down greedy search approach
+ through the space of possible branches with no backtracking (until the
+ branches have 0 entropy).
+\end_layout
+
+\begin_layout Enumerate
+It begins with the original set S as the root node.
+\end_layout
+
+\begin_layout Enumerate
+On each iteration of the algorithm, it iterates through the unused attributes
+ of the set S and calculates 
+\bar under
+Entropy(H)
+\bar default
+ and 
+\bar under
+Information gain(IG)
+\bar default
+ of this attribute.
+\end_layout
+
+\begin_layout Enumerate
+It then selects the attribute which has the smallest Entropy Largest Information
+ gain.
+\end_layout
+
+\begin_layout Enumerate
+The set S is then split by the selected attribute and the algorithm continues
+ to recur on each subset, considering only attributes never selected before.
+\end_layout
+
+\begin_layout Paragraph
+Attribute Selection Method
+\end_layout
+
+\begin_layout Standard
+can be Entropy, Information Gain, Gini Index, Gain Ratio, Reduction in Variance,
+ Chi-Square, etc.
+\begin_inset space ~
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -385,6 +647,63 @@ Differential Privacy
 
 \begin_layout Itemize
 https://www.youtube.com/watch?v=MOcTGM_UteM
+\end_layout
+
+\begin_layout Itemize
+Differential Privacy protects the data 
+\bar under
+before
+\bar default
+ it enters the model.
+\end_layout
+
+\begin_layout Itemize
+Example fitness data, and Eve wants to find out whether Bob is in the data.
+\end_layout
+
+\begin_layout Standard
+We want to create a function 
+\begin_inset Formula $f$
+\end_inset
+
+ that wenn applied to the whole dataset, should be as similar as possible
+ to the function applied to the dataset w/o Bob: 
+\begin_inset Formula $f(D_{n})=f(D_{n-1})$
+\end_inset
+
+.
+ In terms of probability distributions: 
+\begin_inset Formula $\frac{P(f(D_{n}))}{P(f(D_{n-1}))}=e^{\epsilon}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\epsilon=0$
+\end_inset
+
+ would achieve peak privacy.
+ 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ Add random noise to the data.
+ 
+\begin_inset Formula $f(D_{n})$
+\end_inset
+
+=D
+\begin_inset Formula $_{n}+\text{noise}$
+\end_inset
+
+.
+ But the more noise you add the less accurate the data becomes.
+ That means 
+\begin_inset Formula $\epsilon=0$
+\end_inset
+
+ would add so much noise that the data would not be useful anymore.
+ Therefore it works best for last datasets, as good privacy in small ones
+ makes them kinda unusable.
 \end_layout
 
 \begin_layout Section
