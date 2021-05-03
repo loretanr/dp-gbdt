@@ -47,7 +47,7 @@ More details on the tasks in the thesis description:
 • prepare eth paperwork for thesis start
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="04_29" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619595361.65" ts_lastsave="1619704705.59" unique_id="3">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="04_29" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619595361.65" ts_lastsave="1620053169.37" unique_id="3">
 			<rich_text scale="h2">What I did the past week</rich_text>
 			<rich_text>
 
@@ -124,6 +124,9 @@ More details on the tasks in the thesis description:
 
 • Read read read and make notes
 • submit thesis proposal</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="05_06" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1620053169.39" ts_lastsave="1620053270.54" unique_id="4">
+			<rich_text>So the replay/rollback attack in the enclave kinda represents the 2nd level, aka the sequential composition of the DP-GBDT paper?</rich_text>
 		</node>
 	</node>
 </cherrytree>

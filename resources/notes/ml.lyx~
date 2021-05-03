@@ -1213,10 +1213,18 @@ Which price would bring the most money from a set of buyers?
 \end_inset
 
 
+\begin_inset Formula $\Rightarrow$
+\end_inset
+
+ We need to perturb the answer with the same distribution as the real answers.
 \end_layout
 
 \begin_layout Section
 Theos Thesis
+\end_layout
+
+\begin_layout Itemize
+We have a convex loss function.
 \end_layout
 
 \begin_layout Standard
