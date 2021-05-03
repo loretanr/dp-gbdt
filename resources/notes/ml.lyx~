@@ -47,6 +47,11 @@
 \setlength\cftbeforesecskip{1pt}
 \setlength\cftaftertoctitleskip{2pt}
 \setcounter{tocdepth}{2}
+
+% argmin/max
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -692,11 +697,17 @@ Similar to AdaBoost in the sense that both use ensemble of trees to predict
  a target label.
  However, unlike AdaBoost, GB trees have depth larger than 1.
  In practice, you’ll typically see GB being used with a maximum number of
- leaves of between 8 and 32.
+ 
+\bar under
+leaves
+\bar default
+ of between 8 and 32.
+ In GB all trees are equally important.
 \end_layout
 
 \begin_layout Enumerate
-When tackling regression problems, we start with a leaf that is the 
+When tackling regression problems, we start with a leaf that is the initial
+ guess / 
 \bar under
 average value
 \bar default
@@ -727,11 +738,27 @@ Compute new residuals by subtracting actual values from predicted value
 \end_layout
 
 \begin_layout Enumerate
-repeat 3 - 5 until the hyperparam 
+repeat 3 - 6 until the hyperparam 
 \family typewriter
 numtrees
 \family default
  is reached
+\end_layout
+
+\begin_layout Enumerate
+make the ensemble (initial mean + l-rate * residual
+\begin_inset Formula $_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $\forall$
+\end_inset
+
+tree 
+\begin_inset Formula $i$
+\end_inset
+
+)
 \end_layout
 
 \begin_layout Standard
@@ -749,12 +776,232 @@ small step
  towards the final solution.
 \end_layout
 
+\begin_layout Paragraph
+Math
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "https://www.youtube.com/watch?v=2xudPOBz-vs"
+target "https://www.youtube.com/watch?v=2xudPOBz-vs"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Need differentiable 
+\bar under
+loss function
+\end_layout
+
+\begin_layout Standard
+Most common for regression: 
+\begin_inset Formula $L(y_{i},F(x))=\frac{1}{2}(\text{observed}-\text{predicted})^{2}$
+\end_inset
+
+.
+ MSE would be the same but 
+\begin_inset Formula $\frac{1}{n}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+ would not be necessary to determine the best fit, it's only there to make
+ derivatives easier.
+ 
+\begin_inset Formula $\frac{d}{d\,\text{predicted}}\frac{1}{2}(\text{observed}-\text{predicted})^{2}=\text{-}(\text{observed}-\text{predicted})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\bar under
+Initialize model
+\bar default
+ with const value 
+\begin_inset Formula $F_{0}(x)=\underset{\gamma}{\argmin}\sum_{i=1}^{n}L(y_{i},\gamma)$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Where 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ is the predicted value we want to find (done by setting the sum of derivatives
+ =0).
+\end_layout
+
+\begin_layout Enumerate
+Compute 
+\begin_inset Formula $r_{im}=-\left[\frac{\partial L(y_{i},F(x_{i}))}{\partial F(x_{i})}\right]_{F(x)=F_{m-1}(x)}\text{ for }i=1\dots n$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is just the derivative of the loss function with respect to the predicted
+ value.
+ Which is 
+\begin_inset Formula $(\text{observed}-\text{predicted})$
+\end_inset
+
+ for the case where we have 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+ (we have the extra minus that cancels).
+ So there it's equal to the actual 
+\bar under
+residual
+\bar default
+.
+ But since one can take any loss function, we call it 
+\bar under
+pseudo residual
+\bar default
+.
+ We the plug in the 
+\begin_inset Formula $F_{m-1}$
+\end_inset
+
+ which is the last prediction.
+ We do this for 
+\begin_inset Formula $r_{im}$
+\end_inset
+
+, where 
+\begin_inset Formula $i$
+\end_inset
+
+ is the sample number and 
+\begin_inset Formula $m$
+\end_inset
+
+ is the current tree.
+\end_layout
+
+\begin_layout Enumerate
+Fit the regression tree to the 
+\begin_inset Formula $r_{im}$
+\end_inset
+
+values and 
+\bar under
+create terminal regions
+\bar default
+ 
+\begin_inset Formula $R_{jm}$
+\end_inset
+
+ for 
+\begin_inset Formula $j=1\dots J_{m}$
+\end_inset
+
+.
+ They may contain more than one 
+\begin_inset Formula $r_{im}$
+\end_inset
+
+ now.
+\end_layout
+
+\begin_layout Enumerate
+For these regions, for 
+\begin_inset Formula $j=1..J_{m}$
+\end_inset
+
+ compute
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\gamma_{jm}=\underset{\gamma}{\argmin}\sum_{x_{i}\in R_{ij}}L(y_{i},F_{m-1}(x_{i})+\gamma)$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is the step where we create 1 value from the samples that ended up
+ in the same leaf.
+ Need the sum when more than one sample end up in one leaf.
+ In we use the 
+\begin_inset Formula $\frac{1}{2}()^{2}$
+\end_inset
+
+ loss function, this nicely simplifies to the 
+\bar under
+average
+\bar default
+ of the 
+\begin_inset Formula $r_{im}$
+\end_inset
+
+'s in their corresp region.
+\end_layout
+
+\begin_layout Enumerate
+Update 
+\begin_inset Formula $F_{m}(x)=F_{m-1}(x)+\nu\sum_{j=1}^{J_{m}}\gamma_{jm}I(x\in R_{jm})$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+where 
+\begin_inset Formula $\nu$
+\end_inset
+
+ is the learning rate.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Add up the output values (
+\begin_inset Formula $\gamma_{jm}$
+\end_inset
+
+'s for all the leaves 
+\begin_inset Formula $R_{jm}$
+\end_inset
+
+ that contain a sample 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Differential Privacy
 \end_layout
 
 \begin_layout Itemize
-https://www.youtube.com/watch?v=MOcTGM_UteM
+\begin_inset CommandInset href
+LatexCommand href
+target "https://www.youtube.com/watch?v=MOcTGM_UteM"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
