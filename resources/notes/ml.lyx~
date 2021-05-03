@@ -843,6 +843,14 @@ Where
  =0).
 \end_layout
 
+\begin_layout Standard
+Now the first iteration (
+\begin_inset Formula $m=1)$
+\end_inset
+
+
+\end_layout
+
 \begin_layout Enumerate
 Compute 
 \begin_inset Formula $r_{im}=-\left[\frac{\partial L(y_{i},F(x_{i}))}{\partial F(x_{i})}\right]_{F(x)=F_{m-1}(x)}\text{ for }i=1\dots n$
@@ -1059,6 +1067,152 @@ We want to create a function
  would add so much noise that the data would not be useful anymore.
  Therefore it works best for last datasets, as good privacy in small ones
  makes them kinda unusable.
+\end_layout
+
+\begin_layout Section
+GBDT paper
+\end_layout
+
+\begin_layout Itemize
+Goal: improve model accuracy of GBDT while preserving the strong guarantee
+ of differential privacy.
+\end_layout
+
+\begin_layout Itemize
+
+\bar under
+Sensitivity
+\bar default
+ and 
+\bar under
+privacy budget
+\bar default
+ are two key design aspects for the effectiveness of differential private
+ models.
+\end_layout
+
+\begin_layout Paragraph
+Algorithm
+\end_layout
+
+\begin_layout Standard
+GBDT minimizes the following objective for the 
+\begin_inset Formula $t^{\text{th}}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O(x)^{(t)}=\sum_{i}L(y_{i},\gamma_{i})+\sum_{k}\Omega(f_{k})$
+\end_inset
+
+, where 
+\begin_inset Formula $\Omega$
+\end_inset
+
+ is the regularization function (that penalizes the complexity of the 
+\begin_inset Formula $t^{\text{th}}$
+\end_inset
+
+ tree)
+\end_layout
+
+\begin_layout Itemize
+Then 
+\begin_inset Formula $L$
+\end_inset
+
+ is replaced with an approximation.
+\end_layout
+
+\begin_layout Itemize
+Then the tree is built, splits are decided by this simplified formula of
+ the 
+\bar under
+gain
+\bar default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $G(I_{L},I_{R})=\frac{(\sum_{i\in I_{L}}g_{i})^{2}}{|I_{L}|+\lambda}+\frac{(\sum_{i\in I_{R}}g_{i})^{2}}{|I_{R}|+\lambda}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Optimal leaf values are set by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $V(I)=-\eta\frac{\sum_{i\in I}g_{i}}{|I|+\lambda}$
+\end_inset
+
+, 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the regularization parameter.
+\end_layout
+
+\begin_layout Paragraph
+Differential Privacy
+\end_layout
+
+\begin_layout Standard
+
+\bar under
+Privacy budget allocation
+\bar default
+: either 
+\bar under
+sequential
+\bar default
+, but with large #trees the budget for each tree is very small.
+ 
+\bar under
+parallel composition
+\bar default
+ means giving disjoint inputs to each tree.
+ Problem with large #trees they can get too few input to do meaningful work.
+\end_layout
+
+\begin_layout Itemize
+Laplace mechanism works to hide numbers
+\end_layout
+
+\begin_layout Itemize
+Exponential mechanism works to hide answers to non-numeric questions like
+ 
+\begin_inset Quotes eld
+\end_inset
+
+What's the most common eye color?
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Or 
+\begin_inset Quotes eld
+\end_inset
+
+Which price would bring the most money from a set of buyers?
+\begin_inset Quotes erd
+\end_inset
+
+.
+ i.e.
+ 
+\begin_inset Formula $R=\{\text{red,blue,green,red}\}$
+\end_inset
+
+ or 
+\begin_inset Formula $R=\text{\{1\$, 2\$, 2.5\$, 2\$\}}$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
