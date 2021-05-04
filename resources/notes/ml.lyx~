@@ -52,6 +52,9 @@
 \usepackage{amsmath}
 \DeclareMathOperator*{\argmax}{\arg\!\max}
 \DeclareMathOperator*{\argmin}{\arg\!\min}
+
+% strikethrough
+\usepackage{ulem}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -1224,7 +1227,232 @@ Theos Thesis
 \end_layout
 
 \begin_layout Itemize
-We have a convex loss function.
+We have a convex loss function
+\end_layout
+
+\begin_layout Itemize
+Most notes handwritten in the thesis!
+\end_layout
+
+\begin_layout Paragraph
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilightt{
+\end_layout
+
+\end_inset
+
+Questions
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+I think I understand the individual concepts, but I'm having trouble putting
+ them together and into the insurance context.
+\end_layout
+
+\begin_layout Itemize
+The output of the whole process is a model (an ensemble of trees).
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+sout{
+\end_layout
+
+\end_inset
+
+This would then allow the insurance company to run past & future customer
+ data through it and get an idea of where they stand in comparison with
+ others.
+ They will know a company has bad security but not in what way.
+ Right? Couldn't that lead to discrimination if a company is worse than
+ the rest?
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+I guess, the insurance won't ever have the questionnairs, they're only sent
+ to the enclave.
+ And probably encrypted such that only the one legit enclave can decrypt
+ it.
+\end_layout
+
+\begin_layout Itemize
+How do the output trees look?
+\end_layout
+
+\begin_layout Standard
+In the algorithm: 
+\emph on
+Output: An ensemble of trained differentially private decision trees.
+ 
+\emph default
+The node's split attributes should be visible, however the split value is
+ mangled (exp mechanism, meaning it could actually stand for another value
+ in the set of possible values).
+ And we also see leafs containing numbers that were mangled (laplace mechanism,
+ so they are all 
+\begin_inset Quotes eld
+\end_inset
+
+off
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+How can the insurance now learn from the model?
+\end_layout
+
+\begin_layout Itemize
+The 2-node algorithm internal nodes get half the budget compared to non-2-node
+ algorithm.
+\end_layout
+
+\begin_layout Standard
+I guess because now two internal nodes depend on the same input, which violates
+ the disjointness requirement from the parallel composition.
+\end_layout
+
+\begin_layout Itemize
+In the algorithm (2 & 3), what does 
+\begin_inset Quotes eld
+\end_inset
+
+update gradients of all instances on loss 
+\begin_inset Formula $l$
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ exactly mean?
+\end_layout
+
+\begin_layout Standard
+Does it mean: take the leaf values of the last tree, plug them into the
+ loss function and calculate the derivative.
+\end_layout
+
+\begin_layout Itemize
+Why do we even need differential privacy inside the enclave? What would
+ be a good attack if the output trees are not DP?
+\end_layout
+
+\begin_layout Standard
+One could observe effects of e.g.
+ adding / leaving away one company on the output trees.
+ One could pretty accurtely follow in which leafs it ended up (where it
+ influenced the average) and thus which internal node path it took.
+\end_layout
+
+\begin_layout Itemize
+Let's say we need 500 companies' data to get a meaningful model.
+ Until that point we can't really start.
+ We would need to store the 500 questionnaires somewhere.
+ 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ do we store enclave-encrypted questionnaires?
+\end_layout
+
+\begin_layout Itemize
+Could a malicious insurance e.g.
+ give 400 distinct legit questionnaires from + 100 identical ones from one
+ company to the enclave? And would differential privacy
+\end_layout
+
+\begin_layout Section
+Differential Privacy
+\end_layout
+
+\begin_layout Paragraph
+Epsilon
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "https://aircloak.com/explaining-differential-privacy/"
+target "https://aircloak.com/explaining-differential-privacy/"
+literal "false"
+
+\end_inset
+
+ The problem is that when you use truly random noise to anonymize your data,
+ every time you query the same data, you reduce the level of anonymization.
+ This is because you are able to use the aggregate results to reconstruct
+ the original data by filtering out the noise through 
+\bar under
+averaging
+\bar default
+.
+ The value epsilon is then used to determine how strict the privacy is.
+ 
+\bar under
+The smaller the value, the better the privacy but the worse the accuracy
+\bar default
+ of any results from analysing the data.
+ That also means, the smaller the value of epsilon, the fewer times you
+ can access the data (effectively epsilon is proportional to your privacy
+ budget) because otherwise you would be able to reconstruct the noise and
+ ultimately de-anonymize the data.
+ The trick to all this is that you can exactly define how much of your privacy
+ budget you can use until the data is not considered as anonymous anymore.
+\end_layout
+
+\begin_layout Itemize
+the inventors of the concept suggested to keep the epsilon between 0.1 and
+ 1
+\end_layout
+
+\begin_layout Itemize
+value of 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ that would generally be regarded as strongly anonymous (i.e.
+ 
+\begin_inset Formula $\epsilon<1$
+\end_inset
+
+) allow for only a small number of queries, maybe a few 10s
 \end_layout
 
 \begin_layout Standard
