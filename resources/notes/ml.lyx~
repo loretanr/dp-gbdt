@@ -32,8 +32,19 @@
 \definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0}
 
 % highlight
-\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
-\newcommand{\hilightt}[1]{\colorbox{orange}{#1}}
+\usepackage{soul}
+\newcommand{\hilight}[1]{%
+  \begingroup
+  \definecolor{hlcolor}{RGB}{255,255,170}\sethlcolor{hlcolor}%
+  \hl{#1}%
+  \endgroup
+}
+\newcommand{\hilightt}[1]{%
+  \begingroup
+  \definecolor{hlcolor}{RGB}{170,255,170}\sethlcolor{hlcolor}%
+  \hl{#1}%
+  \endgroup
+}
 
 % titlespace
 \usepackage{titling}
@@ -1310,7 +1321,30 @@ I guess, the insurance won't ever have the questionnairs, they're only sent
 \end_layout
 
 \begin_layout Itemize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilight{
+\end_layout
+
+\end_inset
+
 How do the output trees look?
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1335,7 +1369,30 @@ off
 \end_layout
 
 \begin_layout Itemize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilight{
+\end_layout
+
+\end_inset
+
 How can the insurance now learn from the model?
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -1349,6 +1406,18 @@ I guess because now two internal nodes depend on the same input, which violates
 \end_layout
 
 \begin_layout Itemize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilight{
+\end_layout
+
+\end_inset
+
 In the algorithm (2 & 3), what does 
 \begin_inset Quotes eld
 \end_inset
@@ -1362,6 +1431,17 @@ update gradients of all instances on loss
 \end_inset
 
  exactly mean?
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1378,10 +1458,22 @@ Why do we even need differential privacy inside the enclave? What would
 One could observe effects of e.g.
  adding / leaving away one company on the output trees.
  One could pretty accurtely follow in which leafs it ended up (where it
- influenced the average) and thus which internal node path it took.
+ influenced the leaf value) and thus which internal node path it took.
 \end_layout
 
 \begin_layout Itemize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilight{
+\end_layout
+
+\end_inset
+
 Let's say we need 500 companies' data to get a meaningful model.
  Until that point we can't really start.
  We would need to store the 500 questionnaires somewhere.
@@ -1390,12 +1482,46 @@ Let's say we need 500 companies' data to get a meaningful model.
 \end_inset
 
  do we store enclave-encrypted questionnaires?
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilight{
+\end_layout
+
+\end_inset
+
 Could a malicious insurance e.g.
  give 400 distinct legit questionnaires from + 100 identical ones from one
- company to the enclave? And would differential privacy
+ company to the enclave? And would differential privacy help in this case?
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
