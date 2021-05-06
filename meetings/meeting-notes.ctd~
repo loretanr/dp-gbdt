@@ -1,7 +1,10 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1619168455.86" unique_id="1">
-		<rich_text></rich_text>
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1620296133.15" unique_id="1">
+		<rich_text>Thu 3pm
+Link:  </rich_text>
+		<rich_text foreground="#3d3c40"> </rich_text>
+		<rich_text link="webs https://ethz.zoom.us/j/4333973638">https://ethz.zoom.us/j/4333973638</rich_text>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="04_22_first" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168455.86" ts_lastsave="1619595361.65" unique_id="2">
 			<rich_text scale="h2">Discussion points</rich_text>
 			<rich_text>
@@ -125,8 +128,62 @@ More details on the tasks in the thesis description:
 • Read read read and make notes
 • submit thesis proposal</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="05_06" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1620053169.39" ts_lastsave="1620053178.11" unique_id="4">
-			<rich_text>So the replay/rollback attack in the enclave kinda represents the sequential composition of the DP-GBDT paper?</rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="05_06" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1620053169.39" ts_lastsave="1620308114.89" unique_id="4">
+			<rich_text scale="h2">Questions</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">DP-GBDT proposes 2 level structure Ensemble of Ensembles.</rich_text>
+			<rich_text>
+   ◇ The first step splits the input data trees are created using parallel composition
+   ◇ 2nd step would create multiple such ensembles and do sequential composition
+      ▪ this is left away in Theos thesis, right? Was there a reason (besides time maybe)
+      ▪ if an enclave would do multiple such 2nd steps that would be similar to the adversary doing rollback attack
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">• It was sufficient to do the inner level
+• and by doing the outer you would gain accurracy and lose privacy</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">How can the insurance now learn from the model?</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">• The trees are not useless, need to check evaluation/appendix of thesis
+• especially the inner nodes have a good probability to be the most important ones on top etc.</rich_text>
+			<rich_text>
+
+Let's say we need 500 companies' data for a meaningful model. Until we collected that many, the questionnaires are not useful. So we would need to store them somewhere. (encrypted etc probably).
+   ◇ And when we have 500 we feed it to the enclave
+   ◇ </rich_text>
+			<rich_text foreground="#9090eeee9090">What if we feed 400 distinct, and then 100x the same company, or maybe some other clever pattern?</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">• we need to define those things, and specify such rules in the enclave code (attestation)
+• Or there may be some approaches where the data deletes itself after 1 run or something
+• we kind of need to find out this kind of things</rich_text>
+			<rich_text>
+
+-------------------------------------------------------------
+</rich_text>
+			<rich_text scale="h3">3 options for coding</rich_text>
+			<rich_text>
+
+• \exists way to run python code in enclave -&gt; bad, much code, how to secure
+• use C DPDT implementation, start from there
+   ◇ however this code is (highly) optimized
+• </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">do it from scratch</rich_text>
+			<rich_text>
+   ◇ can use libraries as much as we want for non-secret dependant parts
+   ◇ but do the secret dependant parts on my own
+      ▪ then we know them exactly
+
+------------- next steps -------------------
+• finish reading
+• Tell Kari to setup a meeting with Theo as soon as I'm ready
+• get to know Theos code
+
+</rich_text>
 		</node>
 	</node>
 </cherrytree>
