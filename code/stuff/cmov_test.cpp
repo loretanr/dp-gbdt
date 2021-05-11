@@ -12,7 +12,7 @@ uint32_t cmov(uint8_t pred, uint32_t target_val, uint32_t new_val)
         "test %1, %1;\n\t"
         "cmovz %3, %0;\n\t"
         "test %2, %2;"
-        : "=&r"(result)  // need the & early-clobber
+        : "=&r"(result)  // need the & early-clobber! wrong in paper
         : "r"(pred), "r"(target_val), "r"(new_val)
         : "cc");
     return result;
