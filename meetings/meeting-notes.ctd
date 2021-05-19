@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1620296133.15" unique_id="1">
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1621427507.62" unique_id="1">
 		<rich_text>Thu 3pm
 Link:  </rich_text>
 		<rich_text foreground="#3d3c40"> </rich_text>
@@ -188,5 +188,20 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 
 </rich_text>
 		</node>
+	</node>
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621427568.33" unique_id="5">
+		<rich_text>TODO
+• run
+• run with info flag
+
+
+
+Big picture
+
+• translate to CPP, using libraries where possible
+
+
+Questions
+• How are we gonna identify secret dependant stuff (-&gt; replace  library code with my own there)</rich_text>
 	</node>
 </cherrytree>
