@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1621427507.62" unique_id="1">
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1621517715.69" unique_id="1">
 		<rich_text>Thu 3pm
 Link:  </rich_text>
 		<rich_text foreground="#3d3c40"> </rich_text>
@@ -188,8 +188,22 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 
 </rich_text>
 		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="05_20" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621517715.69" ts_lastsave="1621517914.36" unique_id="6">
+			<rich_text>• we'll try and find secret dependant accesses by hand first!
+   ◇ because tools can be messy!
+   ◇ esfanidar sent a paper for such a tool </rich_text>
+			<rich_text link="webs https://hal.inria.fr/hal-01658653/document">https://hal.inria.fr/hal-01658653/document</rich_text>
+			<rich_text>
+
+• TODO create a shared google docs with the 2 algorithms from the DPGDBDT paper
+   ◇ (</rich_text>
+			<rich_text link="webs https://ojs.aaai.org//index.php/AAAI/article/view/5422">https://ojs.aaai.org//index.php/AAAI/article/view/5422</rich_text>
+			<rich_text>)
+   ◇ need to be able to annotate each part with our ideas whether it is potentially risky
+   ◇ and need space to insert solutions like “use list, loop through”</rich_text>
+		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621508603.79" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621517556.45" unique_id="5">
 		<rich_text scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -198,7 +212,7 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
    ☑ run
    ☑ run with info/debug
    ☑ performs DFS,BFS,3-nodes
-      ◇ RMSE from 3.3 - 2.7 and 3-nodes is the best 
+      ◇ RMSE from 4.x - 2.7 and the alternate who's best
          </rich_text>
 		<rich_text foreground="#9090eeee9090">▪ How good is a RMSE of 3?</rich_text>
 		<rich_text>
@@ -216,6 +230,12 @@ Questions
 • </rich_text>
 		<rich_text foreground="#9090eeee9090">How are we gonna identify secret dependant stuff (-&gt; replace  library code with my own there)</rich_text>
 		<rich_text>
-• </rich_text>
+• so far the code seems to make sense, is well commentated
+• maybe give me theos information and I'll question him as rquired.
+
+
+--------------------------------------
+go through the 2 pseudocode algorithms in 
+make shared google docs with comments at each step whether its secret xependant.</rich_text>
 	</node>
 </cherrytree>
