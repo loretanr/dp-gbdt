@@ -553,6 +553,7 @@ class DecisionNode:
     self.node_id = None  # type: Optional[int]
 
 
+
 class TreeExporter:
   """Class to export and plot decision trees using Scikit's library."""
   def __init__(self, nodes: List[DecisionNode], l2_lambda: float) -> None:
@@ -601,6 +602,9 @@ class TreeExporter:
     self.n_node_samples = [len(node.X) for node in nodes]  # type: ignore
     self.n_classes = [1]
     self.weighted_n_node_samples = np.full(fill_value=1, shape=len(nodes))
+
+
+
 
 
 class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
@@ -719,6 +723,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
 
     self.decision_path = []
 
+
+
   def Fit(self, X: np.array, y: np.ndarray, gradients: np.array) -> None:
     """Fit the tree to the data.
 
@@ -764,6 +770,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.AssignNodeIDs(root_node, node_ids)
     self.tree_ = TreeExporter(self.nodes, self.l2_lambda)
 
+
+
   def MakeTreeDFS(self,
                   X: np.array,
                   y: np.ndarray,
@@ -784,7 +792,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
           For 3_trees only.
       gradients_sibling (np.array): Optional. The gradients in the sibling
           node. For 3_trees only.
-
     Returns:
       DecisionNode: A decision node.
     """
@@ -797,6 +804,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
                           depth=current_depth)
       self.nodes.append(node)
       return node
+
 
     if current_depth == max_depth or len(X) < self.min_samples_split:
       # Max depth reached or not enough samples to split node, node is a leaf
@@ -845,17 +853,15 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
 
     return MakeLeafNode()
 
-  def MakeTreeBFS(self,
-                  X: np.array,
-                  y: np.ndarray,
-                  gradients: np.array) -> DecisionNode:
+
+
+  def MakeTreeBFS(self, X: np.array, y: np.ndarray, gradients: np.array) -> DecisionNode:
     """Build a tree in a best-leaf first fashion.
 
     Args:
       X (np.array): The dataset.
       y (np.ndarray): The dataset labels.
       gradients (np.array): The gradients for the dataset instances.
-
     Returns:
       DecisionNode: A decision node.
     """
@@ -888,6 +894,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       if not node.prediction and not node.left_child and not node.right_child:
         node.prediction = self.GetLeafPrediction(node.gradients, node.y)
     return node
+
+
 
   def _ExpandTreeBFS(self) -> None:
     """Expand a tree in a best-leaf first fashion.
@@ -986,6 +994,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.nodes_bfs.put(left_child)
     return self._ExpandTreeBFS()
 
+
+
   def _MakeLeaf(self, node: DecisionNode) -> None:
     """Make a node a leaf node.
 
@@ -995,6 +1005,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     node.prediction = self.GetLeafPrediction(node.gradients, node.y)
     self.current_number_of_leaves += 1
     self.nodes.append(node)
+
+
 
   def _IsMaxLeafReached(self) -> bool:
     """Check if we reached maximum number of leaf nodes.
@@ -1011,6 +1023,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       if self.current_number_of_leaves + leaf_candidates >= self.max_leaves:
         self.max_leaves_reached = True
     return self.max_leaves_reached
+
+
 
   def FindBestSplit(self,
                     X: np.array,
@@ -1030,7 +1044,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
           For 3_trees only.
       gradients_sibling (np.array): Optional. The gradients in the sibling
           node. For 3_trees only.
-
     Returns:
       Optional[Dict[str, Any]]: A dictionary containing the split
           information, or none if no split could be done.
@@ -1091,6 +1104,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     return max(
         probabilities, key=lambda x: x['gain']) if probabilities else None
 
+
+
   def GetLeafPrediction(self, gradients: np.array, y: np.ndarray) -> float:
     """Compute the leaf prediction.
 
@@ -1102,6 +1117,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       float: The prediction for the leaf node
     """
     return ComputePredictions(gradients, y, self.loss, self.l2_lambda)
+
+
 
   def Predict(self, X: np.array) -> np.array:
     """Return predictions for a list of input data.
@@ -1116,6 +1133,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     for row in X:
       predictions.append(self._Predict(row, self.root_node))  # type: ignore
     return np.asarray(predictions)
+
+
 
   def _Predict(self, row: np.array, node: DecisionNode) -> float:
     """Walk through the decision tree to output a prediction for the row.
@@ -1139,10 +1158,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       child_node = node.left_child
     return self._Predict(row, child_node)  # type: ignore
 
-  def ComputeGain(self,
-                  index: int,
-                  value: Any,
-                  X: np.array,
+
+
+  def ComputeGain(self, index: int, value: Any, X: np.array,
                   gradients: np.array,
                   X_sibling: Optional[np.array] = None,
                   gradients_sibling: Optional[np.array] = None) -> float:
@@ -1185,6 +1203,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     total_gain = lhs_gain + rhs_gain
     return total_gain if total_gain >= 0. else 0.
 
+
+
   def AssignNodeIDs(self,
                     node: DecisionNode,
                     node_ids: Queue  # type: ignore
@@ -1200,6 +1220,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.AssignNodeIDs(node.left_child, node_ids)
     if node.right_child:
       self.AssignNodeIDs(node.right_child, node_ids)
+
+
 
   @staticmethod
   def fit() -> None:
@@ -1217,10 +1239,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     return self.decision_path
 
 
-def ClipLeaves(leaves: List[DecisionNode],
-               l2_threshold: float,
-               learning_rate: float,
-               tree_index: int) -> None:
+
+def ClipLeaves(leaves: List[DecisionNode], l2_threshold: float, learning_rate: float, tree_index: int) -> None:
   """Clip leaf nodes.
 
   If the prediction is higher than the threshold, set the prediction to
@@ -1242,15 +1262,14 @@ def ClipLeaves(leaves: List[DecisionNode],
         leaf.prediction = -1 * threshold
 
 
-def AddLaplacianNoise(leaves: List[DecisionNode],
-                      scale: float) -> None:
+
+def AddLaplacianNoise(leaves: List[DecisionNode], scale: float) -> None:
   """Add laplacian noise to the leaf nodes.
 
   Args:
     leaves (List[DecisionNode]): The list of leaves.
     scale (float): The scale to use for the laplacian distribution.
   """
-
   for leaf in leaves:
     noise = np.random.laplace(0, scale)
     logger.debug('Leaf value before noise: {0:f}'.format(
@@ -1260,10 +1279,8 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
         np.float(leaf.prediction)))
 
 
-def ComputePredictions(gradients: np.ndarray,
-                       y: np.ndarray,
-                       loss: LossFunction,
-                       l2_lambda: float) -> float:
+
+def ComputePredictions(gradients: np.ndarray, y: np.ndarray, loss: LossFunction, l2_lambda: float) -> float:
   """Computes the predictions of a leaf.
 
   Used in the `DifferentiallyPrivateTree` as well as in `SplitNode`
@@ -1272,14 +1289,12 @@ def ComputePredictions(gradients: np.ndarray,
   Ref:
     Friedman 01. "Greedy function approximation: A gradient boosting machine."
       (https://projecteuclid.org/euclid.aos/1013203451)
-
   Args:
     gradients (np.ndarray): The positive gradients y˜ for the dataset instances.
     y (np.ndarray): The dataset labels y.
     loss (LossFunction): An sklearn loss wrapper
         suitable for regression and classification.
     l2_lambda (float): Regularization parameter for l2 loss function.
-
   Returns:
     Prediction γ of a leaf
   """
@@ -1299,6 +1314,7 @@ def ComputePredictions(gradients: np.ndarray,
   return prediction
 
 
+
 def ExponentialMechanism(
     probabilities: List[Dict[str, Any]],
     max_gain: float,
@@ -1310,7 +1326,6 @@ def ExponentialMechanism(
     max_gain (float): The maximum gain amongst all probabilities in the list.
     reverse (bool): Optional. If True, sort probabilities in reverse order (
         i.e. lower gains are better).
-
   Returns:
     Dict: a candidate (i.e. probability) from the list.
   """

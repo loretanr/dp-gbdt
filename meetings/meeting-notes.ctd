@@ -189,12 +189,23 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 </rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621427568.33" unique_id="5">
-		<rich_text>TODO
-• run
-• run with info flag
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621513818.34" unique_id="5">
+		<rich_text scale="h2">&quot;example.py&quot;</rich_text>
+		<rich_text>
+(</rich_text>
+		<rich_text weight="heavy">abalone clams</rich_text>
+		<rich_text>, 0.1 budget)
+   ☑ run
+   ☑ run with info/debug
+   ☑ performs DFS,BFS,3-nodes
+      ◇ RMSE from 4.x - 2.7 and the alternate who's best
+         </rich_text>
+		<rich_text foreground="#9090eeee9090">▪ How good is a RMSE of 3?</rich_text>
+		<rich_text>
+      ◇ 
 
-
+☐ test print decision tree functionality
+☐ 
 
 Big picture
 
@@ -202,6 +213,9 @@ Big picture
 
 
 Questions
-• How are we gonna identify secret dependant stuff (-&gt; replace  library code with my own there)</rich_text>
+• </rich_text>
+		<rich_text foreground="#9090eeee9090">How are we gonna identify secret dependant stuff (-&gt; replace  library code with my own there)</rich_text>
+		<rich_text>
+• </rich_text>
 	</node>
 </cherrytree>
