@@ -50,11 +50,9 @@ class AttackClassifier:
     self.y_test = y_test
     self.attack = attack
 
-  def Attack(self,
-             attack_feature: Optional[int] = None,
-             lifestyle: bool = True) -> Any:
+  def Attack(self, attack_feature: Optional[int] = None, lifestyle: bool = True) -> Any:
     """Runs the attack and returns its accuracy."""
-    self.target_classifier.fit(self.X_train, self.y_train)
+    bla = self.target_classifier.fit(self.X_train, self.y_train)
     if self.attack == 'membership_inference_label':
       classifier = ScikitlearnGradientBoostingClassifier(self.target_classifier)
       attack_classifier = MembershipInferenceBlackBoxRuleBased(classifier)
@@ -69,8 +67,7 @@ class AttackClassifier:
       return train_acc, test_acc, attack_accuracy
     elif self.attack == 'membership_inference':
       classifier = ScikitlearnGradientBoostingClassifier(self.target_classifier)
-      attack_classifier = MembershipInferenceBlackBox(classifier,
-                                                      attack_model_type='rf')
+      attack_classifier = MembershipInferenceBlackBox(classifier, attack_model_type='rf')
 
       # train attack model
       attack_classifier.fit(self.X_train, self.y_train,

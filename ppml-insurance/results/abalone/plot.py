@@ -5,10 +5,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+from datetime import datetime
 from evaluation import estimator
 
-PATH = './'
+PATH = './results/abalone/'
 SAMPLES = [300, 5000]
 
 if __name__ == '__main__':
@@ -72,5 +72,7 @@ if __name__ == '__main__':
         data[data['nb_samples'] == nb_samples].iloc[0]['nb_tree']))
     plt.xlabel('Privacy budget')
     plt.ylabel('RMSE')
+    now = datetime.now().strftime("%d-%m-%y_%H:%M")
     plt.savefig(
-        PATH + 'results_{0!s}.png'.format(nb_samples), format='png', dpi=600)
+        PATH + 'results_{0!s}_{1!s}.png'.format(nb_samples, now), 
+        format='png', dpi=600)

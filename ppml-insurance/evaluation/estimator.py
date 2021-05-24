@@ -126,13 +126,13 @@ class DPGBDT(BaseEstimator):  # type: ignore
         verbosity=self.verbosity)
     self.n_features_ = None
 
+
   def fit(self, X: np.array, y: np.array) -> 'GradientBoostingEnsemble':
     """Fit the model to the dataset.
 
     Args:
       X (np.array): The features.
       y (np.array): The label.
-
     Returns:
       GradientBoostingEnsemble: A GradientBoostingEnsemble object.
     """
@@ -140,12 +140,12 @@ class DPGBDT(BaseEstimator):  # type: ignore
     self.n_features_ = X.shape[1]
     return self.model.Train(X, y)
 
+
   def predict(self, X: np.array) -> np.array:
     """Predict the label for a given dataset.
 
     Args:
       X (np.array): The dataset for which to predict values.
-
     Returns:
       np.array: The predictions.
     """
@@ -161,12 +161,12 @@ class DPGBDT(BaseEstimator):  # type: ignore
       encoded = np.where(predictions >= 0, 1, -1)
       return encoded
 
+
   def predict_proba(self, X: np.array) -> np.array:
     """Predict class probabilities for X.
 
     Args:
       X (np.array): The dataset for which to predict values.
-
     Returns:
       np.array: The class probabilities of the input samples.
     """
@@ -185,6 +185,7 @@ class DPGBDT(BaseEstimator):  # type: ignore
         probs.append([1 - sigmoid[idx], sigmoid[idx]])
     return probs
 
+
   def decision_path(self, X: np.array, tree_index: int) -> np.array:
     label = self.predict(X)[0]
     trees = self.model.trees[tree_index]
@@ -197,6 +198,7 @@ class DPGBDT(BaseEstimator):  # type: ignore
         self.label = label
     return Wrapper(decision_path, label)
 
+
   def get_samples_at_node(self,
                           node_id: int,
                           label: int,
@@ -206,9 +208,11 @@ class DPGBDT(BaseEstimator):  # type: ignore
     nodes = trees[tree_index].nodes
     return len([n for n in nodes if n.node_id == node_id][0].X)
 
+
   @staticmethod
   def sigmoid(X: np.array):
     return 1 / (1 + np.exp(-X))
+
 
   def get_params(
       self,
@@ -237,12 +241,16 @@ class DPGBDT(BaseEstimator):  # type: ignore
         'verbosity': self.verbosity
     }
 
+
   def set_params(self,
                  **parameters: Dict[str, Any]) -> 'DPGBDT':
     """Stub for sklearn cross validation"""
     for parameter, value in parameters.items():
       setattr(self, parameter, value)
     return self
+
+
+
 
 
 class DPRef(BaseEstimator):  # type: ignore
@@ -371,8 +379,7 @@ class DPRef(BaseEstimator):  # type: ignore
         'balance_partition': self.balance_partition
     }
 
-  def set_params(self,
-                 **parameters: Dict[str, Any]) -> 'DPRef':
+  def set_params(self, **parameters: Dict[str, Any]) -> 'DPRef':
     """Stub for sklearn cross validation"""
     for parameter, value in parameters.items():
       setattr(self, parameter, value)

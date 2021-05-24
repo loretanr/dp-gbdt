@@ -65,8 +65,7 @@ if __name__ == '__main__':
                          squared=False,
                          greater_is_better=False)
       validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=True)
-      clf = GridSearchCV(
-          model(), params, scoring=rmse, n_jobs=-1, cv=validator, verbose=1)
+      clf = GridSearchCV(model(), params, scoring=rmse, n_jobs=-1, cv=validator, verbose=1)
       clf.fit(X, y)
       best_params[DATASET][model_name] = clf.best_params_
 

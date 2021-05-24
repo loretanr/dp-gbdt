@@ -25,12 +25,14 @@ SAMPLES = [300, 5000]
 # Nb trees for each ensemble
 NB_TREES_PER_ENSEMBLE = 50
 
+PATH = "./results/abalone/"
+
 # The optimal parameters found through the grid search for the baseline model
-with open('./model_params.json') as json_file:
+with open(PATH + 'model_params.json') as json_file:
   MODEL_PARAMS = json.load(json_file)
 
 if __name__ == '__main__':
-  output = open('data.csv', 'w')
+  output = open(PATH + 'data.csv', 'w')
   output.write('dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,'
                'max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,'
                'model,config,balance_partition\n')
@@ -57,7 +59,7 @@ if __name__ == '__main__':
           if model_name == 'DPRef' and config != 'DFS':
             continue
           model_params = MODEL_PARAMS.get(model_name).get(config)
-          budget = np.around(np.float(budget), decimals=2)
+          budget = np.around(np.float64(budget), decimals=2)
           if config == 'Vanilla':
             budget = 0.
           nb_trees = model_params.get(
@@ -87,7 +89,7 @@ if __name__ == '__main__':
               regressor=m,
               transformer=MinMaxScaler(feature_range=(-1, 1)))
           scores = cross_val_score(
-              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1)
+              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # multithreading
           mean, std = scores.mean(), (scores.std() / 2)
           output.write(
               '{0:s},{1:d},{2:f},{3:d},{4:d},{5:d},{6:d},{7:f},'  # type: ignore

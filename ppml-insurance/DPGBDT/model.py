@@ -141,7 +141,7 @@ class GradientBoostingEnsemble:
 
     # classification vs regression
     if not n_classes:
-      self.loss_ = LeastSquaresError(1)  # type: LossFunction
+      self.loss_ = LeastSquaresError()  # type: LossFunction, RL: CHANGED
     else:
       if n_classes == 2:
         if self.binary_classification:  # Through regression model

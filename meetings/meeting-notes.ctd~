@@ -188,7 +188,7 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="05_20" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621517715.69" ts_lastsave="1621517914.36" unique_id="6">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="05_20" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621517715.69" ts_lastsave="1621517939.67" unique_id="6">
 			<rich_text>• we'll try and find secret dependant accesses by hand first!
    ◇ because tools can be messy!
    ◇ esfanidar sent a paper for such a tool </rich_text>
@@ -200,11 +200,11 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 			<rich_text link="webs https://ojs.aaai.org//index.php/AAAI/article/view/5422">https://ojs.aaai.org//index.php/AAAI/article/view/5422</rich_text>
 			<rich_text>)
    ◇ need to be able to annotate each part with our ideas whether it is potentially risky
-   ◇ and need space to insert solutions like “use list, loop through”</rich_text>
+   ◇ and need space to insert solutions like “use list, loop through all nodes etc”</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621517556.45" unique_id="5">
-		<rich_text scale="h2">&quot;example.py&quot;</rich_text>
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621852646.32" unique_id="5">
+		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
 		<rich_text weight="heavy">abalone clams</rich_text>
@@ -216,9 +216,101 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
          </rich_text>
 		<rich_text foreground="#9090eeee9090">▪ How good is a RMSE of 3?</rich_text>
 		<rich_text>
-      ◇ 
+
+</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example_classification.py&quot;</rich_text>
+		<rich_text>
+</rich_text>
+		<rich_text weight="heavy">classify samples from 3 random normal distributions that were scrambled</rich_text>
+		<rich_text>
+
+</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;evaluation/attack.py&quot;</rich_text>
+		<rich_text>
+</rich_text>
+		<rich_text weight="heavy">membership</rich_text>
+		<rich_text> </rich_text>
+		<rich_text weight="heavy">inference</rich_text>
+		<rich_text>
+   ◇ not working as is
+
+</rich_text>
+		<rich_text foreground="#a0a02020f0f0">&quot;</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">results/</rich_text>
+		<rich_text foreground="#a0a02020f0f0">&quot;</rich_text>
+		<rich_text>
+   •  n1 python plot.py's ready
+
+    </rich_text>
+		<rich_text weight="heavy">cross_val.py</rich_text>
+		<rich_text>
+      •   takes long
+      •   --------- Processing Model DPREF, outputs only a bunch of LightGBM unknown param warnings
+      • And the values I get are also much worse than the ones on github
+      • so DPRef not working, skipping for now!
+      • </rich_text>
+		<rich_text foreground="#9090eeee9090">what is DP_Ref</rich_text>
+		<rich_text>, it seems DP, but what and why is it in code. Can't find in thesis
+
+&quot;</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">baseline</rich_text>
+		<rich_text scale="h2">/</rich_text>
+		<rich_text>&quot;
+    code for evalutating baseliine models on the reference dataset
+   •  seems ot be the non-DP code
+   • Uses LightGBM, which is a paper proposing an improvement over standard GBDT 
+   • grid search cross validation
+   • takes long to run
+
+</rich_text>
+		<rich_text scale="h2">“</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">model.py</rich_text>
+		<rich_text scale="h2">”</rich_text>
+		<rich_text>
+• </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">class</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#cb4b16" weight="heavy">GradientBoostingEnsemble</rich_text>
+		<rich_text>
+• </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">class</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#cb4b16" weight="heavy">DecisionNode</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy">:</rich_text>
+		<rich_text>
+• </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">class</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#cb4b16" weight="heavy">TreeExporter</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy">:</rich_text>
+		<rich_text>
+• </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">class</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#cb4b16" weight="heavy">DifferentiallyPrivateTree</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy">(</rich_text>
+		<rich_text foreground="#6c71c4" weight="heavy">BaseEstimator</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy">):</rich_text>
+		<rich_text>
+
+</rich_text>
+		<rich_text scale="h2">“</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">evaluation/estimator</rich_text>
+		<rich_text scale="h2">&quot;</rich_text>
+		<rich_text>
+• 
+
+
+--------------------------------------------------------
 
 ☐ test print decision tree functionality
+   ◇ </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">class</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#cb4b16" weight="heavy">TreeExporter</rich_text>
+		<rich_text> in model.py
+   ◇ no usage in project
+   ◇ creates attributes such that sklearn.tree.plot_tree could plot it
 ☐ 
 
 Big picture
