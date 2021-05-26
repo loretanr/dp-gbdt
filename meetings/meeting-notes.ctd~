@@ -203,7 +203,7 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
    ◇ and need space to insert solutions like “use list, loop through all nodes etc”</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621852646.32" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621853459.74" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -260,7 +260,7 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
    •  seems ot be the non-DP code
    • Uses LightGBM, which is a paper proposing an improvement over standard GBDT 
    • grid search cross validation
-   • takes long to run
+   • takes really long to run
 
 </rich_text>
 		<rich_text scale="h2">“</rich_text>
@@ -295,11 +295,47 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 
 </rich_text>
 		<rich_text scale="h2">“</rich_text>
-		<rich_text foreground="#a0a02020f0f0" scale="h2">evaluation/estimator</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">evaluation/estimator.py</rich_text>
 		<rich_text scale="h2">&quot;</rich_text>
 		<rich_text>
-• 
-
+• </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">class</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#cb4b16" weight="heavy">DPGBDT</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy">(</rich_text>
+		<rich_text foreground="#6c71c4" weight="heavy">BaseEstimator</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy">):</rich_text>
+		<rich_text>
+   ◇ </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">def</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#268bd2" weight="heavy">fit</rich_text>
+		<rich_text>
+   ◇ </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">def</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#268bd2" weight="heavy">predict</rich_text>
+		<rich_text>
+   ◇ </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">def</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#268bd2" weight="heavy">predict_proba</rich_text>
+		<rich_text>
+   ◇ </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">def</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#268bd2" weight="heavy">decision_path</rich_text>
+		<rich_text>
+• </rich_text>
+		<rich_text foreground="#93a1a1" weight="heavy">class</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy"> </rich_text>
+		<rich_text foreground="#cb4b16" weight="heavy">DPRef</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy">(</rich_text>
+		<rich_text foreground="#6c71c4" weight="heavy">BaseEstimator</rich_text>
+		<rich_text foreground="#bbbbbb" weight="heavy">):</rich_text>
+		<rich_text>
+   ◇ similar
+uses resp. wraps around the model.py stuff
 
 --------------------------------------------------------
 
@@ -311,7 +347,8 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 		<rich_text> in model.py
    ◇ no usage in project
    ◇ creates attributes such that sklearn.tree.plot_tree could plot it
-☐ 
+
+============================
 
 Big picture
 
@@ -328,6 +365,25 @@ Questions
 
 --------------------------------------
 go through the 2 pseudocode algorithms in 
-make shared google docs with comments at each step whether its secret xependant.</rich_text>
+make shared google docs with comments at each step whether its secret dependant.</rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="creating a single tree" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621853459.74" ts_lastsave="1621864859.28" unique_id="7">
+			<rich_text scale="h1">creating a single tree</rich_text>
+			<rich_text>
+
+ressources to check before start:
+
+• implementation ideas from theo
+• implementation ideas from github_gbdt
+• Implementation ideas from the internet
+   ◇ n1 Makefile </rich_text>
+			<rich_text link="webs https://github.com/qiyiping/gbdt/blob/master/src/cpp/Makefile">https://github.com/qiyiping/gbdt/blob/master/src/cpp/Makefile</rich_text>
+			<rich_text>
+   ◇ smaller, better overview decision tree repo, but Chinese comments
+      ▪ </rich_text>
+			<rich_text link="webs https://github.com/zhaoxingfeng/XGBoost-cpp/blob/master/src/decision_tree.cpp">https://github.com/zhaoxingfeng/XGBoost-cpp/blob/master/src/decision_tree.cpp</rich_text>
+			<rich_text>
+   ◇ 
+• stuff from the paper.</rich_text>
+		</node>
 	</node>
 </cherrytree>
