@@ -49,10 +49,10 @@ if __name__ == '__main__':
         metrics.mean_squared_error, squared=False)
     validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=True)
 
-    for model in models:
+    for model in models: # not used as variable, just to have 2 iterations
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
-      for config in ['Vanilla', 'BFS', 'DFS', '3-trees']:
+      for config in ['DFS', 'Vanilla', 'BFS', '3-trees']:
         for idx, budget in enumerate(PRIVACY_BUDGETS):
           if config == 'Vanilla' and idx != 0:
             continue
@@ -64,7 +64,7 @@ if __name__ == '__main__':
             budget = 0.
           nb_trees = model_params.get(
               'nb_trees') if nb_samples == 5000 else int(
-                  model_params.get('nb_trees') / 10)
+                  model_params.get('nb_trees') / 10) # few samples -> make fewer trees
           min_samples_split = model_params.get(
               'min_samples_split', 2) if nb_samples == 5000 else int(
                   model_params.get('min_samples_split', 20) / 10)
@@ -84,13 +84,16 @@ if __name__ == '__main__':
               use_3_trees=model_params.get('use_3_trees', False),
               cat_idx=cat_idx,
               num_idx=num_idx,
-              verbosity=-1)  # type: ignore
-          regressor = TransformedTargetRegressor(
-              regressor=m,
-              transformer=MinMaxScaler(feature_range=(-1, 1)))
+              verbosity=0)  # type: ignore
+          regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
+              regressor=m,                               # that are used to predict the target"
+              transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
+                                                                   # must implement fit()
           scores = cross_val_score(
-              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # multithreading
+              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # was -1 for multithreading
+
           mean, std = scores.mean(), (scores.std() / 2)
+
           output.write(
               '{0:s},{1:d},{2:f},{3:d},{4:d},{5:d},{6:d},{7:f},'  # type: ignore
               '{8:d},{9:f},{10:f},{11:s},{12:s}\n'.format(

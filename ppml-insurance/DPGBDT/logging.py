@@ -64,7 +64,7 @@ BOLD = '\u001b[1m'  # Bold / bright modifier
 
 # We'll get something like this:
 # [2020-07-09 18:06:05,187] [libcloudforensics] INFO   Disk successfully copied
-LOG_FORMAT = ('[%(asctime)s] [{0:s}{color:s}%(name)-20s{1:s}] %(levelname)-8s'
+LOG_FORMAT = ('[%(asctime)s] [{0:s}{color:s}%(name)s.%(funcName)-20s{1:s}] %(levelname)-8s'
               ' %(message)s')
 
 LEVEL_COLOR_MAP = {

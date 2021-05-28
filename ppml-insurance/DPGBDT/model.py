@@ -10,16 +10,12 @@ import operator
 from collections import defaultdict
 from queue import Queue
 from typing import List, Any, Optional, Dict
-
 import numpy as np
 from scipy.special import logsumexp
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split
-# pylint: disable=line-too-long
 from sklearn.ensemble._gb_losses import LeastSquaresError, \
   MultinomialDeviance, LossFunction, BinomialDeviance
-# pylint: enable=line-too-long
-
 from DPGBDT import logging
 
 logging.SetUpLogger(__name__)
@@ -41,7 +37,6 @@ class GradientBoostingEnsemble:
         For the square loss function (default), this is 0.1.
     trees (List[List[DifferentiallyPrivateTree]]): A list of k-classes DP trees.
   """
-  # pylint: disable=invalid-name, too-many-arguments, unused-variable
 
   def __init__(self,
                nb_trees: int,
@@ -64,8 +59,9 @@ class GradientBoostingEnsemble:
                num_idx: Optional[List[int]] = None,
                test_size: float = 0.3,
                verbosity: int = -1) -> None:
-    """Initialize the GradientBoostingEnsemble class.
 
+    """Initialize the GradientBoostingEnsemble class.
+    
     Args:
       nb_trees (int): The total number of trees in the model.
       nb_trees_per_ensemble (int): The number of trees in each ensemble.
@@ -109,6 +105,7 @@ class GradientBoostingEnsemble:
           is -1, meaning only warnings and above are displayed. 0 is info,
           1 is debug.
       """
+
     self.nb_trees = nb_trees
     self.nb_trees_per_ensemble = nb_trees_per_ensemble
     self.max_depth = max_depth
@@ -141,15 +138,15 @@ class GradientBoostingEnsemble:
 
     # classification vs regression
     if not n_classes:
-      self.loss_ = LeastSquaresError()  # type: LossFunction, RL: CHANGED
+      self.loss_ = LeastSquaresError()  # type: LossFunction
     else:
-      if n_classes == 2:
+      if n_classes == 2: # option to use regression for binary classification. Default False
         if self.binary_classification:  # Through regression model
-          self.loss_ = LeastSquaresError(1)
+          self.loss_ = LeastSquaresError()
         else:  # Through classification model
-          self.loss_ = BinomialDeviance(n_classes)
+          self.loss_ = BinomialDeviance(n_classes) # -> dual classification
       else:
-        self.loss_ = MultinomialDeviance(n_classes)
+        self.loss_ = MultinomialDeviance(n_classes) # -> milticlass classification
 
     self.init_ = self.loss_.init_estimator()
 
@@ -184,23 +181,22 @@ class GradientBoostingEnsemble:
 
     self.test_size = test_size
 
-  def Train(self,
-            X: np.array,
-            y: np.array) -> 'GradientBoostingEnsemble':
+
+
+
+
+  def Train(self, X: np.array, y: np.array) -> 'GradientBoostingEnsemble':    # called once
     """Train the ensembles of gradient boosted trees.
 
     Args:
       X (np.array): The features.
       y (np.array): The label.
-
     Returns:
       GradientBoostingEnsemble: A GradientBoostingEnsemble object.
     """
-
     # Init gradients
     self.init_.fit(X, y)
-    self.init_score = self.loss_.get_init_raw_predictions(
-        X, self.init_)  # (n_samples, K)
+    self.init_score = self.loss_.get_init_raw_predictions(X, self.init_)  # (n_samples, K)
     logger.debug('Training initialized with score: {}'.format(self.init_score))
     update_gradients = True
 
@@ -231,7 +227,7 @@ class GradientBoostingEnsemble:
 
       current_tree_for_ensemble = tree_index % self.nb_trees_per_ensemble
       if current_tree_for_ensemble == 0:
-        # Initialize the dataset and the gradients
+        # Initialize the dataset and the gradients  # probably works only because he uses max 1 ensemble
         X_ensemble = np.copy(X)
         y_ensemble = np.copy(y)
         prev_score = np.inf
@@ -258,14 +254,13 @@ class GradientBoostingEnsemble:
           # Line 8 of Algorithm 2 from the paper
           number_of_rows = int((len(X) * self.learning_rate * math.pow(
             (1 - self.learning_rate), current_tree_for_ensemble)) / (
-                1 - math.pow((
-                    1 - self.learning_rate), self.nb_trees_per_ensemble)))
+                1 - math.pow((1 - self.learning_rate), self.nb_trees_per_ensemble)))
 
         # If using the formula from the algorithm, some trees may not get
         # samples. In that case we skip the tree and issue a warning. This
         # should hint the user to change its parameters (likely the ensembles
         # are too unbalanced)
-        if number_of_rows == 0:  # pylint: disable=no-else-continue
+        if number_of_rows == 0:
           logger.warning('The choice of trees per ensemble vs. the total number'
                          ' of trees is not balanced properly; some trees will '
                          'not get any training samples. Try using '
@@ -275,11 +270,11 @@ class GradientBoostingEnsemble:
           number_of_rows = len(X_ensemble)
 
         # Select <number_of_rows> rows at random from the ensemble dataset
-        rows = np.random.choice(range(len(X_ensemble)),
-                                size=number_of_rows,
-                                replace=False)
-        X_tree = X_ensemble[rows, :]
-        y_tree = y_ensemble[rows]
+        rows = np.random.choice(range(len(X_ensemble)), size=number_of_rows, replace=False)  # gives list of row indices
+        X_tree = X_ensemble[rows, :] # here they are copied
+        y_tree = y_ensemble[rows]     # WTF EACH TREE GETS A RANDOM CHUNK OF TRAINING DATA -> NON DISJUNCT ???
+                                      # yes, that is what happens. Need to investigate whether this is legal / the idea.
+                                      # No, he removes it at the end of Train(). But only if the tree improved the ensemble!
 
         # train for each class a separate tree on the same rows.
         # In regression or binary classification, K has been set to one.
@@ -288,8 +283,7 @@ class GradientBoostingEnsemble:
           if tree_index == 0:
             # First tree, start with initial scores (mean of labels)
             assert self.init_score is not None
-            gradients = self.ComputeGradientForLossFunction(
-                y, self.init_score[:len(y)], kth_tree)
+            gradients = self.ComputeGradientForLossFunction(y, self.init_score[:len(y)], kth_tree)
           else:
             # Update gradients of all training instances on loss l
             if update_gradients:
@@ -302,10 +296,8 @@ class GradientBoostingEnsemble:
 
           # Gradient based data filtering
           if self.gradient_filtering:
-            gradients_tree[
-                gradients_tree > self.l2_threshold] = self.l2_threshold
-            gradients_tree[
-                gradients_tree < -self.l2_threshold] = -self.l2_threshold
+            gradients_tree[gradients_tree > self.l2_threshold] = self.l2_threshold
+            gradients_tree[gradients_tree < -self.l2_threshold] = -self.l2_threshold
 
           logger.debug('Tree {0:d} will receive a budget of epsilon={1:f} and '
                        'train on {2:d} instances.'.format(
@@ -338,7 +330,7 @@ class GradientBoostingEnsemble:
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
       else:
-        # Fit a normal decision tree
+        # Fit a normal (non DP) decision tree
         k_trees = []
         for kth_tree in range(self.loss_.K):
           if tree_index == 0:
@@ -368,10 +360,10 @@ class GradientBoostingEnsemble:
               use_decay=self.use_decay,
               cat_idx=self.cat_idx,
               num_idx=self.num_idx)
-          tree.Fit(X, (y == kth_tree).astype(
-              np.float64) if self.loss_.is_multi_class else y, gradients)
+          tree.Fit(X, (y == kth_tree).astype(np.float64) if self.loss_.is_multi_class else y, gradients)
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
+      
       self.trees.append(k_trees)
 
       score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
@@ -379,8 +371,7 @@ class GradientBoostingEnsemble:
                   'score so far: {2:f}'.format(tree_index, score, prev_score))
 
       if score >= prev_score:
-        # This tree doesn't improve overall prediction quality, removing from
-        # model
+        # This tree doesn't improve overall prediction quality, removing from model
         # not reusing gradients in multi-class as they are class-dependent
         update_gradients = self.loss_.is_multi_class
         self.trees.pop()
@@ -405,6 +396,9 @@ class GradientBoostingEnsemble:
 
     return self
 
+
+
+
   def Predict(self, X: np.array) -> np.array:
     """Predict values from the ensemble of gradient boosted trees.
 
@@ -412,14 +406,12 @@ class GradientBoostingEnsemble:
 
     Args:
       X (np.array): The dataset for which to predict values.
-
     Returns:
       np.array of shape (n_samples, K): The predictions.
     """
     # sum across the ensemble per class
     predictions = np.sum([[self.learning_rate * tree.Predict(X)
-                           for tree in k_trees] for k_trees in self.trees],
-                         axis=0).T
+                           for tree in k_trees] for k_trees in self.trees], axis=0).T
     if len(X) <= len(self.init_score):
       assert self.init_score is not None
       init_score = self.init_score[:len(predictions)]
@@ -429,16 +421,17 @@ class GradientBoostingEnsemble:
     init_score = self.loss_.get_init_raw_predictions(X, self.init_)
     return np.add(init_score, predictions)
 
+
+
+
   def PredictLabels(self, X: np.ndarray) -> np.ndarray:
     """Predict labels out of the raw prediction values of `Predict`.
        Only defined for classification tasks.
 
     Args:
       X (np.ndarray): The dataset for which to predict labels.
-
     Returns:
       np.ndarray: The label predictions.
-
     Raises:
       ValueError: If the loss function doesn't match the prediction task.
     """
@@ -446,20 +439,19 @@ class GradientBoostingEnsemble:
       raise ValueError("Labels are not defined for regression tasks.")
 
     raw_predictions = self.Predict(X)
-    # pylint: disable=no-member,protected-access
     encoded_labels = self.loss_._raw_prediction_to_decision(raw_predictions)
-    # pylint: enable=no-member,protected-access
     return encoded_labels
+
+
+
 
   def PredictProba(self, X: np.ndarray) -> np.ndarray:
     """Predict class probabilities for X.
 
     Args:
       X (np.ndarray): The dataset for which to predict labels.
-
     Returns:
       np.ndarray: The class probabilities of the input samples.
-
     Raises:
       ValueError: If the loss function doesn't match the prediction task.
     """
@@ -467,22 +459,19 @@ class GradientBoostingEnsemble:
       raise ValueError("Labels are not defined for regression tasks.")
 
     raw_predictions = self.Predict(X)
-    # pylint: disable=no-member,protected-access
     probas = self.loss_._raw_prediction_to_proba(raw_predictions)
-    # pylint: enable=no-member,protected-access
     return probas
 
-  def ComputeGradientForLossFunction(self,
-                                     y: np.array,
-                                     y_pred: np.array,
-                                     k: int) -> np.array:
+
+
+
+  def ComputeGradientForLossFunction(self, y: np.array, y_pred: np.array, k: int) -> np.array:
     """Compute the gradient of the loss function.
 
     Args:
       y (np.array): The true values.
       y_pred (np.array): The predictions.
       k (int): the class.
-
     Returns:
       (np.array): The gradient of the loss function.
     """
@@ -491,6 +480,11 @@ class GradientBoostingEnsemble:
     # sklearn's impl is using the negative gradient (i.e. y - F).
     # Here the positive gradient is used though
     return -self.loss_.negative_gradient(y, y_pred, k=k)
+
+
+
+
+
 
 
 class DecisionNode:
@@ -508,8 +502,6 @@ class DecisionNode:
     prediction (float): For a leaf node, holds the predicted value.
     processed (bool): If a node has been processed during BFS tree construction.
   """
-  # pylint: disable=too-many-arguments
-
   def __init__(self,
                X: Optional[np.array] = None,
                y: Optional[np.array] = None,
@@ -545,8 +537,6 @@ class DecisionNode:
       prediction (float): Optional. For a leaf node, holds the predicted value.
           Default is None.
     """
-    # pylint: disable=invalid-name
-
     self.X = X
     self.y = y
     self.gradients = gradients
@@ -562,6 +552,7 @@ class DecisionNode:
     # To export the tree and plot it, we have to conform to scikit's attributes
     self.n_outputs = 1
     self.node_id = None  # type: Optional[int]
+
 
 
 class TreeExporter:
@@ -614,6 +605,9 @@ class TreeExporter:
     self.weighted_n_node_samples = np.full(fill_value=1, shape=len(nodes))
 
 
+
+
+
 class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
   """Implement a differentially private decision tree.
 
@@ -631,8 +625,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
         suitable for regression and classification.
     max_depth (int): Max. depth for the tree.
   """
-  # pylint: disable=invalid-name,too-many-arguments
-
   def __init__(self,
                tree_index: int,
                learning_rate: float,
@@ -732,6 +724,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
 
     self.decision_path = []
 
+
+
   def Fit(self, X: np.array, y: np.ndarray, gradients: np.array) -> None:
     """Fit the tree to the data.
 
@@ -777,6 +771,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.AssignNodeIDs(root_node, node_ids)
     self.tree_ = TreeExporter(self.nodes, self.l2_lambda)
 
+
+
   def MakeTreeDFS(self,
                   X: np.array,
                   y: np.ndarray,
@@ -797,7 +793,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
           For 3_trees only.
       gradients_sibling (np.array): Optional. The gradients in the sibling
           node. For 3_trees only.
-
     Returns:
       DecisionNode: A decision node.
     """
@@ -810,6 +805,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
                           depth=current_depth)
       self.nodes.append(node)
       return node
+
 
     if current_depth == max_depth or len(X) < self.min_samples_split:
       # Max depth reached or not enough samples to split node, node is a leaf
@@ -858,17 +854,15 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
 
     return MakeLeafNode()
 
-  def MakeTreeBFS(self,
-                  X: np.array,
-                  y: np.ndarray,
-                  gradients: np.array) -> DecisionNode:
+
+
+  def MakeTreeBFS(self, X: np.array, y: np.ndarray, gradients: np.array) -> DecisionNode:
     """Build a tree in a best-leaf first fashion.
 
     Args:
       X (np.array): The dataset.
       y (np.ndarray): The dataset labels.
       gradients (np.array): The gradients for the dataset instances.
-
     Returns:
       DecisionNode: A decision node.
     """
@@ -901,6 +895,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       if not node.prediction and not node.left_child and not node.right_child:
         node.prediction = self.GetLeafPrediction(node.gradients, node.y)
     return node
+
+
 
   def _ExpandTreeBFS(self) -> None:
     """Expand a tree in a best-leaf first fashion.
@@ -999,6 +995,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.nodes_bfs.put(left_child)
     return self._ExpandTreeBFS()
 
+
+
   def _MakeLeaf(self, node: DecisionNode) -> None:
     """Make a node a leaf node.
 
@@ -1008,6 +1006,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     node.prediction = self.GetLeafPrediction(node.gradients, node.y)
     self.current_number_of_leaves += 1
     self.nodes.append(node)
+
+
 
   def _IsMaxLeafReached(self) -> bool:
     """Check if we reached maximum number of leaf nodes.
@@ -1024,6 +1024,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       if self.current_number_of_leaves + leaf_candidates >= self.max_leaves:
         self.max_leaves_reached = True
     return self.max_leaves_reached
+
+
 
   def FindBestSplit(self,
                     X: np.array,
@@ -1043,7 +1045,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
           For 3_trees only.
       gradients_sibling (np.array): Optional. The gradients in the sibling
           node. For 3_trees only.
-
     Returns:
       Optional[Dict[str, Any]]: A dictionary containing the split
           information, or none if no split could be done.
@@ -1101,8 +1102,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
         probabilities.append(prob)
     if self.use_dp:
       return ExponentialMechanism(probabilities, max_gain)
-    return max(
-        probabilities, key=lambda x: x['gain']) if probabilities else None
+    return max(probabilities, key=lambda x: x['gain']) if probabilities else None
+
+
 
   def GetLeafPrediction(self, gradients: np.array, y: np.ndarray) -> float:
     """Compute the leaf prediction.
@@ -1115,6 +1117,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       float: The prediction for the leaf node
     """
     return ComputePredictions(gradients, y, self.loss, self.l2_lambda)
+
+
 
   def Predict(self, X: np.array) -> np.array:
     """Return predictions for a list of input data.
@@ -1129,6 +1133,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     for row in X:
       predictions.append(self._Predict(row, self.root_node))  # type: ignore
     return np.asarray(predictions)
+
+
 
   def _Predict(self, row: np.array, node: DecisionNode) -> float:
     """Walk through the decision tree to output a prediction for the row.
@@ -1152,10 +1158,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       child_node = node.left_child
     return self._Predict(row, child_node)  # type: ignore
 
-  def ComputeGain(self,
-                  index: int,
-                  value: Any,
-                  X: np.array,
+
+
+  def ComputeGain(self, index: int, value: Any, X: np.array,
                   gradients: np.array,
                   X_sibling: Optional[np.array] = None,
                   gradients_sibling: Optional[np.array] = None) -> float:
@@ -1198,6 +1203,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     total_gain = lhs_gain + rhs_gain
     return total_gain if total_gain >= 0. else 0.
 
+
+
   def AssignNodeIDs(self,
                     node: DecisionNode,
                     node_ids: Queue  # type: ignore
@@ -1213,6 +1220,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.AssignNodeIDs(node.left_child, node_ids)
     if node.right_child:
       self.AssignNodeIDs(node.right_child, node_ids)
+
+
 
   @staticmethod
   def fit() -> None:
@@ -1230,10 +1239,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     return self.decision_path
 
 
-def ClipLeaves(leaves: List[DecisionNode],
-               l2_threshold: float,
-               learning_rate: float,
-               tree_index: int) -> None:
+
+def ClipLeaves(leaves: List[DecisionNode], l2_threshold: float, learning_rate: float, tree_index: int) -> None:
   """Clip leaf nodes.
 
   If the prediction is higher than the threshold, set the prediction to
@@ -1255,15 +1262,14 @@ def ClipLeaves(leaves: List[DecisionNode],
         leaf.prediction = -1 * threshold
 
 
-def AddLaplacianNoise(leaves: List[DecisionNode],
-                      scale: float) -> None:
+
+def AddLaplacianNoise(leaves: List[DecisionNode], scale: float) -> None:
   """Add laplacian noise to the leaf nodes.
 
   Args:
     leaves (List[DecisionNode]): The list of leaves.
     scale (float): The scale to use for the laplacian distribution.
   """
-
   for leaf in leaves:
     noise = np.random.laplace(0, scale)
     logger.debug('Leaf value before noise: {0:f}'.format(
@@ -1273,10 +1279,8 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
         np.float(leaf.prediction)))
 
 
-def ComputePredictions(gradients: np.ndarray,
-                       y: np.ndarray,
-                       loss: LossFunction,
-                       l2_lambda: float) -> float:
+
+def ComputePredictions(gradients: np.ndarray, y: np.ndarray, loss: LossFunction, l2_lambda: float) -> float:
   """Computes the predictions of a leaf.
 
   Used in the `DifferentiallyPrivateTree` as well as in `SplitNode`
@@ -1285,14 +1289,12 @@ def ComputePredictions(gradients: np.ndarray,
   Ref:
     Friedman 01. "Greedy function approximation: A gradient boosting machine."
       (https://projecteuclid.org/euclid.aos/1013203451)
-
   Args:
     gradients (np.ndarray): The positive gradients y˜ for the dataset instances.
     y (np.ndarray): The dataset labels y.
     loss (LossFunction): An sklearn loss wrapper
         suitable for regression and classification.
     l2_lambda (float): Regularization parameter for l2 loss function.
-
   Returns:
     Prediction γ of a leaf
   """
@@ -1312,6 +1314,7 @@ def ComputePredictions(gradients: np.ndarray,
   return prediction
 
 
+
 def ExponentialMechanism(
     probabilities: List[Dict[str, Any]],
     max_gain: float,
@@ -1323,7 +1326,6 @@ def ExponentialMechanism(
     max_gain (float): The maximum gain amongst all probabilities in the list.
     reverse (bool): Optional. If True, sort probabilities in reverse order (
         i.e. lower gains are better).
-
   Returns:
     Dict: a candidate (i.e. probability) from the list.
   """

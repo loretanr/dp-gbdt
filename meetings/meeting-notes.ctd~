@@ -203,7 +203,7 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
    ◇ and need space to insert solutions like “use list, loop through all nodes etc”</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1621853459.74" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622125439.92" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -365,8 +365,11 @@ Questions
 
 --------------------------------------
 go through the 2 pseudocode algorithms in 
-make shared google docs with comments at each step whether its secret dependant.</rich_text>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="creating a single tree" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621853459.74" ts_lastsave="1621864859.28" unique_id="7">
+make shared google docs with comments at each step whether its secret dependant.
+
+
+gonna be interesting how fast the CPP is, since Python used automatic sklearn multithreading (4 threads on my laptop)</rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="creating a single tree" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621853459.74" ts_lastsave="1622032046.54" unique_id="7">
 			<rich_text scale="h1">creating a single tree</rich_text>
 			<rich_text>
 
@@ -382,8 +385,85 @@ ressources to check before start:
       ▪ </rich_text>
 			<rich_text link="webs https://github.com/zhaoxingfeng/XGBoost-cpp/blob/master/src/decision_tree.cpp">https://github.com/zhaoxingfeng/XGBoost-cpp/blob/master/src/decision_tree.cpp</rich_text>
 			<rich_text>
+      ▪ </rich_text>
+			<rich_text link="webs https://github.com/HrBlack/GBDT/blob/master/decision_tree.cpp">https://github.com/HrBlack/GBDT/blob/master/decision_tree.cpp</rich_text>
+			<rich_text>
    ◇ 
-• stuff from the paper.</rich_text>
+• stuff from the paper
+
+
+
+==============================
+What I need:
+   •  train() / fit()
+      ◇ loop to grow_tree() each tree in the ensemble
+   • grow_tree()
+      ◇ XGBoost uses a queue
+      ◇ HrBlack/GBDT uses 2 lists that he pushes into
+      ◇ XGBoost-cpp uses class Tree with attributes like split_val, left_child etc.
+      ◇ Theo builds it recursively with MakeTreeBFS/DFS -&gt; create nodes and point to the children etc.
+         ▪ the logic is all there, no ML library used.</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622108984.01" ts_lastsave="1622128336.23" unique_id="8">
+			<rich_text foreground="#9090eeee9090">start with bfs / dfs / 2-nodes ?   Need all 3 in final implementation?</rich_text>
+			<rich_text>
+   •  2-nodes was best
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">which dataset am I working with? synthetic I guess?</rich_text>
+			<rich_text>
+
+-------------------------------------
+</rich_text>
+			<rich_text foreground="#9090eeee9090">which options to implement</rich_text>
+			<rich_text>
+• bfs / dfs / 2-nodes (best, mostly)
+   ◇ Default I'll do 
+      ▪ 2-nodes, (with Leaf clipping and gradient filtering)
+      ▪ balance partition = yes  (aka same number of trees per ensemble)
+• Looking at it it all makes sense, or is not much overhead for me anyway
+• questionable
+   ◇ use_decay (&quot;</rich_text>
+			<rich_text foreground="#2aa198">internal node privacy budget has a decaying factor</rich_text>
+			<rich_text>&quot;)
+      ▪ by default off, in results/  it's also never used.
+      ▪ so this probably means it was not useful resp “can worsen accuracy” according to GLC section of base paper
+      ▪ but implementation overhead is tiny.
+
+• “according to thesis” GDF (filtering) can be selectively enabled.
+   ◇ </rich_text>
+			<rich_text foreground="#ffffa5a50000">the instances with a very large gradient are often outliers in the training data set since they cannot be well learned by GBDTs. Thus, it is reasonable to learn a tree by filtering those</rich_text>
+			<rich_text>
+outliers.
+   ◇ simple option model.py line ~295
+   ◇ can later test whether it makes any difference
+      ▪ leave away for now.</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="ensembles" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622123435.95" ts_lastsave="1622197846.67" unique_id="9">
+			<rich_text>Train()
+   •  info-logs the number of ensembles
+   • called by estimator. (DPGBT).fit()
+   • Then all trees get trained
+      ◇ and they are assigned to their ensemble by   index modulo #ensembles
+   • Theos code does 50 trees 1 ensemble for the 5000 samples case (at least for abalone)
+      ◇ for the 300 sample case he uses 5 trees and ignores the nb_trees_per_ensemble
+
+fit()
+   •  called by directly after chearing model = (, , , , , ,) model.fit(X,y)
+   • example.py only creates 1 (50 tree) ensemble
+   • cross_val he would do 50 trees per ensemble
+
+
+
+</rich_text>
+			<rich_text scale="h2">Train()</rich_text>
+			<rich_text>
+• so theo does like an ensemble of 50 trees for like 3000 samples.
+• so each gets 60 instances.
+• Theo randomly selects 60 and checks if the tree improves the ensembles least squares error score.
+   ◇ If not, he “skips” that tree (by not even saving it) 
+      ▪ its training instances though are keptl usable for the next ones.
+   ◇ So the number of trees (out of those 50) is variable and depends on the run! (like 20-30) out of 50</rich_text>
 		</node>
 	</node>
 </cherrytree>
