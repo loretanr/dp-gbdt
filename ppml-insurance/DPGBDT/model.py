@@ -274,13 +274,13 @@ class GradientBoostingEnsemble:
         X_tree = X_ensemble[rows, :] # here they are copied
         y_tree = y_ensemble[rows]     # WTF EACH TREE GETS A RANDOM CHUNK OF TRAINING DATA -> NON DISJUNCT ???
                                       # yes, that is what happens. Need to investigate whether this is legal / the idea.
-                                      # No, he removes it at the end of Train(). But only if the tree improved the ensemble!
+                                      # No, he removes it at the end of Train(). But only if the tree improved the LSE score!
 
         # train for each class a separate tree on the same rows.
         # In regression or binary classification, K has been set to one.
-        k_trees = []  # type: List[DifferentiallyPrivateTree]
-        for kth_tree in range(self.loss_.K):
-          if tree_index == 0:
+        k_trees = []  # type: List[DifferentiallyPrivateTree]               # K: The number of regression trees to be induced;
+        for kth_tree in range(self.loss_.K):                                # 1 for regression and binary classification;
+          if tree_index == 0:                                               # ``n_classes`` for multi-class classification.
             # First tree, start with initial scores (mean of labels)
             assert self.init_score is not None
             gradients = self.ComputeGradientForLossFunction(y, self.init_score[:len(y)], kth_tree)
@@ -364,7 +364,7 @@ class GradientBoostingEnsemble:
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
       
-      self.trees.append(k_trees)
+      self.trees.append(k_trees)   # it's always only a 1 tree list, except in multiclassification
 
       score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
       logger.info('Decision tree {0:d} fit. Current score: {1:f} - Best '

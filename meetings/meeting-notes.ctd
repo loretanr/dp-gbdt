@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1621517715.69" unique_id="1">
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1622210274.9" unique_id="1">
 		<rich_text>Thu 3pm
 Link:  </rich_text>
 		<rich_text foreground="#3d3c40"> </rich_text>
@@ -202,8 +202,79 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
    ◇ need to be able to annotate each part with our ideas whether it is potentially risky
    ◇ and need space to insert solutions like “use list, loop through all nodes etc”</rich_text>
 		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="05_28" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622210274.9" ts_lastsave="1622213346.65" unique_id="10">
+			<rich_text>
+• High level analysis of the algorithm side channel was ok.
+    But at some point we need a more detailed overview of the problem and how my implementation solves it.
+
+• Had difficulties to explain the The [0,1] probabilities addition thingy. 
+        The thing that Theo does to implement the exponential mechanism.
+        is named something like CTF (probability distribution) with increasing balkens something.
+        
+        
+        
+</rich_text>
+			<rich_text scale="h2">Q &amp; A</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">do you see any difference in this approach vs creating all 50 sets at once</rich_text>
+			<rich_text>
+    “unused samples are not put back”
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">Esfandiar sees privacy dangers in this approach</rich_text>
+			<rich_text>
+        </rich_text>
+			<rich_text foreground="#ffffa5a50000">if there's a tree whose ability to improve the model (discard tree or not) depends on 1 point</rich_text>
+			<rich_text>
+            then someone might learn something somehow. Esfandiar thinks so.
+            maybe an adversary could recognize whether a sample “put back” resp. used again
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">is it normal for GBDT that you end up using less tree than specified?</rich_text>
+			<rich_text>
+   •  when tested, out of 50 possible trees it ended up being ~25
+   •  so half of the training data was not &quot;used&quot; 
+   •  but we still paid privacy budget for it
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">   • It's not normal, normal GBDT improve with every tree.
+      ◇  but it makes sense because of DP! Randomization can create useless trees</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">Do you think that leaks information if we don't keep trees that are not used for prediction later?
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">YES, must keep all trees! (Esfandiar)</rich_text>
+			<rich_text>
+    
+</rich_text>
+			<rich_text foreground="#9090eeee9090">start with bfs / dfs / 2-nodes ?   Need all 3 in final implementation?</rich_text>
+			<rich_text>
+   •  2-nodes was best
+   </rich_text>
+			<rich_text foreground="#ffffa5a50000">• would be nice to have all options</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">which dataset am I working with? synthetic I guess?</rich_text>
+			<rich_text>
+       </rich_text>
+			<rich_text foreground="#ffffa5a50000">• would be nice to have all abalones and datasets!</rich_text>
+			<rich_text>
+       
+    
+</rich_text>
+			<rich_text scale="h2">TODO</rich_text>
+			<rich_text> next steps:
+   ◇ we need to check with higher privacy budget. Then less trees should get discarded.
+
+   ◇ </rich_text>
+			<rich_text weight="heavy">Remove the “put back ” strategy in python code and see whether it works as good as Theo’s code does.</rich_text>
+			<rich_text>
+</rich_text>
+		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622125439.92" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622213748.39" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -335,7 +406,9 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 		<rich_text foreground="#bbbbbb" weight="heavy">):</rich_text>
 		<rich_text>
    ◇ similar
-uses resp. wraps around the model.py stuff
+uses resp. wraps around the model.py stuff. </rich_text>
+		<rich_text foreground="#ffffa5a50000">It's to use sklearn.cross_val on a DPGBDT object.</rich_text>
+		<rich_text>
 
 --------------------------------------------------------
 
@@ -404,18 +477,34 @@ What I need:
       ◇ Theo builds it recursively with MakeTreeBFS/DFS -&gt; create nodes and point to the children etc.
          ▪ the logic is all there, no ML library used.</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622108984.01" ts_lastsave="1622128336.23" unique_id="8">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622108984.01" ts_lastsave="1622213562.55" unique_id="8">
 			<rich_text foreground="#9090eeee9090">start with bfs / dfs / 2-nodes ?   Need all 3 in final implementation?</rich_text>
 			<rich_text>
    •  2-nodes was best
+   </rich_text>
+			<rich_text foreground="#ffffa5a50000">• yeah want all</rich_text>
+			<rich_text>
 
 </rich_text>
 			<rich_text foreground="#9090eeee9090">which dataset am I working with? synthetic I guess?</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">all, but synthetic will later be the focus</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">multi classification necessary?</rich_text>
+			<rich_text>
+   </rich_text>
+			<rich_text foreground="#ffffa5a50000"> if some dataset requires it, yes, because we want all the abalones etc</rich_text>
 			<rich_text>
 
 -------------------------------------
 </rich_text>
 			<rich_text foreground="#9090eeee9090">which options to implement</rich_text>
+			<rich_text>
+• </rich_text>
+			<rich_text foreground="#ffffa5a50000">we want almost all of them (Esfandiar)</rich_text>
 			<rich_text>
 • bfs / dfs / 2-nodes (best, mostly)
    ◇ Default I'll do 
@@ -437,9 +526,49 @@ What I need:
 outliers.
    ◇ simple option model.py line ~295
    ◇ can later test whether it makes any difference
-      ▪ leave away for now.</rich_text>
+      ▪ leave away for now.
+
+
+-------------------------------------------------
+</rich_text>
+			<rich_text foreground="#9090eeee9090">do you see any difference in this approach vs creating all 50 sets at once</rich_text>
+			<rich_text>
+    “unused samples are not put back”
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">Esfandiar sees privacy dangers in this approach</rich_text>
+			<rich_text>
+        </rich_text>
+			<rich_text foreground="#ffffa5a50000">if there's a tree whose ability to improve the model (discard tree or not) depends on 1 point</rich_text>
+			<rich_text>
+            then someone might learn something somehow. Esfandiar thinks so.
+            maybe an adversary could recognize whether a sample “put back” resp. used again
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">is it normal for GBDT that you end up using less tree than specified?</rich_text>
+			<rich_text>
+   •  when tested, out of 50 possible trees it ended up being ~25
+   •  so half of the training data was not &quot;used&quot; 
+   •  but we still paid privacy budget for it
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">   • It's not normal, but it makes sense because of DP! Randomization can create useless trees</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">Do you think that leaks information if we don't keep trees that are not used for prediction later?
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">YES, must keep all trees! (Esfandiar)</rich_text>
+			<rich_text foreground="#9090eeee9090">
+
+</rich_text>
+			<rich_text foreground="#ffffffffffff">==============================</rich_text>
+			<rich_text foreground="#9090eeee9090">
+
+try with larger privacy budget, see if not so many trees are discarded
+</rich_text>
+			<rich_text>
+</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="ensembles" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622123435.95" ts_lastsave="1622197864.9" unique_id="9">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="ensembles" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622123435.95" ts_lastsave="1622213662.62" unique_id="9">
 			<rich_text>Train()
    •  info-logs the number of ensembles
    • called by estimator. (DPGBT).fit()
@@ -465,8 +594,7 @@ fit()
       ▪ its training instances though are keptl usable for the next ones.
    ◇ So the number of trees (out of those 50) is variable and depends on the run! (like 20-30) out of 50
 
-
-TODO connect this with the docs algo.</rich_text>
+</rich_text>
 		</node>
 	</node>
 </cherrytree>

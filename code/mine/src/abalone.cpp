@@ -14,7 +14,7 @@ int main()
     ifstream infile("data/abalone.data");
     string line;
     float val;
-    vector<vector<float>> X;
+    vector<vector<float>> X; // TODO think about row/columnwise what makes sense
     vector<float> y;
 
     int lineIdx = 0;
