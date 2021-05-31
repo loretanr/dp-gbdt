@@ -92,7 +92,7 @@ if __name__ == '__main__':
               transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
                                                                    # must implement fit()
           scores = cross_val_score(
-              regressor, X, y, cv=validator, scoring=rmse, n_jobs=1) # was -1 for multithreading
+              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # was -1 for multithreading
           
           mean, std = scores.mean(), (scores.std() / 2)
 

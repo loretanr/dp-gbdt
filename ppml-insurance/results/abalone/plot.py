@@ -12,7 +12,7 @@ PATH = './results/abalone/'
 SAMPLES = [300, 5000]
 
 if __name__ == '__main__':
-  data = pd.read_csv(PATH + 'data.csv', usecols=[
+  data = pd.read_csv(PATH + 'data_noscale_31-05-21_16:22.csv', usecols=[
       'dataset', 'nb_samples', 'privacy_budget', 'nb_tree',
       'nb_tree_per_ensemble', 'max_depth',
       'max_leaves', 'learning_rate', 'nb_of_runs', 'mean', 'std', 'model',
@@ -44,10 +44,10 @@ if __name__ == '__main__':
           else:
             if config == '3-trees':
               marker = '-s'
-              label = 'DPGBDT (2-nodes)'
+              label = 'DPGBDT (2-nodes)-noscale'
             else:
               marker = '-^'
-              label = 'DPGBDT (Depth-first)'
+              label = 'DPGBDT (Depth-first)-noscale'
         else:
           mean = list([values['mean'].values[0] for _ in range(
             len(privacy_budgets))])
@@ -74,5 +74,5 @@ if __name__ == '__main__':
     plt.ylabel('RMSE')
     now = datetime.now().strftime("%d-%m-%y_%H:%M")
     plt.savefig(
-        PATH + 'results_{0!s}_{1!s}.png'.format(nb_samples, now), 
+        PATH + 'results_noscale_{0!s}_{1!s}.png'.format(nb_samples, now), 
         format='png', dpi=600)
