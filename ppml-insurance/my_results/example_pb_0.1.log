@@ -1,0 +1,55 @@
+Abalone, 1 ensemble with 50 trees, privacy budget = 0.1
+Using all 4100 samples, (0.75,0.25) train-test-split
+learning_rate=0.1
+
+
+Mean                      RMSE: 3.14
+Depth first growth        RMSE: 2.97    #trees used: 23/50
+Best-leaf first growth    RMSE: 3.15    #trees used: 8/50
+3-nodes trees growth      RMSE: 3.66    #trees used: 24/50
+---------
+Mean                      RMSE: 3.41
+Depth first growth        RMSE: 2.94    #trees used: 28/50
+Best-leaf first growth    RMSE: 3.41    #trees used: 6/50
+3-nodes trees growth      RMSE: 3.20    #trees used: 24/50
+---------
+Mean                      RMSE: 3.24
+Depth first growth        RMSE: 2.98    #trees used: 26/50
+Best-leaf first growth    RMSE: 3.24    #trees used: 5/50
+3-nodes trees growth      RMSE: 3.17    #trees used: 20/50
+---------
+Mean                      RMSE: 3.16
+Depth first growth        RMSE: 3.98    #trees used: 26/50
+Best-leaf first growth    RMSE: 3.17    #trees used: 7/50
+3-nodes trees growth      RMSE: 4.75    #trees used: 33/50
+---------
+Mean                      RMSE: 3.21
+Depth first growth        RMSE: 3.07    #trees used: 26/50
+Best-leaf first growth    RMSE: 3.21    #trees used: 8/50
+3-nodes trees growth      RMSE: 3.17    #trees used: 22/50
+---------
+Mean                      RMSE: 3.19
+Depth first growth        RMSE: 3.15    #trees used: 17/50
+Best-leaf first growth    RMSE: 3.19    #trees used: 6/50
+3-nodes trees growth      RMSE: 3.51    #trees used: 27/50
+---------
+Mean                      RMSE: 3.07
+Depth first growth        RMSE: 3.89    #trees used: 29/50
+Best-leaf first growth    RMSE: 3.07    #trees used: 8/50
+3-nodes trees growth      RMSE: 3.15    #trees used: 20/50
+---------
+Mean                      RMSE: 3.23
+Depth first growth        RMSE: 3.26    #trees used: 24/50
+Best-leaf first growth    RMSE: 3.23    #trees used: 4/50
+3-nodes trees growth      RMSE: 3.57    #trees used: 26/50
+---------
+Mean                      RMSE: 3.08
+Depth first growth        RMSE: 2.90    #trees used: 27/50
+Best-leaf first growth    RMSE: 3.08    #trees used: 9/50
+3-nodes trees growth      RMSE: 3.24    #trees used: 25/50
+---------
+Mean                      RMSE: 3.24
+Depth first growth        RMSE: 3.33    #trees used: 24/50
+Best-leaf first growth    RMSE: 3.24    #trees used: 13/50
+3-nodes trees growth      RMSE: 3.42    #trees used: 27/50
+---------
