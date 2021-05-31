@@ -11,6 +11,8 @@ from sklearn.compose import TransformedTargetRegressor
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import RobustScaler
 
 from data.parser.parser import Parser
 from evaluation import estimator
@@ -18,11 +20,11 @@ from evaluation import estimator
 # The dataset to use for evaluation
 DATASET = 'abalone'
 # The privacy budget to use for evaluation
-PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1)
+PRIVACY_BUDGETS = [0.1, 1]
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
-SAMPLES = [300, 5000]
+SAMPLES = [5000]
 # Nb trees for each ensemble
 NB_TREES_PER_ENSEMBLE = 50
 
@@ -45,16 +47,17 @@ if __name__ == '__main__':
     X, y, cat_idx, num_idx, task = parser.Parse(n_rows=nb_samples)
 
     # Own model
-    models = [estimator.DPGBDT, estimator.DPRef]
+    models = [estimator.DPGBDT] #, estimator.DPRef]
 
     rmse = make_scorer(metrics.mean_squared_error, squared=False)
+    #rmse = metrics.mean_squared_error(squared=False)
     
     validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=True)
 
     for model in models: # not used as variable, just to have 2 iterations
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
-      for config in ['DFS', 'Vanilla', 'BFS', '3-trees']:
+      for config in ['DFS']:
         for idx, budget in enumerate(PRIVACY_BUDGETS):
           if config == 'Vanilla' and idx != 0:
             continue
@@ -88,11 +91,11 @@ if __name__ == '__main__':
               num_idx=num_idx,
               verbosity=0)  # type: ignore
           regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
-              regressor=m,                               # that are used to predict the target"
-              transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
+              regressor=m) #, transformer=RobustScaler())#,                               # that are used to predict the target"
+              #transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
                                                                    # must implement fit()
           scores = cross_val_score(
-              regressor, X, y, cv=validator, scoring=rmse, n_jobs=1) # was -1 for multithreading
+              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # was -1 for multithreading
           
           mean, std = scores.mean(), (scores.std() / 2)
 

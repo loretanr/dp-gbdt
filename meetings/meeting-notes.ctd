@@ -274,7 +274,7 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 </rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622213748.39" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622451203.85" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -595,6 +595,86 @@ fit()
    ◇ So the number of trees (out of those 50) is variable and depends on the run! (like 20-30) out of 50
 
 </rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1622465895.26" unique_id="11">
+			<rich_text>TODO make sure giovanna and DPGBDT indeed use different model.py
+    by debug breakpoint
+   •  the DPGBDT one uses its own model \checkmark
+
+Looking at the example.py results.
+
+   •  so, somehow BFS is either bad or wrong implemented
+        probably why it Theo does not mention it in thesis
+   • Idk why Theos abalone 5000 graph in thesis has a 0.1pb RMSE of 20-25.
+
+parameters are the same, yellow are different but no influence.
+
+example.py
+    { </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">'balance_partition': True,</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">'cat_idx': [0],
+      'early_stop': 5,</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffffff0000">      'gradient_filtering': False,
+      'leaf_clipping': False,</rich_text>
+			<rich_text>
+     </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb"> 'learning_rate': 0.1,
+      'max_depth': 6,
+      'max_leaves': None,
+      'min_samples_split': 2,
+      'n_classes': None,
+      'nb_trees': 50,
+      'nb_trees_per_ensemble': 50,
+      'num_idx': [1, 2, 3, 4, 5, 6, 7],
+      'privacy_budget': 0.1,
+      'use_3_trees': False,
+      'use_bfs': False,
+      'use_decay': False,</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">      'verbosity': -1}
+</rich_text>
+			<rich_text>      
+cross_val.py / test.py
+    { </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">'balance_partition': True,</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffffffff0000">'binary_classification': False,</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">'cat_idx': [0],
+      'early_stop': 5,</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffffff0000">      'gradient_filtering': True,
+      'leaf_clipping': True,</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">'learning_rate': 0.1,
+      'max_depth': 6,
+      'max_leaves': None,
+      'min_samples_split': 2,
+      'n_classes': None,
+      'nb_trees': 50,
+      'nb_trees_per_ensemble': 50,
+      'num_idx': [1, 2, 3, 4, 5, 6, 7],
+      'privacy_budget': 0.1,</rich_text>
+			<rich_text>
+   </rich_text>
+			<rich_text foreground="#ffffffff0000">   'test_size': 0.3,</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">'use_3_trees': False,
+      'use_bfs': False,
+      'use_decay': False,</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">      'verbosity': 0}</rich_text>
 		</node>
 	</node>
 </cherrytree>

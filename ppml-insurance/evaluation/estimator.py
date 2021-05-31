@@ -125,6 +125,8 @@ class DPGBDT(BaseEstimator):  # type: ignore
         test_size=self.test_size,
         verbosity=self.verbosity)
     self.n_features_ = None
+    self.num_used_trees = None
+
 
 
   def fit(self, X: np.array, y: np.array) -> 'GradientBoostingEnsemble':
@@ -138,7 +140,9 @@ class DPGBDT(BaseEstimator):  # type: ignore
     """
     assert self.model
     self.n_features_ = X.shape[1]
-    return self.model.Train(X, y)
+    ensemble = self.model.Train(X, y)
+    self.num_used_trees = len(ensemble.trees)
+    return ensemble
 
 
   def predict(self, X: np.array) -> np.array:
@@ -150,6 +154,11 @@ class DPGBDT(BaseEstimator):  # type: ignore
       np.array: The predictions.
     """
     assert self.model
+
+    # import pprint
+    # pp = pprint.PrettyPrinter(indent=2)
+    # pp.pprint(self.get_params())
+
     # try classification output first,
     # o.w. fallback to the raw regression values
     try:
