@@ -20,9 +20,9 @@ DATASET = 'abalone'
 # The privacy budget to use for evaluation
 PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1)
 # The number of time to repeat the experiment to get an average accuracy
-NB_SPLITS = 5
+NB_SPLITS = 53
 # Number of rows to use from the dataset
-SAMPLES = [300, 5000]
+SAMPLES = [5000]
 # Nb trees for each ensemble
 NB_TREES_PER_ENSEMBLE = 50
 
@@ -34,7 +34,7 @@ with open(PATH + 'model_params.json') as json_file:
 
 if __name__ == '__main__':
   now = datetime.now().strftime("%d-%m-%y_%H:%M")
-  output = open(PATH + 'data_' + now + '.csv', 'a')
+  output = open(PATH + 'data_alltrees_corr2ndsplit_' + now + '.csv', 'a')
   output.write('dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,'
                'max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,'
                'model,config,balance_partition\n')
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     for model in models: # not used as variable, just to have 2 iterations
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
-      for config in ['DFS', 'Vanilla', 'BFS', '3-trees']:
+      for config in ['DFS', 'Vanilla', '3-trees']:
         for idx, budget in enumerate(PRIVACY_BUDGETS):
           if config == 'Vanilla' and idx != 0:
             continue
@@ -87,12 +87,12 @@ if __name__ == '__main__':
               cat_idx=cat_idx,
               num_idx=num_idx,
               verbosity=0)  # type: ignore
-          regressor = TransformedTargetRegressor(                             # regressor = "all names of the variables 
-              regressor=m,                                                    # that are used to predict the target"
-              transformer=MinMaxScaler(feature_range=(-1, 1)))                # just to scale the features.
-                                        
-          scores = cross_val_score(                                           # must implement fit() and predict
-              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1)         # was -1 for multithreading
+          regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
+              regressor=m,                               # that are used to predict the target"
+              transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
+                                                                   # must implement fit()
+          scores = cross_val_score(
+              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # was -1 for multithreading
           
           mean, std = scores.mean(), (scores.std() / 2)
 

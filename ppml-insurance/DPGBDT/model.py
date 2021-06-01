@@ -228,32 +228,32 @@ class GradientBoostingEnsemble:
       current_tree_for_ensemble = tree_index % self.nb_trees_per_ensemble
       if current_tree_for_ensemble == 0:
         # Initialize the dataset and the gradients  # probably works only because he uses max 1 ensemble
-        X_ensemble = np.copy(X)
-        y_ensemble = np.copy(y)
+        X_ensemble = np.copy(X_train)
+        y_ensemble = np.copy(y_train)
         prev_score = np.inf
         update_gradients = True
         # gradient initialization will happen later in the per-class-loop
 
       if self.use_dp:
         # Compute the number of rows that the current tree will use for training
-        if self.balance_partition:
+        if self.balance_partition:        # ADJUSTED X TO X_TRAIN in here
           # All trees will receive same amount of samples
           if self.nb_trees % self.nb_trees_per_ensemble == 0:
             # Perfect split
-            number_of_rows = int(len(X) / self.nb_trees_per_ensemble)
+            number_of_rows = int(len(X_train) / self.nb_trees_per_ensemble)
           else:
             # Partitioning data across ensembles
             if np.ceil(tree_index / self.nb_trees_per_ensemble) == np.ceil(
                 self.nb_trees / self.nb_trees_per_ensemble):
-              number_of_rows = int(len(X) / (
+              number_of_rows = int(len(X_train) / (
                   self.nb_trees % self.nb_trees_per_ensemble))
             else:
-              number_of_rows = int(len(X) / self.nb_trees_per_ensemble) + int(
-                  len(X) / (self.nb_trees % self.nb_trees_per_ensemble))
+              number_of_rows = int(len(X_train) / self.nb_trees_per_ensemble) + int(
+                  len(X_train) / (self.nb_trees % self.nb_trees_per_ensemble))
         else:
           # Line 8 of Algorithm 2 from the paper
           number_of_rows = int((len(X) * self.learning_rate * math.pow(
-            (1 - self.learning_rate), current_tree_for_ensemble)) / (
+            (1 - self.learning_rate), current_tree_for_ensemble)) / (     
                 1 - math.pow((1 - self.learning_rate), self.nb_trees_per_ensemble)))
 
         # If using the formula from the algorithm, some trees may not get
@@ -283,7 +283,7 @@ class GradientBoostingEnsemble:
           if tree_index == 0:                                               # ``n_classes`` for multi-class classification.
             # First tree, start with initial scores (mean of labels)
             assert self.init_score is not None
-            gradients = self.ComputeGradientForLossFunction(y, self.init_score[:len(y)], kth_tree)
+            gradients = self.ComputeGradientForLossFunction(y_train, self.init_score[:len(y_train)], kth_tree)    # 2x adjusted y to y_train
           else:
             # Update gradients of all training instances on loss l
             if update_gradients:

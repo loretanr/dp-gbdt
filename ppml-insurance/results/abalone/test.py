@@ -20,7 +20,7 @@ from evaluation import estimator
 # The dataset to use for evaluation
 DATASET = 'abalone'
 # The privacy budget to use for evaluation
-PRIVACY_BUDGETS = [0.1, 1]
+PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1)
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
@@ -91,8 +91,8 @@ if __name__ == '__main__':
               num_idx=num_idx,
               verbosity=0)  # type: ignore
           regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
-              regressor=m) #, transformer=RobustScaler())#,                               # that are used to predict the target"
-              #transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
+              regressor=m,# transformer=RobustScaler())#,                               # that are used to predict the target"
+              transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
                                                                    # must implement fit()
           scores = cross_val_score(
               regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # was -1 for multithreading
