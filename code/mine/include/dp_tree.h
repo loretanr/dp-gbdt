@@ -2,7 +2,7 @@
 #define DIFFPRIVTREE_H
 
 #include "utils.h"
-#include "TreeNode.h"
+#include "tree_node.h"
 #include <vector>
 #include <queue>
 
@@ -14,7 +14,7 @@ private:
     vector<vector<float>> *X;
     vector<float> *y;
 
-    void makeTreeBFS();
+    void makeTreeDFS();
     void findBestSplit();
 
 public:

@@ -2,6 +2,9 @@
 #define UTILS_H
 
 #include <vector>
+#include <algorithm>
+#include <random>
+#include <ctime>
 
 using namespace std;
 
@@ -26,10 +29,18 @@ struct ModelParams {
 };
 
 struct DataSet {
-    vector<vector<float>> *X;
-    vector<float> *y;
-    DataSet(vector<vector<float>> *X, vector<float> *y) : X(X), y(y) {};
+    vector<vector<float>> X;
+    vector<float> y;
+    DataSet(vector<vector<float>> X, vector<float> y) : X(X), y(y) {};
 };
+
+struct TrainTestSplit {
+    DataSet train;
+    DataSet test;
+    TrainTestSplit(DataSet train, DataSet test) : train(train), test(test) {};
+};
+
+TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.75);
 
 /* #include <cstdint>
 typedef int8_t int8;
