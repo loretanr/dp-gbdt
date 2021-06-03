@@ -35,9 +35,15 @@ void DPEnsemble::train(DataSet *dataset)
             // don't think so; using an array to mark deleted rows
         }
         
-        // compute number of training rows per tree
-        if(params.balance_partition){
-            int number_of_rows = int(train_set->length / params.nb_trees);
+        // compute number of training instances per tree
+        if(params.balance_partition){  // TODO this part should be done outside loop
+            // perfect split
+            int remainder = train_set->length % params.nb_trees;
+            if(remainder == 0)
+                int number_of_rows = train_set->length / params.nb_trees;
+            else {
+
+            }
         } else {
             throw runtime_error("non-balanced resp. textbook formula partition not implemented yet");
         }

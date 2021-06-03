@@ -4,18 +4,17 @@ vector<string> split_string(const string &s, char delim) {
     vector<string> result;
     stringstream ss(s);
     string item;
-
     while (getline(ss, item, delim)) {
         result.push_back(item);
     }
-
     return result;
 }
 
 DataSet::DataSet(vector<vector<float>> X, vector<float> y) : X(X), y(y) {
     if(X.size() != y.size()){
-        //throw runtime_error(string_format("X %i and y %i need equal amount of rows!", X.size(), y.size()));
-        cout << X.size() << " " << y.size() << endl;
+        stringstream message;
+        message << "X,y need equal amount of rows! (" << X.size() << ',' << y.size() << ')';
+        throw runtime_error(message.str());
     }
     length = X.size();
 }
