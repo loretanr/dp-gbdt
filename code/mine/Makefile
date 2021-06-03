@@ -1,5 +1,5 @@
 COMPILER=g++
-CFLAGS=-c -Wall -std=c++11 -g
+CFLAGS=-c -Wall -std=c++11 -g -O0
 SOURCES=$(wildcard src/*.cpp)
 INC=-I./include/
 

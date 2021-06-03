@@ -9,11 +9,41 @@ DPEnsemble::~DPEnsemble() {};
 
 void DPEnsemble::train(DataSet *dataset)
 {
-    // init gradients
+    // update gradients
+
+    // second split
+    float prev_score = numeric_limits<float>::max();
+    TrainTestSplit split = train_test_split_random(*dataset);
+    DataSet *train_set = &split.train;
+    DataSet *test_set = &split.test;
 
     // prepare privacy budgets
+    float tree_privacy_budget = params.privacy_budget / params.nb_trees;
 
     // train all trees
+    for(int tree_index = 0; tree_index<params.nb_trees;  tree_index++){
+
+        // compute sensitivity
+        params.delta_g = 3 * pow(params.l2_threshold, 2); // todo move out of loop
+        params.delta_v = min((double) (params.l2_threshold / (1 + params.l2_lambda)),
+                            2 * params.l2_threshold *
+                            pow(1-params.learning_rate, tree_index));
+
+        // init gradients for first tree of ensemble
+        if(tree_index == 0){
+            // do I really need to work on a copy?
+            // don't think so; using an array to mark deleted rows
+        }
+        
+        // compute number of training rows per tree
+        if(params.balance_partition){
+            int number_of_rows = int(train_set->length / params.nb_trees);
+        } else {
+            throw runtime_error("non-balanced resp. textbook formula partition not implemented yet");
+        }
+
+
+    }
 
     trees = {};
 }

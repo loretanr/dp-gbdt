@@ -1,11 +1,32 @@
 #include "utils.h"
 
+vector<string> split_string(const string &s, char delim) {
+    vector<string> result;
+    stringstream ss(s);
+    string item;
 
-TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio)
+    while (getline(ss, item, delim)) {
+        result.push_back(item);
+    }
+
+    return result;
+}
+
+DataSet::DataSet(vector<vector<float>> X, vector<float> y) : X(X), y(y) {
+    if(X.size() != y.size()){
+        //throw runtime_error(string_format("X %i and y %i need equal amount of rows!", X.size(), y.size()));
+        cout << X.size() << " " << y.size() << endl;
+    }
+    length = X.size();
+}
+
+TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio, bool shuffle)
 {
-    srand(time(0));
-    random_shuffle(dataset.X.begin(), dataset.X.end());
-    random_shuffle(dataset.y.begin(), dataset.y.end());
+    if(shuffle) {
+        srand(time(0));
+        random_shuffle(dataset.X.begin(), dataset.X.end());
+        random_shuffle(dataset.y.begin(), dataset.y.end());
+    }
 
     int border = round(train_ratio * dataset.y.size());
 

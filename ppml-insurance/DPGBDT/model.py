@@ -230,7 +230,7 @@ class GradientBoostingEnsemble:
         # Initialize the dataset and the gradients  # probably works only because he uses max 1 ensemble
         X_ensemble = np.copy(X_train)
         y_ensemble = np.copy(y_train)
-        prev_score = np.inf
+        prev_score = np.inf   # relevant if multiple ensembles
         update_gradients = True
         # gradient initialization will happen later in the per-class-loop
 
