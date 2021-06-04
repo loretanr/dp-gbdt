@@ -1,10 +1,15 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1622210274.9" unique_id="1">
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1622727420.89" unique_id="1">
 		<rich_text>Thu 3pm
 Link:  </rich_text>
 		<rich_text foreground="#3d3c40"> </rich_text>
 		<rich_text link="webs https://ethz.zoom.us/j/4333973638">https://ethz.zoom.us/j/4333973638</rich_text>
+		<rich_text>
+
+
+
+from 0.5   up to   1  </rich_text>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="04_22_first" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168455.86" ts_lastsave="1619595361.65" unique_id="2">
 			<rich_text scale="h2">Discussion points</rich_text>
 			<rich_text>
@@ -272,6 +277,31 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 			<rich_text weight="heavy">Remove the “put back ” strategy in python code and see whether it works as good as Theo’s code does.</rich_text>
 			<rich_text>
 </rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="06_03" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622727420.89" ts_lastsave="1622806285.01" unique_id="13">
+			<rich_text> discussing and Q&amp;A also here
+ 
+    </rich_text>
+			<rich_text link="webs https://docs.google.com/document/d/1GaqAwNijzrrf_228VdCj4WU4N1dySOratf2DJ6VN3XI/edit#">https://docs.google.com/document/d/1GaqAwNijzrrf_228VdCj4WU4N1dySOratf2DJ6VN3XI/edit#</rich_text>
+			<rich_text>
+    
+    
+    
+Q &amp; A
+
+   •  The scaling to [-1,1] in Theos code is necessary for the proof.
+      ◇ If those values would be larger we would need more noise
+      ◇  the 3 in delta G sensitivity calculation (in code) is because of the scaling!
+
+
+TODO
+   ◇ create clean graphs
+   ◇ especially one that uses alltrees and no rejection for pb 0.5 to 4
+   ◇ debugger how many instances where (abalone + maybe some larger dataset?)
+   ◇ put __pycache__'s in gitignore if not already.
+
+TODO 
+    check out Theos meeting slides.</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622471704.32" unique_id="5">
@@ -620,10 +650,14 @@ would be nice to have cross_val in C++,
     
 There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER SPLIT in Train() -&gt; where they do a 0.7/0.3 split. And the 0.3 split is used to choose good trees</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1622474177.53" unique_id="12">
-			<rich_text>Theos thesis and code:
-    sensitivity of the splitting function could be bound by ∆G ≤ 3gl * 2.
-    In base paper its a bit different (&quot;Corollary 1&quot;)</rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1622730065.64" unique_id="12">
+			<rich_text>How does the mighty “proof” of Moritz look?
+    is it published
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">TODO: debug the result of the pick-formula (algo 2, line 8, base paper)
+    does it stay constant across trees?
+    is there an easier formula that calculates the same if we have only 1 ensemble ?</rich_text>
 		</node>
 	</node>
 </cherrytree>

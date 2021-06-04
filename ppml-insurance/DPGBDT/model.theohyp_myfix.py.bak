@@ -252,7 +252,7 @@ class GradientBoostingEnsemble:
                   len(X_train) / (self.nb_trees % self.nb_trees_per_ensemble))
         else:
           # Line 8 of Algorithm 2 from the paper
-          number_of_rows = int((len(X) * self.learning_rate * math.pow( # NOT ADJUSTED YET
+          number_of_rows = int((len(X) * self.learning_rate * math.pow(
             (1 - self.learning_rate), current_tree_for_ensemble)) / (     
                 1 - math.pow((1 - self.learning_rate), self.nb_trees_per_ensemble)))
 
@@ -342,7 +342,7 @@ class GradientBoostingEnsemble:
             # Update gradients of all training instances on loss l
             if update_gradients:
               gradients = self.ComputeGradientForLossFunction(
-                y, self.Predict(X), kth_tree)  # type: ignore
+                y_ensemble, self.Predict(X_ensemble), kth_tree)  # type: ignore
           tree = DifferentiallyPrivateTree(
               tree_index,
               self.learning_rate,
