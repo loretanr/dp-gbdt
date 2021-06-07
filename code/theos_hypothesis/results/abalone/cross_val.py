@@ -18,7 +18,7 @@ from evaluation import estimator
 # The dataset to use for evaluation
 DATASET = 'abalone'
 # The privacy budget to use for evaluation
-PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1) # [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1) #[0.1, 0.3, 0.5, 0.7, 1, 1.5, 2, 2.5, 3, 3.5, 4] # = np.arange(0.1, 1.0, 0.1)
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
@@ -34,7 +34,7 @@ with open(PATH + 'model_params.json') as json_file:
 
 if __name__ == '__main__':
   now = datetime.now().strftime("%d-%m-%y_%H:%M")
-  output = open(PATH + 'results_alltrees_' + now + '.csv', 'a')
+  output = open(PATH + 'data_2ndsplit_' + now + '.csv', 'a')
   output.write('dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,'
                'max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,'
                'model,config,balance_partition\n')

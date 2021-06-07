@@ -4,4 +4,4 @@ This folder contains the code to generate measurements and graphs related to "Th
 
 The basis is [https://gitlab.inf.ethz.ch/kkari/ppml-insurance](https://gitlab.inf.ethz.ch/kkari/ppml-insurance), but only the relevant files are taken over and all unrelated content of the repository was removed
 
-The files have to be run from this directory, e.g. `python results/abalone/cross_val_2ndsplit.py`
+The files have to be run from this directory, e.g. `python results/abalone/cross_val_2ndsplit.py`. And the model you want to test should be named model.py, so do something e.g. `cp DPGBDT/model_2ndsplit.py DPGBDT/model.py`.

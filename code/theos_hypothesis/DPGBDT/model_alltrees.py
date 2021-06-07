@@ -204,10 +204,8 @@ class GradientBoostingEnsemble:
     logger.debug('Training initialized with score: {}'.format(self.init_score))
     update_gradients = True
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=self.test_size, random_state=0)
-    logger.debug('Using {0:d} instances for training and {1:d} instances for '
-                 'validation'.format(len(X_train), len(X_test)))
+    X_train, X_test, y_train, y_test = train_test_split(      # not using these sets
+        X, y, test_size=self.test_size, random_state=0)       # resp. not rejecting on line 383
 
     # Number of ensembles in the model
     nb_ensembles = int(np.ceil(self.nb_trees / self.nb_trees_per_ensemble))
@@ -232,8 +230,8 @@ class GradientBoostingEnsemble:
       current_tree_for_ensemble = tree_index % self.nb_trees_per_ensemble
       if current_tree_for_ensemble == 0:
         # Initialize the dataset and the gradients
-        X_ensemble = np.copy(X_train)
-        y_ensemble = np.copy(y_train)
+        X_ensemble = np.copy(X)       # take X and y here for alltrees
+        y_ensemble = np.copy(y)
         prev_score = np.inf
         update_gradients = True
         # gradient initialization will happen later in the per-class-loop
@@ -244,16 +242,16 @@ class GradientBoostingEnsemble:
           # All trees will receive same amount of samples
           if self.nb_trees % self.nb_trees_per_ensemble == 0:
             # Perfect split
-            number_of_rows = int(len(X_train) / self.nb_trees_per_ensemble)
+            number_of_rows = int(len(X) / self.nb_trees_per_ensemble)
           else:
             # Partitioning data across ensembles
             if np.ceil(tree_index / self.nb_trees_per_ensemble) == np.ceil(
                 self.nb_trees / self.nb_trees_per_ensemble):
-              number_of_rows = int(len(X_train) / (
+              number_of_rows = int(len(X) / (
                   self.nb_trees % self.nb_trees_per_ensemble))
             else:
-              number_of_rows = int(len(X_train) / self.nb_trees_per_ensemble) + int(
-                  len(X_train) / (self.nb_trees % self.nb_trees_per_ensemble))
+              number_of_rows = int(len(X) / self.nb_trees_per_ensemble) + int(
+                  len(X) / (self.nb_trees % self.nb_trees_per_ensemble))
         else:
           # Line 8 of Algorithm 2 from the paper
           number_of_rows = int((len(X) * self.learning_rate * math.pow(
@@ -289,7 +287,7 @@ class GradientBoostingEnsemble:
             # First tree, start with initial scores (mean of labels)
             assert self.init_score is not None
             gradients = self.ComputeGradientForLossFunction(
-                y_train, self.init_score[:len(y_train)], kth_tree)
+                y, self.init_score[:len(y)], kth_tree)
           else:
             # Update gradients of all training instances on loss l
             if update_gradients:
@@ -338,7 +336,7 @@ class GradientBoostingEnsemble:
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
       else:
-        # Fit a normal decision tree, "Vanilla"
+        # Fit a normal decision tree
         k_trees = []
         for kth_tree in range(self.loss_.K):
           if tree_index == 0:
@@ -368,7 +366,8 @@ class GradientBoostingEnsemble:
               use_decay=self.use_decay,
               cat_idx=self.cat_idx,
               num_idx=self.num_idx)
-          tree.Fit(X, (y == kth_tree).astype(np.float64) if self.loss_.is_multi_class else y, gradients)
+          tree.Fit(X, (y == kth_tree).astype(
+              np.float64) if self.loss_.is_multi_class else y, gradients)
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
       self.trees.append(k_trees)
@@ -378,11 +377,10 @@ class GradientBoostingEnsemble:
                   'score so far: {2:f}'.format(tree_index, score, prev_score))
 
       if score >= prev_score:
-        # This tree doesn't improve overall prediction quality, removing from
-        # model
+        # This tree doesn't improve overall prediction quality, removing from model
         # not reusing gradients in multi-class as they are class-dependent
         update_gradients = self.loss_.is_multi_class
-        self.trees.pop()
+        # self.trees.pop()          # Uncommenting this is responsible for not rejecting trees
         if not self.use_dp:
           self.early_stop -= 1
           if self.early_stop == 0:
@@ -1266,10 +1264,10 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
   for leaf in leaves:
     noise = np.random.laplace(0, scale)
     logger.debug('Leaf value before noise: {0:f}'.format(
-        np.float64(leaf.prediction)))
+        np.float(leaf.prediction)))
     leaf.prediction += noise
     logger.debug('Leaf value after noise: {0:f}'.format(
-        np.float64(leaf.prediction)))
+        np.float(leaf.prediction)))
 
 
 def ComputePredictions(gradients: np.ndarray,

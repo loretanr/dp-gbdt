@@ -10,8 +10,8 @@ from evaluation import estimator
 
 INPUT_NAME = 'results_alltrees_04-06-21_15:35.csv'
 PATH = './results/abalone/'
-SAMPLES = [5000]
-PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1) # = [0.1, 0.3, 0.5, 0.7, 1, 1.5, 2, 2.5, 3, 3.5, 4] # np.arange(0.1, 1.0, 0.1)
+SAMPLES = [4177]
+PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1)#[1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] # = [0.1, 0.3, 0.5, 0.7, 1, 1.5, 2, 2.5, 3, 3.5, 4] # np.arange(0.1, 1.0, 0.1)
 
 if __name__ == '__main__':
   data = pd.read_csv(PATH + INPUT_NAME, usecols=[
@@ -19,8 +19,6 @@ if __name__ == '__main__':
       'nb_tree_per_ensemble', 'max_depth',
       'max_leaves', 'learning_rate', 'nb_of_runs', 'mean', 'std', 'model',
       'config', 'balance_partition'])
-
-  SAMPLES = min(SAMPLES, data['nb_samples'])
 
   param_values = data.iloc[0]
 
@@ -65,12 +63,14 @@ if __name__ == '__main__':
                      fmt=marker,
                      capsize=3,
                      label=label)
-    bla = PRIVACY_BUDGETS[-1] #+ 0.1 * ([PRIVACY_BUDGETS[-1] - PRIVACY_BUDGETS[0])
-    plt.axis([0, bla,
+    xaxis_upperlimit = PRIVACY_BUDGETS[-1] + round(0.1 * (PRIVACY_BUDGETS[-1] - PRIVACY_BUDGETS[0]),2)
+    xaxis_lowerlimit = PRIVACY_BUDGETS[0] - round(0.1 * (PRIVACY_BUDGETS[-1] - PRIVACY_BUDGETS[0]),2)
+
+    plt.axis([xaxis_lowerlimit, xaxis_upperlimit,
         0, int(max(data[data['nb_samples'] == nb_samples]['mean']) + max(
             data[data['nb_samples'] == nb_samples]['std']) + 5)])
     plt.legend(loc='upper right')
-    plt.title('Dataset={0!s}, Samples={1!s}, Trees={2!s}, 2nd-split'.format(
+    plt.title('Dataset={0!s}, Samples={1!s}, Trees={2!s}, alltrees'.format(
         param_values['dataset'], nb_samples,
         data[data['nb_samples'] == nb_samples].iloc[0]['nb_tree']))
     plt.xlabel('Privacy budget')
