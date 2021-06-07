@@ -201,8 +201,7 @@ class GradientBoostingEnsemble:
 
     # Init gradients
     self.init_.fit(X, y)
-    self.init_score = self.loss_.get_init_raw_predictions(
-        X, self.init_)  # (n_samples, K)
+    self.init_score = self.loss_.get_init_raw_predictions(X, self.init_)  # (n_samples, K)
     logger.debug('Training initialized with score: {}'.format(self.init_score))
     update_gradients = True
 

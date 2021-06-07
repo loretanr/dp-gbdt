@@ -2,10 +2,7 @@
 #define DPENSEMBLE_H
 
 #include "dp_tree.h"
-
-#include <cmath>
-#include <limits>
-//#include <stdexcept>
+#include "utils.h"
 
 
 class DPEnsemble
@@ -20,6 +17,7 @@ public:
 private:
     ModelParams params;
     vector<DPTree> trees;
+    void distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set);
 };
 
 #endif // DPTREEENSEMBLE_H

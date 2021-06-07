@@ -9,6 +9,10 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <numeric>
+#include <queue>
+#include <cmath>
+#include <limits>
 
 
 using namespace std;
@@ -22,6 +26,7 @@ struct ModelParams {
     int early_stop = 5;
     int max_leaves;
     int min_samples_split = 2;
+    bool second_split = true;
     bool balance_partition = true;
     bool leaf_clipping = false;
     bool use_bfs = false;
@@ -42,6 +47,7 @@ struct DataSet {
     vector<float> y;
     int length;
     DataSet(vector<vector<float>> X, vector<float> y);
+    void add_row(vector<float> xrow, float yval);
 };
 
 struct TrainTestSplit {

@@ -278,7 +278,7 @@ Let's say we need 500 companies' data for a meaningful model. Until we collected
 			<rich_text>
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="06_03" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622727420.89" ts_lastsave="1622806256.39" unique_id="13">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="06_03" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622727420.89" ts_lastsave="1623056086.55" unique_id="13">
 			<rich_text> discussing and Q&amp;A also here
  
     </rich_text>
@@ -298,7 +298,10 @@ TODO
    ◇ create clean graphs
    ◇ especially one that uses alltrees and no rejection for pb 0.5 to 4
    ◇ debugger how many instances where (abalone + maybe some larger dataset?)
-   ◇ put pycaches in gitignore if not already.
+   ◇ put __pycache__'s in gitignore if not already.
+   ◇ done </rich_text>
+			<rich_text link="webs https://docs.google.com/document/d/1CEYstt6WXV2DO6hBD7ENk2zDl_5xUWXYuJB7Cd5PjUw/edit">https://docs.google.com/document/d/1CEYstt6WXV2DO6hBD7ENk2zDl_5xUWXYuJB7Cd5PjUw/edit</rich_text>
+			<rich_text>
 
 TODO 
     check out Theos meeting slides.</rich_text>
@@ -650,14 +653,34 @@ would be nice to have cross_val in C++,
     
 There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER SPLIT in Train() -&gt; where they do a 0.7/0.3 split. And the 0.3 split is used to choose good trees</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1622730065.64" unique_id="12">
-			<rich_text>How does the mighty “proof” of Moritz look?
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623058504.4" unique_id="12">
+			<rich_text foreground="#9090eeee9090">How does the mighty “proof” of Moritz look?</rich_text>
+			<rich_text>
     is it published
+    
+</rich_text>
+			<rich_text foreground="#9090eeee9090">do you have an idea of how I could create a better overview of algorithm and implementation to reason about side channel stuff?</rich_text>
+			<rich_text>
+   •  because the google docs snippet thing is ...naja. 
 
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">TODO: debug the result of the pick-formula (algo 2, line 8, base paper)
     does it stay constant across trees?
     is there an easier formula that calculates the same if we have only 1 ensemble ?</rich_text>
+			<rich_text>
+    
+    
+TODO read check out theos meeting slides
+
+TODO check if there's a larger testset than abalone 
+    (for potential theos hypothesis runs)
+
+TODO   cooooooooode cpp
+
+
+
+splitting the training samples (list of list) should not be privacy relevant right?
+    and then each tree takes his chunk once its his turn.</rich_text>
 		</node>
 	</node>
 </cherrytree>

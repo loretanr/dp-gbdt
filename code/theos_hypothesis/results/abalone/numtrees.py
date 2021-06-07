@@ -48,7 +48,7 @@ if __name__ == '__main__':
   #pp.pprint(model.get_params())
 
   NB_TREES = 50
-  PRIVACY_BUDGET = [4.6] # np.arange(0.1, 4.6, 0.3)
+  PRIVACY_BUDGET = np.arange(0.1, 4.6, 0.3)
   BALANCE = True # for DFS and 3-nodes
   VERBOSE = True
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
         print('Depth first growth'.ljust(25), 'RMSE: {0:.2f}'.format(rmse1), 
             '   #trees used: {}/{}'.format(ntree1, model.nb_trees))
 
-      # Train the model using a best-leaf first approach,  BROKEN
+      # Train the model using a best-leaf first approach,  !!!BFS is BROKEN!!!
       model = estimator.DPGBDT(privacy_budget=p_value,
                               nb_trees=NB_TREES,
                               nb_trees_per_ensemble=50,

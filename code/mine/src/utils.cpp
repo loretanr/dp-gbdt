@@ -19,6 +19,12 @@ DataSet::DataSet(vector<vector<float>> X, vector<float> y) : X(X), y(y) {
     length = X.size();
 }
 
+void DataSet::add_row(vector<float> xrow, float yval) {
+    X.push_back(xrow);
+    y.push_back(yval);
+    length++;
+}
+
 TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio, bool shuffle)
 {
     if(shuffle) {
@@ -29,10 +35,10 @@ TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio, bool 
 
     int border = round(train_ratio * dataset.y.size());
 
-    vector<vector<float>> x_train(dataset.X.begin(),dataset.X.begin() + border);
-    vector<float> y_train(dataset.y.begin(),dataset.y.begin() + border);
-    vector<vector<float>> x_test(dataset.X.begin() + border,dataset.X.end());
-    vector<float> y_test(dataset.y.begin() + border,dataset.y.end());
+    vector<vector<float>> x_train(dataset.X.begin(), dataset.X.begin() + border);
+    vector<float> y_train(dataset.y.begin(), dataset.y.begin() + border);
+    vector<vector<float>> x_test(dataset.X.begin() + border, dataset.X.end());
+    vector<float> y_test(dataset.y.begin() + border, dataset.y.end());
 
     DataSet train(x_train, y_train);
     DataSet test(x_test, y_test);
