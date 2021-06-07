@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from evaluation import estimator
 
-INPUT_NAME = 'results_alltrees_04-06-21_15:35.csv'
+INPUT_NAME = 'data_2ndsplit_07-06-21_10:02.csv'
 PATH = './results/abalone/'
 SAMPLES = [4177]
-PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1)#[1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] # = [0.1, 0.3, 0.5, 0.7, 1, 1.5, 2, 2.5, 3, 3.5, 4] # np.arange(0.1, 1.0, 0.1)
+PRIVACY_BUDGETS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]#[1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] # = [0.1, 0.3, 0.5, 0.7, 1, 1.5, 2, 2.5, 3, 3.5, 4] # np.arange(0.1, 1.0, 0.1)
 
 if __name__ == '__main__':
   data = pd.read_csv(PATH + INPUT_NAME, usecols=[
@@ -70,12 +70,12 @@ if __name__ == '__main__':
         0, int(max(data[data['nb_samples'] == nb_samples]['mean']) + max(
             data[data['nb_samples'] == nb_samples]['std']) + 5)])
     plt.legend(loc='upper right')
-    plt.title('Dataset={0!s}, Samples={1!s}, Trees={2!s}, alltrees'.format(
+    plt.title('Dataset={0!s}, Samples={1!s}, Trees={2!s}, 2nd-split'.format(
         param_values['dataset'], nb_samples,
         data[data['nb_samples'] == nb_samples].iloc[0]['nb_tree']))
     plt.xlabel('Privacy budget')
     plt.ylabel('RMSE')
     now = datetime.now().strftime("%d-%m-%y_%H:%M")
     plt.savefig(
-        PATH + 'results_alltrees_{0!s}_{1!s}.png'.format(nb_samples, now), 
+        PATH + 'results_2ndsplit_{0!s}_{1!s}.png'.format(nb_samples, now), 
         format='png', dpi=600)

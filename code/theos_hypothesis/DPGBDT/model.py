@@ -3,6 +3,8 @@
 """Implement ensemble of differentially private gradient boosted trees.
 
 From: https://arxiv.org/pdf/1911.04209.pdf
+
+2nd-split method
 """
 
 import math
