@@ -1,20 +1,27 @@
 #include "dp_ensemble.h"
 
+
 DPEnsemble::DPEnsemble(ModelParams *parameters)
 {
     params = *parameters; // local copy for now
 }
     
+
 DPEnsemble::~DPEnsemble() {}; // TODO
+
 
 void DPEnsemble::train(DataSet *dataset)
 {
     // float prev_score = numeric_limits<float>::max();
 
-    // update gradients
+    // init predictions
+    vector<float> gradients[dataset->length];
+    double sum = std::accumulate((dataset->y).begin(), (dataset->y).end(), 0.0);
+    float mean = sum / dataset->length;
+    std::fill(gradients->begin(), gradients->end(), mean);
 
     // second split (& shuffle)
-    TrainTestSplit split = train_test_split_random(*dataset);;
+    TrainTestSplit split = train_test_split_random(*dataset, 0.75f, false); // no shuffle for debug
     DataSet *train_set, *test_set;
     if(params.second_split) {
         train_set = &split.train;
@@ -52,7 +59,9 @@ void DPEnsemble::train(DataSet *dataset)
             float mean = sum / train_set->length;
             std::fill(gradients->begin(), gradients->end(), mean);
         } else {
-            TODOOOOOOOOOOOOOOOOOO
+            for(auto tree : trees) {
+
+            }
         }
 
 
@@ -62,6 +71,12 @@ void DPEnsemble::train(DataSet *dataset)
     }
 
     trees = {};
+}
+
+
+vector<float>  DPEnsemble::predict(vector<vector<float>> *X)
+{
+
 }
 
 

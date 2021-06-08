@@ -31,23 +31,26 @@ struct ModelParams {
     bool leaf_clipping = false;
     bool use_bfs = false;
     bool use_3_trees = false;
-    bool use_decay = false;
-    int test_size = 0.3;
+    // bool use_decay = false;
+    int test_size = 0.3;    // TODO 1st or 2nd split?
     int verbosity = -1;
     float l2_threshold = 1.0;
     float l2_lambda = 0.1;
     float delta_g;
     double delta_v;
-    int *cat_idx;
-    int *num_idx;
+    float init_score;
+    vector<int> cat_idx;
+    vector<int> num_idx;
 };
 
 struct DataSet {
     vector<vector<float>> X;
     vector<float> y;
     int length;
+    int num_x_cols;
     DataSet(vector<vector<float>> X, vector<float> y);
     void add_row(vector<float> xrow, float yval);
+    void scale(ModelParams params, float lower, float upper);
 };
 
 struct TrainTestSplit {
@@ -56,8 +59,8 @@ struct TrainTestSplit {
     TrainTestSplit(DataSet train, DataSet test) : train(train), test(test) {};
 };
 
-vector<string> split_string(const string &s, char delim);
-TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.75, bool shuffle = true);
+vector<string> split_string(const string &s, char delim);           // TODO enable shuffle
+TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.70, bool shuffle = false);
 
 /* #include <cstdint>
 typedef int8_t int8;

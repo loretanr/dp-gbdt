@@ -13,6 +13,7 @@ public:
     ~DPEnsemble();
 
     void train(DataSet *dataset);
+    vector<float> predict(vector<vector<float>> *X);
 
 private:
     ModelParams params;

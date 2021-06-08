@@ -655,7 +655,7 @@ would be nice to have cross_val in C++,
     
 There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER SPLIT in Train() -&gt; where they do a 0.7/0.3 split. And the 0.3 split is used to choose good trees</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623058504.4" unique_id="12">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623142987.67" unique_id="12">
 			<rich_text foreground="#9090eeee9090">How does the mighty “proof” of Moritz look?</rich_text>
 			<rich_text>
     is it published
@@ -671,6 +671,8 @@ There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER S
     is there an easier formula that calculates the same if we have only 1 ensemble ?</rich_text>
 			<rich_text>
     
+do we even need a test set for the “real” hardened application?
+    
     
 TODO read check out theos meeting slides
 
@@ -681,8 +683,12 @@ TODO   cooooooooode cpp
 
 
 
-splitting the training samples (list of list) should not be privacy relevant right?
-    and then each tree takes his chunk once its his turn.</rich_text>
+why is the categorical column not scaled?
+
+Theo did not scale the matrix X.
+    somehow the minmaxscaler did not do his job.
+    
+</rich_text>
 		</node>
 	</node>
 </cherrytree>
