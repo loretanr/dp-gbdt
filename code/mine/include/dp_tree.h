@@ -9,8 +9,7 @@ using namespace std;
 class DPTree
 {
 private:
-    vector<vector<float>> *X;
-    vector<float> *y;
+    DataSet *dataset;
 
     void makeTreeDFS();
     void findBestSplit();

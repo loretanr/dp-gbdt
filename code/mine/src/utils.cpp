@@ -11,6 +11,17 @@ vector<string> split_string(const string &s, char delim)
     return result;
 }
 
+float clip(float n, float lower, float upper)
+{
+  return std::max(lower, std::min(n, upper));
+}
+
+DataSet::DataSet()
+{
+    empty = true;
+}
+
+
 DataSet::DataSet(vector<vector<float>> X, vector<float> y) : X(X), y(y)
 {
     if(X.size() != y.size()){
@@ -20,6 +31,7 @@ DataSet::DataSet(vector<vector<float>> X, vector<float> y) : X(X), y(y)
     }
     length = X.size();
     num_x_cols = X[0].size();
+    empty = false;
 }
 
 void DataSet::add_row(vector<float> xrow, float yval)
@@ -62,15 +74,22 @@ TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio, bool 
         random_shuffle(dataset.y.begin(), dataset.y.end());
     }
 
-    int border = round(train_ratio * dataset.y.size());
+    int border = floor(train_ratio * dataset.y.size());
 
     vector<vector<float>> x_train(dataset.X.begin(), dataset.X.begin() + border);
     vector<float> y_train(dataset.y.begin(), dataset.y.begin() + border);
     vector<vector<float>> x_test(dataset.X.begin() + border, dataset.X.end());
     vector<float> y_test(dataset.y.begin() + border, dataset.y.end());
 
-    DataSet train(x_train, y_train);
-    DataSet test(x_test, y_test);
-
-    return TrainTestSplit(train, test);
+    if(train_ratio >= 1) {
+        DataSet train(x_train, y_train);
+        return TrainTestSplit(train, DataSet());
+    } else if (train_ratio <= 0) {
+        DataSet test(x_test, y_test);
+        return TrainTestSplit(DataSet(), test);
+    } else {
+        DataSet train(x_train, y_train);
+        DataSet test(x_test, y_test);
+        return TrainTestSplit(train, test);
+    }
 }

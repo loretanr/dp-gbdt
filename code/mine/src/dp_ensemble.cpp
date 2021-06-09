@@ -52,17 +52,34 @@ void DPEnsemble::train(DataSet *dataset)
                             2 * params.l2_threshold *
                             pow(1-params.learning_rate, tree_index));
 
-        // update/init the gradients
-        vector<float> gradients[train_set->length];
+        // update/init gradients of all training instances
         if(tree_index == 0) {
             double sum = std::accumulate((train_set->y).begin(), (train_set->y).end(), 0.0);
             float mean = sum / train_set->length;
-            std::fill(gradients->begin(), gradients->end(), mean);
+            for(DataSet &dset : tree_samples) {
+                for (auto row : dset.X){
+                    dset.gradients.push_back(mean);
+                }
+            }
         } else {
-            for(auto tree : trees) {
+            vector<float> y_pred = predict(&tree_samples[tree_index].X);
+            // calculate gradient from that
+            // TODO once we built the first tree.
+        }
 
+        // gradient-based data filtering
+        if(params.gradient_filtering) {
+            for(DataSet &dset : tree_samples) {
+                for (auto &grad : dset.gradients){
+                    grad = clip(grad, -params.l2_threshold, params.l2_threshold);
+                }
             }
         }
+
+        DPTree tree = DPTree(&params, &tree_samples[tree_index]);
+
+        cout << "training tree " << tree_index << endl;
+
 
 
         
@@ -76,6 +93,12 @@ void DPEnsemble::train(DataSet *dataset)
 
 vector<float>  DPEnsemble::predict(vector<vector<float>> *X)
 {
+    vector<float> predictions(X->size());
+    for(auto tree : trees) {
+        //rrrr = tree.predict(X);
+        // TODO once we have the stuff to build trees.
+    }
+
 
 }
 

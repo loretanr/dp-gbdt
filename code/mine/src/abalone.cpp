@@ -54,7 +54,7 @@ int main()
 
 
     DPEnsemble ensemble = DPEnsemble(&parammmms);
-    TrainTestSplit split = train_test_split_random(dataset);
+    TrainTestSplit split = train_test_split_random(dataset, 1); // empty test for now
     
     ensemble.train(&split.train);
 

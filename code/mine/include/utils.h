@@ -28,6 +28,7 @@ struct ModelParams {
     int min_samples_split = 2;
     bool second_split = true;
     bool balance_partition = true;
+    bool gradient_filtering = false;
     bool leaf_clipping = false;
     bool use_bfs = false;
     bool use_3_trees = false;
@@ -46,8 +47,11 @@ struct ModelParams {
 struct DataSet {
     vector<vector<float>> X;
     vector<float> y;
+    vector<float> gradients;
     int length;
     int num_x_cols;
+    bool empty;
+    DataSet();
     DataSet(vector<vector<float>> X, vector<float> y);
     void add_row(vector<float> xrow, float yval);
     void scale(ModelParams params, float lower, float upper);
@@ -59,6 +63,7 @@ struct TrainTestSplit {
     TrainTestSplit(DataSet train, DataSet test) : train(train), test(test) {};
 };
 
+float clip(float n, float lower, float upper);
 vector<string> split_string(const string &s, char delim);           // TODO enable shuffle
 TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.70, bool shuffle = false);
 
