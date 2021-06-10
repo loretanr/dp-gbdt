@@ -30,7 +30,7 @@ struct ModelParams {
     bool balance_partition = true;
     bool gradient_filtering = false;
     bool leaf_clipping = false;
-    bool use_bfs = false;
+    bool use_dfs = true;
     bool use_3_trees = false;
     // bool use_decay = false;
     int test_size = 0.3;    // TODO 1st or 2nd split?

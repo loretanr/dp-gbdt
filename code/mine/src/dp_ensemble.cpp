@@ -76,7 +76,7 @@ void DPEnsemble::train(DataSet *dataset)
             }
         }
 
-        DPTree tree = DPTree(&params, &tree_samples[tree_index]);
+        DPTree tree = DPTree(&params, &tree_samples[tree_index], tree_privacy_budget);
 
         cout << "training tree " << tree_index << endl;
 
