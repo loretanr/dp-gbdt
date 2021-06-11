@@ -32,7 +32,7 @@ TreeNode DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         }
 
     // find best split
-    
+
 }
 
 
@@ -40,7 +40,7 @@ TreeNode DPTree::make_leaf_node(int current_depth)
 {
     TreeNode leaf = TreeNode();
     leaf.depth = current_depth;
-    leaf.prediction = compute_predictions(nullptr, nullptr);
+    //leaf.prediction = compute_predictions(nullptr, nullptr);
     nodes.push_back(leaf);
 }
 

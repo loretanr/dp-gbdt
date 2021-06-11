@@ -44,6 +44,14 @@ struct ModelParams {
     vector<int> num_idx;
 };
 
+struct Scaler {
+    float data_min, data_max;
+    float feature_min, feature_max;
+    Scaler();
+    Scaler(float min_val, float max_val, float fmin, float fmax) : data_min(min_val), data_max(max_val),
+        feature_min(fmin), feature_max(fmax) {};
+};
+
 struct DataSet {
     vector<vector<float>> X;
     vector<float> y;
@@ -51,10 +59,13 @@ struct DataSet {
     int length;
     int num_x_cols;
     bool empty;
+    Scaler scaler;
+
     DataSet();
     DataSet(vector<vector<float>> X, vector<float> y);
-    void add_row(vector<float> xrow, float yval);
-    void scale(ModelParams params, float lower, float upper);
+
+    void add_row(vector<float> xrow, float yval); // probably broken because theres no self/this
+    void scale(float lower, float upper);
 };
 
 struct TrainTestSplit {

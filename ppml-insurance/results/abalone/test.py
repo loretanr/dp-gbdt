@@ -52,8 +52,6 @@ if __name__ == '__main__':
     rmse = make_scorer(metrics.mean_squared_error, squared=False)
     #rmse = metrics.mean_squared_error(squared=False)
     
-    validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=True)
-
     for model in models: # not used as variable, just to have 2 iterations
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
@@ -89,11 +87,12 @@ if __name__ == '__main__':
               use_3_trees=model_params.get('use_3_trees', False),
               cat_idx=cat_idx,
               num_idx=num_idx,
-              verbosity=0)  # type: ignore
+              verbosity=1)  # type: ignore
           regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
               regressor=m,# transformer=RobustScaler())#,                               # that are used to predict the target"
               transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
                                                                    # must implement fit()
+          validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
           scores = cross_val_score(
               regressor, X, y, cv=validator, scoring=rmse, n_jobs=1) # was -1 for multithreading
           

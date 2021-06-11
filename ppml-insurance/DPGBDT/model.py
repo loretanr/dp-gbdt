@@ -283,6 +283,8 @@ class GradientBoostingEnsemble:
         #                         replace=False)
                           # CHANGED TO DETERMINISTIC !!!!!!!!!!!!!!!!!!!!!!!!!!
         rows = [elem for elem in range(row_counter, row_counter + number_of_rows)]
+        row_counter += number_of_rows
+
         X_tree = X_ensemble[rows, :]
         y_tree = y_ensemble[rows]
 

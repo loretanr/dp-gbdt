@@ -14,14 +14,14 @@ void DPEnsemble::train(DataSet *dataset)
 {
     // float prev_score = numeric_limits<float>::max();
 
-    // init predictions
+    // init score
     vector<float> gradients[dataset->length];
     double sum = std::accumulate((dataset->y).begin(), (dataset->y).end(), 0.0);
-    float mean = sum / dataset->length;
+    float mean = sum / dataset->length; // this is correct
     std::fill(gradients->begin(), gradients->end(), mean);
 
     // second split (& shuffle)
-    TrainTestSplit split = train_test_split_random(*dataset, 0.75f, false); // no shuffle for debug
+    TrainTestSplit split = train_test_split_random(*dataset, 1.0f, false); // no shuffle for debug
     DataSet *train_set, *test_set;
     if(params.second_split) {
         train_set = &split.train;
@@ -54,13 +54,17 @@ void DPEnsemble::train(DataSet *dataset)
 
         // update/init gradients of all training instances
         if(tree_index == 0) {
-            double sum = std::accumulate((train_set->y).begin(), (train_set->y).end(), 0.0);
-            float mean = sum / train_set->length;
-            for(DataSet &dset : tree_samples) {
-                for (auto row : dset.X){
-                    dset.gradients.push_back(mean);
-                }
-            }
+            // double sum = std::accumulate((train_set->y).begin(), (train_set->y).end(), 0.0);
+            // float mean = sum / train_set->length;
+            // for(DataSet &dset : tree_samples) {
+            //     for (auto row : dset.X){                // TODO seems wrong!
+            //         dset.gradients.push_back(mean);     // gradient seems not like mean
+            //     }
+            // }
+
+            //TODO
+
+
         } else {
             vector<float> y_pred = predict(&tree_samples[tree_index].X);
             // calculate gradient from that
@@ -78,7 +82,7 @@ void DPEnsemble::train(DataSet *dataset)
 
         DPTree tree = DPTree(&params, &tree_samples[tree_index], tree_privacy_budget);
 
-        cout << "training tree " << tree_index << endl;
+        cout << "training tree nr " << tree_index << endl;
 
 
 

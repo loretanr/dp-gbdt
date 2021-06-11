@@ -47,15 +47,20 @@ int main()
     parammmms.max_depth = 600000;
 
     DataSet dataset = get_abalone(parammmms);
-    dataset.scale(parammmms, -1, 1);
 
     // dataset.X = {{1,2,3},{4,5,6},{7,8,9},{10,11,12},{13,14,15}};  // TODO remove
     // dataset.y = {9001,9002,9003,9004,9005};
 
 
     DPEnsemble ensemble = DPEnsemble(&parammmms);
-    TrainTestSplit split = train_test_split_random(dataset, 1); // empty test for now
-    
+    TrainTestSplit split = train_test_split_random(dataset, 0.80f, false); // empty test for now
+    // we should fit the Scaler only on the training set, according to
+    // https://datascience.stackexchange.com/questions/38395/standardscaler-before-and-after-splitting-data
+    // However this probably hurts DP, because y_test is then not guaranteed between [-1,1]
+    // but to keep data exactly the same as sklearn i'll only do on train for now.
+    split.train.scale(-1, 1);
+
+
     ensemble.train(&split.train);
 
     cout << "hello MA world" << endl;

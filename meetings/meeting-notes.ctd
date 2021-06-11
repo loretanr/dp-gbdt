@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1622727420.89" unique_id="1">
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1623331472.6" unique_id="1">
 		<rich_text>Thu 3pm
 Link:  </rich_text>
 		<rich_text foreground="#3d3c40"> </rich_text>
@@ -305,6 +305,29 @@ TODO
 
 TODO 
     check out Theos meeting slides.</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="06_10" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1623331472.64" ts_lastsave="1623332681.42" unique_id="14">
+			<rich_text foreground="#9090eeee9090">How does the mighty “proof” of Moritz look?</rich_text>
+			<rich_text>
+•  got the DPGBDT proof from esfandiar 
+   ◇ I don't understand anything
+    
+</rich_text>
+			<rich_text foreground="#9090eeee9090">do you have an idea of how I could create a better overview of algorithm and implementation to reason about side channel stuff?</rich_text>
+			<rich_text>
+   •  need some form of more detailed pseudocode (with more details)
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">Only y is scaled right? because we only will add noise to predictions. Right?
+Or do we need to scale X before training? Or does it not make a difference?</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">Esfandiar says only the labels (y)</rich_text>
+			<rich_text>
+    o/w read the base paper...
+    
+    
+</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622471704.32" unique_id="5">
@@ -655,15 +678,8 @@ would be nice to have cross_val in C++,
     
 There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER SPLIT in Train() -&gt; where they do a 0.7/0.3 split. And the 0.3 split is used to choose good trees</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623224636.93" unique_id="12">
-			<rich_text foreground="#9090eeee9090">How does the mighty “proof” of Moritz look?</rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623332731.83" unique_id="12">
 			<rich_text>
-    is it published
-    
-</rich_text>
-			<rich_text foreground="#9090eeee9090">do you have an idea of how I could create a better overview of algorithm and implementation to reason about side channel stuff?</rich_text>
-			<rich_text>
-   •  because the google docs snippet thing is ...naja. 
 
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">TODO: debug the result of the pick-formula (algo 2, line 8, base paper)
@@ -676,17 +692,22 @@ There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER S
 			<rich_text>
     
     
-TODO read check out theos meeting slides
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">TODO read check out theos meeting slides
 
 TODO check if there's a larger testset than abalone 
     (for potential theos hypothesis runs)
 
-TODO   cooooooooode cpp
+TODO   cooooooooode cpp</rich_text>
+			<rich_text>
 
 
 </rich_text>
 			<rich_text foreground="#9090eeee9090">Only y is scaled right? because we only will add noise to predictions. Right?
 Or do we need to scale X before training? Or does it not make a difference?</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">Esfandiar says only the labels (y)</rich_text>
 			<rich_text>
 
 Do we need to look at RMSE % compared to output range?
@@ -706,9 +727,17 @@ Theo did not scale the matrix X, resp pythons cross_val_score does not. At least
         idk.
         ignore for now.
 
-booking master lab
+</rich_text>
+			<rich_text foreground="#9090eeee9090">booking master lab</rich_text>
+			<rich_text>
 </rich_text>
 			<rich_text link="webs https://isg.inf.ethz.ch/Main/ServicesStudentLabsMasterThesisITCoordinators">https://isg.inf.ethz.ch/Main/ServicesStudentLabsMasterThesisITCoordinators</rich_text>
+			<rich_text>
+
+
+
+-----
+paper proof -1,1 only for y or X -&gt;</rich_text>
 		</node>
 	</node>
 </cherrytree>
