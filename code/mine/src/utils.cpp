@@ -11,10 +11,26 @@ vector<string> split_string(const string &s, char delim)
     return result;
 }
 
+
 float clip(float n, float lower, float upper)
 {
   return std::max(lower, std::min(n, upper));
 }
+
+
+template <typename Iter>
+typename std::iterator_traits<Iter>::value_type log_sum_exp(Iter begin, Iter end)
+{
+  using VT = std::iterator_traits<Iter>::value_type{};
+  if (begin==end) return VT{};
+  using std::exp;
+  using std::log;
+  auto max_elem = *std::max_element(begin, end);
+  auto sum = std::accumulate(begin, end, VT{}, 
+     [max_elem](VT a, VT b) { return a + exp(b - max_elem); });
+  return max_elem + log(sum);
+}
+
 
 DataSet::DataSet()
 {
@@ -36,12 +52,14 @@ DataSet::DataSet(vector<vector<float>> X, vector<float> y) : X(X), y(y)
     empty = false;
 }
 
+
 void DataSet::add_row(vector<float> xrow, float yval)
 {
     this->X.push_back(xrow);
     this->y.push_back(yval);
     length++;
 }
+
 
 // scale the features such that they lie in [lower,upper]
 // !!! Seems like only y needs to be scaled !!!

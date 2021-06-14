@@ -14,6 +14,7 @@
 #include <queue>
 #include <cmath>
 #include <limits>
+#include <iterator>
 
 
 using namespace std;
@@ -85,6 +86,9 @@ struct SplitCandidate {
 float clip(float n, float lower, float upper);
 vector<string> split_string(const string &s, char delim);           // TODO enable shuffle
 TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.70, bool shuffle = false);
+
+template <typename Iter>
+typename std::iterator_traits<Iter>::value_type log_sum_exp(Iter begin, Iter end);
 
 /* #include <cstdint>
 typedef int8_t int8;

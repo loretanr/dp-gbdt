@@ -151,4 +151,17 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, float max_gain)
     if (count == 0) {
         return -1;
     }
+    vector<__float128> exp_probs;
+    std::copy_if (probs.begin(), probs.end(), std::back_inserter(exp_probs), [](SplitCandidate c){return c.gain != 0;} );
+;
+    for (auto &prob : probs) {
+        __float128 val;
+        if (prob.gain <= 0) {
+            val = 0;   
+        } else {
+            
+            val = std::exp( (__float128) prob.gain - log_sum_exp(exp_probs.begin(), exp_probs.end()));
+        }
+        prob = val;
+    }
 }
