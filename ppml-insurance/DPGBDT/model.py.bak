@@ -4,7 +4,7 @@
 
 From: https://arxiv.org/pdf/1911.04209.pdf
 
-alltrees / no 2nd-split method
+2nd-split method
 """
 
 import math
@@ -201,13 +201,14 @@ class GradientBoostingEnsemble:
 
     # Init gradients
     self.init_.fit(X, y)
-    self.init_score = self.loss_.get_init_raw_predictions(
-        X, self.init_)  # (n_samples, K)
+    self.init_score = self.loss_.get_init_raw_predictions(X, self.init_)  # (n_samples, K)
     logger.debug('Training initialized with score: {}'.format(self.init_score))
     update_gradients = True
 
-    X_train, X_test, y_train, y_test = train_test_split(      # not using these sets
-        X, y, test_size=self.test_size, random_state=0)       # resp. not rejecting on line 383
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=self.test_size, random_state=0)
+    logger.debug('Using {0:d} instances for training and {1:d} instances for '
+                 'validation'.format(len(X_train), len(X_test)))
 
     # Number of ensembles in the model
     nb_ensembles = int(np.ceil(self.nb_trees / self.nb_trees_per_ensemble))
@@ -221,7 +222,7 @@ class GradientBoostingEnsemble:
 
     prev_score = np.inf
 
-    row_counter = 0
+    row_counter = 0 # for deterministic sample distribution
 
     # Train all trees
     for tree_index in range(self.nb_trees):
@@ -234,8 +235,8 @@ class GradientBoostingEnsemble:
       current_tree_for_ensemble = tree_index % self.nb_trees_per_ensemble
       if current_tree_for_ensemble == 0:
         # Initialize the dataset and the gradients
-        X_ensemble = np.copy(X)       # take X and y here for alltrees
-        y_ensemble = np.copy(y)
+        X_ensemble = np.copy(X_train)
+        y_ensemble = np.copy(y_train)
         prev_score = np.inf
         update_gradients = True
         # gradient initialization will happen later in the per-class-loop
@@ -246,16 +247,16 @@ class GradientBoostingEnsemble:
           # All trees will receive same amount of samples
           if self.nb_trees % self.nb_trees_per_ensemble == 0:
             # Perfect split
-            number_of_rows = int(len(X) / self.nb_trees_per_ensemble)
+            number_of_rows = int(len(X_train) / self.nb_trees_per_ensemble)
           else:
             # Partitioning data across ensembles
             if np.ceil(tree_index / self.nb_trees_per_ensemble) == np.ceil(
                 self.nb_trees / self.nb_trees_per_ensemble):
-              number_of_rows = int(len(X) / (
+              number_of_rows = int(len(X_train) / (
                   self.nb_trees % self.nb_trees_per_ensemble))
             else:
-              number_of_rows = int(len(X) / self.nb_trees_per_ensemble) + int(
-                  len(X) / (self.nb_trees % self.nb_trees_per_ensemble))
+              number_of_rows = int(len(X_train) / self.nb_trees_per_ensemble) + int(
+                  len(X_train) / (self.nb_trees % self.nb_trees_per_ensemble))
         else:
           # Line 8 of Algorithm 2 from the paper
           number_of_rows = int((len(X) * self.learning_rate * math.pow(
@@ -280,8 +281,10 @@ class GradientBoostingEnsemble:
         # rows = np.random.choice(range(len(X_ensemble)),
         #                         size=number_of_rows,
         #                         replace=False)
+                          # CHANGED TO DETERMINISTIC !!!!!!!!!!!!!!!!!!!!!!!!!!
         rows = [elem for elem in range(row_counter, row_counter + number_of_rows)]
         row_counter += number_of_rows
+
         X_tree = X_ensemble[rows, :]
         y_tree = y_ensemble[rows]
 
@@ -293,7 +296,7 @@ class GradientBoostingEnsemble:
             # First tree, start with initial scores (mean of labels)
             assert self.init_score is not None
             gradients = self.ComputeGradientForLossFunction(
-                y, self.init_score[:len(y)], kth_tree)
+                y_train, self.init_score[:len(y_train)], kth_tree)
           else:
             # Update gradients of all training instances on loss l
             if update_gradients:
@@ -342,7 +345,7 @@ class GradientBoostingEnsemble:
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
       else:
-        # Fit a normal decision tree
+        # Fit a normal decision tree, "Vanilla"
         k_trees = []
         for kth_tree in range(self.loss_.K):
           if tree_index == 0:
@@ -372,8 +375,7 @@ class GradientBoostingEnsemble:
               use_decay=self.use_decay,
               cat_idx=self.cat_idx,
               num_idx=self.num_idx)
-          tree.Fit(X, (y == kth_tree).astype(
-              np.float64) if self.loss_.is_multi_class else y, gradients)
+          tree.Fit(X, (y == kth_tree).astype(np.float64) if self.loss_.is_multi_class else y, gradients)
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
       self.trees.append(k_trees)
@@ -383,10 +385,11 @@ class GradientBoostingEnsemble:
                   'score so far: {2:f}'.format(tree_index, score, prev_score))
 
       if score >= prev_score:
-        # This tree doesn't improve overall prediction quality, removing from model
+        # This tree doesn't improve overall prediction quality, removing from
+        # model
         # not reusing gradients in multi-class as they are class-dependent
         update_gradients = self.loss_.is_multi_class
-        # self.trees.pop()          # Uncommenting this is responsible for not rejecting trees
+        self.trees.pop()
         if not self.use_dp:
           self.early_stop -= 1
           if self.early_stop == 0:
@@ -1028,8 +1031,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
         self.max_leaves_reached = True
     return self.max_leaves_reached
 
-
-
   def FindBestSplit(self,
                     X: np.array,
                     gradients: np.array,
@@ -1108,7 +1109,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       return ExponentialMechanism(probabilities, max_gain)
     return max(
         probabilities, key=lambda x: x['gain']) if probabilities else None
-        
 
   def GetLeafPrediction(self, gradients: np.array, y: np.ndarray) -> float:
     """Compute the leaf prediction.
@@ -1197,8 +1197,10 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       rhs = np.where(rhs_op(X[:, index], value))[0]
 
     lhs_grad, rhs_grad = gradients[lhs], gradients[rhs]
-    lhs_gain = np.square(np.sum(lhs_grad)) / (len(lhs) + self.l2_lambda)  # type: float
-    rhs_gain = np.square(np.sum(rhs_grad)) / (len(rhs) + self.l2_lambda)  # type: float
+    lhs_gain = np.square(np.sum(lhs_grad)) / (
+        len(lhs) + self.l2_lambda)  # type: float
+    rhs_gain = np.square(np.sum(rhs_grad)) / (
+        len(rhs) + self.l2_lambda)  # type: float
     total_gain = lhs_gain + rhs_gain
     return total_gain if total_gain >= 0. else 0.
 
@@ -1271,10 +1273,10 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
   for leaf in leaves:
     noise = np.random.laplace(0, scale)
     logger.debug('Leaf value before noise: {0:f}'.format(
-        np.float(leaf.prediction)))
+        np.float64(leaf.prediction)))
     leaf.prediction += noise
     logger.debug('Leaf value after noise: {0:f}'.format(
-        np.float(leaf.prediction)))
+        np.float64(leaf.prediction)))
 
 
 def ComputePredictions(gradients: np.ndarray,

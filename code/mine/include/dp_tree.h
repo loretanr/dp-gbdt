@@ -11,6 +11,7 @@ class DPTree
 private:
     ModelParams *params;
     DataSet *dataset;
+    vector<set<float>> X_unique;
     float privacy_budget;
 
     TreeNode make_tree_DFS(int current_depth, vector<int> live_samples);
@@ -19,7 +20,9 @@ private:
     float compute_predictions(vector<float> gradients, vector<float> y);
     vector<TreeNode> collect_nodes(TreeNode rootnode);
 
-    void find_best_split();
+    TreeNode find_best_split(vector<int> live_samples, int current_depth);
+    float compute_gain(int feature_index, float feature_value);
+    int exponential_mechanism(vector<SplitCandidate> &probs, float max_gain);
 
 public:
     DPTree(ModelParams *params, DataSet *dataset, float privacy_budget);

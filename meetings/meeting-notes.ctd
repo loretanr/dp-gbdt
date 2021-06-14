@@ -678,7 +678,7 @@ would be nice to have cross_val in C++,
     
 There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER SPLIT in Train() -&gt; where they do a 0.7/0.3 split. And the 0.3 split is used to choose good trees</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623332731.83" unique_id="12">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623654517.68" unique_id="12">
 			<rich_text>
 
 </rich_text>
@@ -698,8 +698,8 @@ There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER S
 TODO check if there's a larger testset than abalone 
     (for potential theos hypothesis runs)
 
-TODO   cooooooooode cpp</rich_text>
-			<rich_text>
+TODO   </rich_text>
+			<rich_text>is use_decay  used?
 
 
 </rich_text>
@@ -711,8 +711,6 @@ Or do we need to scale X before training? Or does it not make a difference?</ric
 			<rich_text>
 
 Do we need to look at RMSE % compared to output range?
-
-why is the categorical column not scaled? intuition
 
 Theo did not scale the matrix X, resp pythons cross_val_score does not. At least in abalone case.
     somehow the minmaxscaler given to cross_val does only scale y
@@ -726,18 +724,7 @@ Theo did not scale the matrix X, resp pythons cross_val_score does not. At least
         it has the same contents as y in cross_val (and cpp)
         idk.
         ignore for now.
-
 </rich_text>
-			<rich_text foreground="#9090eeee9090">booking master lab</rich_text>
-			<rich_text>
-</rich_text>
-			<rich_text link="webs https://isg.inf.ethz.ch/Main/ServicesStudentLabsMasterThesisITCoordinators">https://isg.inf.ethz.ch/Main/ServicesStudentLabsMasterThesisITCoordinators</rich_text>
-			<rich_text>
-
-
-
------
-paper proof -1,1 only for y or X -&gt;</rich_text>
 		</node>
 	</node>
 </cherrytree>

@@ -19,6 +19,8 @@ private:
     ModelParams params;
     vector<DPTree> trees;
     void distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set);
+    vector<float> compute_gradient_for_loss(vector<float> y, float init_score);
+
 };
 
 #endif // DPTREEENSEMBLE_H

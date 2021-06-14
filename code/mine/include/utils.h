@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <vector>
+#include <set>
 #include <algorithm>
 #include <random>
 #include <ctime>
@@ -32,7 +33,7 @@ struct ModelParams {
     bool leaf_clipping = false;
     bool use_dfs = true;
     bool use_3_trees = false;
-    // bool use_decay = false;
+    bool use_decay = false;
     int test_size = 0.3;    // TODO 1st or 2nd split?
     int verbosity = -1;
     float l2_threshold = 1.0;
@@ -72,6 +73,13 @@ struct TrainTestSplit {
     DataSet train;
     DataSet test;
     TrainTestSplit(DataSet train, DataSet test) : train(train), test(test) {};
+};
+
+struct SplitCandidate {
+    int feature_index;
+    float split_value;
+    float gain;
+    SplitCandidate(int f, float s, float g) : feature_index(f), split_value(s), gain(g) {};
 };
 
 float clip(float n, float lower, float upper);

@@ -14,9 +14,8 @@ public:
     TreeNode *left;
     TreeNode *right;
     int depth;
-    int split_index;
-    float split_value;
     int split_attr;
+    float split_value;
     float split_gain;
     float weight;
     float prediction; // if it's a leaf
