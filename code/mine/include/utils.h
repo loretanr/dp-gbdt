@@ -16,6 +16,11 @@
 #include <limits>
 #include <iterator>
 
+// #include "tree_node.h"
+// #include "dp_tree.h"
+// #include "dp_ensemble.h"
+
+
 
 using namespace std;
 
@@ -39,12 +44,12 @@ struct ModelParams {
     int verbosity = -1;
     float l2_threshold = 1.0;
     float l2_lambda = 0.1;
-    float delta_g;
-    double delta_v;
+
     float init_score;
     vector<int> cat_idx;
     vector<int> num_idx;
 };
+
 
 struct Scaler {
     float data_min, data_max;
@@ -83,12 +88,17 @@ struct SplitCandidate {
     SplitCandidate(int f, float s, float g) : feature_index(f), split_value(s), gain(g) {};
 };
 
+struct TreeParams {
+    float delta_g;
+    double delta_v;
+    double tree_privacy_budget;
+};
+
 float clip(float n, float lower, float upper);
 vector<string> split_string(const string &s, char delim);           // TODO enable shuffle
 TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.70, bool shuffle = false);
 
-template <typename Iter>
-typename std::iterator_traits<Iter>::value_type log_sum_exp(Iter begin, Iter end);
+double log_sum_exp(vector<double> arr);
 
 /* #include <cstdint>
 typedef int8_t int8;

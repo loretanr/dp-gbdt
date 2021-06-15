@@ -30,8 +30,10 @@ void DPEnsemble::train(DataSet *dataset)
         train_set = dataset;
     }
 
-    // prepare privacy budgets
-    float tree_privacy_budget = params.privacy_budget / params.nb_trees;
+    TreeParams tree_params;
+    
+    // Each tree gets the full pb, as they train on distinct data
+    tree_params.tree_privacy_budget = params.privacy_budget;
 
     // distribute training instances amongst trees
     vector<DataSet> tree_samples;
@@ -47,8 +49,8 @@ void DPEnsemble::train(DataSet *dataset)
         }
 
         // compute sensitivity
-        params.delta_g = 3 * pow(params.l2_threshold, 2); // todo move out of loop
-        params.delta_v = min((double) (params.l2_threshold / (1 + params.l2_lambda)),
+        tree_params.delta_g = 3 * pow(params.l2_threshold, 2); // todo move out of loop
+        tree_params.delta_v = min((double) (params.l2_threshold / (1 + params.l2_lambda)),
                             2 * params.l2_threshold *
                             pow(1-params.learning_rate, tree_index));
 
@@ -79,7 +81,7 @@ void DPEnsemble::train(DataSet *dataset)
         }
 
         // TODO, we have the right data, now build tree
-        DPTree tree = DPTree(&params, &tree_samples[tree_index], tree_privacy_budget);
+        DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index]);
         tree.fit();
 
         cout << "building tree nr " << tree_index << endl;

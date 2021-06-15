@@ -17,5 +17,7 @@ clean:
 objs/%.o: src/%.cpp
 	$(COMPILER) $(CFLAGS) $(INC) $< -o $@
 
-rebuild: clean 
+# rebuild: clean 
+# 	make
+rebuild:
 	make

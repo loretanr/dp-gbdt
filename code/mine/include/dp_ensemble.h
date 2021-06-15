@@ -1,8 +1,8 @@
 #ifndef DPENSEMBLE_H
 #define DPENSEMBLE_H
 
-#include "dp_tree.h"
 #include "utils.h"
+#include "dp_tree.h"
 
 
 class DPEnsemble

@@ -1,6 +1,8 @@
 #ifndef TREENODE_H
 #define TREENODE_H
 
+#include "utils.h"
+
 class TreeNode {
 public:
     TreeNode();

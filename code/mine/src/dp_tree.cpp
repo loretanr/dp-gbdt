@@ -1,10 +1,11 @@
 #include "dp_tree.h"
+//#include <quadmath.h>
 
  //: tree_index(tree_index), learning_rate(learning_rate), l2_threshold(l2_threshold), l2_lambda(l2_lambda), privacy_budget(privacy_budget), delta_g(delta_g), delta_v(delta_v), loss(loss), max_depth(max_depth), max_leaves(max_leaves), min_samples_split(min_samples_split), leaf_clipping(leaf_clipping), use_bfs(use_bfs), use_3_trees(use_3_trees), use_decay(use_decay), cat_idx(cat_idx), num_idx(num_idx)
-DPTree::DPTree(ModelParams *params, DataSet *dataset, float privacy_budget): 
-    params(params), 
-    dataset(dataset),
-    privacy_budget(privacy_budget)
+DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset): 
+    params(params),
+    tree_params(tree_params), 
+    dataset(dataset)
 {
     // create a matrix whose rows contain the columns of X, but without duplicates
     for (int i=0; i<dataset->num_x_cols; i++){
@@ -82,9 +83,9 @@ TreeNode DPTree::find_best_split(vector<int> live_samples, int current_depth)
 {
     float privacy_budget_for_node;
     if ((current_depth != 0) and params->use_decay) {
-        privacy_budget_for_node = (params->privacy_budget) / 2 / pow(2, current_depth);
+        privacy_budget_for_node = (tree_params->tree_privacy_budget) / 2 / pow(2, current_depth);
     } else {
-        privacy_budget_for_node = (params->privacy_budget)/2/params->max_depth;
+        privacy_budget_for_node = (tree_params->tree_privacy_budget)/2/params->max_depth;
     }
     if (params->use_3_trees and (current_depth != 0)) {
         // Except for the root node, budget is divided by the 3-nodes
@@ -103,6 +104,7 @@ TreeNode DPTree::find_best_split(vector<int> live_samples, int current_depth)
             if (gain == -1) {
                 continue;
             }
+            gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
             max_gain = (gain > max_gain) ? gain : max_gain; // unused
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
             probabilities.push_back(candidate);
@@ -122,8 +124,15 @@ float DPTree::compute_gain(int feature_index, float feature_value)
 {
     // partition into lhs / rhs
     vector<bool> lhs;
-    for (auto sample : dataset->X) {
-        lhs.push_back(sample[feature_index] < feature_value);
+    // if the feature is categorical
+    if(std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end()) {
+        for (auto sample : dataset->X) {
+            lhs.push_back(sample[feature_index] == feature_value);
+        }
+    } else { // feature is continuous
+        for (auto sample : dataset->X) {
+            lhs.push_back(sample[feature_index] < feature_value);
+        }
     }
 
     int lhs_size = std::count(lhs.begin(), lhs.end(), true);
@@ -151,17 +160,28 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, float max_gain)
     if (count == 0) {
         return -1;
     }
-    vector<__float128> exp_probs;
-    std::copy_if (probs.begin(), probs.end(), std::back_inserter(exp_probs), [](SplitCandidate c){return c.gain != 0;} );
-;
-    for (auto &prob : probs) {
-        __float128 val;
-        if (prob.gain <= 0) {
-            val = 0;   
-        } else {
-            
-            val = std::exp( (__float128) prob.gain - log_sum_exp(exp_probs.begin(), exp_probs.end()));
+
+    // TODO need quadmath?
+
+    // vector<SplitCandidate> exp_probs;
+    // std::copy_if(probs.begin(), probs.end(), std::back_inserter(exp_probs), [](SplitCandidate c){return c.gain != 0;} );
+    vector<double> gains, probabilities, partials(probs.size());
+
+    for (auto p : probs) {
+        if (p.gain != 0) {
+            gains.push_back(p.gain);
         }
-        prob = val;
     }
+
+    for (auto &prob : probs) {
+        if (prob.gain <= 0) {
+            probabilities.push_back(0);   
+        } else {
+            probabilities.push_back( exp( (double) prob.gain - log_sum_exp(gains)) );
+        }
+    }
+
+    std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
+
+    return 69;
 }

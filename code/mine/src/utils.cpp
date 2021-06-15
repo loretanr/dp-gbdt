@@ -18,19 +18,21 @@ float clip(float n, float lower, float upper)
 }
 
 
-template <typename Iter>
-typename std::iterator_traits<Iter>::value_type log_sum_exp(Iter begin, Iter end)
+// TODO does this overflow?
+double log_sum_exp(vector<double> vec)
 {
-  using VT = std::iterator_traits<Iter>::value_type{};
-  if (begin==end) return VT{};
-  using std::exp;
-  using std::log;
-  auto max_elem = *std::max_element(begin, end);
-  auto sum = std::accumulate(begin, end, VT{}, 
-     [max_elem](VT a, VT b) { return a + exp(b - max_elem); });
-  return max_elem + log(sum);
+    size_t count = vec.size();
+    if (count > 0) {
+        double maxVal = *max_element(vec.begin(), vec.end());
+        double sum = 0;
+        for (size_t i = 0; i < count; i++) {
+            sum += exp(vec[i] - maxVal);
+        }
+        return log(sum) + maxVal;
+    } else {
+        return 0.0;
+    }
 }
-
 
 DataSet::DataSet()
 {

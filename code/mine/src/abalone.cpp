@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 
-#include "dp_tree.h"
+// #include "dp_tree.h"
 #include "dp_ensemble.h"
 #include "utils.h"
 
@@ -43,8 +43,8 @@ int main()
 {
     ModelParams parammmms;
     parammmms.nb_trees = 50;
-    parammmms.delta_g = 0.42;
-    parammmms.max_depth = 600000;
+    parammmms.max_depth = 6;
+    parammmms.privacy_budget = 0.1;
 
     DataSet dataset = get_abalone(parammmms);
 
