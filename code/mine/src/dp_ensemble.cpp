@@ -90,7 +90,7 @@ void DPEnsemble::train(DataSet *dataset)
         DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index]);
         tree.fit();
 
-        spdlog::info("building tree nr {0}", tree_index);
+        LOG_INFO("building tree nr {1}", tree_index);
 
 
 

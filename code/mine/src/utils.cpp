@@ -18,6 +18,14 @@ float clip(float n, float lower, float upper)
 }
 
 
+std::string string_pad(std::string str, const size_t num, const char paddingChar)
+{
+    if(num > str.size())
+        str.insert(0, num - str.size(), paddingChar);
+    return str;
+}
+
+
 // TODO does this overflow?
 double log_sum_exp(vector<double> vec)
 {

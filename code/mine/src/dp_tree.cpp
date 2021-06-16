@@ -113,7 +113,7 @@ TreeNode *DPTree::find_best_split(vector<int> live_samples, int current_depth)
         privacy_budget_for_node /= 2;
     }
 
-    //console->debug("Using {0:.2f} budget for internal leaf nodes", privacy_budget_for_node);
+    LOG_DEBUG("Using {1:.2f} budget for internal leaf nodes", privacy_budget_for_node);
 
     vector<SplitCandidate> probabilities;
     float max_gain = numeric_limits<float>::min();

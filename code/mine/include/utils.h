@@ -16,11 +16,19 @@
 #include <limits>
 #include <iterator>
 
-// #include "tree_node.h"
-// #include "dp_tree.h"
-// #include "dp_ensemble.h"
-
-
+/* Logging, to be removed */
+#define concat(one, two) ((std::string) one + (std::string) two).c_str()
+#define LOG_INFO_ARG(msg, ...) spdlog::info(concat("[{0:>17s}] ", msg), __func__,  __VA_ARGS__)
+#define LOG_INFO_NO_ARG(msg) spdlog::info(concat("[{0:>17s}] ", msg), __func__)
+#define LOG_DEBUG_ARG(msg, ...) spdlog::debug(concat("[{0:>17s}] ", msg), __func__,  __VA_ARGS__)
+#define LOG_DEBUG_NO_ARG(msg) spdlog::debug(concat("[{0:>17s}] ", msg), __func__)
+#define GET_4TH_ARG(arg1, arg2, arg3, arg4, ...) arg4
+#define LOG_INFO_MACRO_CHOOSER(...) \
+    GET_4TH_ARG(__VA_ARGS__, LOG_INFO_ARG, LOG_INFO_ARG, LOG_INFO_NO_ARG, )
+#define LOG_INFO(...) LOG_INFO_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+#define LOG_DEBUG_MACRO_CHOOSER(...) \
+    GET_4TH_ARG(__VA_ARGS__, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_NO_ARG, )
+#define LOG_DEBUG(...) LOG_DEBUG_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 
 using namespace std;
 
@@ -99,6 +107,7 @@ vector<string> split_string(const string &s, char delim);           // TODO enab
 TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.70, bool shuffle = false);
 
 double log_sum_exp(vector<double> arr);
+void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');
 
 /* #include <cstdint>
 typedef int8_t int8;
