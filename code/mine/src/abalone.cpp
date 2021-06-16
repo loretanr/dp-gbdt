@@ -5,7 +5,11 @@
 
 // #include "dp_tree.h"
 #include "dp_ensemble.h"
+#include "spdlog/spdlog.h"
+#include <spdlog/sinks/stdout_sinks.h>
 #include "utils.h"
+
+#define LOG_INFO(msg, ...) spdlog::info(((std::string) "[...] " + (std::string) msg).c_str(),  __VA_ARGS__)
 
 using namespace std;
 
@@ -39,8 +43,21 @@ DataSet get_abalone(ModelParams &params)
     return DataSet(X, y);
 }
 
+//std::shared_ptr<spdlog::logger> console;
+
+
 int main()
 {
+    spdlog::set_level(spdlog::level::debug); // Set global log level to debug
+    spdlog::set_pattern("[%H:%M:%S] [%^%l%$] %v");
+
+    LOG_INFO("hello MA start {0}", 1);
+    // auto blaaaa = strcat((char *) "[...] ","hello MA start {0}")
+    // spdlog::info(strcat((char *) "[...] ","hello MA start {0}"), 1);
+
+
+
+
     ModelParams parammmms;
     parammmms.nb_trees = 50;
     parammmms.max_depth = 6;

@@ -1,4 +1,5 @@
 #include "dp_ensemble.h"
+#include "spdlog/spdlog.h"
 #include "dp_tree.h"
 
 
@@ -89,7 +90,7 @@ void DPEnsemble::train(DataSet *dataset)
         DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index]);
         tree.fit();
 
-        cout << "building tree nr " << tree_index << endl;
+        spdlog::info("building tree nr {0}", tree_index);
 
 
 

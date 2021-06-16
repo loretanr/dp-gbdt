@@ -678,7 +678,7 @@ would be nice to have cross_val in C++,
     
 There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER SPLIT in Train() -&gt; where they do a 0.7/0.3 split. And the 0.3 split is used to choose good trees</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623654517.68" unique_id="12">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623834483.73" unique_id="12">
 			<rich_text>
 
 </rich_text>
@@ -700,6 +700,8 @@ TODO check if there's a larger testset than abalone
 
 TODO   </rich_text>
 			<rich_text>is use_decay  used?
+
+TODO implement the non DP for deterministic verification and python comparison of algorithm
 
 
 </rich_text>

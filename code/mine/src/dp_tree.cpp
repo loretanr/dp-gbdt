@@ -1,4 +1,6 @@
 #include "dp_tree.h"
+#include "spdlog/spdlog.h"
+
 //#include <quadmath.h>
 
  //: tree_index(tree_index), learning_rate(learning_rate), l2_threshold(l2_threshold), l2_lambda(l2_lambda), privacy_budget(privacy_budget), delta_g(delta_g), delta_v(delta_v), loss(loss), max_depth(max_depth), max_leaves(max_leaves), min_samples_split(min_samples_split), leaf_clipping(leaf_clipping), use_bfs(use_bfs), use_3_trees(use_3_trees), use_decay(use_decay), cat_idx(cat_idx), num_idx(num_idx)
@@ -111,6 +113,8 @@ TreeNode *DPTree::find_best_split(vector<int> live_samples, int current_depth)
         privacy_budget_for_node /= 2;
     }
 
+    //console->debug("Using {0:.2f} budget for internal leaf nodes", privacy_budget_for_node);
+
     vector<SplitCandidate> probabilities;
     float max_gain = numeric_limits<float>::min();
     
@@ -122,6 +126,7 @@ TreeNode *DPTree::find_best_split(vector<int> live_samples, int current_depth)
         for (auto elem : live_samples) {
             temp.push_back((dataset->X)[elem][col]);
         }
+        X_live.push_back(temp);
     }
 
     // iterate over features
