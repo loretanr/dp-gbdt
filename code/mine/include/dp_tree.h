@@ -15,13 +15,14 @@ private:
     DataSet *dataset;
     vector<set<float>> X_unique;
 
-    TreeNode make_tree_DFS(int current_depth, vector<int> live_samples);
+    TreeNode *make_tree_DFS(int current_depth, vector<int> live_samples);
 
-    TreeNode make_leaf_node(int current_depth);
+    TreeNode *make_leaf_node(int current_depth);
     float compute_predictions(vector<float> gradients, vector<float> y);
     vector<TreeNode> collect_nodes(TreeNode rootnode);
 
-    TreeNode find_best_split(vector<int> live_samples, int current_depth);
+    TreeNode *find_best_split(vector<int> live_samples, int current_depth);
+    void samples_left_right_partition(vector<bool> &lhs, int feature_index, float feature_value);
     float compute_gain(int feature_index, float feature_value);
     int exponential_mechanism(vector<SplitCandidate> &probs, float max_gain);
 
@@ -30,7 +31,9 @@ public:
     //: tree_index(tree_index), learning_rate(learning_rate), l2_threshold(l2_threshold), l2_lambda(l2_lambda), privacy_budget(privacy_budget), delta_g(delta_g), delta_v(delta_v), loss(loss), max_depth(max_depth), max_leaves(max_leaves), min_samples_split(min_samples_split), leaf_clipping(leaf_clipping), use_bfs(use_bfs), use_3_trees(use_3_trees), use_decay(use_decay), cat_idx(cat_idx), num_idx(num_idx) {};
     ~DPTree();
 
-    TreeNode root_node;
+    void delete_tree(TreeNode *node);
+
+    TreeNode *root_node;
     //queue<TreeNode *> nodes_bfs;
     vector<TreeNode> nodes;  // main list of nodes
 

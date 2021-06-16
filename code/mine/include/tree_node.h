@@ -13,8 +13,7 @@ public:
     bool is_leaf();
     //void print_node_info();
 
-    TreeNode *left;
-    TreeNode *right;
+    TreeNode *left, *right;
     int depth;
     int split_attr;
     float split_value;

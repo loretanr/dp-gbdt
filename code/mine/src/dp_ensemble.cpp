@@ -1,4 +1,5 @@
 #include "dp_ensemble.h"
+#include "dp_tree.h"
 
 
 DPEnsemble::DPEnsemble(ModelParams *parameters)
@@ -7,7 +8,11 @@ DPEnsemble::DPEnsemble(ModelParams *parameters)
 }
     
 
-DPEnsemble::~DPEnsemble() {}; // TODO
+DPEnsemble::~DPEnsemble() {
+    for (auto tree : trees) {
+        tree.delete_tree(tree.root_node);
+    }
+}; // TODO
 
 
 void DPEnsemble::train(DataSet *dataset)
@@ -31,7 +36,7 @@ void DPEnsemble::train(DataSet *dataset)
     }
 
     TreeParams tree_params;
-    
+
     // Each tree gets the full pb, as they train on distinct data
     tree_params.tree_privacy_budget = params.privacy_budget;
 
