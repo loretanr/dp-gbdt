@@ -47,10 +47,6 @@ int main()
 
     LOG_INFO("hello MA start");
 
-    // string s = __func__;
-    // string_pad(s, 12, '?');
-    // cout << s << endl;
-
     ModelParams parammmms;
     parammmms.nb_trees = 50;
     parammmms.max_depth = 6;

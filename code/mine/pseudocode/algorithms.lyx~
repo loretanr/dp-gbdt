@@ -1,0 +1,272 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+%% use full paper
+\usepackage[margin=2cm]{geometry}
+
+%% multicols
+\usepackage{multicol}
+
+%% no automated date after title 
+\date{}
+
+%% compact spacing
+\usepackage[compact]{titlesec}
+\usepackage{enumitem}
+\setlist{nolistsep}
+
+%% table formatting
+\usepackage{graphicx} 
+
+%% colors
+\usepackage{xcolor}
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0}
+
+% highlight
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+\newcommand{\hilightt}[1]{\colorbox{orange}{#1}}
+
+% titlespace
+\usepackage{titling}
+
+% no ugly indent
+\setlength\parindent{0pt}
+
+
+%\usepackage{algorithm,algpseudocode}
+%\usepackage{algorithm2e}
+\end_preamble
+\use_default_options true
+\begin_modules
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "frame=trbl,backgroundcolor={\color{lightgray}},flexiblecolumns=true,basicstyle={\small\ttfamily},breaklines=true,keywordstyle={\color{blue}\bfseries},language=Java,sensitive=true,emph={[1]{critical_section}},emphstyle={[1]\color{red}},emph={[2]{atomic,Condition}},emphstyle={[2]\color{blue}},rulesepcolor={\color{gray}},emph={[3]{acquire(mutex),release(mutex),signal(mutex)}},emphstyle={[3]\color{magenta}},showstringspaces=false,stringstyle={\color{purple}},commentstyle={\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small},morecomment={[l][\color{Blue}]{...}},tabsize=4,lineskip={-1.5pt}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Build_Tree_DFS (current_depth, samples)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm
+if (current_depth 
+\family typewriter
+==
+\family default
+ max_depth 
+\family typewriter
+||
+\family default
+ not enough samples)
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm
+
+\family typewriter
+* return new LeafNode()
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm
+endif
+\end_layout
+
+\begin_layout Algorithm
+* 
+\family typewriter
+split = find_best_split(samples)
+\end_layout
+
+\begin_layout Algorithm
+
+\family typewriter
+* vector<bool> lhs = samples_left_right_partition(split)
+\end_layout
+
+\begin_layout Algorithm
+
+\family typewriter
+* node = new InternalNode()
+\end_layout
+
+\begin_layout Algorithm
+
+\family typewriter
+* node.left = Build_Tree_DFS(current_depth+1, split.left_samples)
+\end_layout
+
+\begin_layout Algorithm
+
+\family typewriter
+* node.right = Build_Tree_DFS(current_depth+1, split.right_samples)
+\end_layout
+
+\begin_layout Algorithm
+
+\family typewriter
+* return node
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Find_Best_Split (samples)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Algorithm
+for (feature_index : features)
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm
+for (feature_value : samples[feature_index])
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm
+* 
+\family typewriter
+gain = compute_gain(feature_index, feature_value)
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm
+endfor
+\end_layout
+
+\begin_layout Algorithm
+* 
+\family typewriter
+vector<float> probabilities = bla
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm
+endfor
+\end_layout
+
+\begin_layout Algorithm
+* hello
+\end_layout
+
+\begin_layout Algorithm
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

@@ -25,6 +25,7 @@ void DPEnsemble::train(DataSet *dataset)
     double sum = std::accumulate((dataset->y).begin(), (dataset->y).end(), 0.0);
     float init_score = sum / dataset->length; // this is correct
     std::fill(gradients->begin(), gradients->end(), init_score);
+    LOG_DEBUG("Training initialized with score: {1}", init_score);
 
     // second split (& shuffle), alltrees & noshuffle for debug
     TrainTestSplit split = train_test_split_random(*dataset, 1.0f, false);
@@ -47,6 +48,8 @@ void DPEnsemble::train(DataSet *dataset)
     
     // train all trees
     for(int tree_index = 0; tree_index<params.nb_trees;  tree_index++) {
+
+        LOG_DEBUG(BOLD("Tree {1:2d}") + ": receives pb {2:.2f} and will train on {3} instances", tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
 
         // init the dataset
         if(tree_index == 0) {
@@ -90,7 +93,6 @@ void DPEnsemble::train(DataSet *dataset)
         DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index]);
         tree.fit();
 
-        LOG_INFO("building tree nr {1}", tree_index);
 
 
 

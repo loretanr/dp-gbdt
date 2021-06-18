@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1623331472.6" unique_id="1">
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1623939008.65" unique_id="1">
 		<rich_text>Thu 3pm
 Link:  </rich_text>
 		<rich_text foreground="#3d3c40"> </rich_text>
@@ -9,7 +9,12 @@ Link:  </rich_text>
 
 
 
-from 0.5   up to   1  </rich_text>
+from 0.5   up to   1  
+
+
+special consideration to all branches like find best split
+
+continue;</rich_text>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="04_22_first" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168455.86" ts_lastsave="1619595361.65" unique_id="2">
 			<rich_text scale="h2">Discussion points</rich_text>
 			<rich_text>
@@ -328,6 +333,9 @@ Or do we need to scale X before training? Or does it not make a difference?</ric
     
     
 </rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="06_17" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1623939008.65" ts_lastsave="1623939012.79" unique_id="15">
+			<rich_text>need to indicate after each pseudocode, what exactly it could leak in its current form (even algorithm parameters)</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622471704.32" unique_id="5">
@@ -678,7 +686,7 @@ would be nice to have cross_val in C++,
     
 There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER SPLIT in Train() -&gt; where they do a 0.7/0.3 split. And the 0.3 split is used to choose good trees</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623654517.68" unique_id="12">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623834483.73" unique_id="12">
 			<rich_text>
 
 </rich_text>
@@ -700,6 +708,8 @@ TODO check if there's a larger testset than abalone
 
 TODO   </rich_text>
 			<rich_text>is use_decay  used?
+
+TODO implement the non DP for deterministic verification and python comparison of algorithm
 
 
 </rich_text>

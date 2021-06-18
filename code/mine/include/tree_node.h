@@ -5,14 +5,14 @@
 
 class TreeNode {
 public:
-    TreeNode();
+    TreeNode(bool is_leaf);
     ~TreeNode();
 
     // probably need some info/pointers to dataset
 
-    bool is_leaf();
     //void print_node_info();
 
+    bool is_leaf();
     TreeNode *left, *right;
     int depth;
     int split_attr;

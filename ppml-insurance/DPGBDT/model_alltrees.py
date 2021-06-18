@@ -309,7 +309,7 @@ class GradientBoostingEnsemble:
 
           logger.debug('Tree {0:d} will receive a budget of epsilon={1:f} and '
                        'train on {2:d} instances.'.format(
-              tree_index, tree_privacy_budget, len(X_ensemble)))
+              tree_index, tree_privacy_budget, len(X_tree)))
           # Fit a differentially private decision tree
           tree = DifferentiallyPrivateTree(
               tree_index,
@@ -811,8 +811,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       return node
 
     if current_depth == max_depth or len(X) < self.min_samples_split:
-      # Max depth reached or not enough samples to split node, node is a leaf
-      # node
+      # Max depth reached or not enough samples to split node, node is a leaf node
+      logger.debug("max_depth ({1}) or min_samples ({2})-> leaf".format(current_depth,len(X)))
       return MakeLeafNode()
 
     if not self.use_3_trees:
@@ -825,13 +825,13 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       else:
         best_split = self.FindBestSplit(X, gradients, current_depth)
     if best_split:
-      logger.debug('Tree DFS: best split found at index {0:d}, value {1:f} '
-                   'with gain {2:f}. Current depth is {3:d}'.format(
-          best_split['index'], best_split['value'],
-          best_split['gain'], current_depth))
       lhs_op, rhs_op = self.feature_to_op[best_split['index']]
       lhs = np.where(lhs_op(X[:, best_split['index']], best_split['value']))[0]
       rhs = np.where(rhs_op(X[:, best_split['index']], best_split['value']))[0]
+      logger.debug('Tree DFS: best split found at index {0:d}, value {1:f} '
+                   'gain {2:f}, curr depth {3:d}, samples {4} -> ({5},{6})'.format(
+          best_split['index'], best_split['value'],
+          best_split['gain'], current_depth, len(X), len(lhs), len(rhs)))
       if not self.use_3_trees:
         left_child = self.MakeTreeDFS(
             X[lhs],  y[lhs], gradients[lhs], current_depth + 1, max_depth)

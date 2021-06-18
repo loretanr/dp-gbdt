@@ -27,8 +27,6 @@ from DPGBDT import logging
 logging.SetUpLogger(__name__)
 logger = logging.GetLogger(__name__)
 
-RANDOMIZATION = False
-
 
 class GradientBoostingEnsemble:
   """Implement gradient boosting ensemble of trees.
@@ -818,7 +816,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
 
     if current_depth == max_depth or len(X) < self.min_samples_split:
       # Max depth reached or not enough samples to split node, node is a leaf node
-      logger.debug('max_depth ({0}) or min_samples ({1}) -> leaf'.format(current_depth, len(X)))
+      logger.debug("max_depth ({1}) or min_samples ({2})-> leaf".format(current_depth,len(X)))
       return MakeLeafNode()
 
     if not self.use_3_trees:
@@ -834,7 +832,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       lhs_op, rhs_op = self.feature_to_op[best_split['index']]
       lhs = np.where(lhs_op(X[:, best_split['index']], best_split['value']))[0]
       rhs = np.where(rhs_op(X[:, best_split['index']], best_split['value']))[0]
-      logger.debug('DFS: Best split at {0:d}, value {1:f} '
+      logger.debug('Tree DFS: best split found at index {0:d}, value {1:f} '
               'gain {2:f}, curr depth {3:d}, samples {4} -> ({5},{6})'.format(
               best_split['index'], best_split['value'],
               best_split['gain'], current_depth, len(X), len(lhs), len(rhs)))
@@ -861,7 +859,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.nodes.append(node)
       return node
 
-    logger.debug('Making leaf node, depth ({0}) samples ({1}) -> leaf'.format(current_depth, len(X)))
     return MakeLeafNode()
 
   def MakeTreeBFS(self,
@@ -1079,7 +1076,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     for feature_index in range(X.shape[1]):
       binary_split = len(np.unique(X[:, feature_index])) == 2
       # Iterate over unique value for this feature
-      for idx, value in enumerate(X[:, feature_index]):   # removed unique for debug
+      for idx, value in enumerate(np.unique(X[:, feature_index])):
         # Find gain for that split
         if binary_split and idx == 1:
           # If the attribute only has 2 values then we don't need to care for
@@ -1382,11 +1379,6 @@ def ExponentialMechanism(
         else:
           prob['probability'] = 0.
 
-  # disable randomization for debug
-  if (not RANDOMIZATION):
-    max_prob = max(probabilities, key=lambda x:x['probability'])
-    return max_prob
-
   # Apply the exponential mechanism
   previous_prob = 0.
   random_prob = np.random.uniform()
@@ -1403,5 +1395,4 @@ def ExponentialMechanism(
       if op(prob['probability'], random_prob):
         return prob
     random_prob = np.random.uniform()
-  logger.debug("exp mechanism failed, no split found")
   return None

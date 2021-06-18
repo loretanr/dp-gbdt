@@ -16,19 +16,22 @@
 #include <limits>
 #include <iterator>
 
+static const bool RANDOMIZATION = false;
+
 /* Logging, to be removed */
 #define concat(one, two) ((std::string) one + (std::string) two).c_str()
 #define LOG_INFO_ARG(msg, ...) spdlog::info(concat("[{0:>17s}] ", msg), __func__,  __VA_ARGS__)
 #define LOG_INFO_NO_ARG(msg) spdlog::info(concat("[{0:>17s}] ", msg), __func__)
 #define LOG_DEBUG_ARG(msg, ...) spdlog::debug(concat("[{0:>17s}] ", msg), __func__,  __VA_ARGS__)
 #define LOG_DEBUG_NO_ARG(msg) spdlog::debug(concat("[{0:>17s}] ", msg), __func__)
-#define GET_4TH_ARG(arg1, arg2, arg3, arg4, ...) arg4
+#define GET_9TH_ARG(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, ...) arg9
 #define LOG_INFO_MACRO_CHOOSER(...) \
-    GET_4TH_ARG(__VA_ARGS__, LOG_INFO_ARG, LOG_INFO_ARG, LOG_INFO_NO_ARG, )
+    GET_9TH_ARG(__VA_ARGS__, LOG_INFO_ARG, LOG_INFO_ARG, LOG_INFO_ARG, LOG_INFO_ARG, LOG_INFO_ARG, LOG_INFO_ARG, LOG_INFO_ARG, LOG_INFO_NO_ARG, )
 #define LOG_INFO(...) LOG_INFO_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 #define LOG_DEBUG_MACRO_CHOOSER(...) \
-    GET_4TH_ARG(__VA_ARGS__, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_NO_ARG, )
+    GET_9TH_ARG(__VA_ARGS__, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_NO_ARG, )
 #define LOG_DEBUG(...) LOG_DEBUG_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+#define BOLD(words) "\033[1m" + words + "\033[0m"
 
 using namespace std;
 
@@ -45,6 +48,7 @@ struct ModelParams {
     bool balance_partition = true;
     bool gradient_filtering = false;
     bool leaf_clipping = false;
+    bool use_dp = false; // TODO remove this default
     bool use_dfs = true;
     bool use_3_trees = false;
     bool use_decay = false;

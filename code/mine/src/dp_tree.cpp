@@ -20,8 +20,10 @@ DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset):
     } */
 }
 
+
 // TODO destroy the nodes, done in ensemble for now.
 DPTree::~DPTree() {}
+
 
 // Fit the tree to the data
 void DPTree::fit()
@@ -39,25 +41,39 @@ void DPTree::fit()
     
 }
 
+
 // Recursively build tree, DFS approach, 1st instance returns root node
 TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 {
     // max depth reached or not enough samples -> leaf node
     if ( (current_depth == params->max_depth) or
         live_samples.size() < (size_t) params->min_samples_split) {
+            LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf", current_depth, live_samples.size());
             return make_leaf_node(current_depth);
         }
 
+    // only use the samples that actually end up in this node
+    // note that the cols of X are rows in X_live
+    vector<vector<float>> X_live;
+    for(int col=0; col < dataset->num_x_cols; col++) {
+        vector<float> temp;
+        for (auto elem : live_samples) {
+            temp.push_back((dataset->X)[elem][col]);
+        }
+        X_live.push_back(temp);
+    }
+
     // find best split
-    TreeNode *node = find_best_split(live_samples, current_depth);
+    TreeNode *node = find_best_split(X_live, current_depth);
 
     // no split found
     if (node->is_leaf()) {
+        LOG_DEBUG("no split found -> leaf");
         return node;
     }
 
     vector<bool> lhs;
-    samples_left_right_partition(lhs, node->split_attr, node->split_value);
+    samples_left_right_partition(lhs, X_live, node->split_attr, node->split_value);
     vector<int> left_live_samples, right_live_samples;
     for (auto sample_index : live_samples) {
         if (lhs[sample_index]) {
@@ -66,10 +82,14 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
             right_live_samples.push_back(sample_index);
         }
     }
+    LOG_DEBUG("DFS: best split @ {1}, val {2:.2f}, gain {3:.5f}, curr_depth {4}, samples {5} ->({6},{7})", 
+        node->split_attr, node->split_value, node->split_gain, current_depth, 
+        live_samples.size(), left_live_samples.size(), right_live_samples.size()); 
 
     node->left = make_tree_DFS(current_depth + 1, left_live_samples);
     node->right = make_tree_DFS(current_depth + 1, right_live_samples);
 
+    return node;
 
 
 }
@@ -77,7 +97,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 
 TreeNode *DPTree::make_leaf_node(int current_depth)
 {
-    TreeNode *leaf = new TreeNode();
+    TreeNode *leaf = new TreeNode(true);
     leaf->depth = current_depth;
     //leaf.prediction = compute_predictions(nullptr, nullptr);
     //nodes.push_back(leaf); // push back here???
@@ -100,7 +120,7 @@ float DPTree::compute_predictions(vector<float> gradients, vector<float> y)
 
 
 //Find best split of data using the exponential mechanism
-TreeNode *DPTree::find_best_split(vector<int> live_samples, int current_depth)
+TreeNode *DPTree::find_best_split(vector<vector<float>> &X_live, int current_depth)
 {
     float privacy_budget_for_node;
     if ((current_depth != 0) and params->use_decay) {
@@ -113,27 +133,17 @@ TreeNode *DPTree::find_best_split(vector<int> live_samples, int current_depth)
         privacy_budget_for_node /= 2;
     }
 
-    LOG_DEBUG("Using {1:.2f} budget for internal leaf nodes", privacy_budget_for_node);
+    LOG_DEBUG("Using {1:.4f} budget for internal leaf nodes", privacy_budget_for_node);
 
     vector<SplitCandidate> probabilities;
     float max_gain = numeric_limits<float>::min();
     
-    // only use the samples that actually end up in this node
-    // note that the cols of X are rows in X_live
-    vector<vector<float>> X_live;
-    for(int col=0; col < dataset->num_x_cols; col++) {
-        vector<float> temp;
-        for (auto elem : live_samples) {
-            temp.push_back((dataset->X)[elem][col]);
-        }
-        X_live.push_back(temp);
-    }
-
+    
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         for (float feature_value : X_live[feature_index]) { // TODO, don't iterate over duplicates in X_live
             // compute gain
-            float gain = compute_gain(feature_index, feature_value);
+            float gain = compute_gain(X_live, feature_index, feature_value);
             // feature cannot be chosen, skipping
             if (gain == -1) {
                 continue;
@@ -145,11 +155,13 @@ TreeNode *DPTree::find_best_split(vector<int> live_samples, int current_depth)
         }
     }
     int index = exponential_mechanism(probabilities, max_gain);
-    TreeNode *node = new TreeNode();
+    TreeNode *node;
     if (index == -1) {
+        node = new TreeNode(true);
         node->left = nullptr;
         node->right = nullptr;
     }
+    node = new TreeNode(false);
     node->split_attr = probabilities[index].feature_index;
     node->split_value = probabilities[index].split_value;
     node->split_gain = probabilities[index].gain;
@@ -157,11 +169,11 @@ TreeNode *DPTree::find_best_split(vector<int> live_samples, int current_depth)
 }
 
 
-float DPTree::compute_gain(int feature_index, float feature_value)
+float DPTree::compute_gain(vector<vector<float>> &samples, int feature_index, float feature_value)
 {
     // partition into lhs / rhs
     vector<bool> lhs;
-    samples_left_right_partition(lhs, feature_index, feature_value);
+    samples_left_right_partition(lhs, samples, feature_index, feature_value);
 
     int lhs_size = std::count(lhs.begin(), lhs.end(), true);
     int rhs_size = std::count(lhs.begin(), lhs.end(), false);
@@ -174,7 +186,7 @@ float DPTree::compute_gain(int feature_index, float feature_value)
     float lhs_gain = 0, rhs_gain = 0;
     for (size_t index=0; index<lhs.size(); index++) {
         lhs_gain += (unsigned) lhs[index] * (dataset->gradients)[index];
-        rhs_gain += (unsigned) (not lhs[index]) * (dataset->gradients)[index];
+        rhs_gain += (unsigned) (not lhs[index]) * (dataset->gradients)[index];              // PROBLEM: WERE TAKING TOO MANY GRADIENTS HERE, X INSTEAD OF x_lIVE
     }
     lhs_gain = std::pow(lhs_gain,2) / (lhs_size + params->l2_lambda);
     rhs_gain = std::pow(rhs_gain,2) / (rhs_size + params->l2_lambda);
@@ -182,16 +194,17 @@ float DPTree::compute_gain(int feature_index, float feature_value)
 }
 
 
-void DPTree::samples_left_right_partition(vector<bool> &lhs, int feature_index, float feature_value)
+// the result is a bool array that will indicate left/right
+void DPTree::samples_left_right_partition(vector<bool> &lhs, vector<vector<float>> &samples, int feature_index, float feature_value)
 {
     // if the feature is categorical
     if(std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end()) {
-        for (auto sample : dataset->X) {
-            lhs.push_back(sample[feature_index] == feature_value);
+        for (auto sample : samples[feature_index]) {
+            lhs.push_back(sample == feature_value);
         }
     } else { // feature is continuous
-        for (auto sample : dataset->X) {
-            lhs.push_back(sample[feature_index] < feature_value);
+        for (auto sample : samples[feature_index]) {
+            lhs.push_back(sample < feature_value);
         }
     }
 }
@@ -225,8 +238,14 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, float max_gain)
     // all values in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
-    double rand01 = ((double) rand() / (RAND_MAX));
+    srand(time(0));
+    double rand01 = ((double) std::rand() / (RAND_MAX));
 
+    // disable randomness for debug
+    if (not RANDOMIZATION) {
+        auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
+        return std::distance(probabilities.begin(), max_elem);
+    }
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
     for (int tries=0; tries<10; tries++) {
         for (size_t index=0; index<partials.size(); index++) {
@@ -238,6 +257,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, float max_gain)
     }
     return -1;
 }
+
 
 void DPTree::delete_tree(TreeNode *node)
 {
