@@ -21,9 +21,9 @@ private:
     float compute_predictions(vector<float> gradients, vector<float> y);
     vector<TreeNode> collect_nodes(TreeNode rootnode);
 
-    TreeNode *find_best_split(vector<vector<float>> &X_live, int current_depth);
-    void samples_left_right_partition(vector<bool> &lhs, vector<vector<float>> &samples, int feature_index, float feature_value);
-    float compute_gain(vector<vector<float>> &samples, int feature_index, float feature_value);
+    TreeNode *find_best_split(VVF &X_live, vector<float> &gradients_live, int current_depth);
+    void samples_left_right_partition(vector<bool> &lhs, VVF &samples, vector<float> &gradients_live, int feature_index, float feature_value);
+    float compute_gain(VVF &samples, vector<float> &gradients_live, int feature_index, float feature_value);
     int exponential_mechanism(vector<SplitCandidate> &probs, float max_gain);
 
 public:

@@ -50,7 +50,7 @@ DataSet::DataSet()
 Scaler::Scaler() {}
 
 
-DataSet::DataSet(vector<vector<float>> X, vector<float> y) : X(X), y(y)
+DataSet::DataSet(VVF X, vector<float> y) : X(X), y(y)
 {
     if(X.size() != y.size()){
         stringstream message;
@@ -109,9 +109,9 @@ TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio, bool 
     // [ test |      train      ]
     int border = ceil((1-train_ratio) * dataset.y.size());
 
-    vector<vector<float>> x_test(dataset.X.begin(), dataset.X.begin() + border);
+    VVF x_test(dataset.X.begin(), dataset.X.begin() + border);
     vector<float> y_test(dataset.y.begin(), dataset.y.begin() + border);
-    vector<vector<float>> x_train(dataset.X.begin() + border, dataset.X.end());
+    VVF x_train(dataset.X.begin() + border, dataset.X.end());
     vector<float> y_train(dataset.y.begin() + border, dataset.y.end());
 
     if(train_ratio >= 1) {

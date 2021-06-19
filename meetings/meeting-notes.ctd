@@ -337,7 +337,7 @@ Or do we need to scale X before training? Or does it not make a difference?</ric
 • special consideration required for stuff like “continue;”</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1622471704.32" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1624106103.59" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -659,7 +659,7 @@ fit()
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1623071887.96" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624108230.54" unique_id="11">
 			<rich_text>
 
 Looking at the example.py results.
@@ -682,8 +682,23 @@ use_dp seems obsolete for cpp translation. Want only dp.
 would be nice to have cross_val in C++,
     it would not need to be side-channel proof
     it's just validation
+
+
+don't need non-dp option. can just “disable the exp-machanism”
+    for now.
+    need to check why theo had so many if(no_dp)'s
     
-There is a split in example.py train/test 3/4-1/4.    AND THEN THERE'S ANOTHER SPLIT in Train() -&gt; where they do a 0.7/0.3 split. And the 0.3 split is used to choose good trees</rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">todo checkout easygdb &amp; other github gain computation.</rich_text>
+			<rich_text>    
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">todo print all gains and analyze pattern (seems like they stay weirdly constant across feature values)
+
+todo print trees (cpp and python) for easy validation</rich_text>
+			<rich_text>
+
+so, theos code says a non-categorical attribute that has only two values, has iidentical gains -&gt; his if binary bla</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623834483.73" unique_id="12">
 			<rich_text>
@@ -734,6 +749,11 @@ Theo did not scale the matrix X, resp pythons cross_val_score does not. At least
         idk.
         ignore for now.
 </rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624106103.59" ts_lastsave="1624106407.52" unique_id="16">
+			<rich_text foreground="#9090eeee9090">After changing the algorithm, the parameters (grid search) are probably off. How to find them again effitiently?</rich_text>
+			<rich_text>
+        implement whole gridsearch stuff?</rich_text>
 		</node>
 	</node>
 </cherrytree>

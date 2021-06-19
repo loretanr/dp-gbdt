@@ -14,7 +14,7 @@ DataSet get_abalone(ModelParams &params)
 {
     ifstream infile("data/abalone.data");
     string line;
-    vector<vector<float>> X; // TODO think about row/columnwise what makes sense
+    VVF X; // TODO think about row/columnwise what makes sense
     vector<float> y;
 
     params.cat_idx = {0}; // first column is categorical

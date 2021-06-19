@@ -105,7 +105,7 @@ void DPEnsemble::train(DataSet *dataset)
 }
 
 
-vector<float>  DPEnsemble::predict(vector<vector<float>> *X)
+vector<float>  DPEnsemble::predict(VVF *X)
 {
     vector<float> predictions(X->size());
     for(auto tree : trees) {
@@ -134,7 +134,7 @@ void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train
         int current_index = 0;
         // same amount for every tree
         for(int i=0; i<params.nb_trees; i++) {
-            vector<vector<float>> x_tree = {};
+            VVF x_tree = {};
             vector<float> y_tree = {};
             for(int j=0; j<quotient; j++){
                 x_tree.push_back((train_set->X)[current_index]);

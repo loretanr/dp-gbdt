@@ -1108,7 +1108,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
           }
         probabilities.append(prob)
     if self.use_dp:
-      return ExponentialMechanism(probabilities, max_gain)
+      le_index = ExponentialMechanism(probabilities, max_gain)
+      return le_index 
     return max(
         probabilities, key=lambda x: x['gain']) if probabilities else None
         

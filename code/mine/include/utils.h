@@ -16,7 +16,6 @@
 #include <limits>
 #include <iterator>
 
-static const bool RANDOMIZATION = false;
 
 /* Logging, to be removed */
 #define concat(one, two) ((std::string) one + (std::string) two).c_str()
@@ -32,6 +31,12 @@ static const bool RANDOMIZATION = false;
     GET_9TH_ARG(__VA_ARGS__, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_NO_ARG, )
 #define LOG_DEBUG(...) LOG_DEBUG_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 #define BOLD(words) "\033[1m" + words + "\033[0m"
+
+
+typedef std::vector<std::vector<float>> VVF;
+
+static const bool RANDOMIZATION = false;
+
 
 using namespace std;
 
@@ -72,7 +77,7 @@ struct Scaler {
 };
 
 struct DataSet {
-    vector<vector<float>> X;
+    VVF X;
     vector<float> y;
     vector<float> gradients;
     int length;
@@ -81,7 +86,7 @@ struct DataSet {
     Scaler scaler;
 
     DataSet();
-    DataSet(vector<vector<float>> X, vector<float> y);
+    DataSet(VVF X, vector<float> y);
 
     void add_row(vector<float> xrow, float yval); // probably broken because theres no self/this
     void scale(float lower, float upper);

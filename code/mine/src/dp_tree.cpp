@@ -54,7 +54,8 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 
     // only use the samples that actually end up in this node
     // note that the cols of X are rows in X_live
-    vector<vector<float>> X_live;
+    VVF X_live;
+    vector<float> gradients_live;
     for(int col=0; col < dataset->num_x_cols; col++) {
         vector<float> temp;
         for (auto elem : live_samples) {
@@ -62,9 +63,12 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         }
         X_live.push_back(temp);
     }
+    for(auto elem : live_samples) {
+        gradients_live.push_back((dataset->gradients)[elem]);
+    }
 
     // find best split
-    TreeNode *node = find_best_split(X_live, current_depth);
+    TreeNode *node = find_best_split(X_live, gradients_live, current_depth);
 
     // no split found
     if (node->is_leaf()) {
@@ -73,13 +77,13 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     }
 
     vector<bool> lhs;
-    samples_left_right_partition(lhs, X_live, node->split_attr, node->split_value);
+    samples_left_right_partition(lhs, X_live, gradients_live, node->split_attr, node->split_value);
     vector<int> left_live_samples, right_live_samples;
-    for (auto sample_index : live_samples) {
-        if (lhs[sample_index]) {
-            left_live_samples.push_back(sample_index);
+    for (size_t i=0; i<live_samples.size(); i++) {
+        if (lhs[i]) {
+            left_live_samples.push_back(live_samples[i]);
         } else {
-            right_live_samples.push_back(sample_index);
+            right_live_samples.push_back(live_samples[i]);
         }
     }
     LOG_DEBUG("DFS: best split @ {1}, val {2:.2f}, gain {3:.5f}, curr_depth {4}, samples {5} ->({6},{7})", 
@@ -120,7 +124,7 @@ float DPTree::compute_predictions(vector<float> gradients, vector<float> y)
 
 
 //Find best split of data using the exponential mechanism
-TreeNode *DPTree::find_best_split(vector<vector<float>> &X_live, int current_depth)
+TreeNode *DPTree::find_best_split(VVF &X_live, vector<float> &gradients_live, int current_depth)
 {
     float privacy_budget_for_node;
     if ((current_depth != 0) and params->use_decay) {
@@ -143,7 +147,7 @@ TreeNode *DPTree::find_best_split(vector<vector<float>> &X_live, int current_dep
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         for (float feature_value : X_live[feature_index]) { // TODO, don't iterate over duplicates in X_live
             // compute gain
-            float gain = compute_gain(X_live, feature_index, feature_value);
+            float gain = compute_gain(X_live, gradients_live, feature_index, feature_value);
             // feature cannot be chosen, skipping
             if (gain == -1) {
                 continue;
@@ -169,11 +173,11 @@ TreeNode *DPTree::find_best_split(vector<vector<float>> &X_live, int current_dep
 }
 
 
-float DPTree::compute_gain(vector<vector<float>> &samples, int feature_index, float feature_value)
+float DPTree::compute_gain(VVF &samples, vector<float> &gradients_live, int feature_index, float feature_value)
 {
     // partition into lhs / rhs
     vector<bool> lhs;
-    samples_left_right_partition(lhs, samples, feature_index, feature_value);
+    samples_left_right_partition(lhs, samples, gradients_live, feature_index, feature_value);
 
     int lhs_size = std::count(lhs.begin(), lhs.end(), true);
     int rhs_size = std::count(lhs.begin(), lhs.end(), false);
@@ -185,8 +189,8 @@ float DPTree::compute_gain(vector<vector<float>> &samples, int feature_index, fl
 
     float lhs_gain = 0, rhs_gain = 0;
     for (size_t index=0; index<lhs.size(); index++) {
-        lhs_gain += (unsigned) lhs[index] * (dataset->gradients)[index];
-        rhs_gain += (unsigned) (not lhs[index]) * (dataset->gradients)[index];              // PROBLEM: WERE TAKING TOO MANY GRADIENTS HERE, X INSTEAD OF x_lIVE
+        lhs_gain += (unsigned) lhs[index] * (gradients_live)[index];
+        rhs_gain += (unsigned) (not lhs[index]) * (gradients_live)[index];              // PROBLEM: WERE TAKING TOO MANY GRADIENTS HERE, X INSTEAD OF x_lIVE
     }
     lhs_gain = std::pow(lhs_gain,2) / (lhs_size + params->l2_lambda);
     rhs_gain = std::pow(rhs_gain,2) / (rhs_size + params->l2_lambda);
@@ -195,7 +199,7 @@ float DPTree::compute_gain(vector<vector<float>> &samples, int feature_index, fl
 
 
 // the result is a bool array that will indicate left/right
-void DPTree::samples_left_right_partition(vector<bool> &lhs, vector<vector<float>> &samples, int feature_index, float feature_value)
+void DPTree::samples_left_right_partition(vector<bool> &lhs, VVF &samples, vector<float> &gradients_live, int feature_index, float feature_value)
 {
     // if the feature is categorical
     if(std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end()) {
