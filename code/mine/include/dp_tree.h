@@ -32,10 +32,11 @@ public:
     ~DPTree();
 
     void delete_tree(TreeNode *node);
+    void recursive_print_tree(TreeNode* node);
 
     TreeNode *root_node;
     //queue<TreeNode *> nodes_bfs;
-    vector<TreeNode> nodes;  // main list of nodes
+    vector<TreeNode> *nodes;  // main list of nodes
 
     void fit();
 };

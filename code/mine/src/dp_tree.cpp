@@ -18,6 +18,7 @@ DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset):
             X_unique[col].insert(dataset->X[row][col]);
         }
     } */
+    nodes = new vector<TreeNode>;
 }
 
 
@@ -33,8 +34,8 @@ void DPTree::fit()
         vector<int> live_samples(dataset->length);
         std::iota(std::begin(live_samples), std::end(live_samples), 0);
 
-        TreeNode *root_node = make_tree_DFS(0, live_samples);
-        nodes = collect_nodes(*root_node);
+        root_node = make_tree_DFS(0, live_samples);
+        //nodes = collect_nodes(*root_node);
     } else {
         throw runtime_error("non-DFS not yet implemented.");
     }
@@ -93,6 +94,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     node->left = make_tree_DFS(current_depth + 1, left_live_samples);
     node->right = make_tree_DFS(current_depth + 1, right_live_samples);
 
+    //(*nodes).push_back(node);
     return node;
 
 
@@ -104,7 +106,7 @@ TreeNode *DPTree::make_leaf_node(int current_depth)
     TreeNode *leaf = new TreeNode(true);
     leaf->depth = current_depth;
     //leaf.prediction = compute_predictions(nullptr, nullptr);
-    //nodes.push_back(leaf); // push back here???
+    //(*nodes).push_back(leaf); // push back here???
     return(leaf);
 }
 
@@ -164,15 +166,17 @@ TreeNode *DPTree::find_best_split(VVF &X_live, vector<float> &gradients_live, in
         node = new TreeNode(true);
         node->left = nullptr;
         node->right = nullptr;
+    } else {
+        node = new TreeNode(false);
+        node->split_attr = probabilities[index].feature_index;
+        node->split_value = probabilities[index].split_value;
+        node->split_gain = probabilities[index].gain;
     }
-    node = new TreeNode(false);
-    node->split_attr = probabilities[index].feature_index;
-    node->split_value = probabilities[index].split_value;
-    node->split_gain = probabilities[index].gain;
+    node->depth = current_depth;
     return node;
 }
 
-
+// This gain is the simplified formula for least squares loss function
 float DPTree::compute_gain(VVF &samples, vector<float> &gradients_live, int feature_index, float feature_value)
 {
     // partition into lhs / rhs
@@ -190,7 +194,7 @@ float DPTree::compute_gain(VVF &samples, vector<float> &gradients_live, int feat
     float lhs_gain = 0, rhs_gain = 0;
     for (size_t index=0; index<lhs.size(); index++) {
         lhs_gain += (unsigned) lhs[index] * (gradients_live)[index];
-        rhs_gain += (unsigned) (not lhs[index]) * (gradients_live)[index];              // PROBLEM: WERE TAKING TOO MANY GRADIENTS HERE, X INSTEAD OF x_lIVE
+        rhs_gain += (unsigned) (not lhs[index]) * (gradients_live)[index];
     }
     lhs_gain = std::pow(lhs_gain,2) / (lhs_size + params->l2_lambda);
     rhs_gain = std::pow(rhs_gain,2) / (rhs_size + params->l2_lambda);
@@ -206,9 +210,9 @@ void DPTree::samples_left_right_partition(vector<bool> &lhs, VVF &samples, vecto
         for (auto sample : samples[feature_index]) {
             lhs.push_back(sample == feature_value);
         }
-    } else { // feature is continuous
+    } else { // feature is numerical
         for (auto sample : samples[feature_index]) {
-            lhs.push_back(sample < feature_value);
+            lhs.push_back(sample <= feature_value);
         }
     }
 }
@@ -260,6 +264,48 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, float max_gain)
         rand01 = ((double) rand() / (RAND_MAX));
     }
     return -1;
+}
+
+
+void DPTree::recursive_print_tree(TreeNode* node) {
+    if (node->is_leaf()) {
+        return;
+    }
+    // check if split uses categorical attr
+    bool categorical = std::find( ((*(this->params)).cat_idx).begin(), ((*(this->params)).cat_idx).end(), node->split_attr) != ((*(this->params)).cat_idx).end();
+
+    for (int i = 0; i < node->depth; ++i) {
+        cout << ":  ";
+    }
+    if (!categorical) {
+        cout << "Attr" << node->split_attr << " <= " << node->split_value;
+    } else { // else if (node->split_attr == 2)
+        float split_value = (node->split_value); // categorical, hacked
+        cout << "Attr" << node->split_attr << " = " << split_value;
+    }
+    if (node->left->is_leaf()) {
+        cout << " (" << "L-leaf weight todo" << ")" << endl; // node->left->weight
+    } else {
+        cout << endl;
+    }
+    recursive_print_tree(node->left);
+
+
+    for (int i = 0; i < node->depth; ++i) {
+        cout << ":  ";
+    }
+    if (!categorical) {
+        cout << "Attr" << node->split_attr << " > " << node->split_value;
+    } else {
+        float split_value = node->split_value;
+        cout << "Attr" << node->split_attr << " != " << split_value;
+    }
+    if (node->right->is_leaf()) {
+        cout << " (" << "R-leaf weight todo" << ")" << endl;
+    } else {
+        cout << endl;
+    }
+    recursive_print_tree(node->right);
 }
 
 

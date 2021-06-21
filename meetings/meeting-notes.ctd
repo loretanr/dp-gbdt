@@ -659,11 +659,8 @@ fit()
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624108230.54" unique_id="11">
-			<rich_text>
-
-Looking at the example.py results.
-
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624266209.41" unique_id="11">
+			<rich_text>Looking at the example.py results.
    •  so, somehow BFS is either bad or wrong implemented
         probably why it Theo does not mention it in thesis
    • Idk why Theos abalone 5000 graph in thesis has a 0.1pb RMSE of 20-25.
@@ -676,13 +673,9 @@ BFS balance_partition=False   is broken!! threading hangs in queue.get() empty s
 
 balance_partition= True makes less trees rejected in 2ndsplit
 
-use_dp seems obsolete for cpp translation. Want only dp.
-
-
 would be nice to have cross_val in C++,
     it would not need to be side-channel proof
     it's just validation
-
 
 don't need non-dp option. can just “disable the exp-machanism”
     for now.
@@ -690,13 +683,42 @@ don't need non-dp option. can just “disable the exp-machanism”
     
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">todo checkout easygdb &amp; other github gain computation.</rich_text>
-			<rich_text>    
+			<rich_text> 
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">not making me schlau</rich_text>
+			<rich_text>
     
 </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">todo check out theos thesis and base paper for formula</rich_text>
+			<rich_text>
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">Gain formula seems correct
+   •  EasyXGB uses &lt;= instead of &lt; to split tough
+   •  github_gbdt uses &lt;
+   •  trying out both shows that the gain seems to be exactly the same, but the split values differ. It should not matter.</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">    
+so what is this weird theo-if-binary-split-dont-consider-2nd?
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">tested it (by printing gainz in theos). it's only correct for categorical, so it's mostly wrong and the “savings” in categorical is small. (at least for abalone)</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">
+</rich_text>
+			<rich_text>
+</rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">todo print all gains and analyze pattern (seems like they stay weirdly constant across feature values)
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">   •  there's always only a limited number of possible split outcomes depending on the #samples. -&gt; for (2 (nonequal-value) samples, and &lt;=) there always has to be 1 in LHS or 2 in LHS. So 2 possible outcomes and thus 2 possible gains. And if we already computed those  values in feature 1 of 7, then the remaining 6 computations are redundant, won't get a better gain.
+   • But I would consider it a small optimization, but only to be potentially considered much later.
+   • It only seems viable for low number of sample splits.</rich_text>
+			<rich_text>
+   </rich_text>
+			<rich_text foreground="#ffffffff0000">• However, it might have the same effect as pruning, so it might not be so bad for the algorithm actually</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">
 
 todo print trees (cpp and python) for easy validation</rich_text>
 			<rich_text>
+    EasyXGB tree.cpp has something
 
 so, theos code says a non-categorical attribute that has only two values, has iidentical gains -&gt; his if binary bla</rich_text>
 		</node>

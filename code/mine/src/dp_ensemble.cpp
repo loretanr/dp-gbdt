@@ -94,6 +94,8 @@ void DPEnsemble::train(DataSet *dataset)
         tree.fit();
 
 
+        trees.push_back(tree);
+
 
 
         
@@ -101,7 +103,6 @@ void DPEnsemble::train(DataSet *dataset)
 
     }
 
-    trees = {};
 }
 
 

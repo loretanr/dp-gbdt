@@ -14,10 +14,10 @@ public:
 
     void train(DataSet *dataset);
     vector<float> predict(VVF *X);
+    vector<DPTree> trees;
 
 private:
     ModelParams params;
-    vector<DPTree> trees;
     void distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set);
     vector<float> compute_gradient_for_loss(vector<float> y, float init_score);
 

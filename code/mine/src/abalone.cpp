@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 
-// #include "dp_tree.h"
+#include "dp_tree.h"
 #include "dp_ensemble.h"
 #include "spdlog/spdlog.h"
 #include <spdlog/sinks/stdout_sinks.h>
@@ -68,6 +68,9 @@ int main()
 
 
     ensemble.train(&split.train);
+    DPTree first = (ensemble.trees)[0];
+    first.recursive_print_tree(first.root_node);
+    
 
     LOG_INFO("hello MA end");
 }
