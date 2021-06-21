@@ -30,7 +30,7 @@
 #define LOG_DEBUG_MACRO_CHOOSER(...) \
     GET_9TH_ARG(__VA_ARGS__, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_NO_ARG, )
 #define LOG_DEBUG(...) LOG_DEBUG_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
-#define BOLD(words) "\033[1m" + words + "\033[0m"
+#define BOLD(words) "\033[0;40;33m" + words + "\033[0m"
 
 
 typedef std::vector<std::vector<float>> VVF;

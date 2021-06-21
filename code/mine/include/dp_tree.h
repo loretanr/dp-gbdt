@@ -17,8 +17,9 @@ private:
 
     TreeNode *make_tree_DFS(int current_depth, vector<int> live_samples);
 
-    TreeNode *make_leaf_node(int current_depth);
-    float compute_predictions(vector<float> gradients, vector<float> y);
+    TreeNode *make_leaf_node(int current_depth, vector<int> &live_samples);
+    float compute_prediction(vector<float> gradients, vector<float> y);
+    float _predict(vector<float> *row, TreeNode *node);
     vector<TreeNode> collect_nodes(TreeNode rootnode);
 
     TreeNode *find_best_split(VVF &X_live, vector<float> &gradients_live, int current_depth);
@@ -38,6 +39,7 @@ public:
     //queue<TreeNode *> nodes_bfs;
     vector<TreeNode> *nodes;  // main list of nodes
 
+    vector<float> predict(VVF *X);
     void fit();
 };
 

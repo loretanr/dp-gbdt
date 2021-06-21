@@ -405,8 +405,8 @@ class GradientBoostingEnsemble:
               'Success fitting tree {0:d} on {1:d} instances. Instances left '
               'for the ensemble: {2:d}'.format(
                   tree_index, len(rows), len(X_ensemble) - len(rows)))
-          X_ensemble = np.delete(X_ensemble, rows, axis=0)
-          y_ensemble = np.delete(y_ensemble, rows)
+          # X_ensemble = np.delete(X_ensemble, rows, axis=0)
+          # y_ensemble = np.delete(y_ensemble, rows)
 
     return self
 
@@ -1086,7 +1086,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
               feature_index, value, X, gradients, X_sibling=X_sibling,
               gradients_sibling=gradients_sibling)
           gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-          # print("==== binary case (attr {}), gain0: {}".format(feature_index, gain))
+          print("==== binary case (attr {}), gain0: {}".format(feature_index, gain))
         if binary_split and idx == 1:
           # If the attribute only has 2 values then we don't need to care for
           # both gains as they're equal
@@ -1099,7 +1099,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
               feature_index, value, X, gradients, X_sibling=X_sibling,
               gradients_sibling=gradients_sibling)
           gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-          # print("==== binary case (attr {}), gain1: {}".format(feature_index, gain))
+          print("==== binary case (attr {}), gain1: {}".format(feature_index, gain))
         else:
           gain = self.ComputeGain(
               feature_index, value, X, gradients, X_sibling=X_sibling,

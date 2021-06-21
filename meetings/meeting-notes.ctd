@@ -659,7 +659,7 @@ fit()
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624266209.41" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624291586.57" unique_id="11">
 			<rich_text>Looking at the example.py results.
    •  so, somehow BFS is either bad or wrong implemented
         probably why it Theo does not mention it in thesis
@@ -677,9 +677,14 @@ would be nice to have cross_val in C++,
     it would not need to be side-channel proof
     it's just validation
 
-don't need non-dp option. can just “disable the exp-machanism”
-    for now.
-    need to check why theo had so many if(no_dp)'s
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">don't need non-dp for debug. can just “disable the exp-machanism”
+</rich_text>
+			<rich_text>    need to check why theo had so many if(no_dp)'s
+      •   </rich_text>
+			<rich_text foreground="#ffffa5a50000">mainly for privacy budget stuff
+      •   if I want a correct non-dp, would need to think about it more thoroughly (e.g. does it affect the tree building or can we just flip the switch in exp mechanism and leaf-add-laplace-noise? And not care about the redundant computation. This could be low hanging fruit)</rich_text>
+			<rich_text>
     
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">todo checkout easygdb &amp; other github gain computation.</rich_text>
@@ -718,14 +723,19 @@ so what is this weird theo-if-binary-split-dont-consider-2nd?
 
 todo print trees (cpp and python) for easy validation</rich_text>
 			<rich_text>
-    EasyXGB tree.cpp has something
-
-so, theos code says a non-categorical attribute that has only two values, has iidentical gains -&gt; his if binary bla</rich_text>
-		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1623834483.73" unique_id="12">
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">took the EasyXGB tree.cpp one
+   •  skip python for now</rich_text>
 			<rich_text>
 
-</rich_text>
+-------------
+predict
+
+so far the values seem correct, but L/R is sometimes opposite to python (on 2-&gt;1-1 split, the wrong sample is in the wrong leaf?)
+
+    TODOOOOOOOOOOO</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1624271025.05" unique_id="12">
 			<rich_text foreground="#ffffc0c0cbcb">TODO: debug the result of the pick-formula (algo 2, line 8, base paper)
     does it stay constant across trees?
     is there an easier formula that calculates the same if we have only 1 ensemble ?</rich_text>
@@ -735,34 +745,20 @@ so, theos code says a non-categorical attribute that has only two values, has ii
 			<rich_text foreground="#9090eeee9090">do we even need a test set for the “real” hardened application?</rich_text>
 			<rich_text>
     
-    
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">TODO read check out theos meeting slides
-
-TODO check if there's a larger testset than abalone 
-    (for potential theos hypothesis runs)
 
 TODO   </rich_text>
 			<rich_text>is use_decay  used?
 
-TODO implement the non DP for deterministic verification and python comparison of algorithm
-
-
 </rich_text>
-			<rich_text foreground="#9090eeee9090">Only y is scaled right? because we only will add noise to predictions. Right?
-Or do we need to scale X before training? Or does it not make a difference?</rich_text>
+			<rich_text foreground="#9090eeee9090">Only y is scaled right? because we only will add noise to predictions. Right? Or do we need to scale X before training? Or does it not make a difference?</rich_text>
 			<rich_text>
     </rich_text>
 			<rich_text foreground="#ffffa5a50000">Esfandiar says only the labels (y)</rich_text>
 			<rich_text>
 
-Do we need to look at RMSE % compared to output range?
-
-Theo did not scale the matrix X, resp pythons cross_val_score does not. At least in abalone case.
-    somehow the minmaxscaler given to cross_val does only scale y
-    Are we not supposed to scale X?
-    
-    
+Do we need to look at RMSE % compared to output range? 
     
 </rich_text>
 			<rich_text foreground="#ffffffff0000">I don't understand why scaling y in example.py gets such a low RMSE compared to cross_val_score</rich_text>

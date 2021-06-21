@@ -49,8 +49,9 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     // max depth reached or not enough samples -> leaf node
     if ( (current_depth == params->max_depth) or
         live_samples.size() < (size_t) params->min_samples_split) {
-            LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf", current_depth, live_samples.size());
-            return make_leaf_node(current_depth);
+            TreeNode * leaf = make_leaf_node(current_depth, live_samples);
+            LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3})", current_depth, live_samples.size(), std::round(leaf->prediction * 100) / 100);
+            return leaf;
         }
 
     // only use the samples that actually end up in this node
@@ -101,11 +102,17 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 }
 
 
-TreeNode *DPTree::make_leaf_node(int current_depth)
+TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
 {
     TreeNode *leaf = new TreeNode(true);
     leaf->depth = current_depth;
-    //leaf.prediction = compute_predictions(nullptr, nullptr);
+
+    vector<float> y, gradients;
+    for (auto index : live_samples) {
+        y.push_back((this->dataset->y)[index]);
+        gradients.push_back(this->dataset->gradients[index]);
+    }
+    leaf->prediction = compute_prediction(gradients, y);
     //(*nodes).push_back(leaf); // push back here???
     return(leaf);
 }
@@ -118,10 +125,37 @@ vector<TreeNode> DPTree::collect_nodes(TreeNode rootnode)
     return bla;
 }
 
-
-float DPTree::compute_predictions(vector<float> gradients, vector<float> y)
+float DPTree::compute_prediction(vector<float> gradients, vector<float> y)
 {
-    return 0.0f;
+    float prediction = (-1 * std::accumulate(gradients.begin(), gradients.end(), 0.0f)
+                            / (gradients.size() + this->params->l2_lambda));
+    return prediction;
+}
+
+vector<float> DPTree::predict(VVF *X)
+{
+    vector<float> predictions;
+    for (auto &row : *X) {
+        float pred = _predict(&row, this->root_node);
+        predictions.push_back(pred);
+    }
+
+    return predictions;
+}
+
+// recursively walk through decision tree
+float DPTree::_predict(vector<float> *row, TreeNode *node)
+{
+    if(node->is_leaf()){
+        return node->prediction;
+    }
+    float row_val = (*row)[node->split_attr];
+    if (row_val <= node->split_value){
+        return _predict(row, node->left);
+    } else {
+        return _predict(row, node->right);
+    }
+
 }
 
 

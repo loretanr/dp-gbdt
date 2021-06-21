@@ -381,7 +381,7 @@ class GradientBoostingEnsemble:
       self.trees.append(k_trees)
 
       score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
-      logger.info('Decision tree {0:d} fit. Current score: {1:f} - Best '
+      logger.info('Decision tree {0:d} fit done. Current score: {1:f} - Best '
                   'score so far: {2:f}'.format(tree_index, score, prev_score))
 
       if score >= prev_score:
@@ -405,8 +405,8 @@ class GradientBoostingEnsemble:
               'Success fitting tree {0:d} on {1:d} instances. Instances left '
               'for the ensemble: {2:d}'.format(
                   tree_index, len(rows), len(X_ensemble) - len(rows)))
-          X_ensemble = np.delete(X_ensemble, rows, axis=0)
-          y_ensemble = np.delete(y_ensemble, rows)
+          # X_ensemble = np.delete(X_ensemble, rows, axis=0)
+          # y_ensemble = np.delete(y_ensemble, rows)
 
     return self
 
@@ -423,8 +423,7 @@ class GradientBoostingEnsemble:
     """
     # sum across the ensemble per class
     predictions = np.sum([[self.learning_rate * tree.Predict(X)
-                           for tree in k_trees] for k_trees in self.trees],
-                         axis=0).T
+                           for tree in k_trees] for k_trees in self.trees], axis=0).T
     if len(X) <= len(self.init_score):
       assert self.init_score is not None
       init_score = self.init_score[:len(predictions)]
@@ -818,8 +817,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
 
     if current_depth == max_depth or len(X) < self.min_samples_split:
       # Max depth reached or not enough samples to split node, node is a leaf node
-      logger.debug('max_depth ({0}) or min_samples ({1}) -> leaf'.format(current_depth, len(X)))
-      return MakeLeafNode()
+      lleaf = MakeLeafNode()
+      logger.debug('max_depth ({0}) or min_samples ({1}) -> leaf (pred={2})'.format(current_depth, len(X), round(lleaf.prediction,2)))
+      return lleaf;
 
     if not self.use_3_trees:
       best_split = self.FindBestSplit(X, gradients, current_depth)
@@ -861,8 +861,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.nodes.append(node)
       return node
 
-    logger.debug('Making leaf node, depth ({0}) samples ({1}) -> leaf'.format(current_depth, len(X)))
-    return MakeLeafNode()
+    lleaf = MakeLeafNode()
+    logger.debug('Making leaf node, depth ({0}) samples ({1}) -> leaf (pred={2})'.format(current_depth, len(X), round(lleaf.prediction,2)))
+    return lleaf
 
   def MakeTreeBFS(self,
                   X: np.array,
@@ -1086,7 +1087,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
               feature_index, value, X, gradients, X_sibling=X_sibling,
               gradients_sibling=gradients_sibling)
           gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-          print("==== binary case (attr {}), gain0: {}".format(feature_index, gain))
+          # print("==== binary case (attr {}), gain0: {}".format(feature_index, gain))
         if binary_split and idx == 1:
           # If the attribute only has 2 values then we don't need to care for
           # both gains as they're equal
@@ -1099,7 +1100,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
               feature_index, value, X, gradients, X_sibling=X_sibling,
               gradients_sibling=gradients_sibling)
           gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-          print("==== binary case (attr {}), gain1: {}".format(feature_index, gain))
+          # print("==== binary case (attr {}), gain1: {}".format(feature_index, gain))
         else:
           gain = self.ComputeGain(
               feature_index, value, X, gradients, X_sibling=X_sibling,

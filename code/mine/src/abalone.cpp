@@ -69,7 +69,7 @@ int main()
 
     ensemble.train(&split.train);
     DPTree first = (ensemble.trees)[0];
-    first.recursive_print_tree(first.root_node);
+    // first.recursive_print_tree(first.root_node);
     
 
     LOG_INFO("hello MA end");

@@ -49,7 +49,7 @@ void DPEnsemble::train(DataSet *dataset)
     // train all trees
     for(int tree_index = 0; tree_index<params.nb_trees;  tree_index++) {
 
-        LOG_DEBUG(BOLD("Tree {1:2d}") + ": receives pb {2:.2f} and will train on {3} instances", tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
+        LOG_DEBUG(BOLD("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"), tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
 
         // init the dataset
         if(tree_index == 0) {
@@ -78,6 +78,7 @@ void DPEnsemble::train(DataSet *dataset)
             vector<float> y_pred = predict(&tree_samples[tree_index].X);
             // calculate gradient from that
             // TODO once we built the first tree.
+            cout << "uga" << endl;
         }
 
         // gradient-based data filtering // (TODO untested)
@@ -105,12 +106,13 @@ void DPEnsemble::train(DataSet *dataset)
 
 }
 
-
+// Predict values from the ensemble of gradient boosted trees
 vector<float>  DPEnsemble::predict(VVF *X)
 {
+    // predictions = np.sum([[self.learning_rate * tree.Predict(X) for tree in k_trees] for k_trees in self.trees], axis=0).T
     vector<float> predictions(X->size());
     for(auto tree : trees) {
-        //rrrr = tree.predict(X);
+        auto rrrr = tree.predict(X);
         // TODO once we have the stuff to build trees.
     }
     return predictions;
