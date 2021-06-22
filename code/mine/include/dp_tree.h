@@ -14,6 +14,8 @@ private:
     TreeParams *tree_params;
     DataSet *dataset;
     vector<set<float>> X_unique;
+    vector<TreeNode *> leaves;
+    vector<TreeNode> *nodes;  // = necessary?
 
     TreeNode *make_tree_DFS(int current_depth, vector<int> live_samples);
 
@@ -26,6 +28,7 @@ private:
     void samples_left_right_partition(vector<bool> &lhs, VVF &samples, vector<float> &gradients_live, int feature_index, float feature_value);
     float compute_gain(VVF &samples, vector<float> &gradients_live, int feature_index, float feature_value);
     int exponential_mechanism(vector<SplitCandidate> &probs, float max_gain);
+    void add_laplacian_noise(vector<TreeNode *> leaves, float laplace_scale);
 
 public:
     DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset);
@@ -37,9 +40,8 @@ public:
 
     TreeNode *root_node;
     //queue<TreeNode *> nodes_bfs;
-    vector<TreeNode> *nodes;  // main list of nodes
 
-    vector<float> predict(VVF *X);
+    vector<float> predict(VVF &X);
     void fit();
 };
 

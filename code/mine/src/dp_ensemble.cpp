@@ -75,10 +75,19 @@ void DPEnsemble::train(DataSet *dataset)
                 }
             }
         } else {
-            vector<float> y_pred = predict(&tree_samples[tree_index].X);
+            // only have to update gradients of unused samples
+            VVF pred_samples;
+            for (int i=tree_index; i<tree_samples.size(); i++) {
+                pred_samples.insert(pred_samples.end(), tree_samples[i].X.begin(), tree_samples[i].X.end());
+            }
+            vector<float> y_pred = predict(pred_samples);
             // calculate gradient from that
             // TODO once we built the first tree.
-            cout << "uga" << endl;
+
+            // update gradients
+            for (auto samples : tree_samples) {
+                cout << "uga" << endl;
+            }
         }
 
         // gradient-based data filtering // (TODO untested)
@@ -107,13 +116,15 @@ void DPEnsemble::train(DataSet *dataset)
 }
 
 // Predict values from the ensemble of gradient boosted trees
-vector<float>  DPEnsemble::predict(VVF *X)
+vector<float>  DPEnsemble::predict(VVF &X)
 {
     // predictions = np.sum([[self.learning_rate * tree.Predict(X) for tree in k_trees] for k_trees in self.trees], axis=0).T
-    vector<float> predictions(X->size());
-    for(auto tree : trees) {
-        auto rrrr = tree.predict(X);
-        // TODO once we have the stuff to build trees.
+    vector<float> predictions;
+    for (auto tree : trees) {
+        vector<float> pred = tree.predict(X);
+        
+        cout << "uga" << endl;
+        // TODO need to add Laplac noise to leafs
     }
     return predictions;
 

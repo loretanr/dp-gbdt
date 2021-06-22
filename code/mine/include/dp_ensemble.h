@@ -13,7 +13,7 @@ public:
     ~DPEnsemble();
 
     void train(DataSet *dataset);
-    vector<float> predict(VVF *X);
+    vector<float> predict(VVF &X);
     vector<DPTree> trees;
 
 private:
