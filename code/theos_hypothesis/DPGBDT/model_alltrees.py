@@ -206,6 +206,9 @@ class GradientBoostingEnsemble:
     logger.debug('Training initialized with score: {}'.format(self.init_score))
     update_gradients = True
 
+    X_train, X_test, y_train, y_test = train_test_split(      # not using these sets
+    X, y, test_size=self.test_size, random_state=0)       # resp. not rejecting on line 385
+
     # Number of ensembles in the model
     nb_ensembles = int(np.ceil(self.nb_trees / self.nb_trees_per_ensemble))
     logger.info('Model will have {0:d} ensembles'.format(nb_ensembles))
