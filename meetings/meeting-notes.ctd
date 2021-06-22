@@ -337,7 +337,7 @@ Or do we need to scale X before training? Or does it not make a difference?</ric
 • special consideration required for stuff like “continue;”</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1624106103.59" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1624367636.05" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -659,7 +659,7 @@ fit()
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624291586.57" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624384845.1" unique_id="11">
 			<rich_text>Looking at the example.py results.
    •  so, somehow BFS is either bad or wrong implemented
         probably why it Theo does not mention it in thesis
@@ -687,14 +687,14 @@ would be nice to have cross_val in C++,
 			<rich_text>
     
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">todo checkout easygdb &amp; other github gain computation.</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">checkout easygdb &amp; other github gain computation.</rich_text>
 			<rich_text> 
    •  </rich_text>
 			<rich_text foreground="#ffffa5a50000">not making me schlau</rich_text>
 			<rich_text>
     
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">todo check out theos thesis and base paper for formula</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">check out theos thesis and base paper for formula</rich_text>
 			<rich_text>
    •  </rich_text>
 			<rich_text foreground="#ffffa5a50000">Gain formula seems correct
@@ -711,7 +711,7 @@ so what is this weird theo-if-binary-split-dont-consider-2nd?
 </rich_text>
 			<rich_text>
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">todo print all gains and analyze pattern (seems like they stay weirdly constant across feature values)
+			<rich_text foreground="#ffffc0c0cbcb">print all gains and analyze pattern (seems like they stay weirdly constant across feature values)
 </rich_text>
 			<rich_text foreground="#ffffa5a50000">   •  there's always only a limited number of possible split outcomes depending on the #samples. -&gt; for (2 (nonequal-value) samples, and &lt;=) there always has to be 1 in LHS or 2 in LHS. So 2 possible outcomes and thus 2 possible gains. And if we already computed those  values in feature 1 of 7, then the remaining 6 computations are redundant, won't get a better gain.
    • But I would consider it a small optimization, but only to be potentially considered much later.
@@ -719,9 +719,17 @@ so what is this weird theo-if-binary-split-dont-consider-2nd?
 			<rich_text>
    </rich_text>
 			<rich_text foreground="#ffffffff0000">• However, it might have the same effect as pruning, so it might not be so bad for the algorithm actually</rich_text>
+			<rich_text>
+   </rich_text>
+			<rich_text foreground="#ffffffffffff">• testing now the accuracy implications in python!!!</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">  ◇ </rich_text>
+			<rich_text foreground="#ffff00000000">noifbinary</rich_text>
+			<rich_text foreground="#ffffa5a50000"> has negligible effect for abalone</rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">
 
-todo print trees (cpp and python) for easy validation</rich_text>
+print trees (cpp and python) for easy validation</rich_text>
 			<rich_text>
    •  </rich_text>
 			<rich_text foreground="#ffffa5a50000">took the EasyXGB tree.cpp one
@@ -732,8 +740,85 @@ todo print trees (cpp and python) for easy validation</rich_text>
 predict
 
 so far the values seem correct, but L/R is sometimes opposite to python (on 2-&gt;1-1 split, the wrong sample is in the wrong leaf?)
+   • </rich_text>
+			<rich_text foreground="#ffffa5a50000"> it was again due to the if-binary bullshit</rich_text>
+			<rich_text>
 
-    TODOOOOOOOOOOO</rich_text>
+theos code also passes the “leftover” samples to predict. (After giving each tree e.g. 66). But it should not matter in theory.
+
+somehow the leaf_clipping = True does not make it to the point where it's used.
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">it's not passed when the actual tree is built. great.</rich_text>
+			<rich_text>
+   • ignoring for now, but this has to be implemented and tested once the rest runs
+   </rich_text>
+			<rich_text foreground="#ffffffff0000">• let's hope it was not a “convenient accident”</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffff00000000">◇ </rich_text>
+			<rich_text>python bench: definitely noticeable for very small privacy budgets
+         ▪ (like 130 instead of 120 for pb=0.1)
+         </rich_text>
+			<rich_text foreground="#ffff00000000">▪ TODO doing it again for verification</rich_text>
+			<rich_text>
+      ◇ but for pb 0.5+ it seems more or less indifferent
+      </rich_text>
+			<rich_text foreground="#ffff00000000">◇ let's see effect on 2nd split</rich_text>
+			<rich_text>
+         ▪ </rich_text>
+			<rich_text foreground="#ffffffff0000">DFS got better, 2-nodes got worse. Weird.</rich_text>
+			<rich_text>
+            - doing it again for verification.
+            </rich_text>
+			<rich_text foreground="#ffffa5a50000">- 2nd try looks almost identical to normal 2ndtree. So kinda false alarm</rich_text>
+			<rich_text>
+     </rich_text>
+			<rich_text foreground="#ffff00000000"> ◇ is it really required by the proof?</rich_text>
+			<rich_text>
+   • at least the gradient_filtering is used by the code.
+
+
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">TODO need to read the results part of the base paper, to better understand the RMSE numbers and leaf clipping stuff. And the effect of having multiple ensembles</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">and put into a presentation!
+</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">does DPBoost (base paper) have a github?
+    wtf is </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb" link="webs https://github.com/QinbinLi/DPBoost/">https://github.com/QinbinLi/DPBoost/</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb"> ???
+</rich_text>
+			<rich_text>
+    it looks to me like theo took the better bounds without actually using it.
+    
+    why the fuck are the base paper absolute values different from theos?
+   •  is it because they use budget like 0.5 as smallest and theo 0.1?
+        is it because theo only has 1 ensemble?? (&quot;Boosting effect?&quot;)
+        I mean there's some code there for multiple ensembles. But Theo didn't use it so it probably doesn't work.
+
+
+Tomorow
+   ◇ read DPBoost results etc carefully
+   ◇ read theos results and compare.
+   ◇ start the presentation
+      ▪ does he get the results he's supposed to?
+         - even though he only uses 1 ensemble!
+      ▪ 1 slide with everyhing that I don't agree with in theos code
+      ▪ how does this affect the results
+      ▪ 1 slide about how I don't trust the parameters
+         - need to settle for some, to have a benchmark basis &amp; start side-channeling
+   ◇ browse DPBoost github a bit.
+   ◇ finish the code
+      ▪ add to presentation how many lines it is
+         - 2-nodes shouldn't be much more, as it only affects splitting &amp; pb
+         - however the accuracy benefits are small (worth for small datasets though?)
+      ▪ and include some latex functions.
+   ◇ other datasets :O !</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1624271025.05" unique_id="12">
 			<rich_text foreground="#ffffc0c0cbcb">TODO: debug the result of the pick-formula (algo 2, line 8, base paper)
@@ -772,6 +857,11 @@ Do we need to look at RMSE % compared to output range?
 			<rich_text foreground="#9090eeee9090">After changing the algorithm, the parameters (grid search) are probably off. How to find them again effitiently?</rich_text>
 			<rich_text>
         implement whole gridsearch stuff?</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="&quot;mistakes&quot;" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624367636.05" ts_lastsave="1624368406.03" unique_id="17">
+			<rich_text>leaving away leaf_clipping.
+   •  On tree creation it is ready to receive 17 parameters.
+      ◇ But theo supplies 16, exactly w/o leaf clipping so the default = Fales kicks in.</rich_text>
 		</node>
 	</node>
 </cherrytree>
