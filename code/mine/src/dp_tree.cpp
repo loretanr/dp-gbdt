@@ -18,7 +18,7 @@ DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset):
             X_unique[col].insert(dataset->X[row][col]);
         }
     } */
-    nodes = new vector<TreeNode>;
+    //nodes = new vector<TreeNode>;
 }
 
 

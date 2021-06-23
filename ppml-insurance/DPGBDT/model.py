@@ -223,7 +223,7 @@ class GradientBoostingEnsemble:
 
     prev_score = np.inf
 
-    row_counter = 0
+    # row_counter = 0
 
     # Train all trees
     for tree_index in range(self.nb_trees):
@@ -282,8 +282,9 @@ class GradientBoostingEnsemble:
         # rows = np.random.choice(range(len(X_ensemble)),
         #                         size=number_of_rows,
         #                         replace=False)
-        rows = [elem for elem in range(row_counter, row_counter + number_of_rows)]
-        row_counter += number_of_rows
+        # rows = [elem for elem in range(row_counter, row_counter + number_of_rows)]
+        rows = [elem for elem in range(number_of_rows)]
+        # row_counter += number_of_rows
         X_tree = X_ensemble[rows, :]
         y_tree = y_ensemble[rows]
 
@@ -308,6 +309,7 @@ class GradientBoostingEnsemble:
 
           # Gradient based data filtering
           if self.gradient_filtering:
+            logger.debug("Doing gradient filtering with thresholds [{},{}]".format(round(-self.l2_threshold),1,round(self.l2_threshold),1))
             gradients_tree[
                 gradients_tree > self.l2_threshold] = self.l2_threshold
             gradients_tree[
@@ -326,6 +328,7 @@ class GradientBoostingEnsemble:
               delta_g,
               delta_v,
               self.loss_,
+              leaf_clipping=self.leaf_clipping,       # Leaf clipping! was missing
               max_depth=self.max_depth,
               max_leaves=self.max_leaves,
               min_samples_split=self.min_samples_split,
@@ -405,8 +408,8 @@ class GradientBoostingEnsemble:
               'Success fitting tree {0:d} on {1:d} instances. Instances left '
               'for the ensemble: {2:d}'.format(
                   tree_index, len(rows), len(X_ensemble) - len(rows)))
-          # X_ensemble = np.delete(X_ensemble, rows, axis=0)
-          # y_ensemble = np.delete(y_ensemble, rows)
+          X_ensemble = np.delete(X_ensemble, rows, axis=0)
+          y_ensemble = np.delete(y_ensemble, rows)
 
     return self
 
@@ -1071,8 +1074,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
         # If not for the root node splitting, budget is divided by the 3-nodes
         privacy_budget_for_node /= 2
 
-      logger.debug('Using {0:f} budget for internal leaf nodes.'.format(
-          privacy_budget_for_node))
+      # logger.debug('Using {0:f} budget for internal leaf nodes.'.format(privacy_budget_for_node))
 
     probabilities = []
     max_gain = -np.inf
@@ -1082,42 +1084,42 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       # Iterate over unique value for this feature
       for idx, value in enumerate(X[:, feature_index]):   # removed unique for debug
         # Find gain for that split
-        if binary_split and idx == 0:
-          gain = self.ComputeGain(
-              feature_index, value, X, gradients, X_sibling=X_sibling,
-              gradients_sibling=gradients_sibling)
+        # if binary_split and idx == 0:
+        #   gain = self.ComputeGain(
+        #       feature_index, value, X, gradients, X_sibling=X_sibling,
+        #       gradients_sibling=gradients_sibling)
+        #   gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
+        #   # print("==== binary case (attr {}), gain0: {}".format(feature_index, gain))
+        # if binary_split and idx == 1:
+        #   # If the attribute only has 2 values then we don't need to care for
+        #   # both gains as they're equal
+        #   prob = {
+        #     'index': feature_index,
+        #     'value': value,
+        #     'gain': 0.
+        #   }
+        #   gain = self.ComputeGain(
+        #       feature_index, value, X, gradients, X_sibling=X_sibling,
+        #       gradients_sibling=gradients_sibling)
+        #   gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
+        #   # print("==== binary case (attr {}), gain1: {}".format(feature_index, gain))
+        # else:
+        gain = self.ComputeGain(
+            feature_index, value, X, gradients, X_sibling=X_sibling,
+            gradients_sibling=gradients_sibling)
+        if gain == -1:
+          # Feature's value cannot be chosen, skipping
+          continue
+        # Compute probability for exponential mechanism
+        if self.use_dp:
           gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-          # print("==== binary case (attr {}), gain0: {}".format(feature_index, gain))
-        if binary_split and idx == 1:
-          # If the attribute only has 2 values then we don't need to care for
-          # both gains as they're equal
-          prob = {
+        if gain > max_gain:
+          max_gain = gain
+        prob = {
             'index': feature_index,
             'value': value,
-            'gain': 0.
-          }
-          gain = self.ComputeGain(
-              feature_index, value, X, gradients, X_sibling=X_sibling,
-              gradients_sibling=gradients_sibling)
-          gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-          # print("==== binary case (attr {}), gain1: {}".format(feature_index, gain))
-        else:
-          gain = self.ComputeGain(
-              feature_index, value, X, gradients, X_sibling=X_sibling,
-              gradients_sibling=gradients_sibling)
-          if gain == -1:
-            # Feature's value cannot be chosen, skipping
-            continue
-          # Compute probability for exponential mechanism
-          if self.use_dp:
-            gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-          if gain > max_gain:
-            max_gain = gain
-          prob = {
-              'index': feature_index,
-              'value': value,
-              'gain': gain
-          }
+            'gain': gain
+        } # was indented until here
         probabilities.append(prob)
     if self.use_dp:
       le_index = ExponentialMechanism(probabilities, max_gain)

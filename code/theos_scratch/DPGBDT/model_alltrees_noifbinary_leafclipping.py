@@ -4,7 +4,7 @@
 
 From: https://arxiv.org/pdf/1911.04209.pdf
 
-alltrees / no 2nd-split method
+no 2nd-split method
 """
 
 import math
@@ -26,8 +26,6 @@ from DPGBDT import logging
 
 logging.SetUpLogger(__name__)
 logger = logging.GetLogger(__name__)
-
-RANDOMIZATION = False
 
 
 class GradientBoostingEnsemble:
@@ -205,11 +203,11 @@ class GradientBoostingEnsemble:
     self.init_.fit(X, y)
     self.init_score = self.loss_.get_init_raw_predictions(
         X, self.init_)  # (n_samples, K)
-    logger.debug('Training initialized with score: {}'.format(self.init_score[0]))
+    logger.debug('Training initialized with score: {}'.format(self.init_score))
     update_gradients = True
 
     X_train, X_test, y_train, y_test = train_test_split(      # not using these sets
-        X, y, test_size=self.test_size, random_state=0)       # resp. not rejecting on line 383
+    X, y, test_size=self.test_size, random_state=0)       # resp. not rejecting on line 383
 
     # Number of ensembles in the model
     nb_ensembles = int(np.ceil(self.nb_trees / self.nb_trees_per_ensemble))
@@ -222,8 +220,6 @@ class GradientBoostingEnsemble:
       tree_privacy_budget /= self.loss_.K
 
     prev_score = np.inf
-
-    # row_counter = 0
 
     # Train all trees
     for tree_index in range(self.nb_trees):
@@ -279,12 +275,9 @@ class GradientBoostingEnsemble:
           number_of_rows = len(X_ensemble)
 
         # Select <number_of_rows> rows at random from the ensemble dataset
-        # rows = np.random.choice(range(len(X_ensemble)),
-        #                         size=number_of_rows,
-        #                         replace=False)
-        # rows = [elem for elem in range(row_counter, row_counter + number_of_rows)]
-        rows = [elem for elem in range(number_of_rows)]
-        # row_counter += number_of_rows
+        rows = np.random.choice(range(len(X_ensemble)),
+                                size=number_of_rows,
+                                replace=False)
         X_tree = X_ensemble[rows, :]
         y_tree = y_ensemble[rows]
 
@@ -316,7 +309,7 @@ class GradientBoostingEnsemble:
 
           logger.debug('Tree {0:d} will receive a budget of epsilon={1:f} and '
                        'train on {2:d} instances.'.format(
-              tree_index, tree_privacy_budget, len(X_tree)))
+              tree_index, tree_privacy_budget, len(X_ensemble)))
           # Fit a differentially private decision tree
           tree = DifferentiallyPrivateTree(
               tree_index,
@@ -327,6 +320,7 @@ class GradientBoostingEnsemble:
               delta_g,
               delta_v,
               self.loss_,
+              leaf_clipping=self.leaf_clipping,   # added leaf_clipping
               max_depth=self.max_depth,
               max_leaves=self.max_leaves,
               min_samples_split=self.min_samples_split,
@@ -382,7 +376,7 @@ class GradientBoostingEnsemble:
       self.trees.append(k_trees)
 
       score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
-      logger.info('Decision tree {0:d} fit done. Current score: {1:f} - Best '
+      logger.info('Decision tree {0:d} fit. Current score: {1:f} - Best '
                   'score so far: {2:f}'.format(tree_index, score, prev_score))
 
       if score >= prev_score:
@@ -424,7 +418,8 @@ class GradientBoostingEnsemble:
     """
     # sum across the ensemble per class
     predictions = np.sum([[self.learning_rate * tree.Predict(X)
-                           for tree in k_trees] for k_trees in self.trees], axis=0).T
+                           for tree in k_trees] for k_trees in self.trees],
+                         axis=0).T
     if len(X) <= len(self.init_score):
       assert self.init_score is not None
       init_score = self.init_score[:len(predictions)]
@@ -817,10 +812,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       return node
 
     if current_depth == max_depth or len(X) < self.min_samples_split:
-      # Max depth reached or not enough samples to split node, node is a leaf node
-      lleaf = MakeLeafNode()
-      logger.debug('max_depth ({0}) or min_samples ({1}) -> leaf (pred={2})'.format(current_depth, len(X), round(lleaf.prediction,2)))
-      return lleaf;
+      # Max depth reached or not enough samples to split node, node is a leaf
+      # node
+      return MakeLeafNode()
 
     if not self.use_3_trees:
       best_split = self.FindBestSplit(X, gradients, current_depth)
@@ -832,13 +826,13 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       else:
         best_split = self.FindBestSplit(X, gradients, current_depth)
     if best_split:
+      logger.debug('Tree DFS: best split found at index {0:d}, value {1:f} '
+                   'with gain {2:f}. Current depth is {3:d}'.format(
+          best_split['index'], best_split['value'],
+          best_split['gain'], current_depth))
       lhs_op, rhs_op = self.feature_to_op[best_split['index']]
       lhs = np.where(lhs_op(X[:, best_split['index']], best_split['value']))[0]
       rhs = np.where(rhs_op(X[:, best_split['index']], best_split['value']))[0]
-      logger.debug('DFS: Best split at {0:d}, value {1:f} '
-              'gain {2:f}, curr depth {3:d}, samples {4} -> ({5},{6})'.format(
-              best_split['index'], best_split['value'],
-              best_split['gain'], current_depth, len(X), len(lhs), len(rhs)))
       if not self.use_3_trees:
         left_child = self.MakeTreeDFS(
             X[lhs],  y[lhs], gradients[lhs], current_depth + 1, max_depth)
@@ -862,9 +856,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.nodes.append(node)
       return node
 
-    lleaf = MakeLeafNode()
-    logger.debug('Making leaf node, depth ({0}) samples ({1}) -> leaf (pred={2})'.format(current_depth, len(X), round(lleaf.prediction,2)))
-    return lleaf
+    return MakeLeafNode()
 
   def MakeTreeBFS(self,
                   X: np.array,
@@ -1033,8 +1025,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
         self.max_leaves_reached = True
     return self.max_leaves_reached
 
-
-
   def FindBestSplit(self,
                     X: np.array,
                     gradients: np.array,
@@ -1072,7 +1062,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
         # If not for the root node splitting, budget is divided by the 3-nodes
         privacy_budget_for_node /= 2
 
-      # logger.debug('Using {0:f} budget for internal leaf nodes.'.format(privacy_budget_for_node))
+      logger.debug('Using {0:f} budget for internal leaf nodes.'.format(
+          privacy_budget_for_node))
 
     probabilities = []
     max_gain = -np.inf
@@ -1080,14 +1071,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     for feature_index in range(X.shape[1]):
       binary_split = len(np.unique(X[:, feature_index])) == 2
       # Iterate over unique value for this feature
-      for idx, value in enumerate(X[:, feature_index]):   # removed unique for debug
+      for idx, value in enumerate(np.unique(X[:, feature_index])):
         # Find gain for that split
-        # if binary_split and idx == 0:
-        #   gain = self.ComputeGain(
-        #       feature_index, value, X, gradients, X_sibling=X_sibling,
-        #       gradients_sibling=gradients_sibling)
-        #   gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-        #   # print("==== binary case (attr {}), gain0: {}".format(feature_index, gain))
         # if binary_split and idx == 1:
         #   # If the attribute only has 2 values then we don't need to care for
         #   # both gains as they're equal
@@ -1096,11 +1081,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
         #     'value': value,
         #     'gain': 0.
         #   }
-        #   gain = self.ComputeGain(
-        #       feature_index, value, X, gradients, X_sibling=X_sibling,
-        #       gradients_sibling=gradients_sibling)
-        #   gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-        #   # print("==== binary case (attr {}), gain1: {}".format(feature_index, gain))
         # else:
         gain = self.ComputeGain(
             feature_index, value, X, gradients, X_sibling=X_sibling,
@@ -1117,14 +1097,12 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
             'index': feature_index,
             'value': value,
             'gain': gain
-        } # was indented until here
+        }
         probabilities.append(prob)
     if self.use_dp:
-      le_index = ExponentialMechanism(probabilities, max_gain)
-      return le_index 
+      return ExponentialMechanism(probabilities, max_gain)
     return max(
         probabilities, key=lambda x: x['gain']) if probabilities else None
-        
 
   def GetLeafPrediction(self, gradients: np.array, y: np.ndarray) -> float:
     """Compute the leaf prediction.
@@ -1213,8 +1191,10 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       rhs = np.where(rhs_op(X[:, index], value))[0]
 
     lhs_grad, rhs_grad = gradients[lhs], gradients[rhs]
-    lhs_gain = np.square(np.sum(lhs_grad)) / (len(lhs) + self.l2_lambda)  # type: float
-    rhs_gain = np.square(np.sum(rhs_grad)) / (len(rhs) + self.l2_lambda)  # type: float
+    lhs_gain = np.square(np.sum(lhs_grad)) / (
+        len(lhs) + self.l2_lambda)  # type: float
+    rhs_gain = np.square(np.sum(rhs_grad)) / (
+        len(rhs) + self.l2_lambda)  # type: float
     total_gain = lhs_gain + rhs_gain
     return total_gain if total_gain >= 0. else 0.
 
@@ -1395,11 +1375,6 @@ def ExponentialMechanism(
         else:
           prob['probability'] = 0.
 
-  # disable randomization for debug
-  if (not RANDOMIZATION):
-    max_prob = max(probabilities, key=lambda x:x['probability'])
-    return max_prob
-
   # Apply the exponential mechanism
   previous_prob = 0.
   random_prob = np.random.uniform()
@@ -1416,5 +1391,4 @@ def ExponentialMechanism(
       if op(prob['probability'], random_prob):
         return prob
     random_prob = np.random.uniform()
-  logger.debug("exp mechanism failed, no split found")
   return None

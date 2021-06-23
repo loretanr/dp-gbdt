@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1623939126.81" unique_id="1">
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1624438358.97" unique_id="1">
 		<rich_text>Thu 3pm
 Link:  </rich_text>
 		<rich_text foreground="#3d3c40"> </rich_text>
@@ -337,7 +337,7 @@ Or do we need to scale X before training? Or does it not make a difference?</ric
 • special consideration required for stuff like “continue;”</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1624367636.05" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1624438373.44" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -659,7 +659,7 @@ fit()
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624384357.98" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624459336.96" unique_id="11">
 			<rich_text>Looking at the example.py results.
    •  so, somehow BFS is either bad or wrong implemented
         probably why it Theo does not mention it in thesis
@@ -758,6 +758,9 @@ somehow the leaf_clipping = True does not make it to the point where it's used.
 			<rich_text foreground="#ffff00000000">◇ </rich_text>
 			<rich_text>python bench: definitely noticeable for very small privacy budgets
          ▪ (like 130 instead of 120 for pb=0.1)
+         </rich_text>
+			<rich_text foreground="#ffff00000000">▪ TODO doing it again for verification</rich_text>
+			<rich_text>
       ◇ but for pb 0.5+ it seems more or less indifferent
       </rich_text>
 			<rich_text foreground="#ffff00000000">◇ let's see effect on 2nd split</rich_text>
@@ -766,6 +769,9 @@ somehow the leaf_clipping = True does not make it to the point where it's used.
 			<rich_text foreground="#ffffffff0000">DFS got better, 2-nodes got worse. Weird.</rich_text>
 			<rich_text>
             - doing it again for verification.
+            </rich_text>
+			<rich_text foreground="#ffffa5a50000">- 2nd try looks almost identical to normal 2ndtree. So kinda false alarm</rich_text>
+			<rich_text>
      </rich_text>
 			<rich_text foreground="#ffff00000000"> ◇ is it really required by the proof?</rich_text>
 			<rich_text>
@@ -797,16 +803,26 @@ somehow the leaf_clipping = True does not make it to the point where it's used.
 
 
 Tomorow
-   ◇ read DPBoost results etc carefully
-   ◇ read theos results and compare.
-   ◇ start the presentation
+</rich_text>
+			<rich_text foreground="#9090eeee9090">   ◇ read DPBoost results etc carefully
+   ◇ read theos results and compare.</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffffa5a50000">▪ Theos is worse, why though</rich_text>
+			<rich_text>
+   </rich_text>
+			<rich_text foreground="#9090eeee9090">◇ start the presentation</rich_text>
+			<rich_text>
       ▪ does he get the results he's supposed to?
          - even though he only uses 1 ensemble!
       ▪ 1 slide with everyhing that I don't agree with in theos code
       ▪ how does this affect the results
       ▪ 1 slide about how I don't trust the parameters
          - need to settle for some, to have a benchmark basis &amp; start side-channeling
-   ◇ browse DPBoost github a bit.
+   </rich_text>
+			<rich_text foreground="#9090eeee9090">◇ browse DPBoost github a bit.</rich_text>
+			<rich_text>
+      ▪ their abalone code example bugs at the moment :(
    ◇ finish the code
       ▪ add to presentation how many lines it is
          - 2-nodes shouldn't be much more, as it only affects splitting &amp; pb
@@ -852,10 +868,51 @@ Do we need to look at RMSE % compared to output range?
 			<rich_text>
         implement whole gridsearch stuff?</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="&quot;mistakes&quot;" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624367636.05" ts_lastsave="1624368406.03" unique_id="17">
+		<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="&quot;mistakes&quot;" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624367636.05" ts_lastsave="1624438300.77" unique_id="17">
 			<rich_text>leaving away leaf_clipping.
    •  On tree creation it is ready to receive 17 parameters.
-      ◇ But theo supplies 16, exactly w/o leaf clipping so the default = Fales kicks in.</rich_text>
+      ◇ But theo supplies 16, exactly w/o leaf clipping so the default = False kicks in.</rich_text>
 		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
+			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
+   ◇ So leaf_clipping seems optional?
+   ◇ And the way theo implemented GDF seems wrong??
+      ▪ GDF provides same sensitivities across all trees, unlike GLC.
+
+• GLC's sensitivity bound gets tighter with the iterations
+
+• Then the leaf node sensitivity bounds can be combined when using both
+   ◇ delta_v = min(sens GDF, sens GLC)
+   ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
+		</node>
+	</node>
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1624451622.04" unique_id="19">
+		<rich_text scale="h2">Algorithm</rich_text>
+		<rich_text>
+
+• need to fix the sample choice to use the paper formula
+
+• </rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">Use_decay</rich_text>
+		<rich_text>. (pb for internal nodes, “because upper splits are more important”) according to Theo thesis it can be nice, but for deep trees it gets bad. Need to check for which datasets it makes sense.
+
+• </rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">2-nodes</rich_text>
+		<rich_text>: is it worth it? apparently it should be good for small amount of samples (according to theo meeing notes)
+
+</rich_text>
+		<rich_text scale="h2">CPP Bonus</rich_text>
+		<rich_text>
+• read style guide
+
+• stackoverflow code review?
+
+
+</rich_text>
+		<rich_text scale="h2">Bonus*</rich_text>
+		<rich_text>
+
+• Some docs on the cpp algorithm
+   ◇ like intuition which parameters are suitable for which use case</rich_text>
 	</node>
 </cherrytree>
