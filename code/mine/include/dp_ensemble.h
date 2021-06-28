@@ -19,7 +19,7 @@ public:
 private:
     ModelParams params;
     void distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set);
-    vector<float> compute_gradient_for_loss(vector<float> y, float init_score);
+    vector<float> compute_gradient_for_loss(vector<float> y, vector<float> &scores);
 
 };
 

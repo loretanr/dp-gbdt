@@ -68,8 +68,18 @@ int main()
 
 
     ensemble.train(&split.train);
-    DPTree first = (ensemble.trees)[0];
-    // first.recursive_print_tree(first.root_node);
+    
+    // compute score
+    vector<float> y_pred = ensemble.predict(split.test.X);
+    std::transform(split.test.y.begin(), split.test.y.end(), 
+            y_pred.begin(), y_pred.begin(), std::minus<float>());
+    std::transform(y_pred.begin(), y_pred.end(),
+            y_pred.begin(), [](float &c){return std::pow(c,2);});
+    float average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
+    float rmse = std::sqrt(average);
+
+    cout << "RMSE: " << rmse << endl;
+
     
 
     LOG_INFO("hello MA end");

@@ -126,3 +126,17 @@ TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio, bool 
         return TrainTestSplit(train, test);
     }
 }
+
+float Laplace::return_a_random_variable(){
+    float e1 = distribution(generator);
+    float e2 = distribution(generator);
+    return e1-e2;
+}
+
+float Laplace::return_a_random_variable(float scale){
+    std::exponential_distribution<float> distribution1(1.0/scale);
+    std::exponential_distribution<float> distribution2(1.0/scale);
+    float e1 = distribution1(generator);
+    float e2 = distribution2(generator);
+    return e1-e2;
+}

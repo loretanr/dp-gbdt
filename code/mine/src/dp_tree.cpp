@@ -41,11 +41,11 @@ void DPTree::fit()
     }
 
     // leaf clipping TODO (default false)
+    // TODO
 
     // add noise to predictions TODO
     float privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
     float laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
-    LOG_DEBUG("Adding Laplace noise to leaves");
     add_laplacian_noise(this->leaves, laplace_scale);
     
 }
@@ -58,7 +58,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     if ( (current_depth == params->max_depth) or
         live_samples.size() < (size_t) params->min_samples_split) {
             TreeNode *leaf = make_leaf_node(current_depth, live_samples);
-            LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3})", current_depth, live_samples.size(), std::round(leaf->prediction * 100) / 100);
+            LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})", current_depth, live_samples.size(), leaf->prediction);
             return leaf;
         }
 
@@ -145,7 +145,7 @@ float DPTree::compute_prediction(vector<float> gradients, vector<float> y)
 vector<float> DPTree::predict(VVF &X)
 {
     vector<float> predictions;
-    for (auto &row : X) {
+    for (auto row : X) {
         float pred = _predict(&row, this->root_node);
         predictions.push_back(pred);
     }
@@ -160,12 +160,19 @@ float DPTree::_predict(vector<float> *row, TreeNode *node)
         return node->prediction;
     }
     float row_val = (*row)[node->split_attr];
-    if (row_val <= node->split_value){               // have LEQ here, theo has LT (but should only
-        return _predict(row, node->left);            // rarely affect debugging determinism)
-    } else {
-        return _predict(row, node->right);
-    }
 
+    if (std::find((params->cat_idx).begin(), (params->cat_idx).end(), node->split_attr) != (params->cat_idx).end()) {
+        // categorical feature
+        if (row_val == node->split_value){
+            return _predict(row, node->left);
+        }
+    } else {
+        if (row_val < node->split_value){               // have LEQ here, theo has LT (but should only
+            return _predict(row, node->left);            // rarely affect debugging determinism)
+        }
+    }
+    
+    return _predict(row, node->right);
 }
 
 
@@ -256,7 +263,7 @@ void DPTree::samples_left_right_partition(vector<bool> &lhs, VVF &samples, vecto
         }
     } else { // feature is numerical
         for (auto sample : samples[feature_index]) {
-            lhs.push_back(sample <= feature_value);
+            lhs.push_back(sample < feature_value);
         }
     }
 }
@@ -312,41 +319,64 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, float max_gain)
 
 void DPTree::add_laplacian_noise(vector<TreeNode *> leaves, float laplace_scale)
 {
+    LOG_DEBUG("Adding Laplace noise to leaves (Scale {1:.2f})", laplace_scale);
+    Laplace lap(laplace_scale, 0); // no seed for now
     for (auto leaf : leaves) {
-        
+        float noise = 0;
+        if (RANDOMIZATION) {
+            noise = lap.return_a_random_variable();
+        }
+        LOG_DEBUG("({1:.3f} -> {2:.3f})", leaf->prediction, leaf->prediction+noise);
+        leaf->prediction += noise;
     }
 }
 
 
 void DPTree::recursive_print_tree(TreeNode* node) {
+
     if (node->is_leaf()) {
         return;
     }
     // check if split uses categorical attr
     bool categorical = std::find( ((*(this->params)).cat_idx).begin(), ((*(this->params)).cat_idx).end(), node->split_attr) != ((*(this->params)).cat_idx).end();
+    
+    if (categorical) {
+        std::cout << std::defaultfloat;
+    } else {
+        std::cout << std::fixed;
+    }
 
     for (int i = 0; i < node->depth; ++i) { cout << ":  "; }
+
     if (!categorical) {
-        cout << "Attr" << node->split_attr << " <= " << node->split_value;
+        cout << "Attr" << std::setprecision(3) << node->split_attr << " < " << std::setprecision(3) << node->split_value;
     } else { // else if (node->split_attr == 2)
         float split_value = (node->split_value); // categorical, hacked
         cout << "Attr" << node->split_attr << " = " << split_value;
     }
     if (node->left->is_leaf()) {
-        cout << " (" << "L-leaf weight todo" << ")" << endl; // node->left->weight
+        cout << " (" << "L-leaf" << ")" << endl; // node->left->weight
     } else {
         cout << endl;
     }
+
     recursive_print_tree(node->left);
+
+    if (categorical) {
+        std::cout << std::defaultfloat;
+    } else {
+        std::cout << std::fixed;
+    }
+
     for (int i = 0; i < node->depth; ++i) { cout << ":  "; }
     if (!categorical) {
-        cout << "Attr" << node->split_attr << " > " << node->split_value;
+        cout << "Attr" << std::setprecision(3) << node->split_attr << " >= " << std::setprecision(3) << node->split_value;
     } else {
         float split_value = node->split_value;
         cout << "Attr" << node->split_attr << " != " << split_value;
     }
     if (node->right->is_leaf()) {
-        cout << " (" << "R-leaf weight todo" << ")" << endl;
+        cout << " (" << "R-leaf" << ")" << endl;
     } else {
         cout << endl;
     }

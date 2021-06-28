@@ -65,7 +65,8 @@ void DPEnsemble::train(DataSet *dataset)
 
         // update/init gradients of all training instances (using last tree(s))
         if(tree_index == 0) {
-            vector<float> gradients = compute_gradient_for_loss(train_set->y, init_score);
+            vector<float> init_scores(train_set->length, init_score);
+            vector<float> gradients = compute_gradient_for_loss(train_set->y, init_scores);
             int index = 0;
             for(DataSet &dset : tree_samples) {
                 for (auto row : dset.X){
@@ -77,16 +78,24 @@ void DPEnsemble::train(DataSet *dataset)
         } else {
             // only have to update gradients of unused samples
             VVF pred_samples;
-            for (int i=tree_index; i<tree_samples.size(); i++) {
+            vector<float> y_samples;
+            for (size_t i=tree_index; i<tree_samples.size(); i++) {
                 pred_samples.insert(pred_samples.end(), tree_samples[i].X.begin(), tree_samples[i].X.end());
+                y_samples.insert(y_samples.end(), tree_samples[i].y.begin(), tree_samples[i].y.end());
             }
             vector<float> y_pred = predict(pred_samples);
-            // calculate gradient from that
-            // TODO once we built the first tree.
+            std::transform(y_pred.begin(), y_pred.end(),
+                    y_pred.begin(), [init_score](float &c){return c+init_score;});
 
             // update gradients
-            for (auto samples : tree_samples) {
-                cout << "uga" << endl;
+            vector<float> gradients = compute_gradient_for_loss(y_samples, y_pred);
+
+            // store them
+            vector<float>::const_iterator iter = gradients.begin();
+            for (size_t i=tree_index; i<tree_samples.size(); i++) {
+                vector<float> curr_grads = vector<float>(iter, iter + tree_samples[i].length);
+                tree_samples[i].gradients = curr_grads;
+                iter += tree_samples[i].length;
             }
         }
 
@@ -105,8 +114,10 @@ void DPEnsemble::train(DataSet *dataset)
 
 
         trees.push_back(tree);
+        tree.recursive_print_tree(tree.root_node);
 
 
+        LOG_DEBUG(BOLD("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
 
         
 
@@ -118,23 +129,28 @@ void DPEnsemble::train(DataSet *dataset)
 // Predict values from the ensemble of gradient boosted trees
 vector<float>  DPEnsemble::predict(VVF &X)
 {
-    // predictions = np.sum([[self.learning_rate * tree.Predict(X) for tree in k_trees] for k_trees in self.trees], axis=0).T
-    vector<float> predictions;
+    vector<float> predictions(X.size(),0);
     for (auto tree : trees) {
         vector<float> pred = tree.predict(X);
         
-        cout << "uga" << endl;
-        // TODO need to add Laplac noise to leafs
+        std::transform(pred.begin(), pred.end(), 
+            predictions.begin(), predictions.begin(), std::plus<float>());
     }
+    float learning_rate = params.learning_rate;
+    std::transform(predictions.begin(), predictions.end(),
+            predictions.begin(), [learning_rate](float &c){return c*learning_rate;});
     return predictions;
 
 
 }
 
-vector<float> DPEnsemble::compute_gradient_for_loss(vector<float> y, float init_score)
+vector<float> DPEnsemble::compute_gradient_for_loss(vector<float> y, vector<float> &scores)
 {
     // we want the positive gradient
-    std::for_each(y.begin(), y.end(), [init_score](float& f) { f = init_score - f;});
+    //std::for_each(y.begin(), y.end(), [init_score](float& f) { f = init_score - f;});
+    for (size_t i=0; i<y.size(); i++) {
+        y[i] = scores[i] - y[i];
+    }
     return y;
 }
 

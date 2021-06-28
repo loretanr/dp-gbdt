@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <string>
 #include <iostream>
+#include <iomanip> 
 #include <sstream>
 #include <numeric>
 #include <queue>
@@ -35,8 +36,7 @@
 
 typedef std::vector<std::vector<float>> VVF;
 
-static const bool RANDOMIZATION = false;
-
+static const bool RANDOMIZATION = true;
 
 using namespace std;
 
@@ -118,15 +118,19 @@ TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.70
 double log_sum_exp(vector<double> arr);
 void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');
 
-/* #include <cstdint>
-typedef int8_t int8;
-typedef int16_t int16;
-typedef int32_t int32;
-typedef int64_t int64;
-typedef uint8_t uint8;
-typedef uint16_t uint16;
-typedef uint32_t uint32;
-typedef uint64_t uint64;
-typedef uint32_t uint; */
+class Laplace
+{
+private:
+    float scale;
+    std::mt19937 generator;
+    std::default_random_engine generator1;
+    std::default_random_engine generator2;
+    std::exponential_distribution<float> distribution;
+public:
+    Laplace(int seed): generator(seed){};
+    Laplace(float scale, int seed): scale(scale), generator(seed), distribution(1.0/scale){};
+    float return_a_random_variable();
+    float return_a_random_variable(float scale);
+};
 
 #endif // UTILS_H

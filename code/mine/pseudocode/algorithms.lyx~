@@ -196,10 +196,6 @@ split = find_best_split(samples)
 * return node
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -224,6 +220,30 @@ Find_Best_Split (samples)
 \end_layout
 
 \begin_layout Algorithm
+* internal_node_privacy_budget = ...
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm
+* 
+\emph on
+
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+ parameter leakage because of different formulas
+\end_layout
+
+\begin_layout Algorithm
+*
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm
+* vector<SplitCandidates> candidates
+\end_layout
+
+\begin_layout Algorithm
 for (feature_index : features)
 \end_layout
 
@@ -239,33 +259,81 @@ for (feature_value : samples[feature_index])
 gain = compute_gain(feature_index, feature_value)
 \end_layout
 
+\begin_layout Algorithm
+if (no gain)
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm
+* continue
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm
+endif
+\end_layout
+
+\begin_layout Algorithm
+* SplitCandidate c = SplitCandidate(feature_index, feature_value, gain)
+\end_layout
+
+\begin_layout Algorithm
+* candidates.append(c)
+\end_layout
+
+\end_deeper
+\begin_layout Algorithm
+endfor
+\end_layout
+
 \end_deeper
 \begin_layout Algorithm
 endfor
 \end_layout
 
 \begin_layout Algorithm
-* 
-\family typewriter
-vector<float> probabilities = bla
+* int index = exp_mechanism(candidates)
+\end_layout
+
+\begin_layout Algorithm
+if (no index)
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm
+* return new LeafNode();
 \end_layout
 
 \end_deeper
 \begin_layout Algorithm
-endfor
+else
+\end_layout
+
+\begin_deeper
+\begin_layout Algorithm
+* SplitCandidate chosen = candidates[index]
 \end_layout
 
 \begin_layout Algorithm
-* hello
+* return new Treenode(chosen)
 \end_layout
 
-\begin_layout Algorithm
-
-\end_layout
-
+\end_deeper
 \end_inset
 
 
+\end_layout
+
+\begin_layout Paragraph
+parameter leakage
+\end_layout
+
+\begin_layout Itemize
+Whether we use decaying privacy budget for internal nodes
+\end_layout
+
+\begin_layout Itemize
+Whether we use 2-nodes algorithm for splitting
 \end_layout
 
 \end_body
