@@ -27,7 +27,7 @@ from DPGBDT import logging
 logging.SetUpLogger(__name__)
 logger = logging.GetLogger(__name__)
 
-RANDOMIZATION = True
+RANDOMIZATION = False
 
 
 class GradientBoostingEnsemble:

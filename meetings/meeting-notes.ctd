@@ -659,7 +659,7 @@ fit()
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624970692.47" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624981752.05" unique_id="11">
 			<rich_text>Looking at the example.py results.
    •  so, somehow BFS is either bad or wrong implemented
         probably why it Theo does not mention it in thesis
@@ -875,6 +875,12 @@ so the predictions from both py and cpp have the same values, and their sum is e
    •  first forgot the init_value
    •  because of the inverse MinMaxScaler still wrong
       ◇ where is that -1.25 from
+      ◇ ok, took inverse scaliing code from MinMaxScaler
+
+laplace distribution sampling seems fine (tested with python plot)
+
+
+    SO WHY THE HELL DO WE HAVE MORE FLUCTUATION????????
 
 
 

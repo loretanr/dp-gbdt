@@ -36,7 +36,7 @@
 
 typedef std::vector<std::vector<float>> VVF;
 
-static const bool RANDOMIZATION = true;
+static const bool RANDOMIZATION = false;
 
 using namespace std;
 

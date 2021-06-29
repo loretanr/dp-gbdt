@@ -177,3 +177,5 @@ float Laplace::return_a_random_variable(float scale){
     float e2 = distribution2(generator);
     return e1-e2;
 }
+
+  

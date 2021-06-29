@@ -10,6 +10,7 @@
 #include "utils.h"
 
 
+
 DataSet get_abalone(ModelParams &params)
 {
     ifstream infile("data/abalone.data");
@@ -42,10 +43,34 @@ DataSet get_abalone(ModelParams &params)
 
 int main()
 {
-    spdlog::set_level(spdlog::level::debug); // Set global log level to debug
+    // DISTRIBUTION test
+    float scale = 4;
+
+    vector<float> samples;
+    srand(time(NULL));
+    Laplace lap(scale, rand());
+    for(int i=0; i<10000; i++){
+        samples.push_back(lap.return_a_random_variable(scale));
+    }
+
+    ofstream myfile;
+    myfile.open ("laplace.txt");
+    for(auto sample : samples) {
+        myfile << sample << " ";
+    }
+    myfile.close();
+    exit(0);
+
+
+    // =======================================================
+
+
+    spdlog::set_level(spdlog::level::err); // Set global log level to debug
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     LOG_INFO("hello MA start");
+
+    int NUM_REPEATS = 5;
 
     ModelParams parammmms;
     parammmms.nb_trees = 50;
@@ -57,36 +82,45 @@ int main()
 
     // dataset.X = {{1,2,3},{4,5,6},{7,8,9},{10,11,12},{13,14,15}};  // TODO remove
     // dataset.y = {9001,9002,9003,9004,9005};
+    vector<float> rmses;
+
+    for (int repeats=0; repeats<NUM_REPEATS; repeats++) {
+
+        DPEnsemble ensemble = DPEnsemble(&parammmms);
+        TrainTestSplit split = train_test_split_random(dataset, 0.80f, true); // empty test for now
+        // we should fit the Scaler only on the training set, according to
+        // https://datascience.stackexchange.com/questions/38395/standardscaler-before-and-after-splitting-data
+        // However this probably hurts DP, because y_test is then not guaranteed between [-1,1]
+        // but to keep data exactly the same as sklearn i'll only do on train for now.
+        
+        split.train.scale(-1, 1);
+        // split.test.scale(-1, 1);
 
 
-    DPEnsemble ensemble = DPEnsemble(&parammmms);
-    TrainTestSplit split = train_test_split_random(dataset, 0.80f, false); // empty test for now
-    // we should fit the Scaler only on the training set, according to
-    // https://datascience.stackexchange.com/questions/38395/standardscaler-before-and-after-splitting-data
-    // However this probably hurts DP, because y_test is then not guaranteed between [-1,1]
-    // but to keep data exactly the same as sklearn i'll only do on train for now.
-    
-    split.train.scale(-1, 1);
-    // split.test.scale(-1, 1);
+        ensemble.train(&split.train);
+        
+        // compute score
+        vector<float> y_pred = ensemble.predict(split.test.X);
+
+        // invert the feature scale
+        inverse_scale(split.train.scaler, y_pred);
 
 
-    ensemble.train(&split.train);
-    
-    // compute score
-    vector<float> y_pred = ensemble.predict(split.test.X);
+        std::transform(split.test.y.begin(), split.test.y.end(), 
+                y_pred.begin(), y_pred.begin(), std::minus<float>());
+        std::transform(y_pred.begin(), y_pred.end(),
+                y_pred.begin(), [](float &c){return std::pow(c,2);});
+        float average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
+        float rmse = std::sqrt(average);
 
-    // invert the feature scale
-    inverse_scale(split.train.scaler, y_pred);
+        rmses.push_back(rmse);
+    }
 
 
-    std::transform(split.test.y.begin(), split.test.y.end(), 
-            y_pred.begin(), y_pred.begin(), std::minus<float>());
-    std::transform(y_pred.begin(), y_pred.end(),
-            y_pred.begin(), [](float &c){return std::pow(c,2);});
-    float average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
-    float rmse = std::sqrt(average);
-
-    cout << "RMSE: " << rmse << endl;
+    cout << "RMSE: ";
+    for(auto elem : rmses) {
+        cout << elem << " ";
+    } cout << endl;
 
     
 
