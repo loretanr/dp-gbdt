@@ -50,6 +50,7 @@ int main()
     ModelParams parammmms;
     parammmms.nb_trees = 50;
     parammmms.max_depth = 6;
+    parammmms.gradient_filtering = true;
     parammmms.privacy_budget = 0.1;
 
     DataSet dataset = get_abalone(parammmms);
@@ -64,13 +65,20 @@ int main()
     // https://datascience.stackexchange.com/questions/38395/standardscaler-before-and-after-splitting-data
     // However this probably hurts DP, because y_test is then not guaranteed between [-1,1]
     // but to keep data exactly the same as sklearn i'll only do on train for now.
+    
     split.train.scale(-1, 1);
+    // split.test.scale(-1, 1);
 
 
     ensemble.train(&split.train);
     
     // compute score
     vector<float> y_pred = ensemble.predict(split.test.X);
+
+    // invert the feature scale
+    inverse_scale(split.train.scaler, y_pred);
+
+
     std::transform(split.test.y.begin(), split.test.y.end(), 
             y_pred.begin(), y_pred.begin(), std::minus<float>());
     std::transform(y_pred.begin(), y_pred.end(),

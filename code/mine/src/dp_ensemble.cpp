@@ -24,6 +24,7 @@ void DPEnsemble::train(DataSet *dataset)
     vector<float> gradients[dataset->length];
     double sum = std::accumulate((dataset->y).begin(), (dataset->y).end(), 0.0);
     float init_score = sum / dataset->length; // this is correct
+    this->init_score = init_score;
     std::fill(gradients->begin(), gradients->end(), init_score);
     LOG_DEBUG("Training initialized with score: {1}", init_score);
 
@@ -84,8 +85,6 @@ void DPEnsemble::train(DataSet *dataset)
                 y_samples.insert(y_samples.end(), tree_samples[i].y.begin(), tree_samples[i].y.end());
             }
             vector<float> y_pred = predict(pred_samples);
-            std::transform(y_pred.begin(), y_pred.end(),
-                    y_pred.begin(), [init_score](float &c){return c+init_score;});
 
             // update gradients
             vector<float> gradients = compute_gradient_for_loss(y_samples, y_pred);
@@ -114,12 +113,15 @@ void DPEnsemble::train(DataSet *dataset)
 
 
         trees.push_back(tree);
-        tree.recursive_print_tree(tree.root_node);
+        // cout << "======================= tree " << tree_index << endl;
+        // tree.recursive_print_tree(tree.root_node);
 
 
         LOG_DEBUG(BOLD("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
 
-        
+        // if(tree_index == 49) {
+        //     exit(0);
+        // }
 
 
     }
@@ -132,13 +134,24 @@ vector<float>  DPEnsemble::predict(VVF &X)
     vector<float> predictions(X.size(),0);
     for (auto tree : trees) {
         vector<float> pred = tree.predict(X);
+
+        // if(X.size() == 836) {
+        //     cout << pred[0] << " ";
+        // }
         
         std::transform(pred.begin(), pred.end(), 
             predictions.begin(), predictions.begin(), std::plus<float>());
     }
+
+    // todo optimize those in 1
     float learning_rate = params.learning_rate;
     std::transform(predictions.begin(), predictions.end(),
             predictions.begin(), [learning_rate](float &c){return c*learning_rate;});
+
+    float innit_score = this->init_score;
+    std::transform(predictions.begin(), predictions.end(),
+                    predictions.begin(), [innit_score](float &c){return c+innit_score;});
+
     return predictions;
 
 

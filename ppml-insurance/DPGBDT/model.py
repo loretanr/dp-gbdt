@@ -27,7 +27,7 @@ from DPGBDT import logging
 logging.SetUpLogger(__name__)
 logger = logging.GetLogger(__name__)
 
-RANDOMIZATION = False
+RANDOMIZATION = True
 
 
 class GradientBoostingEnsemble:
@@ -235,6 +235,12 @@ class GradientBoostingEnsemble:
 
       current_tree_for_ensemble = tree_index % self.nb_trees_per_ensemble
       if current_tree_for_ensemble == 0:
+
+        # remove extra samples for debug determinism
+        num_samples_per_tree = int(np.floor(len(X) / self.nb_trees))
+        X = X[range(num_samples_per_tree * self.nb_trees),:]
+        y = y[range(num_samples_per_tree * self.nb_trees)]
+
         # Initialize the dataset and the gradients
         X_ensemble = np.copy(X)       # take X and y here for alltrees
         y_ensemble = np.copy(y)
@@ -344,6 +350,9 @@ class GradientBoostingEnsemble:
                       else y_tree)
           tree.Fit(X_tree, y_target, gradients_tree)
 
+          # print("======================= tree {}".format(tree_index))
+          # tree.recursive_print_tree(tree.root_node)
+
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
       else:
@@ -383,33 +392,38 @@ class GradientBoostingEnsemble:
           k_trees.append(tree)
       self.trees.append(k_trees)
 
-      score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
+      # if(tree_index == 49):
+      #   exit(0)
+
+      # score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
+      score = 42
       logger.info('Decision tree {0:d} fit done. Current score: {1:f} - Best '
                   'score so far: {2:f}'.format(tree_index, score, prev_score))
 
-      if score >= prev_score:
-        # This tree doesn't improve overall prediction quality, removing from model
-        # not reusing gradients in multi-class as they are class-dependent
-        update_gradients = self.loss_.is_multi_class
-        # self.trees.pop()          # Uncommenting this is responsible for not rejecting trees
-        if not self.use_dp:
-          self.early_stop -= 1
-          if self.early_stop == 0:
-            logger.info('Early stop kicked in. No improvement, stopping.')
-            break
-      else:
-        update_gradients = True
-        prev_score = score
-        # Remove the selected rows from the ensemble's dataset
-        # The instances that were filtered out by GBF can still be used for the
-        # training of the next trees
-        if self.use_dp:
-          logger.debug(
-              'Success fitting tree {0:d} on {1:d} instances. Instances left '
-              'for the ensemble: {2:d}'.format(
-                  tree_index, len(rows), len(X_ensemble) - len(rows)))
-          X_ensemble = np.delete(X_ensemble, rows, axis=0)
-          y_ensemble = np.delete(y_ensemble, rows)
+      # if score >= prev_score:
+      #   # This tree doesn't improve overall prediction quality, removing from model
+      #   # not reusing gradients in multi-class as they are class-dependent
+      #   # update_gradients = self.loss_.is_multi_class
+      #   # self.trees.pop()          # Uncommenting this is responsible for not rejecting trees
+      #   # if not self.use_dp:
+      #   #   self.early_stop -= 1
+      #   #   if self.early_stop == 0:
+      #   #     logger.info('Early stop kicked in. No improvement, stopping.')
+      #   #     break
+      # else:
+      update_gradients = True
+      prev_score = score
+      
+      # Remove the selected rows from the ensemble's dataset
+      # The instances that were filtered out by GBF can still be used for the
+      # training of the next trees
+      if self.use_dp:
+        logger.debug(
+            'Success fitting tree {0:d} on {1:d} instances. Instances left '
+            'for the ensemble: {2:d}'.format(
+                tree_index, len(rows), len(X_ensemble) - len(rows)))
+        X_ensemble = np.delete(X_ensemble, rows, axis=0)
+        y_ensemble = np.delete(y_ensemble, rows)
 
     return self
 
@@ -1152,6 +1166,10 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     predictions = []
     for row in X:
       predictions.append(self._Predict(row, self.root_node))  # type: ignore
+      
+    # if(len(X) == 836):
+    #   print("{:.3f} ".format(predictions[0]), end="") 
+
     return np.asarray(predictions)
 
   def _Predict(self, row: np.array, node: DecisionNode) -> float:
@@ -1252,6 +1270,47 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     return self.decision_path
 
 
+  def recursive_print_tree(self, node: DecisionNode):
+    
+    if node.prediction is not None:
+      return
+    
+    categorical = node.index in self.cat_idx
+
+    for i in range(node.depth):
+      print(":  ", end="")
+    
+    if not categorical:
+      print("Attr{} < {:.3f}".format(node.index, node.value), end="")
+    else:
+      print("Attr{} = {:.0f}".format(node.index, node.value), end="")
+
+    if node.left_child.prediction is not None:
+      print(" (L-leaf)")
+    else:
+      print()
+
+    self.recursive_print_tree(node.left_child)
+
+    for i in range(node.depth):
+      print(":  ", end="")
+
+    if not categorical:
+      print("Attr{} >= {:.3f}".format(node.index, node.value), end="")
+    else:
+      print("Attr{} != {:.0f}".format(node.index, node.value), end="")
+
+    if node.right_child.prediction is not None:
+      print(" (R-leaf)")
+    else:
+      print()
+
+    self.recursive_print_tree(node.right_child)
+
+
+
+
+
 def ClipLeaves(leaves: List[DecisionNode],
                l2_threshold: float,
                learning_rate: float,
@@ -1287,12 +1346,11 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
   """
 
   for leaf in leaves:
-    noise = np.random.laplace(0, scale)
-    logger.debug('Leaf value before noise: {0:f}'.format(
-        np.float(leaf.prediction)))
+    noise = 0
+    if (RANDOMIZATION):
+      noise = np.random.laplace(0, scale)
+    logger.debug('({0:.3f} -> {1:.3f})'.format(np.float(leaf.prediction), np.float(leaf.prediction) + noise))
     leaf.prediction += noise
-    logger.debug('Leaf value after noise: {0:f}'.format(
-        np.float(leaf.prediction)))
 
 
 def ComputePredictions(gradients: np.ndarray,

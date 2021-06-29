@@ -47,7 +47,14 @@ DataSet::DataSet()
     empty = true;
 }
 
-Scaler::Scaler() {}
+Scaler::Scaler(float min_val, float max_val, float fmin, float fmax) : data_min(min_val), data_max(max_val),
+        feature_min(fmin), feature_max(fmax)
+{
+    float data_range = data_max - data_min;
+    data_range = data_range == 0 ? 1 : data_range;
+    this->scale = (this->feature_max - this->feature_min) / data_range;
+    this->min_ = this->feature_min - this->data_min * this->scale;
+}
 
 
 DataSet::DataSet(VVF X, vector<float> y) : X(X), y(y)
@@ -96,6 +103,36 @@ void DataSet::scale(float lower, float upper)
         this->y[i] = (this->y[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
     }
     this->scaler = Scaler(minimum_y, maximum_y, lower, upper);
+}
+
+void inverse_scale(Scaler &scaler, vector<float> &vec)
+{
+    // for(auto &elem : vec) {
+    //     elem = (elem - scaler.feature_min) * (scaler.data_max - scaler.data_min)
+    //                 / (scaler.feature_max - scaler.feature_min) + scaler.feature_min;
+    // }
+
+    // try 2
+    // float upper = scaler.data_max;
+    // float lower = scaler.data_min;
+    // float minimum_y = numeric_limits<float>::max();
+    // float maximum_y = numeric_limits<float>::min();
+    // for(int i=0; i<vec.size(); i++) {
+    //     // for(int j=0; j<num_x_cols; j++) {
+    //     //     minima_x[j] = std::min(minima_x[j], X[i][j]);
+    //     //     maxima_x[j] = std::max(maxima_x[j], X[i][j]);
+    //     // }
+    //     minimum_y = std::min(minimum_y, vec[i]);
+    //     maximum_y = std::max(maximum_y, vec[i]);
+    // }
+    // for(int i=0; i<vec.size(); i++) {
+    //     vec[i] = (vec[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
+    // }
+    for(auto &elem : vec) {
+        elem -= scaler.min_;
+        elem /= scaler.scale;
+    }
+
 }
 
 TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio, bool shuffle)

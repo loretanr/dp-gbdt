@@ -20,7 +20,7 @@ from evaluation import estimator
 # The dataset to use for evaluation
 DATASET = 'abalone'
 # The privacy budget to use for evaluation
-PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1)
+PRIVACY_BUDGETS = np.arange(0.1, 0.2, 0.1)
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
@@ -79,7 +79,7 @@ if __name__ == '__main__':
               model_params.get('learning_rate'),
               n_classes=len(set(y)) if task == 'classification' else None,
               gradient_filtering=True,
-              leaf_clipping=True,
+              leaf_clipping=False,   # TODO implement cpp, false for now
               max_leaves=model_params.get('max_leaves'),
               min_samples_split=min_samples_split,
               balance_partition=model_params.get('balance_partition'),
@@ -87,16 +87,19 @@ if __name__ == '__main__':
               use_3_trees=model_params.get('use_3_trees', False),
               cat_idx=cat_idx,
               num_idx=num_idx,
-              verbosity=1)  # type: ignore
+              verbosity=-1)  # type: ignore
           regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
               regressor=m,# transformer=RobustScaler())#,                               # that are used to predict the target"
               transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
                                                                    # must implement fit()
           validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
           scores = cross_val_score(
-              regressor, X, y, cv=validator, scoring=rmse, n_jobs=1) # was -1 for multithreading
+              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # was -1 for multithreading
           
           mean, std = scores.mean(), (scores.std() / 2)
+
+          print(scores)
+          print("====== PB {} SCORE {} ======".format(budget, mean))
 
           output.write(
               '{0:s},{1:d},{2:f},{3:d},{4:d},{5:d},{6:d},{7:f},'  # type: ignore

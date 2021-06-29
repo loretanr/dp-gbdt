@@ -320,11 +320,12 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, float max_gain)
 void DPTree::add_laplacian_noise(vector<TreeNode *> leaves, float laplace_scale)
 {
     LOG_DEBUG("Adding Laplace noise to leaves (Scale {1:.2f})", laplace_scale);
-    Laplace lap(laplace_scale, 0); // no seed for now
+    srand(time(NULL));
+    Laplace lap(laplace_scale, rand());
     for (auto leaf : leaves) {
         float noise = 0;
         if (RANDOMIZATION) {
-            noise = lap.return_a_random_variable();
+            noise = lap.return_a_random_variable(laplace_scale);
         }
         LOG_DEBUG("({1:.3f} -> {2:.3f})", leaf->prediction, leaf->prediction+noise);
         leaf->prediction += noise;

@@ -71,9 +71,9 @@ struct ModelParams {
 struct Scaler {
     float data_min, data_max;
     float feature_min, feature_max;
-    Scaler();
-    Scaler(float min_val, float max_val, float fmin, float fmax) : data_min(min_val), data_max(max_val),
-        feature_min(fmin), feature_max(fmax) {};
+    float scale, min_;
+    Scaler() {};
+    Scaler(float min_val, float max_val, float fmin, float fmax);
 };
 
 struct DataSet {
@@ -111,6 +111,7 @@ struct TreeParams {
     double tree_privacy_budget;
 };
 
+void inverse_scale(Scaler &scaler, vector<float> &vec);
 float clip(float n, float lower, float upper);
 vector<string> split_string(const string &s, char delim);           // TODO enable shuffle
 TrainTestSplit train_test_split_random(DataSet dataset, float train_ratio = 0.70, bool shuffle = false);

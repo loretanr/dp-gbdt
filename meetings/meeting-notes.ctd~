@@ -659,7 +659,7 @@ fit()
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624459336.96" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624970488.25" unique_id="11">
 			<rich_text>Looking at the example.py results.
    •  so, somehow BFS is either bad or wrong implemented
         probably why it Theo does not mention it in thesis
@@ -746,11 +746,12 @@ so far the values seem correct, but L/R is sometimes opposite to python (on 2-&g
 
 theos code also passes the “leftover” samples to predict. (After giving each tree e.g. 66). But it should not matter in theory.
 
-somehow the leaf_clipping = True does not make it to the point where it's used.
-   •  </rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">somehow the leaf_clipping = True does not make it to the point where it's used.
+</rich_text>
+			<rich_text>   •  </rich_text>
 			<rich_text foreground="#ffffa5a50000">it's not passed when the actual tree is built. great.</rich_text>
 			<rich_text>
-   • ignoring for now, but this has to be implemented and tested once the rest runs
    </rich_text>
 			<rich_text foreground="#ffffffff0000">• let's hope it was not a “convenient accident”</rich_text>
 			<rich_text>
@@ -761,7 +762,9 @@ somehow the leaf_clipping = True does not make it to the point where it's used.
          </rich_text>
 			<rich_text foreground="#ffff00000000">▪ TODO doing it again for verification</rich_text>
 			<rich_text>
-      ◇ but for pb 0.5+ it seems more or less indifferent
+            </rich_text>
+			<rich_text foreground="#ffffa5a50000">- 2nd run showed no difference -&gt; small to no effect</rich_text>
+			<rich_text>
       </rich_text>
 			<rich_text foreground="#ffff00000000">◇ let's see effect on 2nd split</rich_text>
 			<rich_text>
@@ -770,7 +773,7 @@ somehow the leaf_clipping = True does not make it to the point where it's used.
 			<rich_text>
             - doing it again for verification.
             </rich_text>
-			<rich_text foreground="#ffffa5a50000">- 2nd try looks almost identical to normal 2ndtree. So kinda false alarm</rich_text>
+			<rich_text foreground="#ffffa5a50000">- 2nd try looks almost identical. So kinda false alarm</rich_text>
 			<rich_text>
      </rich_text>
 			<rich_text foreground="#ffff00000000"> ◇ is it really required by the proof?</rich_text>
@@ -789,17 +792,23 @@ somehow the leaf_clipping = True does not make it to the point where it's used.
 			<rich_text>
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">does DPBoost (base paper) have a github?
-    wtf is </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb" link="webs https://github.com/QinbinLi/DPBoost/">https://github.com/QinbinLi/DPBoost/</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb"> ???
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">yup </rich_text>
+			<rich_text foreground="#ffffa5a50000" link="webs https://github.com/QinbinLi/DPBoost/">https://github.com/QinbinLi/DPBoost/</rich_text>
+			<rich_text foreground="#ffffa5a50000"> 
+    but code example broken and in general it's messy
 </rich_text>
 			<rich_text>
-    it looks to me like theo took the better bounds without actually using it.
-    
-    why the fuck are the base paper absolute values different from theos?
-   •  is it because they use budget like 0.5 as smallest and theo 0.1?
+</rich_text>
+			<rich_text foreground="#9090eeee9090">    
+why the fuck are the base paper absolute values different from theos?
+</rich_text>
+			<rich_text>   •  is it because they use budget like 0.5 as smallest and theo 0.1?
         is it because theo only has 1 ensemble?? (&quot;Boosting effect?&quot;)
         I mean there's some code there for multiple ensembles. But Theo didn't use it so it probably doesn't work.
+      ◇</rich_text>
+			<rich_text foreground="#ffffa5a50000"> nope, there are DPBoost 1 ensemble graphs.</rich_text>
+			<rich_text>
 
 
 Tomorow
@@ -813,22 +822,64 @@ Tomorow
    </rich_text>
 			<rich_text foreground="#9090eeee9090">◇ start the presentation</rich_text>
 			<rich_text>
-      ▪ does he get the results he's supposed to?
-         - even though he only uses 1 ensemble!
-      ▪ 1 slide with everyhing that I don't agree with in theos code
-      ▪ how does this affect the results
+</rich_text>
+			<rich_text foreground="#9090eeee9090">      ▪ does he get the results he's supposed to?
+</rich_text>
+			<rich_text>         </rich_text>
+			<rich_text foreground="#ffffa5a50000">◇   kinda close, but not quite (0-2x less accurate)</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">      ▪ 1 slide with everyhing that I don't agree with in theos code
+         - how does this affect the results
       ▪ 1 slide about how I don't trust the parameters
-         - need to settle for some, to have a benchmark basis &amp; start side-channeling
+</rich_text>
+			<rich_text>         - need to settle for some, to have a benchmark basis &amp; start side-channeling
    </rich_text>
 			<rich_text foreground="#9090eeee9090">◇ browse DPBoost github a bit.</rich_text>
 			<rich_text>
-      ▪ their abalone code example bugs at the moment :(
+      </rich_text>
+			<rich_text foreground="#ffffa5a50000">▪ their abalone code example bugs at the moment :(</rich_text>
+			<rich_text>
    ◇ finish the code
       ▪ add to presentation how many lines it is
          - 2-nodes shouldn't be much more, as it only affects splitting &amp; pb
          - however the accuracy benefits are small (worth for small datasets though?)
       ▪ and include some latex functions.
-   ◇ other datasets :O !</rich_text>
+   ◇ other datasets :O !
+
+============================
+
+had differences with more samples being use for prediction in theo code
+   • made them both start with 3300 and ignore some samples
+      ◇ floor( train set / 50 )
+
+STILL SMALL ERROR SOMEWHERE, INVESTIGATE LIKE TODAY. then create primitive validation infrastructure, then go on with todo list
+
+    from there on
+                    1103c1104
+            &lt; :  Attr3 &lt; 0.225
+            ---
+            &gt; :  Attr5 &lt; 0.753
+            
+            it was because cpp gradient filtering was disabled. python does [-1,1]
+            
+now the tree diffs are identical . (except roundiing)
+
+predictions seem to match, (just by checking some by hand)
+
+============================
+
+now figure out the scores.
+
+so the predictions from both py and cpp have the same values, and their sum is equal (-0.841) so why the fuck does the py code go to -8?
+   •  first forgot the init_value
+   •  because of the inverse MinMaxScaler still wrong
+
+
+
+
+
+</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1624271025.05" unique_id="12">
 			<rich_text foreground="#ffffc0c0cbcb">TODO: debug the result of the pick-formula (algo 2, line 8, base paper)
@@ -886,11 +937,27 @@ Do we need to look at RMSE % compared to output range?
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1624451622.04" unique_id="19">
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1624533654.25" unique_id="19">
 		<rich_text scale="h2">Algorithm</rich_text>
 		<rich_text>
 
 • need to fix the sample choice to use the paper formula
+
+• my </rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">GDF</rich_text>
+		<rich_text> is like theo's, but is that what DPBoost / paper says?
+
+•  right now i'm splitting with “&lt;” like theo. 
+   ◇ in _predict as well as in </rich_text>
+		<rich_text foreground="#268bd2">samples_left_right_partition</rich_text>
+		<rich_text>
+   ◇ easyXGB does &lt;=. however it does not affect the gain. But still unsure what's right.
+
+• my </rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">2-sample-gain-split</rich_text>
+		<rich_text> 2 -&gt; (1,1)
+   ◇ compare that to DPBoost?
+   ◇ Or does it not really matter for larger datasets? Hold for now.
 
 • </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">Use_decay</rich_text>
