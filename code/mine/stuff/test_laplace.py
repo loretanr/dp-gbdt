@@ -7,7 +7,6 @@ import numpy as np
 f = open("laplace.txt", "r")
 numbers = f.read().split(' ')
 numbers = [float(bla) for bla in numbers[:-1]]
-print(numbers[0:5])
 
 
 a = np.hstack(numbers)

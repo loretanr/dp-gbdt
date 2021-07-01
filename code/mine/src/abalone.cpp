@@ -41,27 +41,73 @@ DataSet get_abalone(ModelParams &params)
     return DataSet(X, y);
 }
 
+
+vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle)
+{
+    if(shuffle) {
+        srand(time(0));
+        random_shuffle(dataset.X.begin(), dataset.X.end());
+        random_shuffle(dataset.y.begin(), dataset.y.end());
+    }
+
+    int fold_size = dataset.length / folds;
+    vector<int> fold_sizes(folds, fold_size);
+    int remainder = dataset.length % folds;
+    int index = 0;
+    while (remainder != 0) {
+        fold_sizes[index++]++;
+        remainder--;
+    }
+    // each entry marks the first element of a fold (to be used as test set at some point)
+    deque<int> indices(folds);
+    std::partial_sum(fold_sizes.begin(), fold_sizes.end(), indices.begin());
+    indices.push_front(0); 
+    indices.pop_back();
+
+    vector<TrainTestSplit> splits;
+
+    for(int i=0; i<folds; i++) {
+        VVF X_copy = dataset.X;
+        vector<float> y_copy = dataset.y;
+
+        VVF::iterator x_iterator = X_copy.begin() + indices[i];
+        vector<float>::iterator y_iterator = y_copy.begin() + indices[i];
+
+        VVF x_test(x_iterator, x_iterator + fold_sizes[i]);
+        vector<float> y_test(y_iterator, y_iterator + fold_sizes[i]);
+
+        X_copy.erase(x_iterator, x_iterator + fold_sizes[i]);
+        y_copy.erase(y_iterator, y_iterator + fold_sizes[i]);
+
+        VVF x_train(X_copy.begin(), X_copy.end());
+        vector<float> y_train(y_copy.begin(), y_copy.end());
+
+        DataSet train(x_train,y_train);
+        DataSet test(x_test, y_test);
+
+        splits.push_back(TrainTestSplit(train,test));
+    }
+    return splits;
+}
+
+
 int main()
 {
     // DISTRIBUTION test
-    float scale = 4;
-
-    vector<float> samples;
-    srand(time(NULL));
-    Laplace lap(scale, rand());
-    for(int i=0; i<10000; i++){
-        samples.push_back(lap.return_a_random_variable(scale));
-    }
-
-    ofstream myfile;
-    myfile.open ("laplace.txt");
-    for(auto sample : samples) {
-        myfile << sample << " ";
-    }
-    myfile.close();
-    exit(0);
-
-
+    // float scale = 4;
+    // vector<float> samples;
+    // srand(time(NULL));
+    // Laplace lap(scale, rand());
+    // for(int i=0; i<10000; i++){
+    //     samples.push_back(lap.return_a_random_variable(scale));
+    // }
+    // ofstream myfile;
+    // myfile.open ("laplace.txt");
+    // for(auto sample : samples) {
+    //     myfile << sample << " ";
+    // }
+    // myfile.close();
+    // exit(0);
     // =======================================================
 
 
@@ -70,7 +116,7 @@ int main()
 
     LOG_INFO("hello MA start");
 
-    int NUM_REPEATS = 5;
+    // int NUM_REPEATS = 5;
 
     ModelParams parammmms;
     parammmms.nb_trees = 50;
@@ -84,19 +130,20 @@ int main()
     // dataset.y = {9001,9002,9003,9004,9005};
     vector<float> rmses;
 
-    for (int repeats=0; repeats<NUM_REPEATS; repeats++) {
 
-        DPEnsemble ensemble = DPEnsemble(&parammmms);
-        TrainTestSplit split = train_test_split_random(dataset, 0.80f, true); // empty test for now
+    vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
+
+    for (auto split : cv_inputs) {
+
         // we should fit the Scaler only on the training set, according to
         // https://datascience.stackexchange.com/questions/38395/standardscaler-before-and-after-splitting-data
         // However this probably hurts DP, because y_test is then not guaranteed between [-1,1]
         // but to keep data exactly the same as sklearn i'll only do on train for now.
-        
         split.train.scale(-1, 1);
         // split.test.scale(-1, 1);
 
 
+        DPEnsemble ensemble = DPEnsemble(&parammmms);
         ensemble.train(&split.train);
         
         // compute score
@@ -114,10 +161,12 @@ int main()
         float rmse = std::sqrt(average);
 
         rmses.push_back(rmse);
+        cout << "CV fold x rmse: " << rmse << endl;
     }
 
 
-    cout << "RMSE: ";
+
+    cout << "RMSEs: ";
     for(auto elem : rmses) {
         cout << elem << " ";
     } cout << endl;

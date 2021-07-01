@@ -98,7 +98,7 @@ void DPEnsemble::train(DataSet *dataset)
             }
         }
 
-        // gradient-based data filtering // (TODO untested)
+        // gradient-based data filtering
         if(params.gradient_filtering) {
             for(DataSet &dset : tree_samples) {
                 for (auto &grad : dset.gradients){
