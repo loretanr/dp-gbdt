@@ -1,9 +1,10 @@
-ppml-insurance/.git.bak/
-ppml-insurance/data/
-ppml-insurance/meeting-slides/
-ppml-insurance/thesis/
-ppml-insurance/results/synthetic/
+code/python_gbdt/.git.bak/
+code/python_gbdt/data/
+code/python_gbdt/meeting-slides/
+code/python_gbdt/thesis/
+code/python_gbdt/results/synthetic/
 
+code/stuff/github_gbdts/DPBoost/
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
 **/*.py[cod]
@@ -11,3 +12,11 @@ ppml-insurance/results/synthetic/
 
 # lyx autosave file
 **/*.lyx[#]
+
+# gdb
+**/.gdb_history
+
+# code stuff
+**/.vscode/
+**/run
+**/objs/
