@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <cherrytree>
-	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1624438358.97" unique_id="1">
+	<node custom_icon_id="0" foreground="" is_bold="True" name="Meeting notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1619168425.57" ts_lastsave="1625144466.74" unique_id="1">
 		<rich_text>Thu 3pm
 Link:  </rich_text>
 		<rich_text foreground="#3d3c40"> </rich_text>
@@ -336,6 +336,20 @@ Or do we need to scale X before training? Or does it not make a difference?</ric
 
 • special consideration required for stuff like “continue;”</rich_text>
 		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="07_01" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625144466.79" ts_lastsave="1625154146.07" unique_id="20">
+			<rich_text>
+    SLIDES IN GOOGLE SLIDES
+    
+    
+   •  need DPBoost like Log plots for comparison !!!!!!!!!!!!! I was reading them wrong!!!
+
+otherwise go on as roadmap
+
+
+And for the hardened version will need big comments with formulas etc to make it understandable.
+
+Esfandiar said BFS is better for small datasets than DFS -&gt; might be important to do it doch no</rich_text>
+		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1624438373.44" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
@@ -659,7 +673,7 @@ fit()
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1624981746.24" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1625734749.71" unique_id="11">
 			<rich_text>Looking at the example.py results.
    •  so, somehow BFS is either bad or wrong implemented
         probably why it Theo does not mention it in thesis
@@ -880,9 +894,95 @@ so the predictions from both py and cpp have the same values, and their sum is e
 laplace distribution sampling seems fine (tested with python plot)
 
 
-    SO WHY THE HELL DO WE HAVE MORE FLUCTUATION
+    SO WHY THE HELL DO WE HAVE MORE FLUCTUATION????????
+    
+looks like prediction is wrong (ensemble 2, tree 1, right before update gradient)
+
+-----------------------------------------------
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">looks like predictions are slightly off (probably rounding errors)</rich_text>
+			<rich_text>
+    then gradients will be slightly off
+    then at some point different splits will be made differently
+    
+    python results/abalone/test.py 
+        [3.43531704 </rich_text>
+			<rich_text foreground="#ffffffff0000">1.63171827 </rich_text>
+			<rich_text>2.76654838 2.17902237 2.26754763]
+        [3.4353   1.6317   2.7665   2.1790   2.2675]
+        
+    python gain-clip
+        [3.43531704 </rich_text>
+			<rich_text foreground="#9090eeee9090">1.62848293</rich_text>
+			<rich_text> 2.76654838 2.17902237 2.26754763]
+      •   cpp does not seem to need the same gain clip
 
 
+    cpp double
+        3.43531704 </rich_text>
+			<rich_text foreground="#9090eeee9090">1.62848293</rich_text>
+			<rich_text> 2.76654838 2.17902237 2.26754763
+        RMSEs: 3.4353   1.6285   2.7665   2.1790   2.2675
+            ensemble nr 2 tree_index 4 (LEAFSUM) is where it starts going differently
+            it has 1 more leaf in python (48 vs 47)
+            in general, the tree is built differently (affects like 5 decisions)
+               •  it's not an exp mechanism overflow problem (obviously, deterministic)
+        
+    cpp float
+        RMSEs: 3.4353   1.6712   2.7666   2.1790   2.2351
+</rich_text>
+			<rich_text foreground="#ffffffff0000">        
+• the updated gradients before building 4 are equal
+• diff shows that the third split is done on different values.
+   ◇ gradients and X equal to like 12 kommastellen
+   ◇ cpp splits on attribute 5, py on attribute 7
+      ▪ on attribute 5 the max_gain from attribs 0-4 is already only matching to 7 kommastellen!
+      ▪ first 9 gains on attrib5 are equal (up to 10+ kommastellen)
+         - but then the gain is divided by privacy_budget_for node.
+            → and Theos rounds this value to 7 decimals for some reason!!!
+            → fix had no effect on final result
+
+note rounding in &quot;theos bugs&quot; ? 
+
+• Shit, already recursive_print_tree   tree 1 split 4 differs
+   ◇  (1,0.375) cpp    vs    (2,0.280) py
+   ◇ have the exact same gain(s) !!!!!!!!!!   
+</rich_text>
+			<rich_text foreground="#ffffffffffff">      ▪ even though the splits are different I think (both 4:1 but different one in rhs)
+   ◇  cpp max_elem will choose the first one.
+   ◇ Python one should too (uses “smaller than”)</rich_text>
+			<rich_text foreground="#ffffffff0000">
+        PROBLEM in PYTHON the floats are not exactly equal, in cpp they appear to be!
+            </rich_text>
+			<rich_text foreground="#ffffffffffff">0.0303030410466746357</rich_text>
+			<rich_text foreground="#ffff00000000">75</rich_text>
+			<rich_text foreground="#ffffffff0000">  </rich_text>
+			<rich_text foreground="#ffffffffffff">and</rich_text>
+			<rich_text foreground="#ffffffff0000">
+            </rich_text>
+			<rich_text foreground="#ffffffffffff">0.0303030410466746357</rich_text>
+			<rich_text foreground="#ffff00000000">62</rich_text>
+			<rich_text>
+        stemming from gains that are again off by a tiny bit
+            0.000625254285352182</rich_text>
+			<rich_text foreground="#ffff00000000">5</rich_text>
+			<rich_text>
+            0.000625254285352182</rich_text>
+			<rich_text foreground="#ffff00000000">7</rich_text>
+			<rich_text>
+            
+   •  finding the max probability with a tolerance for close values with numpy.close failed (rtol and atol 1e-10 to 1e-19)
+         ▪ first ensemble all messed up again
+   •  </rich_text>
+			<rich_text foreground="#9090eeee9090">now trying to cap the (py) gain with floor(x*1e10)/1e10</rich_text>
+			<rich_text>
+         ▪ seems to have worked on 1st glance, now need to run the full python cross val
+         ▪ (it at least “fixes” tree 1 in ensemble 2)</rich_text>
+			<rich_text foreground="#ffffffff0000">
+
+
+</rich_text>
+			<rich_text>
 
 
 
@@ -921,15 +1021,10 @@ Do we need to look at RMSE % compared to output range?
         ignore for now.
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624106103.59" ts_lastsave="1624106407.52" unique_id="16">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624106103.59" ts_lastsave="1625648902.91" unique_id="16">
 			<rich_text foreground="#9090eeee9090">After changing the algorithm, the parameters (grid search) are probably off. How to find them again effitiently?</rich_text>
 			<rich_text>
         implement whole gridsearch stuff?</rich_text>
-		</node>
-		<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="&quot;mistakes&quot;" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624367636.05" ts_lastsave="1624438300.77" unique_id="17">
-			<rich_text>leaving away leaf_clipping.
-   •  On tree creation it is ready to receive 17 parameters.
-      ◇ But theo supplies 16, exactly w/o leaf clipping so the default = False kicks in.</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
@@ -988,5 +1083,32 @@ Do we need to look at RMSE % compared to output range?
 
 • Some docs on the cpp algorithm
    ◇ like intuition which parameters are suitable for which use case</rich_text>
+	</node>
+	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1625649127.82" unique_id="21">
+		<rich_text>Suddenly python problem (after apt update/upgrade I believe).
+      </rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">File &quot;/home/loretanr/.local/lib/python3.7/site-packages/matplotlib/__init__.py&quot;, line 107, in &lt;module&gt;
+    from . import _api, cbook, docstring, rcsetup
+      File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 983, in _find_and_load
+      File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 967, in _find_and_load_unlocked
+      File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 677, in _load_unlocked
+      File &quot;&lt;frozen importlib._bootstrap_external&gt;&quot;, line 724, in exec_module
+      File &quot;&lt;frozen importlib._bootstrap_external&gt;&quot;, line 857, in get_code
+      File &quot;&lt;frozen importlib._bootstrap_external&gt;&quot;, line 525, in _compile_bytecode
+    </rich_text>
+		<rich_text foreground="#ffff00000000">ValueError: bad marshal data (invalid reference)</rich_text>
+		<rich_text>
+
+import lightgbm was failing
+    because import matplotlib was failing
+        had to delete .pyc files with 
+            sudo find </rich_text>
+		<rich_text link="fold L2hvbWUvbG9yZXRhbnIvLmxvY2FsL2xpYi9weXRob24zLjcvc2l0ZS1wYWNrYWdlcy9tYXRwbG90bGli">/home/loretanr/.local/lib/python3.7/site-packages/matplotlib</rich_text>
+		<rich_text> -name '*.pyc' -delete
+        as described in </rich_text>
+		<rich_text link="webs https://www.py4u.net/discuss/17141">https://www.py4u.net/discuss/17141</rich_text>
+		<rich_text>
+        
+-------------------------------------------------------------------------------------------------------</rich_text>
 	</node>
 </cherrytree>

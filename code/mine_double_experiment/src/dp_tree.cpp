@@ -249,7 +249,11 @@ double DPTree::compute_gain(VVF &samples, vector<double> &gradients_live, int fe
     }
     lhs_gain = std::pow(lhs_gain,2) / (lhs_size + params->l2_lambda);
     rhs_gain = std::pow(rhs_gain,2) / (rhs_size + params->l2_lambda);
-    return std::max(lhs_gain + rhs_gain, 0.0);
+
+    double total_gain = lhs_gain + rhs_gain;
+    total_gain = std::floor(total_gain * 1e10) / 1e10;
+
+    return std::max(total_gain, 0.0);
 }
 
 
@@ -330,12 +334,12 @@ void DPTree::add_laplacian_noise(vector<TreeNode *> leaves, double laplace_scale
         LOG_DEBUG("({1:.3f} -> {2:.3f})", leaf->prediction, leaf->prediction+noise);
         leaf->prediction += noise;
     }
-    // debugging
+    // debugging TODO REMOVE
     double sum = 0;
     for (auto leaf : leaves) {
         sum += leaf->prediction;
     }
-    LOG_INFO("LEAFSUM {1:.3f}", sum);
+    LOG_INFO("LEAFSUM {1:.8f}", sum);
 }
 
 

@@ -18,7 +18,6 @@ DPEnsemble::~DPEnsemble() {
 
 void DPEnsemble::train(DataSet *dataset)
 {
-    // float prev_score = numeric_limits<float>::max();
 
     // init score (= mean)
     vector<float> gradients[dataset->length];
@@ -109,15 +108,16 @@ void DPEnsemble::train(DataSet *dataset)
 
         // TODO, we have the right data, now build tree
         DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index]);
+        
+        // build tree, add noise to leaves
         tree.fit();
-
 
         trees.push_back(tree);
         // cout << "======================= tree " << tree_index << endl;
         // tree.recursive_print_tree(tree.root_node);
 
 
-        LOG_DEBUG(BOLD("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
+        LOG_INFO(BOLD("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
 
         // if(tree_index == 49) {
         //     exit(0);

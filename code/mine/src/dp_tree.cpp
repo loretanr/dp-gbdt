@@ -330,6 +330,12 @@ void DPTree::add_laplacian_noise(vector<TreeNode *> leaves, float laplace_scale)
         LOG_DEBUG("({1:.3f} -> {2:.3f})", leaf->prediction, leaf->prediction+noise);
         leaf->prediction += noise;
     }
+    // debugging
+    float sum = 0;
+    for (auto leaf : leaves) {
+        sum += leaf->prediction;
+    }
+    LOG_INFO("LEAFSUM {1:.3f}", sum);
 }
 
 

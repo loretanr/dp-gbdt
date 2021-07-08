@@ -1,0 +1,94 @@
+Attr4 < 0.499
+:  Attr2 < 0.275
+:  :  Attr7 < 0.035
+:  :  :  Attr5 < 0.043
+:  :  :  :  Attr1 < 0.190 (L-leaf)
+:  :  :  :  Attr1 >= 0.190
+:  :  :  :  :  Attr1 < 0.200 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.200 (R-leaf)
+:  :  :  Attr5 >= 0.043 (R-leaf)
+:  :  Attr7 >= 0.035
+:  :  :  Attr3 < 0.100
+:  :  :  :  Attr0 = 1 (L-leaf)
+:  :  :  :  Attr0 != 1
+:  :  :  :  :  Attr1 < 0.295 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.295 (R-leaf)
+:  :  :  Attr3 >= 0.100
+:  :  :  :  Attr0 = 1
+:  :  :  :  :  Attr1 < 0.360 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.360 (R-leaf)
+:  :  :  :  Attr0 != 1 (R-leaf)
+:  Attr2 >= 0.275
+:  :  Attr6 < 0.075
+:  :  :  Attr4 < 0.241
+:  :  :  :  Attr1 < 0.370
+:  :  :  :  :  Attr0 = 1 (L-leaf)
+:  :  :  :  :  Attr0 != 1 (R-leaf)
+:  :  :  :  Attr1 >= 0.370 (R-leaf)
+:  :  :  Attr4 >= 0.241
+:  :  :  :  Attr0 = 1
+:  :  :  :  :  Attr1 < 0.370 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.370 (R-leaf)
+:  :  :  :  Attr0 != 1
+:  :  :  :  :  Attr1 < 0.450 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.450 (R-leaf)
+:  :  Attr6 >= 0.075
+:  :  :  Attr1 < 0.405 (L-leaf)
+:  :  :  Attr1 >= 0.405
+:  :  :  :  Attr2 < 0.355
+:  :  :  :  :  Attr0 = 2 (L-leaf)
+:  :  :  :  :  Attr0 != 2 (R-leaf)
+:  :  :  :  Attr2 >= 0.355
+:  :  :  :  :  Attr1 < 0.470 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.470 (R-leaf)
+Attr4 >= 0.499
+:  Attr3 < 0.175
+:  :  Attr6 < 0.152
+:  :  :  Attr5 < 0.229
+:  :  :  :  Attr0 = 1
+:  :  :  :  :  Attr1 < 0.490 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.490 (R-leaf)
+:  :  :  :  Attr0 != 1 (R-leaf)
+:  :  :  Attr5 >= 0.229
+:  :  :  :  Attr0 = 1 (L-leaf)
+:  :  :  :  Attr0 != 1
+:  :  :  :  :  Attr1 < 0.580 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.580 (R-leaf)
+:  :  Attr6 >= 0.152
+:  :  :  Attr5 < 0.428
+:  :  :  :  Attr7 < 0.240
+:  :  :  :  :  Attr6 < 0.164 (L-leaf)
+:  :  :  :  :  Attr6 >= 0.164 (R-leaf)
+:  :  :  :  Attr7 >= 0.240
+:  :  :  :  :  Attr1 < 0.535 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.535 (R-leaf)
+:  :  :  Attr5 >= 0.428
+:  :  :  :  Attr1 < 0.610 (L-leaf)
+:  :  :  :  Attr1 >= 0.610 (R-leaf)
+:  Attr3 >= 0.175
+:  :  Attr5 < 0.471
+:  :  :  Attr1 < 0.595
+:  :  :  :  Attr4 < 0.996
+:  :  :  :  :  Attr1 < 0.540 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.540 (R-leaf)
+:  :  :  :  Attr4 >= 0.996
+:  :  :  :  :  Attr1 < 0.590 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.590 (R-leaf)
+:  :  :  Attr1 >= 0.595
+:  :  :  :  Attr3 < 0.205
+:  :  :  :  :  Attr1 < 0.600 (L-leaf)
+:  :  :  :  :  Attr1 >= 0.600 (R-leaf)
+:  :  :  :  Attr3 >= 0.205
+:  :  :  :  :  Attr0 = 2 (L-leaf)
+:  :  :  :  :  Attr0 != 2 (R-leaf)
+:  :  Attr5 >= 0.471
+:  :  :  Attr5 < 0.532
+:  :  :  :  Attr1 < 0.660
+:  :  :  :  :  Attr0 = 2 (L-leaf)
+:  :  :  :  :  Attr0 != 2 (R-leaf)
+:  :  :  :  Attr1 >= 0.660 (R-leaf)
+:  :  :  Attr5 >= 0.532
+:  :  :  :  Attr1 < 0.655
+:  :  :  :  :  Attr5 < 0.560 (L-leaf)
+:  :  :  :  :  Attr5 >= 0.560 (R-leaf)
+:  :  :  :  Attr1 >= 0.655 (R-leaf)

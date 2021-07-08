@@ -111,7 +111,7 @@ int main()
     // =======================================================
 
 
-    spdlog::set_level(spdlog::level::err); // Set global log level to debug
+    spdlog::set_level(spdlog::level::info); // Set global log level to debug
     
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
