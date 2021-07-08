@@ -1,0 +1,11 @@
+{
+  "DPGBDT": {
+    "Vanilla": {
+      "balance_partition": true,
+      "learning_rate": 0.5,
+      "max_depth": 15,
+      "nb_trees": 20,
+      "nb_trees_per_ensemble": 20
+    }
+  }
+}
