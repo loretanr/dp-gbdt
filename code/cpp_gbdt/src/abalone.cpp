@@ -13,7 +13,7 @@
 
 DataSet get_abalone(ModelParams &params)
 {
-    ifstream infile("data/abalone.data");
+    ifstream infile("datasets/real/abalone.data");
     string line;
     VVF X; // TODO think about row/columnwise what makes sense
     vector<double> y;
@@ -93,24 +93,6 @@ vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int fold
 
 int main()
 {
-    // DISTRIBUTION test
-    // double scale = 4;
-    // vector<double> samples;
-    // srand(time(NULL));
-    // Laplace lap(scale, rand());
-    // for(int i=0; i<10000; i++){
-    //     samples.push_back(lap.return_a_random_variable(scale));
-    // }
-    // ofstream myfile;
-    // myfile.open ("laplace.txt");
-    // for(auto sample : samples) {
-    //     myfile << sample << " ";
-    // }
-    // myfile.close();
-    // exit(0);
-    // =======================================================
-
-
     spdlog::set_level(spdlog::level::info); // Set global log level to debug
     
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
