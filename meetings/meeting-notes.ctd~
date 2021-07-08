@@ -519,7 +519,7 @@ make shared google docs with comments at each step whether its secret dependant.
 
 
 gonna be interesting how fast the CPP is, since Python used automatic sklearn multithreading (4 threads on my laptop)</rich_text>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="creating a single tree" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621853459.74" ts_lastsave="1622032046.54" unique_id="7">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="creating a single tree" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621853459.74" ts_lastsave="1625738065.82" unique_id="7">
 			<rich_text scale="h1">creating a single tree</rich_text>
 			<rich_text>
 
@@ -538,23 +538,17 @@ ressources to check before start:
       ▪ </rich_text>
 			<rich_text link="webs https://github.com/HrBlack/GBDT/blob/master/decision_tree.cpp">https://github.com/HrBlack/GBDT/blob/master/decision_tree.cpp</rich_text>
 			<rich_text>
-   ◇ 
-• stuff from the paper
-
-
-
-==============================
-What I need:
-   •  train() / fit()
-      ◇ loop to grow_tree() each tree in the ensemble
-   • grow_tree()
-      ◇ XGBoost uses a queue
-      ◇ HrBlack/GBDT uses 2 lists that he pushes into
-      ◇ XGBoost-cpp uses class Tree with attributes like split_val, left_child etc.
-      ◇ Theo builds it recursively with MakeTreeBFS/DFS -&gt; create nodes and point to the children etc.
-         ▪ the logic is all there, no ML library used.</rich_text>
+• stuff from the paper</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622108984.01" ts_lastsave="1622213562.55" unique_id="8">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 1.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622108984.01" ts_lastsave="1625738000.84" unique_id="8">
+			<rich_text>================================
+</rich_text>
+			<rich_text scale="h2">Early implementation questions, before py and cpp were equal</rich_text>
+			<rich_text>
+================================
+
+
+</rich_text>
 			<rich_text foreground="#9090eeee9090">start with bfs / dfs / 2-nodes ?   Need all 3 in final implementation?</rich_text>
 			<rich_text>
    •  2-nodes was best
@@ -645,350 +639,7 @@ try with larger privacy budget, see if not so many trees are discarded
 			<rich_text>
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="ensembles" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622123435.95" ts_lastsave="1622213662.62" unique_id="9">
-			<rich_text>Train()
-   •  info-logs the number of ensembles
-   • called by estimator. (DPGBT).fit()
-   • Then all trees get trained
-      ◇ and they are assigned to their ensemble by   index modulo #ensembles
-   • Theos code does 50 trees 1 ensemble for the 5000 samples case (at least for abalone)
-      ◇ for the 300 sample case he uses 5 trees and ignores the nb_trees_per_ensemble
-
-fit()
-   •  called by directly after chearing model = (, , , , , ,) model.fit(X,y)
-   • example.py only creates 1 (50 tree) ensemble
-   • cross_val he would do 50 trees per ensemble
-
-
-
-</rich_text>
-			<rich_text scale="h2">Train()</rich_text>
-			<rich_text>
-• so theo does like an ensemble of 50 trees for like 3000 samples.
-• so each gets 60 instances.
-• Theo randomly selects 60 and checks if the tree improves the ensembles least squares error score.
-   ◇ If not, he “skips” that tree (by not even saving it) 
-      ▪ its training instances though are keptl usable for the next ones.
-   ◇ So the number of trees (out of those 50) is variable and depends on the run! (like 20-30) out of 50
-
-</rich_text>
-		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1625734749.71" unique_id="11">
-			<rich_text>Looking at the example.py results.
-   •  so, somehow BFS is either bad or wrong implemented
-        probably why it Theo does not mention it in thesis
-   • Idk why Theos abalone 5000 graph in thesis has a 0.1pb RMSE of 20-25.
-</rich_text>
-			<rich_text foreground="#ffffa5a50000">   •  it's because of MinMaxScaler!!!</rich_text>
-			<rich_text>
-
-
-BFS balance_partition=False   is broken!! threading hangs in queue.get() empty something
-
-balance_partition= True makes less trees rejected in 2ndsplit
-
-would be nice to have cross_val in C++,
-    it would not need to be side-channel proof
-    it's just validation
-
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">don't need non-dp for debug. can just “disable the exp-machanism”
-</rich_text>
-			<rich_text>    need to check why theo had so many if(no_dp)'s
-      •   </rich_text>
-			<rich_text foreground="#ffffa5a50000">mainly for privacy budget stuff
-      •   if I want a correct non-dp, would need to think about it more thoroughly (e.g. does it affect the tree building or can we just flip the switch in exp mechanism and leaf-add-laplace-noise? And not care about the redundant computation. This could be low hanging fruit)</rich_text>
-			<rich_text>
-    
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">checkout easygdb &amp; other github gain computation.</rich_text>
-			<rich_text> 
-   •  </rich_text>
-			<rich_text foreground="#ffffa5a50000">not making me schlau</rich_text>
-			<rich_text>
-    
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">check out theos thesis and base paper for formula</rich_text>
-			<rich_text>
-   •  </rich_text>
-			<rich_text foreground="#ffffa5a50000">Gain formula seems correct
-   •  EasyXGB uses &lt;= instead of &lt; to split tough
-   •  github_gbdt uses &lt;
-   •  trying out both shows that the gain seems to be exactly the same, but the split values differ. It should not matter.</rich_text>
-			<rich_text>
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">    
-so what is this weird theo-if-binary-split-dont-consider-2nd?
-   •  </rich_text>
-			<rich_text foreground="#ffffa5a50000">tested it (by printing gainz in theos). it's only correct for categorical, so it's mostly wrong and the “savings” in categorical is small. (at least for abalone)</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">
-</rich_text>
-			<rich_text>
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">print all gains and analyze pattern (seems like they stay weirdly constant across feature values)
-</rich_text>
-			<rich_text foreground="#ffffa5a50000">   •  there's always only a limited number of possible split outcomes depending on the #samples. -&gt; for (2 (nonequal-value) samples, and &lt;=) there always has to be 1 in LHS or 2 in LHS. So 2 possible outcomes and thus 2 possible gains. And if we already computed those  values in feature 1 of 7, then the remaining 6 computations are redundant, won't get a better gain.
-   • But I would consider it a small optimization, but only to be potentially considered much later.
-   • It only seems viable for low number of sample splits.</rich_text>
-			<rich_text>
-   </rich_text>
-			<rich_text foreground="#ffffffff0000">• However, it might have the same effect as pruning, so it might not be so bad for the algorithm actually</rich_text>
-			<rich_text>
-   </rich_text>
-			<rich_text foreground="#ffffffffffff">• testing now the accuracy implications in python!!!</rich_text>
-			<rich_text>
-    </rich_text>
-			<rich_text foreground="#ffffa5a50000">  ◇ </rich_text>
-			<rich_text foreground="#ffff00000000">noifbinary</rich_text>
-			<rich_text foreground="#ffffa5a50000"> has negligible effect for abalone</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">
-
-print trees (cpp and python) for easy validation</rich_text>
-			<rich_text>
-   •  </rich_text>
-			<rich_text foreground="#ffffa5a50000">took the EasyXGB tree.cpp one
-   •  skip python for now</rich_text>
-			<rich_text>
-
--------------
-predict
-
-so far the values seem correct, but L/R is sometimes opposite to python (on 2-&gt;1-1 split, the wrong sample is in the wrong leaf?)
-   • </rich_text>
-			<rich_text foreground="#ffffa5a50000"> it was again due to the if-binary bullshit</rich_text>
-			<rich_text>
-
-theos code also passes the “leftover” samples to predict. (After giving each tree e.g. 66). But it should not matter in theory.
-
-</rich_text>
-			<rich_text foreground="#9090eeee9090">somehow the leaf_clipping = True does not make it to the point where it's used.
-</rich_text>
-			<rich_text>   •  </rich_text>
-			<rich_text foreground="#ffffa5a50000">it's not passed when the actual tree is built. great.</rich_text>
-			<rich_text>
-   </rich_text>
-			<rich_text foreground="#ffffffff0000">• let's hope it was not a “convenient accident”</rich_text>
-			<rich_text>
-      </rich_text>
-			<rich_text foreground="#ffff00000000">◇ </rich_text>
-			<rich_text>python bench: definitely noticeable for very small privacy budgets
-         ▪ (like 130 instead of 120 for pb=0.1)
-         </rich_text>
-			<rich_text foreground="#ffff00000000">▪ TODO doing it again for verification</rich_text>
-			<rich_text>
-            </rich_text>
-			<rich_text foreground="#ffffa5a50000">- 2nd run showed no difference -&gt; small to no effect</rich_text>
-			<rich_text>
-      </rich_text>
-			<rich_text foreground="#ffff00000000">◇ let's see effect on 2nd split</rich_text>
-			<rich_text>
-         ▪ </rich_text>
-			<rich_text foreground="#ffffffff0000">DFS got better, 2-nodes got worse. Weird.</rich_text>
-			<rich_text>
-            - doing it again for verification.
-            </rich_text>
-			<rich_text foreground="#ffffa5a50000">- 2nd try looks almost identical. So kinda false alarm</rich_text>
-			<rich_text>
-     </rich_text>
-			<rich_text foreground="#ffff00000000"> ◇ is it really required by the proof?</rich_text>
-			<rich_text>
-   • at least the gradient_filtering is used by the code.
-
-
-
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">TODO need to read the results part of the base paper, to better understand the RMSE numbers and leaf clipping stuff. And the effect of having multiple ensembles</rich_text>
-			<rich_text>
-
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">and put into a presentation!
-</rich_text>
-			<rich_text>
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">does DPBoost (base paper) have a github?
-    </rich_text>
-			<rich_text foreground="#ffffa5a50000">yup </rich_text>
-			<rich_text foreground="#ffffa5a50000" link="webs https://github.com/QinbinLi/DPBoost/">https://github.com/QinbinLi/DPBoost/</rich_text>
-			<rich_text foreground="#ffffa5a50000"> 
-    but code example broken and in general it's messy
-</rich_text>
-			<rich_text>
-</rich_text>
-			<rich_text foreground="#9090eeee9090">    
-why the fuck are the base paper absolute values different from theos?
-</rich_text>
-			<rich_text>   •  is it because they use budget like 0.5 as smallest and theo 0.1?
-        is it because theo only has 1 ensemble?? (&quot;Boosting effect?&quot;)
-        I mean there's some code there for multiple ensembles. But Theo didn't use it so it probably doesn't work.
-      ◇</rich_text>
-			<rich_text foreground="#ffffa5a50000"> nope, there are DPBoost 1 ensemble graphs.</rich_text>
-			<rich_text>
-
-
-Tomorow
-</rich_text>
-			<rich_text foreground="#9090eeee9090">   ◇ read DPBoost results etc carefully
-   ◇ read theos results and compare.</rich_text>
-			<rich_text>
-      </rich_text>
-			<rich_text foreground="#ffffa5a50000">▪ Theos is worse, why though</rich_text>
-			<rich_text>
-   </rich_text>
-			<rich_text foreground="#9090eeee9090">◇ start the presentation</rich_text>
-			<rich_text>
-</rich_text>
-			<rich_text foreground="#9090eeee9090">      ▪ does he get the results he's supposed to?
-</rich_text>
-			<rich_text>         </rich_text>
-			<rich_text foreground="#ffffa5a50000">◇   kinda close, but not quite (0-2x less accurate)</rich_text>
-			<rich_text>
-</rich_text>
-			<rich_text foreground="#9090eeee9090">      ▪ 1 slide with everyhing that I don't agree with in theos code
-         - how does this affect the results
-      ▪ 1 slide about how I don't trust the parameters
-</rich_text>
-			<rich_text>         - need to settle for some, to have a benchmark basis &amp; start side-channeling
-   </rich_text>
-			<rich_text foreground="#9090eeee9090">◇ browse DPBoost github a bit.</rich_text>
-			<rich_text>
-      </rich_text>
-			<rich_text foreground="#ffffa5a50000">▪ their abalone code example bugs at the moment :(</rich_text>
-			<rich_text>
-   ◇ finish the code
-      ▪ add to presentation how many lines it is
-         - 2-nodes shouldn't be much more, as it only affects splitting &amp; pb
-         - however the accuracy benefits are small (worth for small datasets though?)
-      ▪ and include some latex functions.
-   ◇ other datasets :O !
-
-============================
-
-had differences with more samples being use for prediction in theo code
-   • made them both start with 3300 and ignore some samples
-      ◇ floor( train set / 50 )
-
-STILL SMALL ERROR SOMEWHERE, INVESTIGATE LIKE TODAY. then create primitive validation infrastructure, then go on with todo list
-
-    from there on
-                    1103c1104
-            &lt; :  Attr3 &lt; 0.225
-            ---
-            &gt; :  Attr5 &lt; 0.753
-            
-            it was because cpp gradient filtering was disabled. python does [-1,1]
-            
-now the tree diffs are identical . (except roundiing)
-
-predictions seem to match, (just by checking some by hand)
-
-============================
-
-now figure out the scores.
-
-so the predictions from both py and cpp have the same values, and their sum is equal (-0.841) so why the fuck does the py code go to -8?
-   •  first forgot the init_value
-   •  because of the inverse MinMaxScaler still wrong
-      ◇ where is that -1.25 from
-      ◇ ok, took inverse scaliing code from MinMaxScaler
-
-laplace distribution sampling seems fine (tested with python plot)
-
-
-    SO WHY THE HELL DO WE HAVE MORE FLUCTUATION????????
-    
-looks like prediction is wrong (ensemble 2, tree 1, right before update gradient)
-
------------------------------------------------
-</rich_text>
-			<rich_text foreground="#ffffa5a50000">looks like predictions are slightly off (probably rounding errors)</rich_text>
-			<rich_text>
-    then gradients will be slightly off
-    then at some point different splits will be made differently
-    
-    python results/abalone/test.py 
-        [3.43531704 </rich_text>
-			<rich_text foreground="#ffffffff0000">1.63171827 </rich_text>
-			<rich_text>2.76654838 2.17902237 2.26754763]
-        [3.4353   1.6317   2.7665   2.1790   2.2675]
-        
-    python gain-clip
-        [3.43531704 </rich_text>
-			<rich_text foreground="#9090eeee9090">1.62848293</rich_text>
-			<rich_text> 2.76654838 2.17902237 2.26754763]
-      •   cpp does not seem to need the same gain clip
-
-
-    cpp double
-        3.43531704 </rich_text>
-			<rich_text foreground="#9090eeee9090">1.62848293</rich_text>
-			<rich_text> 2.76654838 2.17902237 2.26754763
-        RMSEs: 3.4353   1.6285   2.7665   2.1790   2.2675
-            ensemble nr 2 tree_index 4 (LEAFSUM) is where it starts going differently
-            it has 1 more leaf in python (48 vs 47)
-            in general, the tree is built differently (affects like 5 decisions)
-               •  it's not an exp mechanism overflow problem (obviously, deterministic)
-        
-    cpp float
-        RMSEs: 3.4353   1.6712   2.7666   2.1790   2.2351
-</rich_text>
-			<rich_text foreground="#ffffffff0000">        
-• the updated gradients before building 4 are equal
-• diff shows that the third split is done on different values.
-   ◇ gradients and X equal to like 12 kommastellen
-   ◇ cpp splits on attribute 5, py on attribute 7
-      ▪ on attribute 5 the max_gain from attribs 0-4 is already only matching to 7 kommastellen!
-      ▪ first 9 gains on attrib5 are equal (up to 10+ kommastellen)
-         - but then the gain is divided by privacy_budget_for node.
-            → and Theos rounds this value to 7 decimals for some reason!!!
-            → fix had no effect on final result
-
-note rounding in &quot;theos bugs&quot; ? 
-
-• Shit, already recursive_print_tree   tree 1 split 4 differs
-   ◇  (1,0.375) cpp    vs    (2,0.280) py
-   ◇ have the exact same gain(s) !!!!!!!!!!   
-</rich_text>
-			<rich_text foreground="#ffffffffffff">      ▪ even though the splits are different I think (both 4:1 but different one in rhs)
-   ◇  cpp max_elem will choose the first one.
-   ◇ Python one should too (uses “smaller than”)</rich_text>
-			<rich_text foreground="#ffffffff0000">
-        PROBLEM in PYTHON the floats are not exactly equal, in cpp they appear to be!
-            </rich_text>
-			<rich_text foreground="#ffffffffffff">0.0303030410466746357</rich_text>
-			<rich_text foreground="#ffff00000000">75</rich_text>
-			<rich_text foreground="#ffffffff0000">  </rich_text>
-			<rich_text foreground="#ffffffffffff">and</rich_text>
-			<rich_text foreground="#ffffffff0000">
-            </rich_text>
-			<rich_text foreground="#ffffffffffff">0.0303030410466746357</rich_text>
-			<rich_text foreground="#ffff00000000">62</rich_text>
-			<rich_text>
-        stemming from gains that are again off by a tiny bit
-            0.000625254285352182</rich_text>
-			<rich_text foreground="#ffff00000000">5</rich_text>
-			<rich_text>
-            0.000625254285352182</rich_text>
-			<rich_text foreground="#ffff00000000">7</rich_text>
-			<rich_text>
-            
-   •  finding the max probability with a tolerance for close values with numpy.close failed (rtol and atol 1e-10 to 1e-19)
-         ▪ first ensemble all messed up again
-   •  </rich_text>
-			<rich_text foreground="#9090eeee9090">now trying to cap the (py) gain with floor(x*1e10)/1e10</rich_text>
-			<rich_text>
-         ▪ seems to have worked on 1st glance, now need to run the full python cross val
-         ▪ (it at least “fixes” tree 1 in ensemble 2)</rich_text>
-			<rich_text foreground="#ffffffff0000">
-
-
-</rich_text>
-			<rich_text>
-
-
-
-</rich_text>
-		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1624271025.05" unique_id="12">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622471704.32" ts_lastsave="1625738004.23" unique_id="12">
 			<rich_text foreground="#ffffc0c0cbcb">TODO: debug the result of the pick-formula (algo 2, line 8, base paper)
     does it stay constant across trees?
     is there an easier formula that calculates the same if we have only 1 ensemble ?</rich_text>
@@ -1021,10 +672,326 @@ Do we need to look at RMSE % compared to output range?
         ignore for now.
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="questions 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624106103.59" ts_lastsave="1625648902.91" unique_id="16">
-			<rich_text foreground="#9090eeee9090">After changing the algorithm, the parameters (grid search) are probably off. How to find them again effitiently?</rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 1.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1625738159.26" unique_id="11">
 			<rich_text>
-        implement whole gridsearch stuff?</rich_text>
+================================
+</rich_text>
+			<rich_text scale="h2">Notes up to first equal deterministic py &lt;--&gt; cpp (abalone)</rich_text>
+			<rich_text>
+================================
+
+Idk why Theos abalone 5000 graph in thesis has a 0.1pb RMSE of 20-25.
+   </rich_text>
+			<rich_text foreground="#ffffa5a50000">   ◇  it's because of MinMaxScaler!!!</rich_text>
+			<rich_text>
+      ◇ its necessary, does that solve this now?
+
+</rich_text>
+			<rich_text foreground="#ffffffff0000">BFS balance_partition=False   is broken!!</rich_text>
+			<rich_text> 
+   ◇ threading hangs in queue.get() empty something
+
+• balance_partition= True makes less trees rejected in 2ndsplit
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">don't need non-dp for debug. can just “disable the exp-machanism”
+</rich_text>
+			<rich_text>    need to check why theo had so many if(no_dp)'s
+      •   </rich_text>
+			<rich_text foreground="#ffffa5a50000">mainly for privacy budget stuff</rich_text>
+			<rich_text>
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">checkout easygdb &amp; other github gain computation.</rich_text>
+			<rich_text> 
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">not making me schlau</rich_text>
+			<rich_text>
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">check out theos thesis and base paper for formula</rich_text>
+			<rich_text>
+   •  </rich_text>
+			<rich_text foreground="#9090eeee9090">Gain formula seems correct</rich_text>
+			<rich_text foreground="#ffffa5a50000">
+</rich_text>
+			<rich_text foreground="#ffffffffffff">   •  EasyXGB uses &lt;= to split tough, github_gbdt and theo use &lt;
+   •  trying out both shows that the gain seems to be exactly the same, but the split values differ. It should not matter.</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">    
+so what is this weird </rich_text>
+			<rich_text foreground="#ffffa5a50000">theo-if-binary-split-dont-consider-2nd</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">?
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">t</rich_text>
+			<rich_text foreground="#9090eeee9090">ested it (by printing gainz in theos). it's only correct for categorical</rich_text>
+			<rich_text foreground="#ffffa5a50000">
+      ◇ so it's mostly wrong and the “savings” in categorical is small. (at least for abalone)</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffffffffffff">◇ However, noifbinary might have a similar effect as pruning, so it might not be so bad for the algorithm actually</rich_text>
+			<rich_text>
+   </rich_text>
+			<rich_text foreground="#ffffffffffff">• testing now the accuracy implications in python!!!</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">  ◇ </rich_text>
+			<rich_text foreground="#ffff00000000">noifbinary</rich_text>
+			<rich_text foreground="#ffffa5a50000"> has negligible effect for abalone</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">
+</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">print all gains and analyze pattern (seems like they stay weirdly constant across feature values)
+</rich_text>
+			<rich_text foreground="#ffffffffffff">   •  there's always only a limited number of possible split outcomes depending on the #samples. -&gt; for (2 (nonequal-value) samples, and &lt;=) there always has to be 1 in LHS or 2 in LHS. So 2 possible outcomes and thus 2 possible gains. And if we already computed those  values in feature 1 of 7, then the remaining 6 computations are redundant, won't get a better gain.</rich_text>
+			<rich_text foreground="#ffffa5a50000">
+</rich_text>
+			<rich_text foreground="#9090eeee9090">   • But I would consider it a small optimization, but only to be potentially considered much later.
+</rich_text>
+			<rich_text foreground="#ffffffffffff">      ◇ It only seems viable for low number of sample splits.
+</rich_text>
+			<rich_text>   </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">
+print trees (cpp and python) for easy validation</rich_text>
+			<rich_text>
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">took the EasyXGB tree.cpp one</rich_text>
+			<rich_text>
+
+-------------
+
+</rich_text>
+			<rich_text scale="h2" underline="single">predict</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#ffffffff0000">theos code also passes the “leftover” samples to predict. (After giving each tree e.g. 66)
+  </rich_text>
+			<rich_text foreground="#ffffffffffff"> •  But it should not matter in theory.</rich_text>
+			<rich_text foreground="#ffffffff0000">
+</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffff00000000">somehow the leaf_clipping = True does not make it to the point where it's used.</rich_text>
+			<rich_text foreground="#9090eeee9090">
+</rich_text>
+			<rich_text>   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">it's not passed when the actual tree is built. great.</rich_text>
+			<rich_text>
+   </rich_text>
+			<rich_text foreground="#ffffffff0000">• let's hope it was not a “convenient accident”</rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#ffff00000000">◇ </rich_text>
+			<rich_text>python bench: definitely noticeable for very small privacy budgets
+         ▪ (like 130 instead of 120 for pb=0.1)
+</rich_text>
+			<rich_text foreground="#ffffffffffff">         ▪ doing it again for verification</rich_text>
+			<rich_text>
+            </rich_text>
+			<rich_text foreground="#ffffffffffff">- 2nd run showed no difference</rich_text>
+			<rich_text foreground="#ffffa5a50000"> </rich_text>
+			<rich_text foreground="#9090eeee9090">-&gt; small to no effect</rich_text>
+			<rich_text>
+     </rich_text>
+			<rich_text foreground="#ffffffff0000"> ◇ let's see effect on 2nd split</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffffffffff">         ▪ DFS got better, 2-nodes got worse. Weird.
+</rich_text>
+			<rich_text>            - doing it again for verification.
+</rich_text>
+			<rich_text foreground="#ffffffffffff">            - 2nd try looks almost identical. So kinda false alarm</rich_text>
+			<rich_text>
+     </rich_text>
+			<rich_text foreground="#ffff00000000"> </rich_text>
+			<rich_text foreground="#ffffa5a50000">◇ is it really required by the proof?</rich_text>
+			<rich_text>
+         ▪ yeah proof bounds seem to build on it
+   • at least the gradient_filtering is used by the code.
+
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">need to read the results part of the base paper, to better understand the RMSE
+numbers and leaf clipping stuff. And the effect of having multiple ensembles</rich_text>
+			<rich_text>
+   •  skip for now?</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">
+</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">does DPBoost (base paper) have a github?
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">yup </rich_text>
+			<rich_text foreground="#ffffa5a50000" link="webs https://github.com/QinbinLi/DPBoost/">https://github.com/QinbinLi/DPBoost/</rich_text>
+			<rich_text foreground="#ffffa5a50000"> 
+   •  but code example broken and in general it's messy
+</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">    
+</rich_text>
+			<rich_text foreground="#ffffffff0000">why the fuck are the base paper absolute values different from theos?</rich_text>
+			<rich_text foreground="#9090eeee9090">
+</rich_text>
+			<rich_text>   • </rich_text>
+			<rich_text foreground="#9090eeee9090">is it because they use budget like 0.5 as smallest and theo 0.1?
+   • yes and also because I misread the log plot!</rich_text>
+			<rich_text>
+   • is it because theo only has 1 ensemble?? (&quot;Boosting effect?&quot;)
+      ◇ there's some theo code for 1+ ensembles. But Theo didn't use it so it probably doesn't work.
+   •</rich_text>
+			<rich_text foreground="#ffffa5a50000"> nope, there are DPBoost 1 ensemble graphs.</rich_text>
+			<rich_text>
+
+
+============================
+
+had differences with more samples being use for prediction in theo code
+   • </rich_text>
+			<rich_text foreground="#ffffffff0000">made them both start with 3300 and ignore some samples</rich_text>
+			<rich_text>
+      ◇ floor( train set / 50 )
+
+ERROR SOMEWHERE, INVESTIGATE TODAY
+
+            • </rich_text>
+			<rich_text foreground="#9090eeee9090">it was because cpp gradient_filtering was disabled. python does [-1,1]</rich_text>
+			<rich_text>
+            
+now the tree diffs are identical (on first glance), predictions seem to match
+
+============================
+
+</rich_text>
+			<rich_text scale="h2">scores.</rich_text>
+			<rich_text>
+
+so the predictions from both py and cpp have the same values, and their sum is equal (-0.841) so why the fuck does the py code go to -8?
+   •  first forgot the init_value
+   •  because of the inverse MinMaxScaler still wrong
+      ◇ where is that -1.25 from
+      ◇ ok, took inverse scaliing code from MinMaxScaler
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">laplace distribution sampling seems fine (tested with python plot in ./stuff)
+</rich_text>
+			<rich_text>
+
+============================
+
+</rich_text>
+			<rich_text scale="h2">scores -&gt; float accuracy issues</rich_text>
+			<rich_text>
+
+
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">looks like predictions are slightly off (some kind of precision errors)</rich_text>
+			<rich_text>
+   •  can at some point affect splits which in turn can change the entire process
+      ◇ Happened in (1 of the 5 abalone cross_val)
+    
+    python results/abalone/test.py 
+        [3.43531704 </rich_text>
+			<rich_text foreground="#ffffffff0000">1.63171827 </rich_text>
+			<rich_text>2.76654838 2.17902237 2.26754763]
+        
+    python gain-clip
+        [3.43531704 </rich_text>
+			<rich_text foreground="#9090eeee9090">1.62848293</rich_text>
+			<rich_text> 2.76654838 2.17902237 2.26754763]
+            ▪  cpp does not seem to need the same gain clip
+
+    cpp double
+        [3.43531704 </rich_text>
+			<rich_text foreground="#9090eeee9090">1.62848293</rich_text>
+			<rich_text> 2.76654838 2.17902237 2.26754763]
+               •  it's not an exp mechanism overflow problem (obviously, deterministic)
+        
+</rich_text>
+			<rich_text foreground="#ffffffff0000">        
+Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
+         </rich_text>
+			<rich_text foreground="#ffffffffffff">→ fixed, but had no effect on final result</rich_text>
+			<rich_text foreground="#ffffffff0000">
+
+
+</rich_text>
+			<rich_text foreground="#ffffffffffff">• Shit, already recursive_print_tree   tree 1 split 4 differs
+   ◇  (1,0.375) cpp    vs    (2,0.280) py
+      ▪ have the exact same gain(s) !!!!!!!!!!   </rich_text>
+			<rich_text foreground="#ffffffff0000">
+</rich_text>
+			<rich_text foreground="#ffffffffffff">      ▪ even though the splits are different I think (both 4:1 but different one in rhs)
+   ◇  cpp max_elem will choose the first one.
+   ◇ Python one should too (uses “smaller than”)</rich_text>
+			<rich_text foreground="#ffffffff0000">
+        PROBLEM in PYTHON the floats are not exactly equal, in cpp they appear to be!
+            </rich_text>
+			<rich_text foreground="#ffffffffffff">0.0303030410466746357</rich_text>
+			<rich_text foreground="#ffff00000000">75</rich_text>
+			<rich_text foreground="#ffffffff0000">  </rich_text>
+			<rich_text foreground="#ffffffffffff">and</rich_text>
+			<rich_text foreground="#ffffffff0000">
+            </rich_text>
+			<rich_text foreground="#ffffffffffff">0.0303030410466746357</rich_text>
+			<rich_text foreground="#ffff00000000">62</rich_text>
+			<rich_text>
+        stemming from gains that are again off by a tiny bit
+            0.000625254285352182</rich_text>
+			<rich_text foreground="#ffff00000000">5</rich_text>
+			<rich_text>
+            0.000625254285352182</rich_text>
+			<rich_text foreground="#ffff00000000">7</rich_text>
+			<rich_text>
+            
+   •  finding the max probability with a tolerance for close values with numpy.close failed (rtol and atol 1e-10 to 1e-19)
+         ▪ first ensemble all messed up again
+   •  </rich_text>
+			<rich_text foreground="#9090eeee9090">now trying to cap the (py) gain with floor(x*1e10)/1e10</rich_text>
+			<rich_text>
+         ▪ worked for abalone, deterministic py and cpp now equal</rich_text>
+			<rich_text foreground="#ffffffff0000">
+
+
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">So.... was this a bug in python and where did it come from?</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#9090eeee9090">fuck this for now.</rich_text>
+			<rich_text>
+    the gain was already wrong, would need to go down the rabbit hole, maybe the gradients are the culprit</rich_text>
+			<rich_text foreground="#ffffffff0000">
+</rich_text>
+			<rich_text>
+
+
+
+</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1625738819.08" unique_id="22">
+			<rich_text scale="h2">Validation</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text scale="h3">Preparations</rich_text>
+			<rich_text>
+
+• restructure repo like code -&gt; cpp, python
+   ◇ then validation script should be in code/ to call both
+   ◇ restructure python code (less folders if possible)
+      ▪ also move out datasets
+         and have symlink inside (to be able to run the individuals from there)
+• replace float with double, not loosing “stuff” contents
+
+
+Then the code needs to parse a runtime argument
+    that will be stored in some global var.
+    This will output LEAFSUM-like stuff, as well as RMSEs
+        for tracing down where differences might arise.
+   •  probably also make the DETERMINISM FLAG runtime arg at some point</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
