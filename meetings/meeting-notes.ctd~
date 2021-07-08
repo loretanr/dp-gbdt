@@ -971,7 +971,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1625738819.08" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1625746846.32" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -991,7 +991,17 @@ Then the code needs to parse a runtime argument
     that will be stored in some global var.
     This will output LEAFSUM-like stuff, as well as RMSEs
         for tracing down where differences might arise.
-   •  probably also make the DETERMINISM FLAG runtime arg at some point</rich_text>
+   •  probably also make the DETERMINISM FLAG runtime arg at some point
+
+need validation/testcases
+        smaller versions of the dataset(s)
+        start with abalone (but not 5 fold)
+        
+need validation/run_py_gbdt.py     repr “test.py”
+need validation/run_cpp_gbdt.cpp   repr “abalone.cpp”
+   •  both need to write text output  to validation/outputs
+
+code/validate.sh that runs the ones above</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
