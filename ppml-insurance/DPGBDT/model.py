@@ -309,6 +309,7 @@ class GradientBoostingEnsemble:
               gradients = self.ComputeGradientForLossFunction(
                   y_ensemble, self.Predict(
                       X_ensemble), kth_tree)  # type: ignore
+            logger.info("GRADIENTSUM {:.8f}".format(np.sum(gradients)))
 
           assert gradients is not None
           gradients_tree = gradients[rows]
@@ -397,8 +398,7 @@ class GradientBoostingEnsemble:
 
       # score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
       score = 42
-      logger.info('Decision tree {0:d} fit done. Current score: {1:f} - Best '
-                  'score so far: {2:f}'.format(tree_index, score, prev_score))
+      logger.info('Tree {0:d} done'.format(tree_index))
 
       # if score >= prev_score:
       #   # This tree doesn't improve overall prediction quality, removing from model
@@ -851,8 +851,8 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       lhs_op, rhs_op = self.feature_to_op[best_split['index']]
       lhs = np.where(lhs_op(X[:, best_split['index']], best_split['value']))[0]
       rhs = np.where(rhs_op(X[:, best_split['index']], best_split['value']))[0]
-      logger.debug('DFS: Best split at {0:d}, value {1:f} '
-              'gain {2:f}, curr depth {3:d}, samples {4} -> ({5},{6})'.format(
+      logger.debug('DFS: Split @ {0:d}, value {1:f} '
+              'gain {2:f}, depth {3:d}, samples {4} -> ({5},{6})'.format(
               best_split['index'], best_split['value'],
               best_split['gain'], current_depth, len(X), len(lhs), len(rhs)))
       if not self.use_3_trees:
@@ -1081,8 +1081,10 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
             np.divide(self.privacy_budget/2, np.power(
                 2, current_depth)), decimals=7)
       else:
-        privacy_budget_for_node = np.around(
-            np.divide(self.privacy_budget/2, self.max_depth), decimals=7)
+        # privacy_budget_for_node = np.around(
+        #     np.divide(self.privacy_budget/2, self.max_depth), decimals=7)
+        # TRYING OUT EFFECT OF NOT ROUNDING HERE
+        privacy_budget_for_node = np.divide(self.privacy_budget/2, self.max_depth)
 
       if self.use_3_trees and current_depth != 0:
         # If not for the root node splitting, budget is divided by the 3-nodes
@@ -1236,6 +1238,10 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     lhs_gain = np.square(np.sum(lhs_grad)) / (len(lhs) + self.l2_lambda)  # type: float
     rhs_gain = np.square(np.sum(rhs_grad)) / (len(rhs) + self.l2_lambda)  # type: float
     total_gain = lhs_gain + rhs_gain
+
+    # TRYING TO ROUND FLOAT FOR FLOAT PRECISION
+    total_gain = math.floor(total_gain * 1e10) / 1e10
+
     return total_gain if total_gain >= 0. else 0.
 
   def AssignNodeIDs(self,
@@ -1352,6 +1358,8 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
     logger.debug('({0:.3f} -> {1:.3f})'.format(np.float(leaf.prediction), np.float(leaf.prediction) + noise))
     leaf.prediction += noise
 
+  logger.info("LEAFSUM {:.8f}".format(np.sum([leaf.prediction for leaf in leaves])))
+
 
 def ComputePredictions(gradients: np.ndarray,
                        y: np.ndarray,
@@ -1424,6 +1432,7 @@ def ExponentialMechanism(
           prob['probability'] = np.exp(prob['gain'] - logsumexp(gains))
     # Happens when np.exp() overflows because of a gain that's too high
     except FloatingPointError:
+      print("OVERFLOOOOOW")
       for prob in probabilities:
         gain = prob['gain']
         if gain > 0.:
@@ -1457,7 +1466,19 @@ def ExponentialMechanism(
 
   # disable randomization for debug
   if (not RANDOMIZATION):
-    max_prob = max(probabilities, key=lambda x:x['probability'])
+
+    # TRYING THIS BECAUSE OF FLOATING POINT IMPERFECTIONS
+    # it'll choose the first one if we  have close values
+    #             FAILED
+    # first_index = 0
+    # max_prob = probabilities[0]
+    # for elem in probabilities:
+    #   if not np.isclose(max_prob['probability'], elem['probability'], rtol=1e-10):
+    #     max_prob = max(probabilities, key=lambda x:x['probability'], )
+    #   else:
+    #     print("close-call")
+
+    max_prob = max(probabilities, key=lambda x:x['probability'], )
     return max_prob
 
   # Apply the exponential mechanism
