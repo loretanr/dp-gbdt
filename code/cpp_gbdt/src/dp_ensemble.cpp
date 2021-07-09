@@ -1,6 +1,5 @@
 #include "dp_ensemble.h"
-#include "spdlog/spdlog.h"
-#include "dp_tree.h"
+
 
 
 DPEnsemble::DPEnsemble(ModelParams *parameters)

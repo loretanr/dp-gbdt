@@ -1,5 +1,4 @@
 #include "dp_tree.h"
-#include "spdlog/spdlog.h"
 
 //#include <quadmath.h>
 

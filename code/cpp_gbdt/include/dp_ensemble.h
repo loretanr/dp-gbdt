@@ -3,6 +3,7 @@
 
 #include "utils.h"
 #include "dp_tree.h"
+#include "spdlog/spdlog.h"
 
 extern std::ofstream validation_logfile;
 

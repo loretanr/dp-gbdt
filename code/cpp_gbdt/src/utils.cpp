@@ -164,6 +164,54 @@ TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool
     }
 }
 
+vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle)
+{
+    if(shuffle) {
+        srand(time(0));
+        random_shuffle(dataset.X.begin(), dataset.X.end());
+        random_shuffle(dataset.y.begin(), dataset.y.end());
+    }
+
+    int fold_size = dataset.length / folds;
+    vector<int> fold_sizes(folds, fold_size);
+    int remainder = dataset.length % folds;
+    int index = 0;
+    while (remainder != 0) {
+        fold_sizes[index++]++;
+        remainder--;
+    }
+    // each entry marks the first element of a fold (to be used as test set at some point)
+    deque<int> indices(folds);
+    std::partial_sum(fold_sizes.begin(), fold_sizes.end(), indices.begin());
+    indices.push_front(0); 
+    indices.pop_back();
+
+    vector<TrainTestSplit> splits;
+
+    for(int i=0; i<folds; i++) {
+        VVF X_copy = dataset.X;
+        vector<double> y_copy = dataset.y;
+
+        VVF::iterator x_iterator = X_copy.begin() + indices[i];
+        vector<double>::iterator y_iterator = y_copy.begin() + indices[i];
+
+        VVF x_test(x_iterator, x_iterator + fold_sizes[i]);
+        vector<double> y_test(y_iterator, y_iterator + fold_sizes[i]);
+
+        X_copy.erase(x_iterator, x_iterator + fold_sizes[i]);
+        y_copy.erase(y_iterator, y_iterator + fold_sizes[i]);
+
+        VVF x_train(X_copy.begin(), X_copy.end());
+        vector<double> y_train(y_copy.begin(), y_copy.end());
+
+        DataSet train(x_train,y_train);
+        DataSet test(x_test, y_test);
+
+        splits.push_back(TrainTestSplit(train,test));
+    }
+    return splits;
+}
+
 double Laplace::return_a_random_variable(){
     double e1 = distribution(generator);
     double e2 = distribution(generator);

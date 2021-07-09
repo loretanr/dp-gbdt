@@ -18,12 +18,6 @@
 #include <iterator>
 #include <fstream>
 
-// #include "libfmt/core.h"
-// #include "libfmt/format.h"
-// #include "libfmt/format-inl.h"
-// #include <src/format.cc>
-// fmt/core.h, fmt/format.h, fmt/format-inl.h, src/format.cc
-
 
 /* Logging, to be removed */
 #define concat(one, two) ((std::string) one + (std::string) two).c_str()
@@ -45,10 +39,10 @@
 
 typedef std::vector<std::vector<double>> VVF;
 
-static const bool RANDOMIZATION = false;
+static bool RANDOMIZATION = false;
 
-static const bool VALIDATION = true;
-// std::ofstream validation_logfile;
+static bool VALIDATION_MODE = false;
+
 
 using namespace std;
 
@@ -127,6 +121,8 @@ void inverse_scale(Scaler &scaler, vector<double> &vec);
 double clip(double n, double lower, double upper);
 vector<string> split_string(const string &s, char delim);           // TODO enable shuffle
 TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio = 0.70, bool shuffle = false);
+vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle);
+
 
 double log_sum_exp(vector<double> arr);
 void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');

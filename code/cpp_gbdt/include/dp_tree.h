@@ -3,6 +3,8 @@
 
 #include "utils.h"
 #include "tree_node.h"
+#include "spdlog/spdlog.h"
+
 
 extern std::ofstream validation_logfile;
 
