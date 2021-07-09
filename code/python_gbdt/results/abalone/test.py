@@ -35,6 +35,7 @@ with open(PATH + 'model_params.json') as json_file:
   MODEL_PARAMS = json.load(json_file)
 
 if __name__ == '__main__':
+  
   now = datetime.now().strftime("%d-%m-%y_%H:%M")
   output = open(PATH + 'data_test_garbage' + '.csv', 'a')
   output.write('dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,'

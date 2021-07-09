@@ -16,6 +16,13 @@
 #include <cmath>
 #include <limits>
 #include <iterator>
+#include <fstream>
+
+// #include "libfmt/core.h"
+// #include "libfmt/format.h"
+// #include "libfmt/format-inl.h"
+// #include <src/format.cc>
+// fmt/core.h, fmt/format.h, fmt/format-inl.h, src/format.cc
 
 
 /* Logging, to be removed */
@@ -33,10 +40,15 @@
 #define LOG_DEBUG(...) LOG_DEBUG_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 #define BOLD(words) "\033[0;40;33m" + words + "\033[0m"
 
+#define VALIDATION_LOG(...) validation_logfile << fmt::format(__VA_ARGS__) << "\n"; validation_logfile.flush()
+
 
 typedef std::vector<std::vector<double>> VVF;
 
 static const bool RANDOMIZATION = false;
+
+static const bool VALIDATION = true;
+// std::ofstream validation_logfile;
 
 using namespace std;
 

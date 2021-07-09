@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "dp_tree.h"
 
+extern std::ofstream validation_logfile;
 
 class DPEnsemble
 {
@@ -21,6 +22,8 @@ private:
     void distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set);
     vector<double> compute_gradient_for_loss(vector<double> y, vector<double> &scores);
     double init_score;
+
+
 
 };
 

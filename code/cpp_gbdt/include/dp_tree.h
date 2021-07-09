@@ -1,11 +1,10 @@
 #ifndef DIFFPRIVTREE_H
 #define DIFFPRIVTREE_H
 
-//#include "dp_tree.h"
 #include "utils.h"
 #include "tree_node.h"
 
-using namespace std;
+extern std::ofstream validation_logfile;
 
 class DPTree
 {

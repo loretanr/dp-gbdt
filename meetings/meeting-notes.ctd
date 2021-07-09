@@ -971,7 +971,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1625747190.05" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1625756204.73" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -979,12 +979,15 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 			<rich_text scale="h3">Preparations</rich_text>
 			<rich_text>
 
-• restructure repo like code -&gt; cpp, python
-   ◇ then validation script should be in code/ to call both
+</rich_text>
+			<rich_text foreground="#9090eeee9090">• restructure repo like code -&gt; cpp, python</rich_text>
+			<rich_text>
+
    ◇ restructure python code (less folders if possible)
-      ▪ also move out datasets
-         and have symlink inside (to be able to run the individuals from there)
-• replace float with double, not loosing “stuff” contents
+</rich_text>
+			<rich_text foreground="#9090eeee9090">      ▪ also move out datasets
+         and have symlink inside (to be able to run the individuals from there)</rich_text>
+			<rich_text>
 
 
 Then the code needs to parse a runtime argument
@@ -1002,8 +1005,14 @@ need validation/run_cpp_gbdt.cpp   repr “abalone.cpp”
    •  both need to write text output  to validation/outputs
 
 validation/validate.cpp that parses, compares and colors the output diff
+   •  maybe easier in python?
 
-code/validate.sh that runs it all (compile cpp first)</rich_text>
+code/validate.sh that runs it all (compile cpp first)
+
+
+
+
+TODOOOO, seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use

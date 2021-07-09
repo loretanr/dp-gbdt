@@ -28,6 +28,7 @@ import logging
 import random
 import sys
 from typing import List
+import os
 
 DEBUG = logging.DEBUG
 INFO = logging.INFO
@@ -149,3 +150,23 @@ def GetLogger(name: str) -> logging.Logger:
     logging.Logger: The logger.
   """
   return logging.getLogger(name)
+
+
+class ValidationLogger:
+  """ Writes the output used for algorithm validation to log files """
+  
+  validation_logfile = 0
+
+  def __init__(self, logfilename):
+    # print(os.getcwd() + "/logs/" + logfilename + "_validation_output.log")
+    ValidationLogger.validation_logfile = open(os.getcwd() + "/validation_logs/" + logfilename + "_validation_output.log", "w")
+  
+  def __del__(self):
+    ValidationLogger.validation_logfile.close()
+  
+  def log(self, msg: str):
+    ValidationLogger.validation_logfile.write(msg + "\n")
+    ValidationLogger.validation_logfile.flush()
+
+def GetValidationLogger(name: str) -> ValidationLogger:
+  return ValidationLogger(name)

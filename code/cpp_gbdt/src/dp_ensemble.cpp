@@ -50,6 +50,7 @@ void DPEnsemble::train(DataSet *dataset)
     for(int tree_index = 0; tree_index<params.nb_trees;  tree_index++) {
 
         LOG_DEBUG(BOLD("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"), tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
+        VALIDATION_LOG("Tree {0}", tree_index);
 
         // init the dataset
         if(tree_index == 0) {
@@ -64,9 +65,10 @@ void DPEnsemble::train(DataSet *dataset)
                             pow(1-params.learning_rate, tree_index));
 
         // update/init gradients of all training instances (using last tree(s))
+        vector<double> gradients;
         if(tree_index == 0) {
             vector<double> init_scores(train_set->length, init_score);
-            vector<double> gradients = compute_gradient_for_loss(train_set->y, init_scores);
+            gradients = compute_gradient_for_loss(train_set->y, init_scores);
             int index = 0;
             for(DataSet &dset : tree_samples) {
                 for (auto row : dset.X){
@@ -75,6 +77,7 @@ void DPEnsemble::train(DataSet *dataset)
                     index++;
                 }
             }
+            gradients.resize(index); // for validation log
         } else {
             // only have to update gradients of unused samples
             VVF pred_samples;
@@ -86,12 +89,7 @@ void DPEnsemble::train(DataSet *dataset)
             vector<double> y_pred = predict(pred_samples);
 
             // update gradients
-            vector<double> gradients = compute_gradient_for_loss(y_samples, y_pred);
-
-            // TODO REMOVE DEBUG
-            double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
-            LOG_INFO("GRADIENTSUM {1:.8f}", sum);
-
+            gradients = compute_gradient_for_loss(y_samples, y_pred);
 
             // store them
             vector<double>::const_iterator iter = gradients.begin();
@@ -101,6 +99,10 @@ void DPEnsemble::train(DataSet *dataset)
                 iter += tree_samples[i].length;
             }
         }
+        // intermediate output for validation
+        double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
+        LOG_INFO("GRADIENTSUM {1:.8f}", sum);
+        VALIDATION_LOG("GRADIENTSUM {0:.10f}", sum);
 
         // gradient-based data filtering
         if(params.gradient_filtering) {

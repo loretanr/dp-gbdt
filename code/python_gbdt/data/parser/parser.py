@@ -66,9 +66,9 @@ class Parser:
     self.bins = bins
     self.binary_classification = binary_classification
     self.paths = {
-        'abalone': 'src/real/abalone.data',
-        'questionnaires': 'src/real/questionnaires.csv',
-        'bcw': 'src/real/breast-cancer-wisconsin.data',
+        'abalone': 'datasets/real/abalone.data',
+        'questionnaires': 'datasets/real/questionnaires.csv',
+        'bcw': 'datasets/real/breast-cancer-wisconsin.data',
         'synthetic_A': 'src/synthetic/synthetic_A.csv',
         'synthetic_B': 'src/synthetic/synthetic_B.csv',
         'synthetic_C': 'src/synthetic/synthetic_C.csv',

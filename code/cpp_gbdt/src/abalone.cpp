@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <vector>
 
@@ -9,6 +8,7 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #include "utils.h"
 
+std::ofstream validation_logfile;
 
 
 DataSet get_abalone(ModelParams &params)
@@ -94,8 +94,9 @@ vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int fold
 int main()
 {
     spdlog::set_level(spdlog::level::info); // Set global log level to debug
-    
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
+
+    validation_logfile.open("validation_logs/cpp.log");
 
     LOG_INFO("hello MA start");
 
@@ -157,4 +158,5 @@ int main()
     
 
     LOG_INFO("hello MA end");
+    validation_logfile.close();
 }
