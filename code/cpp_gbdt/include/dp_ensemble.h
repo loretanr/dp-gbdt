@@ -6,6 +6,7 @@
 #include "spdlog/spdlog.h"
 
 extern std::ofstream verification_logfile;
+extern size_t cv_fold_index;
 // bool VERIFICATION_MODE;
 // bool RANDOMIZATION;
 

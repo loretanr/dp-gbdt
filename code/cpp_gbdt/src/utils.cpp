@@ -1,7 +1,10 @@
 #include "utils.h"
 
+
+/** Globals */
 bool VERIFICATION_MODE;
 bool RANDOMIZATION;
+size_t cv_fold_index;
 
 
 vector<string> split_string(const string &s, char delim)

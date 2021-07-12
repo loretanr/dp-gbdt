@@ -50,7 +50,7 @@ void DPEnsemble::train(DataSet *dataset)
 
         LOG_DEBUG(BOLD("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"), tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
         if(VERIFICATION_MODE) {
-            VERIFICATION_LOG("Tree {0}", tree_index);
+            VERIFICATION_LOG("Tree {0} CV-Ensemble {1}", tree_index, cv_fold_index);
         }
 
         // init the dataset

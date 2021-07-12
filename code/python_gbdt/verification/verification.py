@@ -44,7 +44,6 @@ if __name__ == '__main__':
         n_classes=len(set(y)) if task == 'classification' else None,
         gradient_filtering=True,
         leaf_clipping=False,   # TODO implement cpp, false for now     truuuuuuuue ?????
-        # max_leaves=model_params.get('max_leaves'),
         min_samples_split=MIN_SAMPLES_SPLIT,
         balance_partition=True,
         use_bfs=False,
@@ -52,12 +51,12 @@ if __name__ == '__main__':
         cat_idx=cat_idx,
         num_idx=num_idx,
         verbosity=-1)
-    regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
-        regressor=m,# transformer=RobustScaler())#,                               # that are used to predict the target"
-        transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
+    regressor = TransformedTargetRegressor(        # regressor = "all names of the variables" 
+        regressor=m,
+        transformer=MinMaxScaler(feature_range=(-1, 1)))     # scale the features.
     validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
     scores = cross_val_score(
-        regressor, X, y, cv=validator, scoring=rmse, n_jobs=1) # was -1 for multithreading
+        regressor, X, y, cv=validator, scoring=rmse, n_jobs=1) # -1 for multithreading
 
     mean, std = scores.mean(), (scores.std() / 2)
 

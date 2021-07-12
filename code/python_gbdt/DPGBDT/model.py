@@ -17,10 +17,8 @@ import numpy as np
 from scipy.special import logsumexp
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split
-# pylint: disable=line-too-long
 from sklearn.ensemble._gb_losses import LeastSquaresError, \
   MultinomialDeviance, LossFunction, BinomialDeviance
-# pylint: enable=line-too-long
 
 from DPGBDT import logging
 
@@ -31,6 +29,7 @@ verificationLogger = logging.GetVerificationLogger(__name__.split(".")[-1])
 
 RANDOMIZATION = False
 VALIDATION = True
+cv_fold_counter = 0
 
 
 class GradientBoostingEnsemble:
@@ -204,6 +203,8 @@ class GradientBoostingEnsemble:
     Returns:
       GradientBoostingEnsemble: A GradientBoostingEnsemble object.
     """
+    
+    global cv_fold_counter
 
     # Init gradients
     self.init_.fit(X, y)
@@ -227,12 +228,11 @@ class GradientBoostingEnsemble:
 
     prev_score = np.inf
 
-    # row_counter = 0
 
     # Train all trees
     for tree_index in range(self.nb_trees):
 
-      verificationLogger.log("Tree {}".format(tree_index))
+      verificationLogger.log("Tree {} CV-Ensemble {}".format(tree_index, cv_fold_counter))
 
       # Compute sensitivity
       delta_g = 3 * np.square(self.l2_threshold)
@@ -433,6 +433,8 @@ class GradientBoostingEnsemble:
                 tree_index, len(rows), len(X_ensemble) - len(rows)))
         X_ensemble = np.delete(X_ensemble, rows, axis=0)
         y_ensemble = np.delete(y_ensemble, rows)
+
+    cv_fold_counter += 1
 
     return self
 

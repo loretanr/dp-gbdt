@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     parammmms.privacy_budget = 0.1;
 
     Parser parser = Parser();
-    DataSet dataset = parser.get_abalone(parammmms);
+    DataSet dataset = parser.get_abalone(parammmms, false);
 
     // dataset.X = {{1,2,3},{4,5,6},{7,8,9},{10,11,12},{13,14,15}};  // TODO remove
     // dataset.y = {9001,9002,9003,9004,9005};

@@ -43,8 +43,8 @@
 typedef std::vector<std::vector<double>> VVF;
 
 extern bool RANDOMIZATION;
-
 extern bool VERIFICATION_MODE;
+extern size_t cv_fold_index;
 
 
 using namespace std;
@@ -93,6 +93,7 @@ struct DataSet {
     int num_x_cols;
     bool empty;
     Scaler scaler;
+    std::string name;
 
     DataSet();
     DataSet(VVF X, vector<double> y);

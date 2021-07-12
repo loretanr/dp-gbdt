@@ -37,7 +37,7 @@ fi
 
 # compare the outputs
 echo "------------ diff ---------------"
-DIFF_OUTPUT=$(icdiff --color-map='description:cyan' -U 2 --cols=65 verification/outputs/*)
+DIFF_OUTPUT=$(icdiff --color-map='description:cyan,change:red_bold' -U 2 --cols=65 verification/outputs/*)
 if [ $(wc -l <<< "$DIFF_OUTPUT") -eq 1 ] ; then
     echo "files are equal"
 else

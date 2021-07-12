@@ -12,7 +12,7 @@ public:
     Parser() {};
     ~Parser() {};
 
-    DataSet get_abalone(ModelParams &params);
+    DataSet get_abalone(ModelParams &params, bool small_subset = false);
 };
 
 #endif // PARSER_H

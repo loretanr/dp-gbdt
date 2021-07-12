@@ -10,12 +10,10 @@ std::ofstream verification_logfile;
 
 int Verification::main(int argc, char *argv[])
 {
-    cout << "(abalone)" << endl;
 
-    // Set up logging for debugging and validation
+    // Set up logging for debugging
     spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
-    verification_logfile.open("verification_logs/cpp.log");
 
     // Define model parameters
     ModelParams parammmms;
@@ -24,44 +22,49 @@ int Verification::main(int argc, char *argv[])
     parammmms.gradient_filtering = true;
     parammmms.privacy_budget = 0.1;
 
+    vector<DataSet> datasets;
+
     Parser parser = Parser();
-    DataSet dataset = parser.get_abalone(parammmms);
+    datasets.push_back(parser.get_abalone(parammmms, true)); // small abalone
+    datasets.push_back(parser.get_abalone(parammmms)); // full abalone
 
-    vector<double> rmses;
+    for(auto &dataset : datasets) {
 
-    vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
+        // Set up logging for verification
+        verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset.name));
+        cout << dataset.name << endl;
 
-    for (auto split : cv_inputs) {
+        // do cross validation
+        vector<double> rmses;
+        vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
+        cv_fold_index = 0;
 
-        split.train.scale(-1, 1);
+        for (auto split : cv_inputs) {
 
-        DPEnsemble ensemble = DPEnsemble(&parammmms);
-        ensemble.train(&split.train);
-        
-        // compute score
-        vector<double> y_pred = ensemble.predict(split.test.X);
+            split.train.scale(-1, 1);
+            DPEnsemble ensemble = DPEnsemble(&parammmms);
+            ensemble.train(&split.train);
+            
+            // compute score
+            vector<double> y_pred = ensemble.predict(split.test.X);
 
-        // invert the feature scale
-        inverse_scale(split.train.scaler, y_pred);
+            // invert the feature scale
+            inverse_scale(split.train.scaler, y_pred);
 
+            // compute RMSE
+            std::transform(split.test.y.begin(), split.test.y.end(), y_pred.begin(), y_pred.begin(), std::minus<double>());
+            std::transform(y_pred.begin(), y_pred.end(), y_pred.begin(), [](double &c){return std::pow(c,2);});
+            double average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
+            double rmse = std::sqrt(average);
 
-        // compute RMSE
-        std::transform(split.test.y.begin(), split.test.y.end(), 
-                y_pred.begin(), y_pred.begin(), std::minus<double>());
-        std::transform(y_pred.begin(), y_pred.end(),
-                y_pred.begin(), [](double &c){return std::pow(c,2);});
-        double average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
-        double rmse = std::sqrt(average);
+            rmses.push_back(rmse);
+            cout << setprecision(9) << rmse << " " << std::flush;
 
-        rmses.push_back(rmse);
-        cout << rmse << " " << std::flush;
+            cv_fold_index++;
+        } cout << endl;
+    
+        verification_logfile.close();
     }
 
-    cout << endl << "RMSEs: " << setprecision(9);
-    for(auto elem : rmses) {
-        cout << elem << " ";
-    } cout << endl;
- 
-    verification_logfile.close();
     return 0;
 }
