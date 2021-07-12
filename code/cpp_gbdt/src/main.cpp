@@ -1,6 +1,4 @@
-#include <iostream>
-#include <sstream>
-#include <vector>
+
 
 
 #include "dp_tree.h"
@@ -9,27 +7,28 @@
 #include "dataset_parser.h"
 #include "verification.h"
 
-std::ofstream verification_logfile;
-
 
 int main(int argc, char** argv)
 {
     // parse flags
     for(int i = 1; i < argc; i++){
 		if ( !strcmp(argv[i], "--verify") ){
-			VERIFICATION_MODE = true;
             RANDOMIZATION = false;
+			VERIFICATION_MODE = true;
             return Verification::main(argc, argv);
-		} /* else if( !strcmp(argv[i], "--abalone") ){
+		} else {
+            RANDOMIZATION = false;
+            VERIFICATION_MODE = false;
+        } 
+        /* else if( !strcmp(argv[i], "--abalone") ){
 			cout << "ABALONE FLAAG" << endl;
             abalone = true;
 		} */
 	}
 
     // Set up logging for debugging and validation
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
-    verification_logfile.open("validation_logs/cpp.log");
     LOG_INFO("hello MA start");
 
     // Define model parameters
@@ -77,12 +76,12 @@ int main(int argc, char** argv)
         double rmse = std::sqrt(average);
 
         rmses.push_back(rmse);
-        cout << "CV fold x rmse: " << rmse << endl;
+        cout << rmse << " " << std::flush;
     }
 
 
 
-    cout << "RMSEs: " << setprecision(9);
+    cout << endl << "RMSEs: " << setprecision(9);
     for(auto elem : rmses) {
         cout << elem << " ";
     } cout << endl;
@@ -90,5 +89,4 @@ int main(int argc, char** argv)
     
 
     LOG_INFO("hello MA end");
-    verification_logfile.close();
 }

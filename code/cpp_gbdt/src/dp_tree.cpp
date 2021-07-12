@@ -339,9 +339,9 @@ void DPTree::add_laplacian_noise(vector<TreeNode *> leaves, double laplace_scale
         sum += leaf->prediction;
     }
     LOG_INFO("LEAFSUM {1:.8f}", sum);
-    // if(VERIFICATION_MODE) {
-    VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
-    // }
+    if(VERIFICATION_MODE) {
+        VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
+    }
 }
 
 

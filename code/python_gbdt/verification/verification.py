@@ -27,7 +27,7 @@ MAX_DEPTH = 6
 
 
 if __name__ == '__main__':
-    print("starting python verification")
+    print("(abalone)")
 
     # Read the data
     parser = Parser(dataset=DATASET)
@@ -51,7 +51,7 @@ if __name__ == '__main__':
         use_3_trees=False,
         cat_idx=cat_idx,
         num_idx=num_idx,
-        verbosity=-1)  # type: ignore
+        verbosity=-1)
     regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
         regressor=m,# transformer=RobustScaler())#,                               # that are used to predict the target"
         transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.
@@ -62,4 +62,3 @@ if __name__ == '__main__':
     mean, std = scores.mean(), (scores.std() / 2)
 
     print(scores)
-    print("====== PB {} SCORE {} ======".format(PRIVACY_BUDGET, mean))

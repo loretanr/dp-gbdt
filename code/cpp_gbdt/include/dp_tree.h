@@ -7,6 +7,8 @@
 
 
 extern std::ofstream verification_logfile;
+// bool VERIFICATION_MODE;
+// bool RANDOMIZATION;
 
 class DPTree
 {

@@ -1,5 +1,9 @@
 #include "utils.h"
 
+bool VERIFICATION_MODE;
+bool RANDOMIZATION;
+
+
 vector<string> split_string(const string &s, char delim)
 {
     vector<string> result;

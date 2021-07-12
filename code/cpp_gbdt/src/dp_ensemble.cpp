@@ -103,7 +103,9 @@ void DPEnsemble::train(DataSet *dataset)
         // intermediate output for validation
         double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
         LOG_INFO("GRADIENTSUM {1:.8f}", sum);
-        VERIFICATION_LOG("GRADIENTSUM {0:.10f}", sum);
+        if(VERIFICATION_MODE) {
+            VERIFICATION_LOG("GRADIENTSUM {0:.10f}", sum);
+        }
 
         // gradient-based data filtering
         if(params.gradient_filtering) {

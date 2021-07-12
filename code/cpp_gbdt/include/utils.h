@@ -18,7 +18,7 @@
 #include <iterator>
 #include <fstream>
 #include <spdlog/sinks/stdout_sinks.h>
-#include "spdlog/spdlog.h"
+// #include "spdlog/spdlog.h"
 
 
 /* Logging, to be removed */
@@ -42,9 +42,9 @@
 
 typedef std::vector<std::vector<double>> VVF;
 
-static bool RANDOMIZATION = false;
+extern bool RANDOMIZATION;
 
-static bool VERIFICATION_MODE = false;
+extern bool VERIFICATION_MODE;
 
 
 using namespace std;

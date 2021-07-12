@@ -4,14 +4,18 @@
     runs model on different (smaller size) datasets for 
     easy verificaation of correctness
 */
+
+std::ofstream verification_logfile;
+
+
 int Verification::main(int argc, char *argv[])
 {
-    cout << "cpp verification start" << endl;
+    cout << "(abalone)" << endl;
 
     // Set up logging for debugging and validation
     spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
-    verification_logfile.open("validation_logs/cpp.log");
+    verification_logfile.open("verification_logs/cpp.log");
 
     // Define model parameters
     ModelParams parammmms;
@@ -50,13 +54,14 @@ int Verification::main(int argc, char *argv[])
         double rmse = std::sqrt(average);
 
         rmses.push_back(rmse);
-        cout << "CV fold x rmse: " << rmse << endl;
+        cout << rmse << " " << std::flush;
     }
 
-    cout << "RMSEs: " << setprecision(9);
+    cout << endl << "RMSEs: " << setprecision(9);
     for(auto elem : rmses) {
         cout << elem << " ";
     } cout << endl;
  
     verification_logfile.close();
+    return 0;
 }

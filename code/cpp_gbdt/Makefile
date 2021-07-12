@@ -1,7 +1,7 @@
 COMPILER=g++
 CFLAGS=-c -Wall -std=c++11 -g -O0
 SOURCES=$(wildcard src/*.cpp)
-INC=-I./include/ # -L ./src/ -lfmt
+INC=-I./include/# -L ./src/ -lfmt
 
 BUILD_PRINT = \e[1;34mBuilding $<\e[0m
 

@@ -6,6 +6,8 @@
 #include "dp_ensemble.h"
 #include "dataset_parser.h"
 
+extern bool VERIFICATION_MODE;
+extern bool RANDOMIZATION;
 
 namespace Verification
 {
