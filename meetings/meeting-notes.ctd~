@@ -971,7 +971,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1625755542.52" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1625756204.73" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1005,6 +1005,7 @@ need validation/run_cpp_gbdt.cpp   repr “abalone.cpp”
    •  both need to write text output  to validation/outputs
 
 validation/validate.cpp that parses, compares and colors the output diff
+   •  maybe easier in python?
 
 code/validate.sh that runs it all (compile cpp first)
 

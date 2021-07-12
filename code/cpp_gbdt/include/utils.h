@@ -17,6 +17,8 @@
 #include <limits>
 #include <iterator>
 #include <fstream>
+#include <spdlog/sinks/stdout_sinks.h>
+#include "spdlog/spdlog.h"
 
 
 /* Logging, to be removed */
@@ -34,14 +36,15 @@
 #define LOG_DEBUG(...) LOG_DEBUG_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 #define BOLD(words) "\033[0;40;33m" + words + "\033[0m"
 
-#define VALIDATION_LOG(...) validation_logfile << fmt::format(__VA_ARGS__) << "\n"; validation_logfile.flush()
+// #define VERIFICATION_LOG(...) if( VERIFICATION_MODE ) { verification_logfile << fmt::format(__VA_ARGS__) << "\n"; verification_logfile.flush(); }
+#define VERIFICATION_LOG(...) verification_logfile << fmt::format(__VA_ARGS__) << "\n"; verification_logfile.flush()
 
 
 typedef std::vector<std::vector<double>> VVF;
 
 static bool RANDOMIZATION = false;
 
-static bool VALIDATION_MODE = false;
+static bool VERIFICATION_MODE = false;
 
 
 using namespace std;

@@ -6,7 +6,7 @@
 #include "spdlog/spdlog.h"
 
 
-extern std::ofstream validation_logfile;
+extern std::ofstream verification_logfile;
 
 class DPTree
 {

@@ -27,7 +27,7 @@ from DPGBDT import logging
 logging.SetUpLogger(__name__)
 logger = logging.GetLogger(__name__)
 
-validationLogger = logging.GetValidationLogger(__name__.split(".")[-1])
+verificationLogger = logging.GetVerificationLogger(__name__.split(".")[-1])
 
 RANDOMIZATION = False
 VALIDATION = True
@@ -232,7 +232,7 @@ class GradientBoostingEnsemble:
     # Train all trees
     for tree_index in range(self.nb_trees):
 
-      validationLogger.log("Tree {}".format(tree_index))
+      verificationLogger.log("Tree {}".format(tree_index))
 
       # Compute sensitivity
       delta_g = 3 * np.square(self.l2_threshold)
@@ -318,7 +318,7 @@ class GradientBoostingEnsemble:
                       X_ensemble), kth_tree)  # type: ignore
           
           logger.info("GRADIENTSUM {:.8f}".format(np.sum(gradients)))
-          validationLogger.log("GRADIENTSUM {:.10f}".format(np.sum(gradients)))
+          verificationLogger.log("GRADIENTSUM {:.10f}".format(np.sum(gradients)))
 
           assert gradients is not None
           gradients_tree = gradients[rows]
@@ -1368,7 +1368,7 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
     leaf.prediction += noise
 
   logger.info("LEAFSUM {:.8f}".format(np.sum([leaf.prediction for leaf in leaves])))
-  validationLogger.log("LEAFVALUESSUM {:.10f}".format(np.sum([leaf.prediction for leaf in leaves])))
+  verificationLogger.log("LEAFVALUESSUM {:.10f}".format(np.sum([leaf.prediction for leaf in leaves])))
 
 
 def ComputePredictions(gradients: np.ndarray,

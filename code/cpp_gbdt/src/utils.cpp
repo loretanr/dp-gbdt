@@ -226,4 +226,11 @@ double Laplace::return_a_random_variable(double scale){
     return e1-e2;
 }
 
+
+// extern std::ofstream verification_logfile;
+
+// void VERIFICATION_LOG(...)
+// {
+//    verification_logfile << fmt::format(__VA_ARGS__) << "\n"; verification_logfile.flush();
+// } 
   

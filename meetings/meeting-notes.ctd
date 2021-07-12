@@ -1027,7 +1027,7 @@ TODOOOO, seems like giovanna's github is very clean compared to ppml, so can aus
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1624533654.25" unique_id="19">
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1625836698.83" unique_id="19">
 		<rich_text scale="h2">Algorithm</rich_text>
 		<rich_text>
 
@@ -1042,6 +1042,7 @@ TODOOOO, seems like giovanna's github is very clean compared to ppml, so can aus
 		<rich_text foreground="#268bd2">samples_left_right_partition</rich_text>
 		<rich_text>
    ◇ easyXGB does &lt;=. however it does not affect the gain. But still unsure what's right.
+   ◇ would be nice to define the operation at 1 point
 
 • my </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">2-sample-gain-split</rich_text>
@@ -1064,6 +1065,7 @@ TODOOOO, seems like giovanna's github is very clean compared to ppml, so can aus
 
 • stackoverflow code review?
 
+• try on a fresh ubuntu VM to get the setup / installs / requirements.txt
 
 </rich_text>
 		<rich_text scale="h2">Bonus*</rich_text>

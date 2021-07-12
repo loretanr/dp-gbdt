@@ -152,21 +152,21 @@ def GetLogger(name: str) -> logging.Logger:
   return logging.getLogger(name)
 
 
-class ValidationLogger:
+class VerificationLogger:
   """ Writes the output used for algorithm validation to log files """
   
-  validation_logfile = 0
+  verification_logfile = 0
 
   def __init__(self, logfilename):
     # print(os.getcwd() + "/logs/" + logfilename + "_validation_output.log")
-    ValidationLogger.validation_logfile = open(os.getcwd() + "/validation_logs/" + logfilename + "_validation_output.log", "w")
+    VerificationLogger.verification_logfile = open(os.getcwd() + "/verification/verification_logs/" + logfilename + "_validation_output.log", "w")
   
   def __del__(self):
-    ValidationLogger.validation_logfile.close()
+    VerificationLogger.verification_logfile.close()
   
   def log(self, msg: str):
-    ValidationLogger.validation_logfile.write(msg + "\n")
-    ValidationLogger.validation_logfile.flush()
+    VerificationLogger.verification_logfile.write(msg + "\n")
+    VerificationLogger.verification_logfile.flush()
 
-def GetValidationLogger(name: str) -> ValidationLogger:
-  return ValidationLogger(name)
+def GetVerificationLogger(name: str) -> VerificationLogger:
+  return VerificationLogger(name)

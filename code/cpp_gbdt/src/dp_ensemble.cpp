@@ -49,7 +49,9 @@ void DPEnsemble::train(DataSet *dataset)
     for(int tree_index = 0; tree_index<params.nb_trees;  tree_index++) {
 
         LOG_DEBUG(BOLD("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"), tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
-        VALIDATION_LOG("Tree {0}", tree_index);
+        if(VERIFICATION_MODE) {
+            VERIFICATION_LOG("Tree {0}", tree_index);
+        }
 
         // init the dataset
         if(tree_index == 0) {
@@ -101,7 +103,7 @@ void DPEnsemble::train(DataSet *dataset)
         // intermediate output for validation
         double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
         LOG_INFO("GRADIENTSUM {1:.8f}", sum);
-        VALIDATION_LOG("GRADIENTSUM {0:.10f}", sum);
+        VERIFICATION_LOG("GRADIENTSUM {0:.10f}", sum);
 
         // gradient-based data filtering
         if(params.gradient_filtering) {
@@ -121,16 +123,10 @@ void DPEnsemble::train(DataSet *dataset)
         tree.fit();
 
         trees.push_back(tree);
-        // cout << "======================= tree " << tree_index << endl;
-        tree.recursive_print_tree(tree.root_node);
+        // tree.recursive_print_tree(tree.root_node);
 
 
         LOG_INFO(BOLD("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
-
-        // if(tree_index == 49) {
-        //     exit(0);
-        // }
-
 
     }
 

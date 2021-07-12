@@ -1,0 +1,10 @@
+{
+  "DPGBDT":{
+    "DFS":{
+      "balance_partition":true,
+      "learning_rate":0.1,
+      "max_depth":6,
+      "nb_trees":50
+    }
+  }
+}
