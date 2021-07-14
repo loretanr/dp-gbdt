@@ -22,4 +22,4 @@ code/stuff/github_gbdts/DPBoost/
 **/objs/
 
 # datasets
-**/YearPredictionMSD.txt.*
+**/YearPredictionMSD.txt*
