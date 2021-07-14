@@ -81,7 +81,7 @@ void DPEnsemble::train(DataSet *dataset)
             gradients.resize(index); // for validation log
         } else {
             // only have to update gradients of unused samples
-            VVF pred_samples;
+            VVD pred_samples;
             vector<double> y_samples;
             for (size_t i=tree_index; i<tree_samples.size(); i++) {
                 pred_samples.insert(pred_samples.end(), tree_samples[i].X.begin(), tree_samples[i].X.end());
@@ -135,7 +135,7 @@ void DPEnsemble::train(DataSet *dataset)
 }
 
 // Predict values from the ensemble of gradient boosted trees
-vector<double>  DPEnsemble::predict(VVF &X)
+vector<double>  DPEnsemble::predict(VVD &X)
 {
     vector<double> predictions(X.size(),0);
     for (auto tree : trees) {
@@ -183,7 +183,7 @@ void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train
         int current_index = 0;
         // same amount for every tree
         for(int i=0; i<params.nb_trees; i++) {
-            VVF x_tree = {};
+            VVD x_tree = {};
             vector<double> y_tree = {};
             for(int j=0; j<quotient; j++){
                 x_tree.push_back((train_set->X)[current_index]);

@@ -55,7 +55,7 @@ class Parser:
     ssl._create_default_https_context = ssl._create_unverified_context
     # pylint: enable=protected-access
 
-    if dataset not in ['abalone', 'questionnaires', 'bcw', 'adult', 'year',
+    if dataset not in ['abalone', 'questionnaires', 'bcw', 'adult', 'yearMSD',
                        'synthetic_A', 'synthetic_B', 'synthetic_C',
                        'synthetic_D']:
       raise NotImplementedError('Parser not implemented for this dataset.')
@@ -127,7 +127,7 @@ class Parser:
       return self.get_bcw(n_rows=n_rows)
     if self.dataset == 'adult':
       return self.get_adult(n_rows=n_rows)
-    if self.dataset == 'year':
+    if self.dataset == 'yearMSD':
       return self.get_year(n_rows=n_rows)
     if self.dataset.startswith('synthetic'):
       return self.get_synthetic(n_rows=n_rows)

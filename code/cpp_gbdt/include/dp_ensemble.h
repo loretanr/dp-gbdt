@@ -18,7 +18,7 @@ public:
     ~DPEnsemble();
 
     void train(DataSet *dataset);
-    vector<double> predict(VVF &X);
+    vector<double> predict(VVD &X);
     vector<DPTree> trees;
 
 private:

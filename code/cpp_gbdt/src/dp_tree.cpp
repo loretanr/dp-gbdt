@@ -69,7 +69,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 
     // only use the samples that actually end up in this node
     // note that the cols of X are rows in X_live
-    VVF X_live;
+    VVD X_live;
     vector<double> gradients_live;
     for(int col=0; col < dataset->num_x_cols; col++) {
         vector<double> temp;
@@ -147,7 +147,7 @@ double DPTree::compute_prediction(vector<double> gradients, vector<double> y)
 }
 
 
-vector<double> DPTree::predict(VVF &X)
+vector<double> DPTree::predict(VVD &X)
 {
     vector<double> predictions;
     for (auto row : X) {
@@ -182,7 +182,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 
 
 //Find best split of data using the exponential mechanism
-TreeNode *DPTree::find_best_split(VVF &X_live, vector<double> &gradients_live, int current_depth)
+TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, int current_depth)
 {
     double privacy_budget_for_node;
     if ((current_depth != 0) and params->use_decay) {
@@ -233,7 +233,7 @@ TreeNode *DPTree::find_best_split(VVF &X_live, vector<double> &gradients_live, i
 }
 
 // This gain is the simplified formula for least squares loss function
-double DPTree::compute_gain(VVF &samples, vector<double> &gradients_live, int feature_index, double feature_value)
+double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value)
 {
     // partition into lhs / rhs
     vector<bool> lhs;
@@ -263,7 +263,7 @@ double DPTree::compute_gain(VVF &samples, vector<double> &gradients_live, int fe
 
 
 // the result is a bool array that will indicate left/right
-void DPTree::samples_left_right_partition(vector<bool> &lhs, VVF &samples, vector<double> &gradients_live, int feature_index, double feature_value)
+void DPTree::samples_left_right_partition(vector<bool> &lhs, VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value)
 {
     // if the feature is categorical
     if(std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end()) {

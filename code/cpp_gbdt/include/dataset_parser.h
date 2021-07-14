@@ -12,8 +12,8 @@ public:
     Parser() {};
     ~Parser() {};
 
-    DataSet get_abalone(ModelParams &params, bool small_subset = false);
-    DataSet get_YearPredictionMSD(ModelParams &params, bool small_subset = false);
+    DataSet get_abalone(vector<ModelParams> &parameters, size_t num_samples = false, bool default_params = false);
+    DataSet get_YearPredictionMSD(vector<ModelParams> &parameters, size_t num_samples = false, bool default_params = false);
 };
 
 #endif // PARSER_H

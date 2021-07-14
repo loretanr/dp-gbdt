@@ -1,19 +1,25 @@
 #include "dataset_parser.h"
 
-DataSet Parser::get_abalone(ModelParams &params, bool small_subset)
+DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples, bool default_params)
 {
     ifstream infile("datasets/real/abalone.data");
     string line;
-    VVF X;
+    VVD X;
     vector<double> y;
 
-    params.cat_idx = {0}; // first column is categorical
-    params.num_idx = {1,2,3,4,5,6,7};
+    if (default_params) {
+        ModelParams params = create_default_params();
+        params.cat_idx = {0}; // first column is categorical
+        params.num_idx = {1,2,3,4,5,6,7};
+        parameters.push_back(params);
+    } else {
+        parameters.back().num_idx = {1,2,3,4,5,6,7};
+        parameters.back().cat_idx = {0};
+    }
 
-    size_t index_limit = small_subset ? 300 : 5000;
     size_t current_index = 0;
 
-    while (getline(infile, line,'\n') && current_index < index_limit) {
+    while (getline(infile, line,'\n') && current_index < num_samples) {
         stringstream ss(line);
         vector<string> strings = split_string(line, ',');
         vector<double> X_row;
@@ -31,23 +37,35 @@ DataSet Parser::get_abalone(ModelParams &params, bool small_subset)
         X.push_back(X_row);
         current_index++;
     }
+    
     DataSet dataset = DataSet(X,y);
-    dataset.name = small_subset ? "abalone_small" : "abalone_full";
+    dataset.name = num_samples == 300 ? "abalone_small" : "abalone_full";
     return dataset;
 }
 
 
-DataSet Parser::get_YearPredictionMSD(ModelParams &params, bool small_subset)
+DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t num_samples, bool default_params)
 {
     ifstream infile("datasets/real/YearPredictionMSD.txt");
     string line;
-    VVF X;
+    VVD X;
     vector<double> y;
 
-    size_t index_limit = small_subset ? 300 : 800;
+    std::vector<int> v(90); // vector with 90 ints
+    std::iota(std::begin(v), std::end(v), 0); // fill with numbers 0..89
+    if (default_params){
+        ModelParams params = create_default_params();
+        params.cat_idx = {};
+        params.num_idx = v;
+        parameters.push_back(params);
+    } else {
+        parameters.back().cat_idx = {};
+        parameters.back().num_idx = v;
+    }
+
     size_t current_index = 0;
 
-    while (getline(infile, line,'\n') && current_index < index_limit) {
+    while (getline(infile, line,'\n') && current_index < num_samples) {
         stringstream ss(line);
         vector<string> strings = split_string(line, ',');
         vector<double> X_row;
@@ -59,6 +77,6 @@ DataSet Parser::get_YearPredictionMSD(ModelParams &params, bool small_subset)
         current_index++;
     }
     DataSet dataset = DataSet(X,y);
-    dataset.name = small_subset ? "yearMSD_small" : "yearMSD_full";
+    dataset.name = num_samples == 300 ? "yearMSD_small" : "yearMSD_medium";
     return dataset;
 }

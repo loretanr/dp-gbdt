@@ -672,7 +672,7 @@ Do we need to look at RMSE % compared to output range?
         ignore for now.
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 1.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1625738159.26" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 1.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1626277866.85" unique_id="11">
 			<rich_text>
 ================================
 </rich_text>
@@ -909,9 +909,10 @@ so the predictions from both py and cpp have the same values, and their sum is e
 			<rich_text foreground="#9090eeee9090">1.62848293</rich_text>
 			<rich_text> 2.76654838 2.17902237 2.26754763]
                •  it's not an exp mechanism overflow problem (obviously, deterministic)
-        
+
+NOTE       
 </rich_text>
-			<rich_text foreground="#ffffffff0000">        
+			<rich_text foreground="#ffffffff0000">     
 Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
          </rich_text>
 			<rich_text foreground="#ffffffffffff">→ fixed, but had no effect on final result</rich_text>
@@ -971,7 +972,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626266678.46" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626273943.02" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1047,11 +1048,18 @@ need verification/verification.cpp   repr “abalone.cpp”
 
 
 ------------------------------------------------
-yearMSD
-    somehow we're using 240 samples in python and only 200 in cpp
-    
+yearMSD  
     -&gt; maybe time to fix the underlying issue with sample distribution?
-        with abalone?
+         ◇ with abalone?
+         ◇ balanced?
+         ◇ maybe get rid of the gradients splitting up into the struct thing in cpp?
+
+</rich_text>
+			<rich_text foreground="#ffff00000000">CPP PARSER SIDE EFFECT: need to redefine ModelParams num_idx and cat_idx  !!!!!!!!</rich_text>
+			<rich_text>
+
+
+    need to properly distribute ModelParams
 
 </rich_text>
 		</node>

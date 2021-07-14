@@ -14,23 +14,18 @@ int Verification::main(int argc, char *argv[])
     spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
-    // Define model parameters
-    ModelParams parammmms;
-    parammmms.nb_trees = 50;
-    parammmms.max_depth = 6;
-    parammmms.gradient_filtering = true;
-    parammmms.leaf_clipping = true;
-    parammmms.privacy_budget = 0.1;
-
     vector<DataSet> datasets;
+    vector<ModelParams> parameters;
 
     Parser parser = Parser();
-    // datasets.push_back(parser.get_abalone(parammmms, true)); // small abalone (300)
-    // datasets.push_back(parser.get_abalone(parammmms)); // full abalone (5000)
-    datasets.push_back(parser.get_YearPredictionMSD(parammmms, true)); // small yearMSD (300)
-    // datasets.push_back(parser.get_YearPredictionMSD(parammmms, false)); // medium yearMSD (800)
+    datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
+    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
+    datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
+    datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
 
-    for(auto &dataset : datasets) {
+    for(size_t i=0; i<datasets.size(); i++) {
+        DataSet &dataset = datasets[i];
+        ModelParams &param = parameters[i];
 
         // Set up logging for verification
         verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset.name));
@@ -44,7 +39,7 @@ int Verification::main(int argc, char *argv[])
         for (auto split : cv_inputs) {
 
             split.train.scale(-1, 1);
-            DPEnsemble ensemble = DPEnsemble(&parammmms);
+            DPEnsemble ensemble = DPEnsemble(&param);
             ensemble.train(&split.train);
             
             // compute score

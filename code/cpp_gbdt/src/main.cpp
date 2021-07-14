@@ -32,14 +32,13 @@ int main(int argc, char** argv)
     LOG_INFO("hello MA start");
 
     // Define model parameters
-    ModelParams parammmms;
-    parammmms.nb_trees = 50;
-    parammmms.max_depth = 6;
-    parammmms.gradient_filtering = true;
-    parammmms.privacy_budget = 0.1;
+    vector<ModelParams> params;
+    ModelParams current_params = create_default_params();
+    // change current params here if required
+    params.push_back(current_params);
 
     Parser parser = Parser();
-    DataSet dataset = parser.get_abalone(parammmms, false);
+    DataSet dataset = parser.get_abalone(params, 300, false);
 
     // dataset.X = {{1,2,3},{4,5,6},{7,8,9},{10,11,12},{13,14,15}};  // TODO remove
     // dataset.y = {9001,9002,9003,9004,9005};
@@ -58,7 +57,7 @@ int main(int argc, char** argv)
         // split.test.scale(-1, 1);
 
 
-        DPEnsemble ensemble = DPEnsemble(&parammmms);
+        DPEnsemble ensemble = DPEnsemble(&params[0]);
         ensemble.train(&split.train);
         
         // compute score

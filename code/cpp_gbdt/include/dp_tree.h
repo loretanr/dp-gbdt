@@ -28,9 +28,9 @@ private:
     double _predict(vector<double> *row, TreeNode *node);
     vector<TreeNode> collect_nodes(TreeNode rootnode);
 
-    TreeNode *find_best_split(VVF &X_live, vector<double> &gradients_live, int current_depth);
-    void samples_left_right_partition(vector<bool> &lhs, VVF &samples, vector<double> &gradients_live, int feature_index, double feature_value);
-    double compute_gain(VVF &samples, vector<double> &gradients_live, int feature_index, double feature_value);
+    TreeNode *find_best_split(VVD &X_live, vector<double> &gradients_live, int current_depth);
+    void samples_left_right_partition(vector<bool> &lhs, VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value);
+    double compute_gain(VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value);
     int exponential_mechanism(vector<SplitCandidate> &probs, double max_gain);
     void add_laplacian_noise(vector<TreeNode *> leaves, double laplace_scale);
 
@@ -45,7 +45,7 @@ public:
     TreeNode *root_node;
     //queue<TreeNode *> nodes_bfs;
 
-    vector<double> predict(VVF &X);
+    vector<double> predict(VVD &X);
     void fit();
 };
 

@@ -41,7 +41,7 @@
 #define VERIFICATION_LOG(...) verification_logfile << fmt::format(__VA_ARGS__) << "\n"; verification_logfile.flush()
 
 
-typedef std::vector<std::vector<double>> VVF;
+typedef std::vector<std::vector<double>> VVD;
 
 extern bool RANDOMIZATION;
 extern bool VERIFICATION_MODE;
@@ -87,7 +87,7 @@ struct Scaler {
 };
 
 struct DataSet {
-    VVF X;
+    VVD X;
     vector<double> y;
     vector<double> gradients;
     int length;
@@ -97,7 +97,7 @@ struct DataSet {
     std::string name;
 
     DataSet();
-    DataSet(VVF X, vector<double> y);
+    DataSet(VVD X, vector<double> y);
 
     void add_row(vector<double> xrow, double yval); // probably broken because theres no self/this
     void scale(double lower, double upper);
@@ -122,6 +122,7 @@ struct TreeParams {
     double tree_privacy_budget;
 };
 
+ModelParams create_default_params();
 void inverse_scale(Scaler &scaler, vector<double> &vec);
 double clip(double n, double lower, double upper);
 vector<string> split_string(const string &s, char delim);           // TODO enable shuffle

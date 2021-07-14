@@ -54,6 +54,18 @@ DataSet::DataSet()
     empty = true;
 }
 
+ModelParams create_default_params()
+{
+    ModelParams params;
+    params.nb_trees = 50;
+    params.max_depth = 6;
+    params.gradient_filtering = true;
+    params.leaf_clipping = true;
+    params.privacy_budget = 0.1;
+    return params;
+}
+
+
 Scaler::Scaler(double min_val, double max_val, double fmin, double fmax) : data_min(min_val), data_max(max_val),
         feature_min(fmin), feature_max(fmax)
 {
@@ -64,7 +76,7 @@ Scaler::Scaler(double min_val, double max_val, double fmin, double fmax) : data_
 }
 
 
-DataSet::DataSet(VVF X, vector<double> y) : X(X), y(y)
+DataSet::DataSet(VVD X, vector<double> y) : X(X), y(y)
 {
     if(X.size() != y.size()){
         stringstream message;
@@ -153,9 +165,9 @@ TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool
     // [ test |      train      ]
     int border = ceil((1-train_ratio) * dataset.y.size());
 
-    VVF x_test(dataset.X.begin(), dataset.X.begin() + border);
+    VVD x_test(dataset.X.begin(), dataset.X.begin() + border);
     vector<double> y_test(dataset.y.begin(), dataset.y.begin() + border);
-    VVF x_train(dataset.X.begin() + border, dataset.X.end());
+    VVD x_train(dataset.X.begin() + border, dataset.X.end());
     vector<double> y_train(dataset.y.begin() + border, dataset.y.end());
 
     if(train_ratio >= 1) {
@@ -196,19 +208,19 @@ vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int fold
     vector<TrainTestSplit> splits;
 
     for(int i=0; i<folds; i++) {
-        VVF X_copy = dataset.X;
+        VVD X_copy = dataset.X;
         vector<double> y_copy = dataset.y;
 
-        VVF::iterator x_iterator = X_copy.begin() + indices[i];
+        VVD::iterator x_iterator = X_copy.begin() + indices[i];
         vector<double>::iterator y_iterator = y_copy.begin() + indices[i];
 
-        VVF x_test(x_iterator, x_iterator + fold_sizes[i]);
+        VVD x_test(x_iterator, x_iterator + fold_sizes[i]);
         vector<double> y_test(y_iterator, y_iterator + fold_sizes[i]);
 
         X_copy.erase(x_iterator, x_iterator + fold_sizes[i]);
         y_copy.erase(y_iterator, y_iterator + fold_sizes[i]);
 
-        VVF x_train(X_copy.begin(), X_copy.end());
+        VVD x_train(X_copy.begin(), X_copy.end());
         vector<double> y_train(y_copy.begin(), y_copy.end());
 
         DataSet train(x_train,y_train);
