@@ -7,6 +7,9 @@ CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
+
+python3 -u datasets/real/get_year.py | eval "$SHIFT_RIGHT"
+
 # use flag -nrr or --norerun to skip compiling and running
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -31,7 +34,7 @@ if [ "$NRR" = false ] ; then
     cd python_gbdt
     echo -e "${CYAN}Running python verification ...${NC}"
     rm verification/verification_logs/*.log 2> /dev/null
-    python3 verification/verification.py | eval "$SHIFT_RIGHT"
+    python3 -u verification/verification.py | eval "$SHIFT_RIGHT"
     cd $CURR_DIR
 
     # collect the outputs
@@ -46,10 +49,16 @@ fi
 echo "------------ diff ---------------"
 cd verification/outputs
 for py_filename in *.python.log; do
+    # get matching cpp log file
     IFS='.'
     read -ra ADDR <<< "$py_filename"
     cpp_filename="${ADDR[0]}.cpp.log"
     IFS=' '
+    if ! test -f "$cpp_filename"; then
+        echo "$cpp_filename does not exist, skipping"
+        continue
+    fi
+    # file found, compare contents
     DIFF_OUTPUT=$(icdiff --color-map='description:cyan,change:red_bold' -U 2 --cols=65 $py_filename $cpp_filename)
     if [ $(wc -l <<< "$DIFF_OUTPUT") -eq 1 ] ; then
         echo -e "${CYAN}$py_filename\n$cpp_filename${NC}"

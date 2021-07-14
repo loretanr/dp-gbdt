@@ -971,7 +971,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626255378.07" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626266689.33" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1038,16 +1038,24 @@ need verification/verification.cpp   repr “abalone.cpp”
 </rich_text>
 			<rich_text foreground="#ffffffff0000">Leaf_clipping seems to have the convenient side effect of reoving the 1 digit decimal discrepancy between cpp and py.</rich_text>
 			<rich_text>
-   •  so keeping it for now
-
 </rich_text>
-			<rich_text foreground="#9090eeee9090">
-</rich_text>
+			<rich_text foreground="#9090eeee9090">   • so keeping it for now</rich_text>
+			<rich_text>
+   </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">• however it seems to worsen accuracy a bit</rich_text>
 			<rich_text>
 
 
+------------------------------------------------
+yearMSD
+    somehow we're using 240 samples in python and only 200 in cpp
+    
+    -&gt; maybe time to fix the underlying issue with sample distribution?
+         ◇ with abalone?
+         ◇ balanced?
+         ◇ maybe get rid of the gradients splitting up into the struct thing in cpp?
 
-TODOOOO, seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
+</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use

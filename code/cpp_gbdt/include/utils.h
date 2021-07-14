@@ -17,6 +17,7 @@
 #include <limits>
 #include <iterator>
 #include <fstream>
+#include <cstdlib>
 #include <spdlog/sinks/stdout_sinks.h>
 // #include "spdlog/spdlog.h"
 

@@ -25,8 +25,10 @@ int Verification::main(int argc, char *argv[])
     vector<DataSet> datasets;
 
     Parser parser = Parser();
-    datasets.push_back(parser.get_abalone(parammmms, true)); // small abalone
-    datasets.push_back(parser.get_abalone(parammmms)); // full abalone
+    // datasets.push_back(parser.get_abalone(parammmms, true)); // small abalone (300)
+    // datasets.push_back(parser.get_abalone(parammmms)); // full abalone (5000)
+    datasets.push_back(parser.get_YearPredictionMSD(parammmms, true)); // small yearMSD (300)
+    // datasets.push_back(parser.get_YearPredictionMSD(parammmms, false)); // medium yearMSD (800)
 
     for(auto &dataset : datasets) {
 
