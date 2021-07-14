@@ -971,7 +971,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626253212.41" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626255378.07" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1034,6 +1034,14 @@ need verification/verification.cpp   repr “abalone.cpp”
 </rich_text>
 			<rich_text foreground="#9090eeee9090">   •  order of verification was relevant
    • Parser re-did gender to number which resulted in all 3's
+
+</rich_text>
+			<rich_text foreground="#ffffffff0000">Leaf_clipping seems to have the convenient side effect of reoving the 1 digit decimal discrepancy between cpp and py.</rich_text>
+			<rich_text>
+   •  so keeping it for now
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">
 </rich_text>
 			<rich_text>
 

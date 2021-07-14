@@ -971,7 +971,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626104846.66" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626253212.41" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1006,7 +1006,9 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
         start with abalone
             C++</rich_text>
 			<rich_text>
-            python
+            </rich_text>
+			<rich_text foreground="#9090eeee9090">python</rich_text>
+			<rich_text>
         
 </rich_text>
 			<rich_text foreground="#9090eeee9090">need verification/run_py_gbdt.py     repr “verification.py”
@@ -1023,9 +1025,15 @@ need verification/verification.cpp   repr “abalone.cpp”
 
 </rich_text>
 			<rich_text foreground="#9090eeee9090">code/verify.sh that runs it all (compile cpp first)
-   </rich_text>
-			<rich_text foreground="#ffffffffffff">•  need to adapt such that it runs the same name pairs</rich_text>
-			<rich_text foreground="#9090eeee9090">
+   •  need to adapt such that it runs the same name pairs
+</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffff00000000">Parser had side effects! is stupid!</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">   •  order of verification was relevant
+   • Parser re-did gender to number which resulted in all 3's
 </rich_text>
 			<rich_text>
 
@@ -1046,7 +1054,7 @@ TODOOOO, seems like giovanna's github is very clean compared to ppml, so can aus
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1625836698.83" unique_id="19">
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626253230.44" unique_id="19">
 		<rich_text scale="h2">Algorithm</rich_text>
 		<rich_text>
 
@@ -1091,7 +1099,9 @@ TODOOOO, seems like giovanna's github is very clean compared to ppml, so can aus
 		<rich_text>
 
 • Some docs on the cpp algorithm
-   ◇ like intuition which parameters are suitable for which use case</rich_text>
+   ◇ like intuition which parameters are suitable for which use case
+
+• seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 	</node>
 	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1626169666.86" unique_id="21">
 		<rich_text>Suddenly python problem (after apt update/upgrade I believe).

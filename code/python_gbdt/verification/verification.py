@@ -28,7 +28,8 @@ MAX_DEPTH = 6
 
 if __name__ == '__main__':
 
-    parser = Parser(dataset='abalone')
+    DATASET = 'abalone'
+    parser = Parser(dataset=DATASET)
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -42,7 +43,7 @@ if __name__ == '__main__':
             PRIVACY_BUDGET, NB_TREES, NB_TREES_PER_ENSEMBLE, MAX_DEPTH, LEARNING_RATE,
             n_classes=len(set(y)) if task == 'classification' else None,
             gradient_filtering=True,
-            leaf_clipping=False,   # TODO implement cpp, false for now     truuuuuuuue ?????
+            leaf_clipping=True,   # TODO implement cpp, false for now     truuuuuuuue ?????
             min_samples_split=MIN_SAMPLES_SPLIT,
             balance_partition=True, use_bfs=False, use_3_trees=False,
             cat_idx=cat_idx, num_idx=num_idx,

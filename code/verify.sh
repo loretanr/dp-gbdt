@@ -23,19 +23,19 @@ if [ "$NRR" = false ] ; then
     cd cpp_gbdt
     make | eval "$SHIFT_RIGHT"
     echo -e "${CYAN}Running C++ verification ...${NC}"
-    rm verification_logs/*.log
+    rm verification_logs/*.log 2> /dev/null
     ./run --verify | eval "$SHIFT_RIGHT"
     cd $CURR_DIR
 
     # run python implementation
     cd python_gbdt
     echo -e "${CYAN}Running python verification ...${NC}"
-    rm verification/verification_logs/*.log
+    rm verification/verification_logs/*.log 2> /dev/null
     python3 verification/verification.py | eval "$SHIFT_RIGHT"
     cd $CURR_DIR
 
     # collect the outputs
-    rm verification/outputs/*.log
+    rm verification/outputs/*.log 2> /dev/null
     cp cpp_gbdt/verification_logs/*.log verification/outputs
     cp python_gbdt/verification/verification_logs/*.log verification/outputs
 fi

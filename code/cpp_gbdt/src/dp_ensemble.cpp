@@ -117,7 +117,7 @@ void DPEnsemble::train(DataSet *dataset)
         }
 
         // TODO, we have the right data, now build tree
-        DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index]);
+        DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index], tree_index);
         
         // build tree, add noise to leaves
         LOG_INFO("Building tree {1}...", tree_index);

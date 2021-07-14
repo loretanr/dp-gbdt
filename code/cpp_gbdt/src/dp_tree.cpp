@@ -3,10 +3,11 @@
 //#include <quadmath.h>
 
  //: tree_index(tree_index), learning_rate(learning_rate), l2_threshold(l2_threshold), l2_lambda(l2_lambda), privacy_budget(privacy_budget), delta_g(delta_g), delta_v(delta_v), loss(loss), max_depth(max_depth), max_leaves(max_leaves), min_samples_split(min_samples_split), leaf_clipping(leaf_clipping), use_bfs(use_bfs), use_3_trees(use_3_trees), use_decay(use_decay), cat_idx(cat_idx), num_idx(num_idx)
-DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset): 
+DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index): 
     params(params),
     tree_params(tree_params), 
-    dataset(dataset)
+    dataset(dataset),
+    tree_index(tree_index)
 {
    /*  // create a matrix whose rows contain the columns of X, but without duplicates
     for (int i=0; i<dataset->num_x_cols; i++){
@@ -39,8 +40,13 @@ void DPTree::fit()
         throw runtime_error("non-DFS not yet implemented.");
     }
 
-    // leaf clipping TODO (default false)
-    // TODO
+    // leaf clipping TODO
+    if (params->leaf_clipping) {
+        double threshold = this->params->l2_threshold * std::pow((1-this->params->learning_rate), this->tree_index);
+        for (auto &leaf : this->leaves) {
+            leaf->prediction = clip(leaf->prediction, -1 * threshold, threshold);
+        }
+    }
 
     // add noise to predictions TODO
     double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;

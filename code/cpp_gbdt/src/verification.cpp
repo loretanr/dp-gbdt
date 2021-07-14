@@ -19,6 +19,7 @@ int Verification::main(int argc, char *argv[])
     parammmms.nb_trees = 50;
     parammmms.max_depth = 6;
     parammmms.gradient_filtering = true;
+    parammmms.leaf_clipping = true;
     parammmms.privacy_budget = 0.1;
 
     vector<DataSet> datasets;

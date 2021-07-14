@@ -783,8 +783,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       if self.leaf_clipping:
         # Clip the leaf nodes
         logger.debug('Performing geometric leaf clipping')
-        ClipLeaves(
-            leaves, self.l2_threshold, self.learning_rate, self.tree_index)
+        ClipLeaves(leaves, self.l2_threshold, self.learning_rate, self.tree_index)
 
       # Add noise to the predictions
       privacy_budget_for_leaf_node = self.privacy_budget / 2
