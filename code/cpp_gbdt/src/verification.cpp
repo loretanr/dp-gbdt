@@ -1,8 +1,8 @@
 #include "verification.h"
 
 /* 
-    runs model on different (smaller size) datasets for 
-    easy verificaation of correctness
+    runs model on various (smaller size) datasets for 
+    easy verification of correctness
 */
 
 std::ofstream verification_logfile;
@@ -10,7 +10,6 @@ std::ofstream verification_logfile;
 
 int Verification::main(int argc, char *argv[])
 {
-
     // Set up logging for debugging
     spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
@@ -59,7 +58,6 @@ int Verification::main(int argc, char *argv[])
 
             rmses.push_back(rmse);
             cout << setprecision(9) << rmse << " " << std::flush;
-
             cv_fold_index++;
         } cout << endl;
     

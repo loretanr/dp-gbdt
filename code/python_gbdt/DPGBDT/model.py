@@ -21,15 +21,13 @@ from sklearn.ensemble._gb_losses import LeastSquaresError, \
   MultinomialDeviance, LossFunction, BinomialDeviance
 
 from DPGBDT import logging
-
 logging.SetUpLogger(__name__)
 logger = logging.GetLogger(__name__)
-
-verificationLogger = logging.GetVerificationLogger(__name__.split(".")[-1])
+verificationLogger = None
+cv_fold_counter = 0
 
 RANDOMIZATION = False
 VALIDATION = True
-cv_fold_counter = 0
 
 
 class GradientBoostingEnsemble:
@@ -174,12 +172,15 @@ class GradientBoostingEnsemble:
       # Since we're building 3-node trees it's the same anyways.
       self.use_bfs = False
 
+    # Manage logging
     if self.verbosity <= -1:
       logger.setLevel(logging.WARNING)
     elif self.verbosity == 0:
       logger.setLevel(logging.INFO)
     else:
       logger.setLevel(logging.DEBUG)
+    global verificationLogger
+    verificationLogger = logging.GetVerificationLogger()
 
     # This handles attribute comparison depending on the attribute's nature
     self.feature_to_op = defaultdict(
@@ -191,15 +192,12 @@ class GradientBoostingEnsemble:
     self.test_size = test_size
 
 
-  def Train(self,
-            X: np.array,
-            y: np.array) -> 'GradientBoostingEnsemble':
+  def Train(self, X: np.array, y: np.array) -> 'GradientBoostingEnsemble':
     """Train the ensembles of gradient boosted trees.
 
     Args:
       X (np.array): The features.
       y (np.array): The label.
-
     Returns:
       GradientBoostingEnsemble: A GradientBoostingEnsemble object.
     """
@@ -325,7 +323,8 @@ class GradientBoostingEnsemble:
 
           # Gradient based data filtering
           if self.gradient_filtering:
-            logger.debug("Doing gradient filtering with thresholds [{},{}]".format(round(-self.l2_threshold),1,round(self.l2_threshold),1))
+            logger.debug("Doing gradient filtering with thresholds [{},{}]".format(
+                  round(-self.l2_threshold),1,round(self.l2_threshold),1))
             gradients_tree[
                 gradients_tree > self.l2_threshold] = self.l2_threshold
             gradients_tree[
@@ -360,8 +359,8 @@ class GradientBoostingEnsemble:
                       else y_tree)
           tree.Fit(X_tree, y_target, gradients_tree)
 
-          # print("======================= tree {}".format(tree_index))
-          # tree.recursive_print_tree(tree.root_node)
+          if (logger.level == logging.DEBUG):
+            tree.recursive_print_tree(tree.root_node)
 
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
@@ -401,9 +400,6 @@ class GradientBoostingEnsemble:
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
       self.trees.append(k_trees)
-
-      # if(tree_index == 49):
-      #   exit(0)
 
       # score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
       score = 42

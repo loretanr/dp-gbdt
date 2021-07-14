@@ -26,6 +26,7 @@ compatible terminals."""
 
 import logging
 import random
+import typing
 import sys
 from typing import List
 import os
@@ -152,21 +153,38 @@ def GetLogger(name: str) -> logging.Logger:
   return logging.getLogger(name)
 
 
+
+# global name and file handle of current verification logfile
+verification_logfile = typing.TextIO()
+verification_logfilename = ""
+
+
 class VerificationLogger:
   """ Writes the output used for algorithm validation to log files """
-  
-  verification_logfile = 0
 
-  def __init__(self, logfilename):
+  filename = ""
+  logfile = typing.TextIO()
+
+  def __init__(self):
     # print(os.getcwd() + "/logs/" + logfilename + "_validation_output.log")
-    VerificationLogger.verification_logfile = open(os.getcwd() + "/verification/verification_logs/" + logfilename + "_validation_output.log", "w")
-  
-  def __del__(self):
-    VerificationLogger.verification_logfile.close()
+    # global verification_logfile
+    # global verification_logfilename
+    self.filename = verification_logfilename
+    self.logfile = verification_logfile
   
   def log(self, msg: str):
-    VerificationLogger.verification_logfile.write(msg + "\n")
-    VerificationLogger.verification_logfile.flush()
+    self.logfile.write(msg + "\n")
+    self.logfile.flush()
 
-def GetVerificationLogger(name: str) -> VerificationLogger:
-  return VerificationLogger(name)
+def GetVerificationLogger():
+  return VerificationLogger()
+
+def SetupVerificationLogger(name: str):
+  global verification_logfile
+  global verification_logfilename
+  verification_logfile = open(os.getcwd() + "/verification/verification_logs/" + name + ".python.log", "w")
+  verification_logfilename = name
+
+def CloseVerificationLogger():
+  global verification_logfile
+  verification_logfile.close()

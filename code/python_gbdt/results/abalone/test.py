@@ -88,7 +88,7 @@ if __name__ == '__main__':
               use_3_trees=model_params.get('use_3_trees', False),
               cat_idx=cat_idx,
               num_idx=num_idx,
-              verbosity=0)  # type: ignore
+              verbosity=-1)  # type: ignore
           regressor = TransformedTargetRegressor(        # regressor = "all names of the variables 
               regressor=m,# transformer=RobustScaler())#,                               # that are used to predict the target"
               transformer=MinMaxScaler(feature_range=(-1, 1)))     # just to scale the features.

@@ -971,7 +971,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1625756204.73" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626253212.41" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -990,25 +990,52 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 			<rich_text>
 
 
-Then the code needs to parse a runtime argument
+</rich_text>
+			<rich_text foreground="#9090eeee9090">Then the code needs to parse a runtime argument
     that will be stored in some global var.
     This will output LEAFSUM-like stuff, as well as RMSEs
-        for tracing down where differences might arise.
-   •  probably also make the DETERMINISM FLAG runtime arg at some point
+        for tracing down where differences might arise.</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">   •  probably also make the DETERMINISM FLAG runtime arg at some point</rich_text>
+			<rich_text>
 
-need validation/testcases
+</rich_text>
+			<rich_text foreground="#9090eeee9090">need validation/testcases
         smaller versions of the dataset(s)
-        start with abalone (but not 5 fold)
+        start with abalone
+            C++</rich_text>
+			<rich_text>
+            </rich_text>
+			<rich_text foreground="#9090eeee9090">python</rich_text>
+			<rich_text>
         
-need validation/run_py_gbdt.py     repr “test.py”
-need validation/run_cpp_gbdt.cpp   repr “abalone.cpp”
-   •  both need to write text output  to validation/outputs
+</rich_text>
+			<rich_text foreground="#9090eeee9090">need verification/run_py_gbdt.py     repr “verification.py”
+need verification/verification.cpp   repr “abalone.cpp”
+   •  both need to write text output  to verification/outputs</rich_text>
+			<rich_text>
 
-validation/validate.cpp that parses, compares and colors the output diff
+</rich_text>
+			<rich_text foreground="#9090eeee9090">validation/validate.cpp that parses, compares and colors the output diff
    •  maybe easier in python?
+   </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">• so far rudimentary console diff</rich_text>
+			<rich_text>
 
-code/validate.sh that runs it all (compile cpp first)
-
+</rich_text>
+			<rich_text foreground="#9090eeee9090">code/verify.sh that runs it all (compile cpp first)
+   •  need to adapt such that it runs the same name pairs
+</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#ffff00000000">Parser had side effects! is stupid!</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">   •  order of verification was relevant
+   • Parser re-did gender to number which resulted in all 3's
+</rich_text>
+			<rich_text>
 
 
 
@@ -1027,7 +1054,7 @@ TODOOOO, seems like giovanna's github is very clean compared to ppml, so can aus
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1625836698.83" unique_id="19">
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626253230.44" unique_id="19">
 		<rich_text scale="h2">Algorithm</rich_text>
 		<rich_text>
 
@@ -1072,9 +1099,11 @@ TODOOOO, seems like giovanna's github is very clean compared to ppml, so can aus
 		<rich_text>
 
 • Some docs on the cpp algorithm
-   ◇ like intuition which parameters are suitable for which use case</rich_text>
+   ◇ like intuition which parameters are suitable for which use case
+
+• seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1625649127.82" unique_id="21">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1626169666.86" unique_id="21">
 		<rich_text>Suddenly python problem (after apt update/upgrade I believe).
       </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">File &quot;/home/loretanr/.local/lib/python3.7/site-packages/matplotlib/__init__.py&quot;, line 107, in &lt;module&gt;
@@ -1098,6 +1127,14 @@ import lightgbm was failing
         as described in </rich_text>
 		<rich_text link="webs https://www.py4u.net/discuss/17141">https://www.py4u.net/discuss/17141</rich_text>
 		<rich_text>
+        
+-------------------------------------------------------------------------------------------------------
+
+
+stuuuuupid    </rich_text>
+		<rich_text family="monospace">'/usr/lib/python37.zip': No such file or directory</rich_text>
+		<rich_text>
+        because I clicked on breakpoints “Raised Exceptions” in VScode
         
 -------------------------------------------------------------------------------------------------------</rich_text>
 	</node>

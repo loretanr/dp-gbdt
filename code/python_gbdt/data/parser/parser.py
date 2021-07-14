@@ -174,23 +174,23 @@ class Parser:
       self,
       n_rows: Optional[int] = None) -> Any:
     """Return the abalone dataset."""
-    # Re-encode gender information
     task = 'regression'
-    gender = []
-    for i in range(len(self.data['sex'].values)):
-      if self.data['sex'].values[i] == 'M':
-        value = 1
-      elif self.data['sex'].values[i] == 'F':
-        value = 2
-      else:
-        value = 3
-      gender.append(value)
-    self.data['sex'] = gender
-    if n_rows:
-      self.data = self.data.head(n_rows)
-    y = self.data.rings.values.astype(np.float)
-    del self.data['rings']
-    X = self.data.values.astype(np.float)
+    # Re-encode gender information (if not already done)
+    if isinstance(self.data['sex'].values[0], str):
+      gender = []
+      for i in range(len(self.data['sex'].values)):
+        if self.data['sex'].values[i] == 'M':
+          value = 1
+        elif self.data['sex'].values[i] == 'F':
+          value = 2
+        else:
+          value = 3
+        gender.append(value)
+      self.data['sex'] = gender
+    current_data = self.data.head(n_rows)
+    y = current_data.rings.values.astype(np.float)
+    # del self.data['rings']
+    X = (current_data.drop('rings', axis=1)).values.astype(np.float)
     categorical_indices = [0]  # Sex
     numerical_indices = list(range(1, X.shape[1]))  # Other attributes
     return X, y, categorical_indices, numerical_indices, task
