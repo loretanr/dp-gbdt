@@ -102,9 +102,10 @@ void DPEnsemble::train(DataSet *dataset)
         }
         // intermediate output for validation
         double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
+        sum = sum < 0 && sum >= -1e-10 ? 0 : sum;  // avoid "-0.00000.. != 0.00000.."
         LOG_INFO("GRADIENTSUM {1:.8f}", sum);
         if(VERIFICATION_MODE) {
-            VERIFICATION_LOG("GRADIENTSUM {0:.10f}", sum);
+            VERIFICATION_LOG("GRADIENTSUM {0:.8f}", sum);
         }
 
         // gradient-based data filtering
@@ -166,10 +167,12 @@ vector<double>  DPEnsemble::predict(VVD &X)
 vector<double> DPEnsemble::compute_gradient_for_loss(vector<double> y, vector<double> &scores)
 {
     // we want the positive gradient
-    //std::for_each(y.begin(), y.end(), [init_score](double& f) { f = init_score - f;});
     for (size_t i=0; i<y.size(); i++) {
         y[i] = scores[i] - y[i];
     }
+    // limit the numbers to 10 decimals to avoid numeric inconsistencies
+    std::transform(y.begin(), y.end(),
+                y.begin(), [](double &c){return std::floor(c * 1e15) / 1e15;});    
     return y;
 }
 

@@ -18,7 +18,6 @@ from evaluation import estimator
 
 PRIVACY_BUDGET = 0.1
 NB_SPLITS = 5 # number of CV folds
-SAMPLES = [300,5000] # [300, 5000] # number of rows to use from the dataset
 NB_TREES_PER_ENSEMBLE = 50
 NB_TREES = 50
 MIN_SAMPLES_SPLIT = 2
@@ -30,6 +29,8 @@ if __name__ == '__main__':
 
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
+    SAMPLES = [300,5000]
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -60,6 +61,7 @@ if __name__ == '__main__':
     DATASET = 'yearMSD'
     parser = Parser(dataset=DATASET)
     SAMPLES = [300,1000]
+    SAMPLES = [1000]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0

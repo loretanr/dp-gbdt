@@ -64,6 +64,8 @@ for py_filename in *.python.log; do
         echo -e "${CYAN}$py_filename\n$cpp_filename${NC}"
         echo -e "${GREEN}files are equal${NC}"
     else
+    numlines=$(diff $py_filename $cpp_filename | grep "^>" | wc -l)
+    echo "$numlines lines not matching, starting with:" | eval "$SHIFT_RIGHT"
         echo "$DIFF_OUTPUT" | head -n 12  # only show first few lines
     fi
     echo "------------"

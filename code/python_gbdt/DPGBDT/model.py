@@ -315,8 +315,10 @@ class GradientBoostingEnsemble:
                   y_ensemble, self.Predict(
                       X_ensemble), kth_tree)  # type: ignore
           
-          logger.info("GRADIENTSUM {:.8f}".format(np.sum(gradients)))
-          verificationLogger.log("GRADIENTSUM {:.10f}".format(np.sum(gradients)))
+          gr_sum = np.sum(gradients)
+          gr_sum = 0 if gr_sum < 0 and gr_sum >= float("-1e-10") else gr_sum
+          logger.info("GRADIENTSUM {:.8f}".format(gr_sum))
+          verificationLogger.log("GRADIENTSUM {:.8f}".format(gr_sum))
 
           assert gradients is not None
           gradients_tree = gradients[rows]
@@ -518,7 +520,9 @@ class GradientBoostingEnsemble:
       y = (y == k).astype(np.float64)
     # sklearn's impl is using the negative gradient (i.e. y - F).
     # Here the positive gradient is used though
-    return -self.loss_.negative_gradient(y, y_pred, k=k)
+    gradients = -self.loss_.negative_gradient(y, y_pred, k=k)
+    gradients = np.array([math.floor(yi * 1e15) / 1e15 for yi in gradients])
+    return gradients
 
 
 class DecisionNode:
