@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <set>
+#include <map>
 #include <algorithm>
 #include <random>
 #include <ctime>
@@ -95,6 +96,7 @@ struct DataSet {
     bool empty;
     Scaler scaler;
     std::string name;
+    std::string task;
 
     DataSet();
     DataSet(VVD X, vector<double> y);

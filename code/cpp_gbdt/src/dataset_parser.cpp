@@ -81,60 +81,72 @@ DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t nu
     return dataset;
 }
 
-DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples = false, bool default_params = false)
+
+DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, bool default_params)
 {
     ifstream train_infile("datasets/real/adult.data");
     ifstream test_infile("datasets/real/adult.test");
     VVD X;
     vector<double> y;
 
+    // column types for parsing
     vector<int> numerical = {0,4,10,11,12};
     vector<int> categorical = {1,3,5,6,7,8,9,13};
     vector<int> drop = {2}; // drop fnlwgt column
 
+    // create / adjust model parameters
     if (default_params) {
         ModelParams params = create_default_params();
-        params.num_idx = numerical;
-        params.cat_idx = categorical;
+        params.num_idx = {0,3,9,10,11}; // adjusted for dropped column
+        params.cat_idx = {1,2,4,5,6,7,8,12};
         parameters.push_back(params);
     } else {
-        parameters.back().num_idx = numerical;
-        parameters.back().cat_idx = categorical;
+        parameters.back().num_idx = {0,3,9,10,11};
+        parameters.back().cat_idx = {1,2,4,5,6,7,8,12};
     }
+    
+    // store mappings of categorical features to numbers (string -> float)
+    vector<map<string,float>> mappings(14);
 
+    // go through all lines of the training samples
     size_t current_index = 0;
-
-    std::string line;
+    string line;
     while (getline(train_infile, line,'\n') && current_index < num_samples) {
         
+        // drop rows with missing values
         if (line.find('?') < line.length()) {
-            continue; // drop rows with missing values
+            continue;
         }
 
+        // fill X and y
         stringstream ss(line);
         vector<string> strings = split_string(line, ',');
         vector<double> X_row;
-
-        // fill X and y
-        for(int i=0; i<strings.size()-1; i++){
+        for(size_t i=0; i<strings.size()-1; i++){
             if (std::find(drop.begin(), drop.end(), i) != drop.end()) {
                 // drop column
                 continue;
             } else if (std::find(numerical.begin(), numerical.end(), i) != numerical.end()) {
                 // numerical feature
                 X_row.push_back(stof(strings[i]));
-            { else {
+            } else {
                 // categorical feature
-
-                // TODO map with alrady seen labels to numbers
+                try {
+                    float dummy_value = mappings[i].at(strings[i]);
+                    X_row.push_back(dummy_value);
+                } catch (const std::out_of_range& oor) {
+                    mappings[i].insert({strings[i], mappings[i].size()});
+                    float dummy_value = mappings[i].at(strings[i]);
+                    X_row.push_back(dummy_value);
+                }
             }
         }
-        strings.back().find('>') ? y.push_back(1) : y.push_back(0);
+        (strings.back().find('>') < strings.back().length()) ? y.push_back(1) : y.push_back(0);
         X.push_back(X_row);
         current_index++;
     }
-    
     DataSet dataset = DataSet(X,y);
-    dataset.name = num_samples == 300 ? "abalone_small" : "abalone_full";
+    dataset.name = num_samples == 300 ? "adult_small" : "adult_full";
+    dataset.task = "classification";
     return dataset;
 }
