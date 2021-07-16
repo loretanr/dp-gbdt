@@ -209,10 +209,6 @@ class GradientBoostingEnsemble:
     self.init_score = self.loss_.get_init_raw_predictions(
         X, self.init_)  # (n_samples, K)
     logger.debug('Training initialized with score: {}'.format(self.init_score[0]))
-    update_gradients = True
-
-    X_train, X_test, y_train, y_test = train_test_split(      # not using these sets
-        X, y, test_size=self.test_size, random_state=0)       # resp. not rejecting on line 383
 
     # Number of ensembles in the model
     nb_ensembles = int(np.ceil(self.nb_trees / self.nb_trees_per_ensemble))
@@ -223,8 +219,6 @@ class GradientBoostingEnsemble:
     # K trees
     if self.loss_.is_multi_class:
       tree_privacy_budget /= self.loss_.K
-
-    prev_score = np.inf
 
 
     # Train all trees
@@ -249,8 +243,6 @@ class GradientBoostingEnsemble:
         # Initialize the dataset and the gradients
         X_ensemble = np.copy(X)       # take X and y here for alltrees
         y_ensemble = np.copy(y)
-        prev_score = np.inf
-        update_gradients = True
         # gradient initialization will happen later in the per-class-loop
 
       if self.use_dp:
@@ -280,7 +272,7 @@ class GradientBoostingEnsemble:
         # samples. In that case we skip the tree and issue a warning. This
         # should hint the user to change its parameters (likely the ensembles
         # are too unbalanced)
-        if number_of_rows == 0:  # pylint: disable=no-else-continue
+        if number_of_rows == 0:
           logger.warning('The choice of trees per ensemble vs. the total number'
                          ' of trees is not balanced properly; some trees will '
                          'not get any training samples. Try using '
@@ -310,10 +302,9 @@ class GradientBoostingEnsemble:
                 y, self.init_score[:len(y)], kth_tree)
           else:
             # Update gradients of all training instances on loss l
-            if update_gradients:
-              gradients = self.ComputeGradientForLossFunction(
-                  y_ensemble, self.Predict(
-                      X_ensemble), kth_tree)  # type: ignore
+            gradients = self.ComputeGradientForLossFunction(
+                y_ensemble, self.Predict(
+                    X_ensemble), kth_tree)  # type: ignore
           
           gr_sum = np.sum(gradients)
           gr_sum = 0 if gr_sum < 0 and gr_sum >= float("-1e-10") else gr_sum
@@ -377,9 +368,8 @@ class GradientBoostingEnsemble:
               y, self.init_score[:len(y)], kth_tree)
           else:
             # Update gradients of all training instances on loss l
-            if update_gradients:
-              gradients = self.ComputeGradientForLossFunction(
-                y, self.Predict(X), kth_tree)  # type: ignore
+            gradients = self.ComputeGradientForLossFunction(
+              y, self.Predict(X), kth_tree)  # type: ignore
           tree = DifferentiallyPrivateTree(
               tree_index,
               self.learning_rate,
@@ -403,24 +393,8 @@ class GradientBoostingEnsemble:
           k_trees.append(tree)
       self.trees.append(k_trees)
 
-      # score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
-      score = 42
       logger.info('Tree {0:d} done'.format(tree_index))
 
-      # if score >= prev_score:
-      #   # This tree doesn't improve overall prediction quality, removing from model
-      #   # not reusing gradients in multi-class as they are class-dependent
-      #   # update_gradients = self.loss_.is_multi_class
-      #   # self.trees.pop()          # Uncommenting this is responsible for not rejecting trees
-      #   # if not self.use_dp:
-      #   #   self.early_stop -= 1
-      #   #   if self.early_stop == 0:
-      #   #     logger.info('Early stop kicked in. No improvement, stopping.')
-      #   #     break
-      # else:
-      update_gradients = True
-      prev_score = score
-      
       # Remove the selected rows from the ensemble's dataset
       # The instances that were filtered out by GBF can still be used for the
       # training of the next trees
