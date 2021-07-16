@@ -126,7 +126,10 @@ void DPEnsemble::train(DataSet *dataset)
         tree.fit();
 
         trees.push_back(tree);
-        // tree.recursive_print_tree(tree.root_node);
+
+        if (spdlog::default_logger_raw()->level() <= spdlog::level::info) {
+            tree.recursive_print_tree(tree.root_node);
+        }
 
 
         LOG_INFO(BOLD("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
@@ -141,16 +144,12 @@ vector<double>  DPEnsemble::predict(VVD &X)
     vector<double> predictions(X.size(),0);
     for (auto tree : trees) {
         vector<double> pred = tree.predict(X);
-
-        // if(X.size() == 836) {
-        //     cout << pred[0] << " ";
-        // }
         
         std::transform(pred.begin(), pred.end(), 
             predictions.begin(), predictions.begin(), std::plus<double>());
     }
 
-    // todo optimize those in 1
+    // todo optimize those 2 transformsin 1
     double learning_rate = params.learning_rate;
     std::transform(predictions.begin(), predictions.end(),
             predictions.begin(), [learning_rate](double &c){return c*learning_rate;});
@@ -172,7 +171,7 @@ vector<double> DPEnsemble::compute_gradient_for_loss(vector<double> y, vector<do
     }
     // limit the numbers to 10 decimals to avoid numeric inconsistencies
     std::transform(y.begin(), y.end(),
-                y.begin(), [](double &c){return std::floor(c * 1e15) / 1e15;});    
+            y.begin(), [](double &c){return std::floor(c * 1e15) / 1e15;});    
     return y;
 }
 

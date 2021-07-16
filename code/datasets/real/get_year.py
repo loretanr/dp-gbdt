@@ -27,8 +27,8 @@ filename_real_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), f
 
 nothing_todo = True
 
-if not os.path.isfile(filename_real_path):
-    print("downloading YearPredictionMSD dataset:")
+if not (os.path.isfile(filename_real_path) or os.path.isfile(filename_real_path.replace('.zip', ''))):
+    print("downloading YearPredictionMSD.txt.zip dataset:")
     urlretrieve(get_year_url, filename_real_path, show_progress)
     nothing_todo = False
 

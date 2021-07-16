@@ -212,6 +212,7 @@ class Parser:
     numerical_indices = []  # type: List[int]
     return X, y, categorical_indices, numerical_indices, task
 
+
   def get_adult(self, n_rows: Optional[int] = None) -> Any:
     """Return the Adult dataset."""
     task = 'classification'
@@ -261,6 +262,7 @@ class Parser:
         adult[column] = pd.get_dummies(adult[column])
     X = adult.values
     return X, y, categorical_indices, numerical_indices, task
+
 
   def get_synthetic(self,
                       n_rows: Optional[int] = None) -> Any:

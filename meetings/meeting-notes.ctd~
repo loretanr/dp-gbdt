@@ -672,7 +672,7 @@ Do we need to look at RMSE % compared to output range?
         ignore for now.
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 1.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1626277866.85" unique_id="11">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 1.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1622451203.85" ts_lastsave="1626277891.12" unique_id="11">
 			<rich_text>
 ================================
 </rich_text>
@@ -910,7 +910,8 @@ so the predictions from both py and cpp have the same values, and their sum is e
 			<rich_text> 2.76654838 2.17902237 2.26754763]
                •  it's not an exp mechanism overflow problem (obviously, deterministic)
 
-NOTE       
+</rich_text>
+			<rich_text foreground="#ffff00000000">NOTE these were the Leafclipping = False numbers !!!!      
 </rich_text>
 			<rich_text foreground="#ffffffff0000">     
 Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
@@ -972,7 +973,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626273943.02" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626355159.46" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1060,6 +1061,13 @@ yearMSD
 
 
     need to properly distribute ModelParams
+    
+    
+also capped the gradients.... now may can get rid of the cpp -0 again.
+capping the gradients with 1e14 worked in that regard
+
+
+adjust them
 
 </rich_text>
 		</node>
