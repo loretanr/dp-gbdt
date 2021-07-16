@@ -108,12 +108,12 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
     // store mappings of categorical features to numbers (string -> float)
     vector<map<string,float>> mappings(14);
 
-    // go through all lines of the training samples
+    // go through all lines of the training dataset
     size_t current_index = 0;
     string line;
     while (getline(train_infile, line,'\n') && current_index < num_samples) {
         
-        // drop rows with missing values
+        // drop dataset rows that contain missing entries
         if (line.find('?') < line.length() or line.empty()) {
             continue;
         }
@@ -135,16 +135,23 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
                     float dummy_value = mappings[i].at(strings[i]);
                     X_row.push_back(dummy_value);
                 } catch (const std::out_of_range& oor) {
+                    // new label encountered, create mapping
                     mappings[i].insert({strings[i], mappings[i].size()});
                     float dummy_value = mappings[i].at(strings[i]);
                     X_row.push_back(dummy_value);
                 }
             }
         }
+        // y=1 for ">50k", y=0 for "<=50k"
         (strings.back().find('>') < strings.back().length()) ? y.push_back(1) : y.push_back(0);
         X.push_back(X_row);
         current_index++;
     }
+
+    // go through all lines of the test dataset and append to X and y (we'll have our own splits)
+    // TODO
+
+
     DataSet dataset = DataSet(X,y);
     dataset.name = num_samples == 300 ? "adult_small" : "adult_full";
     dataset.task = "classification";

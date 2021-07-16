@@ -973,7 +973,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626425580.9" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626441385.2" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1031,7 +1031,7 @@ need verification/verification.cpp   repr “abalone.cpp”
 </rich_text>
 			<rich_text>
 </rich_text>
-			<rich_text foreground="#ffff00000000">Parser had side effects! is stupid!</rich_text>
+			<rich_text foreground="#ffff00000000">PY Parser has side effects!!!!!!!!! is stupid!</rich_text>
 			<rich_text>
 </rich_text>
 			<rich_text foreground="#9090eeee9090">   •  order of verification was relevant
@@ -1050,10 +1050,13 @@ need verification/verification.cpp   repr “abalone.cpp”
 
 ------------------------------------------------
 yearMSD  
-    -&gt; maybe time to fix the underlying issue with sample distribution?
+    -&gt; time to fix the underlying issue with sample distribution?
          ◇ with abalone?
          ◇ balanced?
          ◇ maybe get rid of the gradients splitting up into the struct thing in cpp?
+         </rich_text>
+			<rich_text foreground="#ffffffff0000">◇ TODO in clean up</rich_text>
+			<rich_text>
 
 </rich_text>
 			<rich_text foreground="#ffff00000000">CPP PARSER SIDE EFFECT: need to redefine ModelParams num_idx and cat_idx  !!!!!!!!</rich_text>
@@ -1068,9 +1071,31 @@ capping the gradients with 1e14 or 1e15 works in that regard for 1000 samples...
 adult
 
 </rich_text>
-			<rich_text foreground="#ffff00000000">Theo's code seems severely flawed! parsing categorical outright wrong.
+			<rich_text foreground="#ffff00000000">Theo's parsing adult categorical outright wrong. !!!!
+   </rich_text>
+			<rich_text foreground="#ffffffffffff"> tries to move matrix into column -&gt; lose most information</rich_text>
+			<rich_text foreground="#ffff00000000">
+    </rich_text>
+			<rich_text foreground="#9090eeee9090">abalone (and year) is not affected</rich_text>
+			<rich_text foreground="#ffff00000000">
+    TODO, check if synthetic also affected!</rich_text>
+			<rich_text>
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">TODO append the test set to training set</rich_text>
+			<rich_text>
 
-    if that's true, the abalone gender column is also wrong probably!</rich_text>
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">TODO correct the python adult parse</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">TODO need BinomialDeviance loss function in CPP</rich_text>
+			<rich_text>
+    and a more modular way, maybe pass loss function around?
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">TODO cpp, need some kind of Predictlabels function for classification</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
