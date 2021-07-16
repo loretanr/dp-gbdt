@@ -114,7 +114,7 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
     while (getline(train_infile, line,'\n') && current_index < num_samples) {
         
         // drop rows with missing values
-        if (line.find('?') < line.length()) {
+        if (line.find('?') < line.length() or line.empty()) {
             continue;
         }
 
