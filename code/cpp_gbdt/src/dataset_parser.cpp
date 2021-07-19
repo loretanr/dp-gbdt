@@ -1,4 +1,5 @@
 #include "dataset_parser.h"
+#include <memory>
 
 DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples, bool default_params)
 {
@@ -7,16 +8,18 @@ DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples,
     VVD X;
     vector<double> y;
 
+    shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
     if (default_params) {
         ModelParams params = create_default_params();
-        params.lossfunction = new LeastSquaresError();
+
+        params.lossfunction = lossfunction;
         params.cat_idx = {0}; // first column is categorical
         params.num_idx = {1,2,3,4,5,6,7};
         parameters.push_back(params);
     } else {
         parameters.back().num_idx = {1,2,3,4,5,6,7};
         parameters.back().cat_idx = {0};
-        parameters.back().lossfunction = new LeastSquaresError();
+        parameters.back().lossfunction = lossfunction;
     }
 
     size_t current_index = 0;

@@ -22,6 +22,7 @@
 #include <spdlog/sinks/stdout_sinks.h>
 // #include "spdlog/spdlog.h"
 #include "loss.h"
+#include <memory>
 
 
 /* Logging, to be removed */
@@ -47,7 +48,6 @@ typedef std::vector<std::vector<double>> VVD;
 extern bool RANDOMIZATION;
 extern bool VERIFICATION_MODE;
 extern size_t cv_fold_index;
-// extern class LossFunction;
 
 
 using namespace std;
@@ -56,7 +56,7 @@ struct ModelParams {
     int nb_trees;
     double learning_rate = 0.1;
     double privacy_budget = 1.0;
-    LossFunction *lossfunction;
+    shared_ptr<LossFunction> lossfunction;
     int max_depth = 6;
     int early_stop = 5;
     int max_leaves;
@@ -77,8 +77,6 @@ struct ModelParams {
     double init_score;
     vector<int> cat_idx;
     vector<int> num_idx;
-
-    ~ModelParams() {delete lossfunction;};
 };
 
 

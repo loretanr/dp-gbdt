@@ -69,8 +69,7 @@ void DPEnsemble::train(DataSet *dataset)
         vector<double> gradients;
         if(tree_index == 0) {
             vector<double> init_scores(train_set->length, init_score);
-            // gradients = (params.lossfunction)->compute_gradients(train_set->y, init_scores);
-            gradients = compute_gradient_for_loss(train_set->y, init_scores);
+            gradients = (params.lossfunction)->compute_gradients(train_set->y, init_scores);
             int index = 0;
             for(DataSet &dset : tree_samples) {
                 for (auto row : dset.X){

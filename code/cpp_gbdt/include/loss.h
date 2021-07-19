@@ -6,11 +6,10 @@
 class LossFunction
 {
 public:
-    // virtual ~LossFunction() = default;
-    virtual std::vector<double> compute_gradients(std::vector<double> &y, std::vector<double> &y_pred){ return {0}; };
+    virtual std::vector<double> compute_gradients(std::vector<double> &y, std::vector<double> &y_pred){ return {0}; }
 };
 
-class LeastSquaresError : public LossFunction
+class LeastSquaresError final : public LossFunction
 {
 public:
     virtual std::vector<double> compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
@@ -24,7 +23,6 @@ public:
                 gradients.begin(), [](double c){ return std::floor(c * 1e15) / 1e15; });    
         return gradients;
     }
-    // virtual ~LeastSquaresError(){}
 };
 
 class BinomialDeviance : public LossFunction
