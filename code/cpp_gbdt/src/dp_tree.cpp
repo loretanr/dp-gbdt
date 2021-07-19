@@ -40,7 +40,7 @@ void DPTree::fit()
         throw runtime_error("non-DFS not yet implemented.");
     }
 
-    // leaf clipping TODO
+    // leaf clipping
     if (params->leaf_clipping) {
         double threshold = this->params->l2_threshold * std::pow((1-this->params->learning_rate), this->tree_index);
         for (auto &leaf : this->leaves) {

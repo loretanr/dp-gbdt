@@ -21,6 +21,7 @@
 #include <cstdlib>
 #include <spdlog/sinks/stdout_sinks.h>
 // #include "spdlog/spdlog.h"
+#include "loss.h"
 
 
 /* Logging, to be removed */
@@ -38,7 +39,6 @@
 #define LOG_DEBUG(...) LOG_DEBUG_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 #define BOLD(words) "\033[0;40;33m" + words + "\033[0m"
 
-// #define VERIFICATION_LOG(...) if( VERIFICATION_MODE ) { verification_logfile << fmt::format(__VA_ARGS__) << "\n"; verification_logfile.flush(); }
 #define VERIFICATION_LOG(...) verification_logfile << fmt::format(__VA_ARGS__) << "\n"; verification_logfile.flush()
 
 
@@ -47,6 +47,7 @@ typedef std::vector<std::vector<double>> VVD;
 extern bool RANDOMIZATION;
 extern bool VERIFICATION_MODE;
 extern size_t cv_fold_index;
+// extern class LossFunction;
 
 
 using namespace std;
@@ -55,7 +56,7 @@ struct ModelParams {
     int nb_trees;
     double learning_rate = 0.1;
     double privacy_budget = 1.0;
-    //LossFunction loss;
+    LossFunction *lossfunction;
     int max_depth = 6;
     int early_stop = 5;
     int max_leaves;
@@ -76,6 +77,8 @@ struct ModelParams {
     double init_score;
     vector<int> cat_idx;
     vector<int> num_idx;
+
+    ~ModelParams() {delete lossfunction;};
 };
 
 

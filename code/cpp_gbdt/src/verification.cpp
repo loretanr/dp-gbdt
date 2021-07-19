@@ -18,8 +18,8 @@ int Verification::main(int argc, char *argv[])
     vector<ModelParams> parameters;
 
     Parser parser = Parser();
-    datasets.push_back(parser.get_adult(parameters, 10000000, true)); // small abalone
-    // datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
+    // datasets.push_back(parser.get_adult(parameters, 300, true)); // small abalone
+    datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
     // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD

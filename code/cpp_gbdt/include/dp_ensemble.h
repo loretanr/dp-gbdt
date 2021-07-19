@@ -3,6 +3,7 @@
 
 #include "utils.h"
 #include "dp_tree.h"
+#include "loss.h"
 #include "spdlog/spdlog.h"
 
 extern std::ofstream verification_logfile;

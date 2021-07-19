@@ -1,10 +1,38 @@
 #include "utils.h"
 
 
-/** Globals */
+/** Global Variables */
 bool VERIFICATION_MODE;
 bool RANDOMIZATION;
 size_t cv_fold_index;
+
+
+// struct ModelParams{
+//     int nb_trees;
+//     double learning_rate = 0.1;
+//     double privacy_budget = 1.0;
+//     LossFunction lossfunction;
+//     int max_depth = 6;
+//     int early_stop = 5;
+//     int max_leaves;
+//     int min_samples_split = 2;
+//     bool second_split = true;
+//     bool balance_partition = true;
+//     bool gradient_filtering = false;
+//     bool leaf_clipping = false;
+//     bool use_dp = false; // TODO remove this default
+//     bool use_dfs = true;
+//     bool use_3_trees = false;
+//     bool use_decay = false;
+//     int test_size = 0.3;    // TODO 1st or 2nd split?
+//     int verbosity = -1;
+//     double l2_threshold = 1.0;
+//     double l2_lambda = 0.1;
+
+//     double init_score;
+//     vector<int> cat_idx;
+//     vector<int> num_idx;
+// };
 
 
 vector<string> split_string(const string &s, char delim)
@@ -49,10 +77,6 @@ double log_sum_exp(vector<double> vec)
     }
 }
 
-DataSet::DataSet()
-{
-    empty = true;
-}
 
 ModelParams create_default_params()
 {
@@ -75,6 +99,10 @@ Scaler::Scaler(double min_val, double max_val, double fmin, double fmax) : data_
     this->min_ = this->feature_min - this->data_min * this->scale;
 }
 
+DataSet::DataSet()
+{
+    empty = true;
+}
 
 DataSet::DataSet(VVD X, vector<double> y) : X(X), y(y)
 {

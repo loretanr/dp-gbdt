@@ -9,12 +9,14 @@ DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples,
 
     if (default_params) {
         ModelParams params = create_default_params();
+        params.lossfunction = new LeastSquaresError();
         params.cat_idx = {0}; // first column is categorical
         params.num_idx = {1,2,3,4,5,6,7};
         parameters.push_back(params);
     } else {
         parameters.back().num_idx = {1,2,3,4,5,6,7};
         parameters.back().cat_idx = {0};
+        parameters.back().lossfunction = new LeastSquaresError();
     }
 
     size_t current_index = 0;

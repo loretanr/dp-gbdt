@@ -235,9 +235,9 @@ class Parser:
     if not os.path.isfile(test_real_path):
       urlretrieve(get_adult_test_url, test_real_path)
 
-    adult = pd.read_csv(train_real_path, header=None, sep=', ')
-    adult = adult.append(
-        pd.read_csv(test_real_path, header=None, skiprows=1, sep=', '))
+    adult = pd.read_csv(train_real_path, header=None, sep=', ')     # diabled test set for now
+    # adult = adult.append(
+    #     pd.read_csv(test_real_path, header=None, skiprows=1, sep=', '))
     # Drop weight info
     adult.drop(columns=[2], axis=1, inplace=True)
     if n_rows:
@@ -259,7 +259,9 @@ class Parser:
         exclude=['object']).columns.tolist()
     for column in adult:
       if column in categorical_indices:
-        adult[column] = pd.get_dummies(adult[column])
+        # adult[column] = pd.get_dummies(adult[column])
+        adult[column] = adult[column].astype('category') # fixed
+        adult[column] = adult[column].cat.codes
     X = adult.values
     return X, y, categorical_indices, numerical_indices, task
 

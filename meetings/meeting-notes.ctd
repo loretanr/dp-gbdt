@@ -973,7 +973,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626441385.2" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626444143.2" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1082,11 +1082,20 @@ adult
 			<rich_text>
     
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">TODO append the test set to training set</rich_text>
+			<rich_text foreground="#9090eeee9090">TODO append the test set to training set</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#ffffffff0000">left it away for now, theo only used 5000 first anyway</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#ffffffff0000">also disabled it in py</rich_text>
 			<rich_text>
 
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">TODO correct the python adult parse</rich_text>
+			<rich_text foreground="#9090eeee9090">TODO correct the python adult parse</rich_text>
+			<rich_text>
+    </rich_text>
+			<rich_text foreground="#9090eeee9090">seems good</rich_text>
 			<rich_text>
 
 </rich_text>
@@ -1110,7 +1119,7 @@ adult
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626253230.44" unique_id="19">
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626450557.52" unique_id="19">
 		<rich_text scale="h2">Algorithm</rich_text>
 		<rich_text>
 
@@ -1145,7 +1154,30 @@ adult
 		<rich_text scale="h2">CPP Bonus</rich_text>
 		<rich_text>
 • read style guide
+   </rich_text>
+		<rich_text link="webs https://medium.com/heuristics/c-application-development-part-1-project-structure-454b00f9eddc">https://medium.com/heuristics/c-application-development-part-1-project-structure-454b00f9eddc</rich_text>
+		<rich_text>
+   ◇ </rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">create a libs/ folder and move fmt stuff into project</rich_text>
+		<rich_text>
+</rich_text>
+		<rich_text link="webs https://softwareengineering.stackexchange.com/questions/320035/define-c-class-in-one-or-more-files">https://softwareengineering.stackexchange.com/questions/320035/define-c-class-in-one-or-more-files</rich_text>
+		<rich_text>
+   ◇ </rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">put as much code as possible into .cpp files -&gt; speeds up compile
 
+   ◇ If the class is lightweight and very unlikely to change it's ok to have it all in a header file.
+
+• create own class for dataset, because it has functionalities (scale, add_row etc)
+   ◇ though it's really only an aggregation of values which would suggest struct
+      ▪ own file for struct?
+      ▪ can also put TrainTestSplit in there (only consists of DataSets)
+      ▪ and the Scaler
+
+• put laplace into a header file, header only because so small and never changing
+   ◇ good idea
+</rich_text>
+		<rich_text>
 • stackoverflow code review?
 
 • try on a fresh ubuntu VM to get the setup / installs / requirements.txt
