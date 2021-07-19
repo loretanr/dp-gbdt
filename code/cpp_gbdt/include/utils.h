@@ -21,9 +21,10 @@
 #include <cstdlib>
 #include <spdlog/sinks/stdout_sinks.h>
 // #include "spdlog/spdlog.h"
-#include "loss.h"
 #include <memory>
 
+typedef std::vector<std::vector<double>> VVD;
+#include "loss.h"
 
 /* Logging, to be removed */
 #define concat(one, two) ((std::string) one + (std::string) two).c_str()
@@ -43,7 +44,6 @@
 #define VERIFICATION_LOG(...) verification_logfile << fmt::format(__VA_ARGS__) << "\n"; verification_logfile.flush()
 
 
-typedef std::vector<std::vector<double>> VVD;
 
 extern bool RANDOMIZATION;
 extern bool VERIFICATION_MODE;
@@ -84,8 +84,9 @@ struct Scaler {
     double data_min, data_max;
     double feature_min, feature_max;
     double scale, min_;
+    bool scaling_required;
     Scaler() {};
-    Scaler(double min_val, double max_val, double fmin, double fmax);
+    Scaler(double min_val, double max_val, double fmin, double fmax, bool scaling_required);
 };
 
 struct DataSet {

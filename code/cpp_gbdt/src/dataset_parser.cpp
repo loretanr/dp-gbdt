@@ -5,13 +5,11 @@ DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples,
 {
     ifstream infile("datasets/real/abalone.data");
     string line;
-    VVD X;
-    vector<double> y;
+    VVD X; vector<double> y;
 
     shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
     if (default_params) {
         ModelParams params = create_default_params();
-
         params.lossfunction = lossfunction;
         params.cat_idx = {0}; // first column is categorical
         params.num_idx = {1,2,3,4,5,6,7};
@@ -53,19 +51,21 @@ DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t nu
 {
     ifstream infile("datasets/real/YearPredictionMSD.txt");
     string line;
-    VVD X;
-    vector<double> y;
+    VVD X; vector<double> y;
 
-    std::vector<int> v(90); // vector with 90 ints
-    std::iota(std::begin(v), std::end(v), 0); // fill with numbers 0..89
+    shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
+    std::vector<int> num_idx(90);
+    std::iota(std::begin(num_idx), std::end(num_idx), 0); // vector with numbers 0..89
     if (default_params){
         ModelParams params = create_default_params();
         params.cat_idx = {};
-        params.num_idx = v;
+        params.num_idx = num_idx;
+        params.lossfunction = lossfunction;
         parameters.push_back(params);
     } else {
         parameters.back().cat_idx = {};
-        parameters.back().num_idx = v;
+        parameters.back().num_idx = num_idx;
+        parameters.back().lossfunction = lossfunction;
     }
 
     size_t current_index = 0;
@@ -91,8 +91,7 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
 {
     ifstream train_infile("datasets/real/adult.data");
     ifstream test_infile("datasets/real/adult.test");
-    VVD X;
-    vector<double> y;
+    VVD X; vector<double> y;
 
     // column types for parsing
     vector<int> numerical = {0,4,10,11,12};
@@ -100,14 +99,17 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
     vector<int> drop = {2}; // drop fnlwgt column
 
     // create / adjust model parameters
+    shared_ptr<BinomialDeviance> lossfunction(new BinomialDeviance());
     if (default_params) {
         ModelParams params = create_default_params();
         params.num_idx = {0,3,9,10,11}; // adjusted for dropped column
         params.cat_idx = {1,2,4,5,6,7,8,12};
+        params.lossfunction = lossfunction;
         parameters.push_back(params);
     } else {
         parameters.back().num_idx = {0,3,9,10,11};
         parameters.back().cat_idx = {1,2,4,5,6,7,8,12};
+        parameters.back().lossfunction = lossfunction;
     }
     
     // store mappings of categorical features to numbers (string -> float)

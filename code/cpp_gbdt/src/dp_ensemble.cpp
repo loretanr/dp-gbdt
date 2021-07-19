@@ -18,13 +18,10 @@ DPEnsemble::~DPEnsemble() {
 void DPEnsemble::train(DataSet *dataset)
 {
 
-    // init score (= mean)
-    vector<double> gradients[dataset->length];
-    double sum = std::accumulate((dataset->y).begin(), (dataset->y).end(), 0.0);
-    double init_score = sum / dataset->length; // this is correct
-    this->init_score = init_score;
-    std::fill(gradients->begin(), gradients->end(), init_score);
-    LOG_DEBUG("Training initialized with score: {1}", init_score);
+    // vector<double> gradients(dataset->length);
+    this->init_score = params.lossfunction->compute_init_score(dataset->y, dataset->X);
+    // std::fill(gradients.begin(), gradients.end(), init_score);
+    LOG_DEBUG("Training initialized with score: {1}", this->init_score);
 
     // second split (& shuffle), alltrees & noshuffle for debug
     TrainTestSplit split = train_test_split_random(*dataset, 1.0f, false);
@@ -68,7 +65,7 @@ void DPEnsemble::train(DataSet *dataset)
         // update/init gradients of all training instances (using last tree(s))
         vector<double> gradients;
         if(tree_index == 0) {
-            vector<double> init_scores(train_set->length, init_score);
+            vector<double> init_scores(train_set->length, this->init_score);
             gradients = (params.lossfunction)->compute_gradients(train_set->y, init_scores);
             int index = 0;
             for(DataSet &dset : tree_samples) {

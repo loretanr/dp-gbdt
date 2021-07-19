@@ -63,8 +63,8 @@ ModelParams create_default_params()
 }
 
 
-Scaler::Scaler(double min_val, double max_val, double fmin, double fmax) : data_min(min_val), data_max(max_val),
-        feature_min(fmin), feature_max(fmax)
+Scaler::Scaler(double min_val, double max_val, double fmin, double fmax, bool scaling_required) : data_min(min_val), data_max(max_val),
+        feature_min(fmin), feature_max(fmax), scaling_required(scaling_required)
 {
     double data_range = data_max - data_min;
     data_range = data_range == 0 ? 1 : data_range;
@@ -102,57 +102,44 @@ void DataSet::add_row(vector<double> xrow, double yval)
 // !!! Seems like only y needs to be scaled !!!
 void DataSet::scale(double lower, double upper)
 {
+    // return if no scaling required
+    bool scaling_required = false;
+    for(auto elem : this->y) {
+        if (elem < lower or elem > upper) {
+            scaling_required = true; break;
+        }
+    }
+    if (not scaling_required) {
+        this->scaler = Scaler(0,0,0,0,false);
+        return;
+    }
+
     double doublemax = numeric_limits<double>::max();
     double doublemin = numeric_limits<double>::min();
-    // vector<double> minima_x(num_x_cols,doublemax), maxima_x(num_x_cols,doublemin);
     double minimum_y = doublemax, maximum_y = doublemin;
     for(int i=0; i<length; i++) {
-        // for(int j=0; j<num_x_cols; j++) {
-        //     minima_x[j] = std::min(minima_x[j], X[i][j]);
-        //     maxima_x[j] = std::max(maxima_x[j], X[i][j]);
-        // }
         minimum_y = std::min(minimum_y, this->y[i]);
         maximum_y = std::max(maximum_y, this->y[i]);
     }
     for(int i=0; i<length; i++) {
-        // only scale numerical features of X
-        // for(auto j : params.num_idx) {
-        //     X[i][j] = (X[i][j]-minima_x[j])/(maxima_x[j]-minima_x[j]) * (upper-lower) + lower; 
-        // }
-        // scale y as well
         this->y[i] = (this->y[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
     }
-    this->scaler = Scaler(minimum_y, maximum_y, lower, upper);
+    this->scaler = Scaler(minimum_y, maximum_y, lower, upper, true);
+    return;
 }
 
 void inverse_scale(Scaler &scaler, vector<double> &vec)
 {
-    // for(auto &elem : vec) {
-    //     elem = (elem - scaler.feature_min) * (scaler.data_max - scaler.data_min)
-    //                 / (scaler.feature_max - scaler.feature_min) + scaler.feature_min;
-    // }
+    // return if no scaling required
+    if(not scaler.scaling_required){
+        return;
+    }
 
-    // try 2
-    // double upper = scaler.data_max;
-    // double lower = scaler.data_min;
-    // double minimum_y = numeric_limits<double>::max();
-    // double maximum_y = numeric_limits<double>::min();
-    // for(int i=0; i<vec.size(); i++) {
-    //     // for(int j=0; j<num_x_cols; j++) {
-    //     //     minima_x[j] = std::min(minima_x[j], X[i][j]);
-    //     //     maxima_x[j] = std::max(maxima_x[j], X[i][j]);
-    //     // }
-    //     minimum_y = std::min(minimum_y, vec[i]);
-    //     maximum_y = std::max(maximum_y, vec[i]);
-    // }
-    // for(int i=0; i<vec.size(); i++) {
-    //     vec[i] = (vec[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
-    // }
     for(auto &elem : vec) {
         elem -= scaler.min_;
         elem /= scaler.scale;
     }
-
+    return;
 }
 
 TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool shuffle)
