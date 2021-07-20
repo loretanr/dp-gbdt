@@ -118,6 +118,7 @@ struct SplitCandidate {
     int feature_index;
     double split_value;
     double gain;
+    int lhs_size, rhs_size;
     SplitCandidate(int f, double s, double g) : feature_index(f), split_value(s), gain(g) {};
 };
 

@@ -16,7 +16,7 @@ public:
     virtual double compute_init_score(std::vector<double> &y) = 0;
 };
 
-
+// used for regression
 class LeastSquaresError : public LossFunction
 {
 public:
@@ -24,7 +24,7 @@ public:
     virtual double compute_init_score(std::vector<double> &y);
 };
 
-
+// to be used for (binary) classification
 class BinomialDeviance : public LossFunction
 {
 public:

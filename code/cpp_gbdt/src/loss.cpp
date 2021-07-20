@@ -39,6 +39,7 @@ std::vector<double> BinomialDeviance::compute_gradients(std::vector<double> &y, 
 
 double BinomialDeviance::compute_init_score(std::vector<double> &y)
 {
+    // count how many samples are in each of the 2 classes
     std::map<double,double> occurrences;
     for(auto elem : y) {
         try {
@@ -48,13 +49,13 @@ double BinomialDeviance::compute_init_score(std::vector<double> &y)
             occurrences.insert({elem, 1});
         }
     }
-    // just need the smaller value ??? 
+    // just need the smaller value   ????? TODO 
     std::set<double, std::greater<double>> occs;
     for(auto &elem : occurrences){
         occs.insert( (double) elem.second / y.size());
     }
     double smaller_value = *occs.rbegin();
-    // log(x / (1-x)) is the inverse of the sigmoid (expit) function
+    // "log(x / (1-x)) is the inverse of the sigmoid (expit) function"
     double prediction = std::log(smaller_value / (1- smaller_value));
     return prediction;
 }

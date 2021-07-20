@@ -72,10 +72,12 @@ Scaler::Scaler(double min_val, double max_val, double fmin, double fmax, bool sc
     this->min_ = this->feature_min - this->data_min * this->scale;
 }
 
+
 DataSet::DataSet()
 {
     empty = true;
 }
+
 
 DataSet::DataSet(VVD X, vector<double> y) : X(X), y(y)
 {
@@ -171,6 +173,8 @@ TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool
     }
 }
 
+// "reverse engineered" the python sklearn.model_selection.cross_val_score
+// Returns a vector of the train-test-splits
 vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle)
 {
     if(shuffle) {
@@ -219,6 +223,7 @@ vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int fold
     return splits;
 }
 
+
 double Laplace::return_a_random_variable(){
     double e1 = distribution(generator);
     double e2 = distribution(generator);
@@ -232,12 +237,3 @@ double Laplace::return_a_random_variable(double scale){
     double e2 = distribution2(generator);
     return e1-e2;
 }
-
-
-// extern std::ofstream verification_logfile;
-
-// void VERIFICATION_LOG(...)
-// {
-//    verification_logfile << fmt::format(__VA_ARGS__) << "\n"; verification_logfile.flush();
-// } 
-  

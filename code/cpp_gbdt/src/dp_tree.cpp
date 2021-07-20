@@ -1,28 +1,12 @@
 #include "dp_tree.h"
 
-//#include <quadmath.h>
 
- //: tree_index(tree_index), learning_rate(learning_rate), l2_threshold(l2_threshold), l2_lambda(l2_lambda), privacy_budget(privacy_budget), delta_g(delta_g), delta_v(delta_v), loss(loss), max_depth(max_depth), max_leaves(max_leaves), min_samples_split(min_samples_split), leaf_clipping(leaf_clipping), use_bfs(use_bfs), use_3_trees(use_3_trees), use_decay(use_decay), cat_idx(cat_idx), num_idx(num_idx)
 DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index): 
     params(params),
     tree_params(tree_params), 
     dataset(dataset),
-    tree_index(tree_index)
-{
-   /*  // create a matrix whose rows contain the columns of X, but without duplicates
-    for (int i=0; i<dataset->num_x_cols; i++){
-        X_unique.push_back(set<double>());
-    }
-    for (int row=0; row < dataset->length; row++) {
-        for (int col=0; col < dataset->num_x_cols; col++) {
-            X_unique[col].insert(dataset->X[row][col]);
-        }
-    } */
-    //nodes = new vector<TreeNode>;
-}
+    tree_index(tree_index) {}
 
-
-// TODO destroy the nodes, done in ensemble for now.
 DPTree::~DPTree() {}
 
 
@@ -35,7 +19,6 @@ void DPTree::fit()
         std::iota(std::begin(live_samples), std::end(live_samples), 0);
 
         root_node = make_tree_DFS(0, live_samples);
-        //nodes = collect_nodes(*root_node);
     } else {
         throw runtime_error("non-DFS not yet implemented.");
     }
@@ -48,31 +31,29 @@ void DPTree::fit()
         }
     }
 
-    // add noise to predictions TODO
+    // add laplace noise to predictions
     double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
     double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
-    add_laplacian_noise(this->leaves, laplace_scale);
-    
+    add_laplacian_noise(laplace_scale);
 }
 
 
-// Recursively build tree, DFS approach, 1st instance returns root node
+// Recursively build tree, DFS approach, first instance returns root node
 TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 {
     // max depth reached or not enough samples -> leaf node
-    if ( (current_depth == params->max_depth) or
-        live_samples.size() < (size_t) params->min_samples_split) {
-            TreeNode *leaf = make_leaf_node(current_depth, live_samples);
-            LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})", current_depth, live_samples.size(), leaf->prediction);
-            return leaf;
-        }
+    if ( (current_depth == params->max_depth) or live_samples.size() < (size_t) params->min_samples_split) {
+        TreeNode *leaf = make_leaf_node(current_depth, live_samples);
+        LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
+            current_depth, live_samples.size(), leaf->prediction);
+        return leaf;
+    }
 
     // only use the samples that actually end up in this node
     // note that the cols of X are rows in X_live
-    VVD X_live;
-    vector<double> gradients_live;
-    for(int col=0; col < dataset->num_x_cols; col++) {
-        vector<double> temp;
+    VVD X_live; vector<double> gradients_live;
+    for(int col=0; col < dataset->num_x_cols; col++) {      // TODO ugly
+        vector<double> temp;    
         for (auto elem : live_samples) {
             temp.push_back((dataset->X)[elem][col]);
         }
@@ -91,6 +72,11 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         return node;
     }
 
+    LOG_DEBUG("best split @ {1}, val {2:.2f}, gain {3:.5f}, curr_depth {4}, samples {5} ->({6},{7})", 
+        node->split_attr, node->split_value, node->split_gain, current_depth, 
+        node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
+
+    // Update live samples and continue recursion
     vector<bool> lhs;
     samples_left_right_partition(lhs, X_live, gradients_live, node->split_attr, node->split_value);
     vector<int> left_live_samples, right_live_samples;
@@ -101,17 +87,11 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
             right_live_samples.push_back(live_samples[i]);
         }
     }
-    LOG_DEBUG("best split @ {1}, val {2:.2f}, gain {3:.5f}, curr_depth {4}, samples {5} ->({6},{7})", 
-        node->split_attr, node->split_value, node->split_gain, current_depth, 
-        live_samples.size(), left_live_samples.size(), right_live_samples.size()); 
 
     node->left = make_tree_DFS(current_depth + 1, left_live_samples);
     node->right = make_tree_DFS(current_depth + 1, right_live_samples);
 
-    //(*nodes).push_back(node);
     return node;
-
-
 }
 
 
@@ -126,7 +106,7 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
         gradients.push_back(this->dataset->gradients[index]);
     }
     leaf->prediction = compute_prediction(gradients, y);
-    leaves.push_back(leaf); // also some general node list?
+    this->leaves.push_back(leaf);
     return(leaf);
 }
 
@@ -190,6 +170,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     } else {
         privacy_budget_for_node = (tree_params->tree_privacy_budget)/2/params->max_depth;
     }
+    // TODO 3_trees not implemented yet
     if (params->use_3_trees and (current_depth != 0)) {
         // Except for the root node, budget is divided by the 3-nodes
         privacy_budget_for_node /= 2;
@@ -199,24 +180,30 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
 
     vector<SplitCandidate> probabilities;
     double max_gain = numeric_limits<double>::min();
-    
+    int lhs_size;
     
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         for (double feature_value : X_live[feature_index]) { // TODO, don't iterate over duplicates in X_live
             // compute gain
-            double gain = compute_gain(X_live, gradients_live, feature_index, feature_value);
+            double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size);
             // feature cannot be chosen, skipping
             if (gain == -1) {
                 continue;
             }
             gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
-            max_gain = (gain > max_gain) ? gain : max_gain; // unused
+            max_gain = (gain > max_gain) ? gain : max_gain; // TODO unused ?
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
+            candidate.lhs_size = lhs_size;
+            candidate.rhs_size = X_live.size() - lhs_size;
             probabilities.push_back(candidate);
         }
     }
+
+    // choose a split using the exponential mechanism
     int index = exponential_mechanism(probabilities, max_gain);
+
+    // construct the node
     TreeNode *node;
     if (index == -1) {
         node = new TreeNode(true);
@@ -227,23 +214,27 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
         node->split_attr = probabilities[index].feature_index;
         node->split_value = probabilities[index].split_value;
         node->split_gain = probabilities[index].gain;
+        node->lhs_size = probabilities[index].lhs_size;
+        node->rhs_size = probabilities[index].rhs_size;
     }
     node->depth = current_depth;
     return node;
 }
 
-// This gain is the simplified formula for least squares loss function
-double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value)
+
+// This gain is the simplified formula for least squares loss function // TODO adapt for classification
+double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
+    int feature_index, double feature_value, int &lhs_size)
 {
     // partition into lhs / rhs
     vector<bool> lhs;
     samples_left_right_partition(lhs, samples, gradients_live, feature_index, feature_value);
 
-    int lhs_size = std::count(lhs.begin(), lhs.end(), true);
-    int rhs_size = std::count(lhs.begin(), lhs.end(), false);
+    int _lhs_size = std::count(lhs.begin(), lhs.end(), true);
+    int _rhs_size = std::count(lhs.begin(), lhs.end(), false);
 
     // if all samples go on the same side it's useless to split on this value
-    if ( lhs_size == 0 or rhs_size == 0 ) {
+    if ( _lhs_size == 0 or _rhs_size == 0 ) {
         return -1;
     }
 
@@ -252,8 +243,8 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, int fe
         lhs_gain += (unsigned) lhs[index] * (gradients_live)[index];
         rhs_gain += (unsigned) (not lhs[index]) * (gradients_live)[index];
     }
-    lhs_gain = std::pow(lhs_gain,2) / (lhs_size + params->l2_lambda);
-    rhs_gain = std::pow(rhs_gain,2) / (rhs_size + params->l2_lambda);
+    lhs_gain = std::pow(lhs_gain,2) / (_lhs_size + params->l2_lambda);
+    rhs_gain = std::pow(rhs_gain,2) / (_rhs_size + params->l2_lambda);
 
     double total_gain = lhs_gain + rhs_gain;
     total_gain = std::floor(total_gain * 1e10) / 1e10;
@@ -278,19 +269,20 @@ void DPTree::samples_left_right_partition(vector<bool> &lhs, VVD &samples, vecto
 }
 
 
+// Computes probabilities from the gains. (Larger gain -> larger probability to 
+// be chosen for split). Then a cumulative distribution function is created from
+// these probabilities. Then we can sample from it using a RNG.
 int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain)
 {
-    // if no split shows a positive gain, return. Node will become a leaf
+    // if no split has a positive gain, return. Node will become a leaf
     int count = std::count_if(probs.begin(), probs.end(),
         [](SplitCandidate c){ return c.gain > 0; });
     if (count == 0) {
         return -1;
     }
 
-    // TODO need quadmath for overflows?
-
+    // calculate the probabilities from the gains
     vector<double> gains, probabilities, partials(probs.size());
-
     for (auto p : probs) {
         if (p.gain != 0) {
             gains.push_back(p.gain);
@@ -304,19 +296,21 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain
         }
     }
 
-    // disable randomness for debug
+    // option to disable randomness for validation / debugging
     if (not RANDOMIZATION) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         return std::distance(probabilities.begin(), max_elem);
     }
 
-    // all values in [0,1]
+    // create a cumulative distribution function from the probabilities.
+    // all values will be in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
     srand(time(0));
     double rand01 = ((double) std::rand() / (RAND_MAX));
 
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
+    // taken from Theos python code
     for (int tries=0; tries<10; tries++) {
         for (size_t index=0; index<partials.size(); index++) {
             if (partials[index] >= rand01) {
@@ -328,22 +322,31 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain
     return -1;
 }
 
-void DPTree::add_laplacian_noise(vector<TreeNode *> leaves, double laplace_scale)
+
+void DPTree::add_laplacian_noise(double laplace_scale)
 {
     LOG_INFO("Adding Laplace noise to leaves (Scale {1:.2f})", laplace_scale);
+
     srand(time(NULL));
     Laplace lap(laplace_scale, rand());
-    for (auto leaf : leaves) {
+
+    // add noise from laplace distribution to leaves
+    for (auto &leaf : this->leaves) {
         double noise = 0;
+
+        // but only if RANDOMIZATION is turned on
         if (RANDOMIZATION) {
             noise = lap.return_a_random_variable(laplace_scale);
         }
-        LOG_DEBUG("({1:.3f} -> {2:.3f})", leaf->prediction, leaf->prediction+noise);
+
         leaf->prediction += noise;
+
+        LOG_DEBUG("({1:.3f} -> {2:.3f})", leaf->prediction, leaf->prediction+noise);
     }
-    // debugging TODO REMOVE
+
+    // rest is just for validation
     double sum = 0;
-    for (auto leaf : leaves) {
+    for (auto leaf : this->leaves) {
         sum += leaf->prediction;
     }
     LOG_INFO("LEAFSUM {1:.8f}", sum);
@@ -352,7 +355,7 @@ void DPTree::add_laplacian_noise(vector<TreeNode *> leaves, double laplace_scale
     }
 }
 
-
+// active in debug mode
 void DPTree::recursive_print_tree(TreeNode* node) {
 
     if (node->is_leaf()) {
@@ -405,6 +408,7 @@ void DPTree::recursive_print_tree(TreeNode* node) {
 }
 
 
+// free allocated ressources
 void DPTree::delete_tree(TreeNode *node)
 {
     if (not node->is_leaf()) {

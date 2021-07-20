@@ -127,6 +127,7 @@ void DPEnsemble::train(DataSet *dataset)
 // Predict values from the ensemble of gradient boosted trees
 vector<double>  DPEnsemble::predict(VVD &X)
 {
+    // TODO inefficient, currently recomputes predictions for all trees after each tree
     vector<double> predictions(X.size(),0);
     for (auto tree : trees) {
         vector<double> pred = tree.predict(X);
@@ -135,7 +136,7 @@ vector<double>  DPEnsemble::predict(VVD &X)
             predictions.begin(), predictions.begin(), std::plus<double>());
     }
 
-    // todo optimize those 2 transformsin 1
+    // TODO optimize those 2 transforms in 1
     double learning_rate = params.learning_rate;
     std::transform(predictions.begin(), predictions.end(),
             predictions.begin(), [learning_rate](double &c){return c*learning_rate;});
@@ -148,7 +149,7 @@ vector<double>  DPEnsemble::predict(VVD &X)
 }
 
 
-// distribute training instances amongst trees
+// distribute training samples amongst trees
 void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set)
 {
     if(params.balance_partition) { // perfect split
@@ -174,6 +175,7 @@ void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train
         //     current_index++;
         // }
     } else {
-        throw runtime_error("non-balanced resp. textbook formula partition not implemented yet");
+        throw runtime_error("non-balanced split, resp. paper formula \
+            partitioning not implemented yet");
     }
 }
