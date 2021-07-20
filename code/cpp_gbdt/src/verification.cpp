@@ -1,7 +1,8 @@
 #include "verification.h"
 
 /* 
-    runs model on various (smaller size) datasets for 
+    Verification:
+    run the model on various (small to medium size) datasets for 
     easy verification of correctness
 */
 
@@ -11,18 +12,23 @@ std::ofstream verification_logfile;
 int Verification::main(int argc, char *argv[])
 {
     // Set up logging for debugging
-    spdlog::set_level(spdlog::level::debug);
+    spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
+    // store datasets and their corresponding parameters here
     vector<DataSet> datasets;
     vector<ModelParams> parameters;
 
+    // select dataset(s) here. So far only abalone and year work correctly
+    // you can either append some ModelParams to parameters here, or let 
+    // the get_xy function do that (it'll create and append some default ones)
+
     Parser parser = Parser();
-    // datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
+    datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
     // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
-    // datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
+    datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
-    datasets.push_back(parser.get_adult(parameters, 300, true)); // small adult
+    // datasets.push_back(parser.get_adult(parameters, 300, true)); // small adult
 
     for(size_t i=0; i<datasets.size(); i++) {
         DataSet &dataset = datasets[i];
@@ -39,7 +45,10 @@ int Verification::main(int argc, char *argv[])
 
         for (auto split : cv_inputs) {
 
+            // scale the features (y) to [-1,1] if necessary
             split.train.scale(-1, 1);
+
+            // train the ensemble
             DPEnsemble ensemble = DPEnsemble(&param);
             ensemble.train(&split.train);
             
@@ -62,6 +71,5 @@ int Verification::main(int argc, char *argv[])
     
         verification_logfile.close();
     }
-
     return 0;
 }

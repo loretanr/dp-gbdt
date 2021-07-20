@@ -1,7 +1,6 @@
 #include "dp_ensemble.h"
 
 
-
 DPEnsemble::DPEnsemble(ModelParams *parameters)
 {
     params = *parameters; // local copy for now
@@ -12,18 +11,16 @@ DPEnsemble::~DPEnsemble() {
     for (auto tree : trees) {
         tree.delete_tree(tree.root_node);
     }
-}; // TODO
+};
 
 
 void DPEnsemble::train(DataSet *dataset)
 {
-
-    // vector<double> gradients(dataset->length);
+    // compute initial prediction
     this->init_score = params.lossfunction->compute_init_score(dataset->y);
-    // std::fill(gradients.begin(), gradients.end(), init_score);
     LOG_DEBUG("Training initialized with score: {1}", this->init_score);
 
-    // second split (& shuffle), alltrees & noshuffle for debug
+    // second split (& shuffle), not used so far
     TrainTestSplit split = train_test_split_random(*dataset, 1.0f, false);
     DataSet *train_set, *test_set;
     if(params.second_split) {
@@ -45,15 +42,10 @@ void DPEnsemble::train(DataSet *dataset)
     // train all trees
     for(int tree_index = 0; tree_index<params.nb_trees;  tree_index++) {
 
-        LOG_DEBUG(BOLD("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"), tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
+        LOG_DEBUG(BOLD("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),
+            tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
         if(VERIFICATION_MODE) {
             VERIFICATION_LOG("Tree {0} CV-Ensemble {1}", tree_index, cv_fold_index);
-        }
-
-        // init the dataset
-        if(tree_index == 0) {
-            // TODO, do I really need to work on a copy?
-            // don't think so; using an array to mark deleted rows
         }
 
         // compute sensitivity
@@ -67,6 +59,7 @@ void DPEnsemble::train(DataSet *dataset)
         if(tree_index == 0) {
             vector<double> init_scores(train_set->length, this->init_score);
             gradients = params.lossfunction->compute_gradients(train_set->y, init_scores);
+            // store the gradients back to their corresponding samples
             int index = 0;
             for(DataSet &dset : tree_samples) {
                 for (auto row : dset.X){
@@ -75,7 +68,7 @@ void DPEnsemble::train(DataSet *dataset)
                     index++;
                 }
             }
-            gradients.resize(index); // for validation log
+            gradients.resize(index); // for validation log, TODO resolve
         } else {
             // only have to update gradients of unused samples
             VVD pred_samples;
@@ -89,7 +82,7 @@ void DPEnsemble::train(DataSet *dataset)
             // update gradients
             gradients = (params.lossfunction)->compute_gradients(y_samples, y_pred);
 
-            // store them
+            // store the gradients back to their corresponding samples
             vector<double>::const_iterator iter = gradients.begin();
             for (size_t i=tree_index; i<tree_samples.size(); i++) {
                 vector<double> curr_grads = vector<double>(iter, iter + tree_samples[i].length);
@@ -97,6 +90,7 @@ void DPEnsemble::train(DataSet *dataset)
                 iter += tree_samples[i].length;
             }
         }
+
         // intermediate output for validation
         double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
         sum = sum < 0 && sum >= -1e-10 ? 0 : sum;  // avoid "-0.00000.. != 0.00000.."
@@ -114,26 +108,21 @@ void DPEnsemble::train(DataSet *dataset)
             }
         }
 
-        // TODO, we have the right data, now build tree
-        DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index], tree_index);
-        
         // build tree, add noise to leaves
         LOG_INFO("Building tree {1}...", tree_index);
-
+        DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index], tree_index);
         tree.fit();
-
         trees.push_back(tree);
-
-        if (spdlog::default_logger_raw()->level() <= spdlog::level::info) {
+        
+        // print the tree if we are in debug mode
+        if (spdlog::default_logger_raw()->level() <= spdlog::level::debug) {
             tree.recursive_print_tree(tree.root_node);
         }
 
-
         LOG_INFO(BOLD("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
-
     }
-
 }
+
 
 // Predict values from the ensemble of gradient boosted trees
 vector<double>  DPEnsemble::predict(VVD &X)
@@ -156,20 +145,6 @@ vector<double>  DPEnsemble::predict(VVD &X)
                     predictions.begin(), [innit_score](double &c){return c+innit_score;});
 
     return predictions;
-
-
-}
-
-vector<double> DPEnsemble::compute_gradient_for_loss(vector<double> y, vector<double> &scores)
-{
-    // we want the positive gradient
-    for (size_t i=0; i<y.size(); i++) {
-        y[i] = scores[i] - y[i];
-    }
-    // limit the numbers to 10 decimals to avoid numeric inconsistencies
-    std::transform(y.begin(), y.end(),
-            y.begin(), [](double &c){return std::floor(c * 1e15) / 1e15;});    
-    return y;
 }
 
 
@@ -192,7 +167,7 @@ void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train
             DataSet d = DataSet(x_tree,y_tree);
             (*storage_vec).push_back(d);
         }
-        // evenly distribute leftover training instances   // TODO, disabled for debug
+        // evenly distribute leftover training instances   // TODO
         // for(int i=0; i<remainder; i++) {
         //     (*storage_vec)[i].add_row((train_set->X)[current_index], 
         //                             (train_set->y)[current_index]);

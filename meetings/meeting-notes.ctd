@@ -973,7 +973,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626769471.45" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626771803.07" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1107,7 +1107,11 @@ adult
 			<rich_text foreground="#ffffc0c0cbcb">TODO cpp, need some kind of Predictlabels function for classification</rich_text>
 			<rich_text>
 
-hardcoded 5 trees int get_adult!</rich_text>
+hardcoded nB_trees int get_adult! as well as NB_TREES_PER_ENS in test_adult.py
+
+now check out why print_recursive does weird!
+
+and maybe test if verification is actually correct!</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use

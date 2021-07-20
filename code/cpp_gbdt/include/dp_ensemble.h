@@ -8,8 +8,6 @@
 
 extern std::ofstream verification_logfile;
 extern size_t cv_fold_index;
-// bool VERIFICATION_MODE;
-// bool RANDOMIZATION;
 
 class DPEnsemble
 {
@@ -25,11 +23,7 @@ public:
 private:
     ModelParams params;
     void distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set);
-    vector<double> compute_gradient_for_loss(vector<double> y, vector<double> &scores);
     double init_score;
-
-
-
 };
 
 #endif // DPTREEENSEMBLE_H

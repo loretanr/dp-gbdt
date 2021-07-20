@@ -1,32 +1,37 @@
 #include "dataset_parser.h"
 #include <memory>
 
-DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples, bool default_params)
+
+DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
 {
     ifstream infile("datasets/real/abalone.data");
-    string line;
-    VVD X; vector<double> y;
+    string line; VVD X; vector<double> y;
+    num_samples = std::min(num_samples, (size_t) 4177);
 
+    // regression task -> LSE
     shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
-    if (default_params) {
+
+    if (use_default_params) {
+        // create some default parameters
         ModelParams params = create_default_params();
         params.lossfunction = lossfunction;
         params.cat_idx = {0}; // first column is categorical
         params.num_idx = {1,2,3,4,5,6,7};
         parameters.push_back(params);
     } else {
+        // you have already defined your parameters, then just abalone specific ones are added
         parameters.back().num_idx = {1,2,3,4,5,6,7};
         parameters.back().cat_idx = {0};
         parameters.back().lossfunction = lossfunction;
     }
 
+    // parse dataset, label-encode categorical feature
     size_t current_index = 0;
-
     while (getline(infile, line,'\n') && current_index < num_samples) {
         stringstream ss(line);
         vector<string> strings = split_string(line, ',');
         vector<double> X_row;
-        if(strings[0] == "M"){ // first column is gender (M/F/I)
+        if(strings[0] == "M"){ // first col categorical (gender M/F/I)
             X_row.push_back(1.0f);
         } else if (strings[0] == "F") {
             X_row.push_back(2.0f);
@@ -42,34 +47,43 @@ DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples,
     }
     
     DataSet dataset = DataSet(X,y);
-    dataset.name = num_samples == 300 ? "abalone_small" : "abalone_full";
+    switch(num_samples){
+        case 300: dataset.name = "abalone_small"; break;
+        case 4177: dataset.name = "abalone_full"; break;
+        default: dataset.name = std::string("abalone_custom_size_").append(
+            std::to_string(num_samples));
+    }
     return dataset;
 }
 
 
-DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t num_samples, bool default_params)
+DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
 {
     ifstream infile("datasets/real/YearPredictionMSD.txt");
-    string line;
-    VVD X; vector<double> y;
+    string line; VVD X; vector<double> y;
 
+    // regression task -> LSE
     shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
+
+    // all 90 columns are numerical -> create vector with numbers 0..89
     std::vector<int> num_idx(90);
-    std::iota(std::begin(num_idx), std::end(num_idx), 0); // vector with numbers 0..89
-    if (default_params){
+    std::iota(std::begin(num_idx), std::end(num_idx), 0);
+    if (use_default_params){
+        // create some default parameters
         ModelParams params = create_default_params();
         params.cat_idx = {};
         params.num_idx = num_idx;
         params.lossfunction = lossfunction;
         parameters.push_back(params);
     } else {
+        // you have already defined your parameters, then just yearMSD specific ones are added
         parameters.back().cat_idx = {};
         parameters.back().num_idx = num_idx;
         parameters.back().lossfunction = lossfunction;
     }
 
+    // parse dataset, only has numerical features
     size_t current_index = 0;
-
     while (getline(infile, line,'\n') && current_index < num_samples) {
         stringstream ss(line);
         vector<string> strings = split_string(line, ',');
@@ -81,13 +95,19 @@ DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t nu
         X.push_back(X_row);
         current_index++;
     }
+
     DataSet dataset = DataSet(X,y);
-    dataset.name = num_samples == 300 ? "yearMSD_small" : "yearMSD_medium";
+    switch(num_samples){
+        case 300: dataset.name = "yearMSD_small"; break;
+        case 1000: dataset.name = "yearMSD_medium"; break;
+        default: dataset.name = std::string("yearMSD_custom_size_").append(
+            std::to_string(num_samples));
+    }
     return dataset;
 }
 
 
-DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, bool default_params)
+DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
 {
     ifstream train_infile("datasets/real/adult.data");
     ifstream test_infile("datasets/real/adult.test");
@@ -98,14 +118,14 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
     vector<int> categorical = {1,3,5,6,7,8,9,13};
     vector<int> drop = {2}; // drop fnlwgt column
 
-    int nb_trees = 5;
+    int nb_trees = 5;           // TODO remove, for debug
     // if (num_samples <= 300)
     //     nb_trees = 5;
 
 
     // create / adjust model parameters
     shared_ptr<BinomialDeviance> lossfunction(new BinomialDeviance());
-    if (default_params) {
+    if (use_default_params) {
         ModelParams params = create_default_params();
         params.num_idx = {0,3,9,10,11}; // adjusted for dropped column
         params.cat_idx = {1,2,4,5,6,7,8,12};
@@ -119,10 +139,10 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
         parameters.back().nb_trees = nb_trees;
     }
     
-    // store mappings of categorical features to numbers (string -> float)
+    // use this map for label encoding of categorical features (string -> float)
     vector<map<string,float>> mappings(14);
 
-    // go through all lines of the training dataset
+    // parse training dataset
     size_t current_index = 0;
     string line;
     while (getline(train_infile, line,'\n') && current_index < num_samples) {
@@ -144,7 +164,7 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
                 // numerical feature
                 X_row.push_back(stof(strings[i]));
             } else {
-                // categorical feature
+                // categorical feature, do label-encoding
                 try {
                     float dummy_value = mappings[i].at(strings[i]);
                     X_row.push_back(dummy_value);
@@ -156,18 +176,25 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
                 }
             }
         }
+
         // y=1 for ">50k", y=0 for "<=50k"
         (strings.back().find('>') < strings.back().length()) ? y.push_back(1) : y.push_back(0);
         X.push_back(X_row);
         current_index++;
     }
 
-    // go through all lines of the test dataset and append to X and y (we'll have our own splits)
     // TODO
+    // go through all lines of the test dataset file and append to X and y (we'll have our own splits)
+    // for now it's fine since we're using tiny amounts of samples
 
 
     DataSet dataset = DataSet(X,y);
-    dataset.name = num_samples == 300 ? "adult_small" : "adult_full";
-    dataset.task = "classification";
+    switch(num_samples){
+        case 300: dataset.name = "adult_small"; break;
+        case 1000: dataset.name = "adult_medium"; break;
+        default: dataset.name = std::string("adult_custom_size_").append(
+            std::to_string(num_samples));
+    }
+    dataset.task = "classification";  // TODO unsused for now
     return dataset;
 }

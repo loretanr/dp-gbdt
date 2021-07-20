@@ -56,6 +56,7 @@ for py_filename in *.python.log; do
     IFS=' '
     if ! test -f "$cpp_filename"; then
         echo "$cpp_filename does not exist, skipping"
+        echo "------------"
         continue
     fi
     # file found, compare contents
