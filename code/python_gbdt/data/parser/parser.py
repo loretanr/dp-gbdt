@@ -139,7 +139,7 @@ class Parser:
     task = 'regression'
     get_year_url = ('https://archive.ics.uci.edu/ml/machine-learning'
                     '-databases/00203/YearPredictionMSD.txt.zip')
-    filename = 'src/real/YearPredictionMSD.txt.zip'
+    filename = 'datasets/real/YearPredictionMSD.txt.zip'
     filename_real_path = os.path.join(os.path.dirname(os.path.dirname(
         os.path.realpath(__file__))), filename)
     if not os.path.isfile(filename_real_path):
