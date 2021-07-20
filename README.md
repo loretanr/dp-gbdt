@@ -7,6 +7,8 @@ WIP: repo for sharing and backup
 as of right now:
 - works for regression (tested with abalone and subset of yearMSD, "works" meaning we get the same results as the python code)
 - I am currently working on adding the adult dataset (and thus classification)
+- There is a global variable RANDOMIZATION that turns on/off randomization (introduced by e.g. the exponential mechanism and through adding laplacian noise to leaves)
+  - I have not yet played around with randomization turned on, as I'm still developing the algorithm and thus require deterministic runs to compare C++ and python
 
 
 ## Requirements
