@@ -280,8 +280,9 @@ void DPTree::samples_left_right_partition(vector<bool> &lhs, VVD &samples, vecto
 
 int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain)
 {
-    int count = std::count_if(probs.begin(), probs.end(),[](SplitCandidate c){ return c.gain > 0; });
-
+    // if no split shows a positive gain, return. Node will become a leaf
+    int count = std::count_if(probs.begin(), probs.end(),
+        [](SplitCandidate c){ return c.gain > 0; });
     if (count == 0) {
         return -1;
     }
@@ -303,17 +304,18 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain
         }
     }
 
+    // disable randomness for debug
+    if (not RANDOMIZATION) {
+        auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
+        return std::distance(probabilities.begin(), max_elem);
+    }
+
     // all values in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
     srand(time(0));
     double rand01 = ((double) std::rand() / (RAND_MAX));
 
-    // disable randomness for debug
-    if (not RANDOMIZATION) {
-        auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
-        return std::distance(probabilities.begin(), max_elem);
-    }
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
     for (int tries=0; tries<10; tries++) {
         for (size_t index=0; index<partials.size(); index++) {

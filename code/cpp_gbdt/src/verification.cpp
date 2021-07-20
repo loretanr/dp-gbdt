@@ -11,14 +11,14 @@ std::ofstream verification_logfile;
 int Verification::main(int argc, char *argv[])
 {
     // Set up logging for debugging
-    spdlog::set_level(spdlog::level::err);
+    spdlog::set_level(spdlog::level::debug);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     vector<DataSet> datasets;
     vector<ModelParams> parameters;
 
     Parser parser = Parser();
-    datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
+    // datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
     // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD

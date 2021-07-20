@@ -1119,7 +1119,7 @@ adult
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626450506.88" unique_id="19">
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626450557.52" unique_id="19">
 		<rich_text scale="h2">Algorithm</rich_text>
 		<rich_text>
 
@@ -1172,6 +1172,7 @@ adult
    ◇ though it's really only an aggregation of values which would suggest struct
       ▪ own file for struct?
       ▪ can also put TrainTestSplit in there (only consists of DataSets)
+      ▪ and the Scaler
 
 • put laplace into a header file, header only because so small and never changing
    ◇ good idea

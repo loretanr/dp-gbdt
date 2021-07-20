@@ -98,6 +98,11 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
     vector<int> categorical = {1,3,5,6,7,8,9,13};
     vector<int> drop = {2}; // drop fnlwgt column
 
+    int nb_trees = 5;
+    // if (num_samples <= 300)
+    //     nb_trees = 5;
+
+
     // create / adjust model parameters
     shared_ptr<BinomialDeviance> lossfunction(new BinomialDeviance());
     if (default_params) {
@@ -105,11 +110,13 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
         params.num_idx = {0,3,9,10,11}; // adjusted for dropped column
         params.cat_idx = {1,2,4,5,6,7,8,12};
         params.lossfunction = lossfunction;
+        params.nb_trees = nb_trees;
         parameters.push_back(params);
     } else {
         parameters.back().num_idx = {0,3,9,10,11};
         parameters.back().cat_idx = {1,2,4,5,6,7,8,12};
         parameters.back().lossfunction = lossfunction;
+        parameters.back().nb_trees = nb_trees;
     }
     
     // store mappings of categorical features to numbers (string -> float)

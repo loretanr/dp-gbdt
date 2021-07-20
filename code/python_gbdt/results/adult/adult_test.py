@@ -21,7 +21,7 @@ NB_SPLITS = 5
 # Number of rows to use from the dataset
 SAMPLES = [300, 5000]
 # Nb trees for each ensemble
-NB_TREES_PER_ENSEMBLE = 50
+NB_TREES_PER_ENSEMBLE = 5
 
 PATH = "./results/adult/"
 
@@ -57,9 +57,7 @@ if __name__ == '__main__':
           budget = np.around(np.float(budget), decimals=2)
           if config == 'Vanilla':
             budget = 0.
-          nb_trees = model_params.get(
-              'nb_trees') if nb_samples == max(SAMPLES) else int(
-                  model_params.get('nb_trees') / 10)
+          nb_trees = NB_TREES_PER_ENSEMBLE
           min_samples_split = model_params.get(
               'min_samples_split', 2) if nb_samples == max(SAMPLES) else int(
                   model_params.get('min_samples_split', 20) / 10)
@@ -79,7 +77,7 @@ if __name__ == '__main__':
               use_3_trees=model_params.get('use_3_trees', False),
               cat_idx=cat_idx,
               num_idx=num_idx,
-              verbosity=0)  # type: ignore
+              verbosity=1)  # type: ignore
           scores = cross_val_score(
               m, X, y, scoring='accuracy', n_jobs=1)
           mean, std = 100 - (scores.mean() * 100), (scores.std() * 100 / 2)

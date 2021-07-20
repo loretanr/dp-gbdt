@@ -19,7 +19,7 @@ void DPEnsemble::train(DataSet *dataset)
 {
 
     // vector<double> gradients(dataset->length);
-    this->init_score = params.lossfunction->compute_init_score(dataset->y, dataset->X);
+    this->init_score = params.lossfunction->compute_init_score(dataset->y);
     // std::fill(gradients.begin(), gradients.end(), init_score);
     LOG_DEBUG("Training initialized with score: {1}", this->init_score);
 
@@ -66,7 +66,7 @@ void DPEnsemble::train(DataSet *dataset)
         vector<double> gradients;
         if(tree_index == 0) {
             vector<double> init_scores(train_set->length, this->init_score);
-            gradients = (params.lossfunction)->compute_gradients(train_set->y, init_scores);
+            gradients = params.lossfunction->compute_gradients(train_set->y, init_scores);
             int index = 0;
             for(DataSet &dset : tree_samples) {
                 for (auto row : dset.X){

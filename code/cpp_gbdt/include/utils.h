@@ -24,6 +24,7 @@
 #include <memory>
 
 typedef std::vector<std::vector<double>> VVD;
+
 #include "loss.h"
 
 /* Logging, to be removed */

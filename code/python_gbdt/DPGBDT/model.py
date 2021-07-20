@@ -357,6 +357,7 @@ class GradientBoostingEnsemble:
 
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
+          
       else:
         # Fit a normal decision tree
         k_trees = []

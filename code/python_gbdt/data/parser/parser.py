@@ -240,10 +240,10 @@ class Parser:
     #     pd.read_csv(test_real_path, header=None, skiprows=1, sep=', '))
     # Drop weight info
     adult.drop(columns=[2], axis=1, inplace=True)
-    if n_rows:
-      adult = adult[:n_rows]
     # Drop rows with missing information
     adult = adult[~(adult.astype(str) == '?').any(1)]
+    if n_rows:
+      adult = adult[:n_rows]
     if not self.binary_classification:
       y = np.where(adult.iloc[:, -1] == '>50K', 1, 0)
     else:
