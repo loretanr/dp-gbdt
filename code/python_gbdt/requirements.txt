@@ -6,3 +6,4 @@ scipy
 six
 matplotlib
 progressbar
+lightgbm
