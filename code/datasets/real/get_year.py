@@ -34,7 +34,7 @@ if not (os.path.isfile(filename_real_path) or os.path.isfile(filename_real_path.
 
 if not os.path.isfile(filename_real_path.replace('.zip', '')):
     print("Extracting " + filename)
-    zip = ZipFile(filename)
+    zip = ZipFile(filename_real_path)
     zip.extractall()
     nothing_todo = False
 

@@ -12,7 +12,9 @@ mkdir -p cpp_gbdt/verification_logs
 mkdir -p python_gbdt/verification/verification_logs
 
 # download year dataset if not present (cause it's not on git)
-python3 -u datasets/real/get_year.py | eval "$SHIFT_RIGHT"
+cd datasets/real/
+python3 -u get_year.py | eval "$SHIFT_RIGHT"
+cd $CURR_DIR
 
 
 # use flag -nrr or --norerun to skip compiling and running
