@@ -7,8 +7,13 @@ CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
+# mkdirs if not already exist
+mkdir -p cpp_gbdt/verification_logs
+mkdir -p python_gbdt/verification/verification_logs
 
-python3 -u datasets/real/get_year.py | eval "$SHIFT_RIGHT"
+# download year dataset if not present (cause it's not on git)
+python -u datasets/real/get_year.py | eval "$SHIFT_RIGHT"
+
 
 # use flag -nrr or --norerun to skip compiling and running
 while [[ "$#" -gt 0 ]]; do
@@ -34,7 +39,7 @@ if [ "$NRR" = false ] ; then
     cd python_gbdt
     echo -e "${CYAN}Running python verification ...${NC}"
     rm verification/verification_logs/*.log 2> /dev/null
-    python3 -u verification/verification.py | eval "$SHIFT_RIGHT"
+    python -u verification/verification.py | eval "$SHIFT_RIGHT"
     cd $CURR_DIR
 
     # collect the outputs
