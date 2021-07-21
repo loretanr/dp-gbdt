@@ -15,7 +15,7 @@ as of right now:
       - **I'd say it's very likely that the python code has certain things wrong that I took over.**
   
 - There is a global variable RANDOMIZATION that turns on/off randomization (introduced by e.g. the exponential mechanism and through adding laplacian noise to leaves)
-  - I have not yet seriously played around and tested the code randomization turned on, as I'm still developing the algorithm and thus require deterministic runs to compare C++ and python
+  - I have **not yet** seriously played around and tested the code **with randomization turned on**, as I'm still developing the algorithm and thus require deterministic runs to compare C++ and python
 
 
 ## Requirements
