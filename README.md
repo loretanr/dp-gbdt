@@ -34,19 +34,19 @@ I don't know how this is usually done, please tell if you do
 
 
 ## Running
-- Verification Py <--> C++
+- **Running the verification  script to compare Python and C++**
 ```bash
 cd code/
 ./verify.sh
 ```
-- Running C++
+- **Running C++ gbdt**
 ```bash
 cd code/cpp_gbdt/
 make
 ./run
 (./run --verify)
 ```
-- Running python gbdt
+- **Running python gbdt**
 ```bash
 cd code/python_gbdt/
 python3 results/abalone/cross_val.py
