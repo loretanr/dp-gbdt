@@ -1126,7 +1126,7 @@ and maybe test if verification is actually correct!</rich_text>
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626450557.52" unique_id="19">
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626853689.22" unique_id="19">
 		<rich_text scale="h2">Algorithm</rich_text>
 		<rich_text>
 
@@ -1187,7 +1187,14 @@ and maybe test if verification is actually correct!</rich_text>
 		<rich_text>
 • stackoverflow code review?
 
-• try on a fresh ubuntu VM to get the setup / installs / requirements.txt
+</rich_text>
+		<rich_text foreground="#9090eeee9090">• try on a fresh ubuntu VM to get the setup / installs / requirements.txt
+</rich_text>
+		<rich_text>
+</rich_text>
+		<rich_text foreground="#9090eeee9090">• if RANDOMIZATION : write to logfile does not seem to be easily removed
+   ◇ need to delete entirely before any serious benchmarking</rich_text>
+		<rich_text>
 
 </rich_text>
 		<rich_text scale="h2">Bonus*</rich_text>

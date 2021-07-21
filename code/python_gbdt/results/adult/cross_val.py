@@ -15,11 +15,11 @@ from evaluation import estimator
 # The dataset to use for evaluation
 DATASET = 'adult'
 # The privacy budget to use for evaluation
-PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1)
+PRIVACY_BUDGETS = [0.5,2,4,6,8,10]
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
-SAMPLES = [300, 5000]
+SAMPLES = [5000]
 # Nb trees for each ensemble
 NB_TREES_PER_ENSEMBLE = 50
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     for model in models:
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
-      for config in ['Vanilla', 'BFS', 'DFS', '3-trees']:
+      for config in ['DFS']:
         for idx, budget in enumerate(PRIVACY_BUDGETS):
           if config == 'Vanilla' and idx != 0:
             continue
@@ -79,13 +79,15 @@ if __name__ == '__main__':
               use_3_trees=model_params.get('use_3_trees', False),
               cat_idx=cat_idx,
               num_idx=num_idx,
-              verbosity=-1)  # type: ignore
+              verbosity=0)  # type: ignore
           scores = cross_val_score(
-              m, X, y, scoring='accuracy', n_jobs=-1)
+              m, X, y, scoring='accuracy', n_jobs=1)
           mean, std = 100 - (scores.mean() * 100), (scores.std() * 100 / 2)
+          print(scores)
+          print("====== PB {} SCORE (mean) {} ======".format(budget, mean))
           output.write(
               '{0:s},{1:d},{2:f},{3:d},{4:d},{5:d},{6:d},{7:f},'  # type: ignore
-              '{8:d},{9:f},{10:f},{11:s},{12:s}\n'.format(
+              '{8:d},{9:f},{10:f},{11:s},{12:s},{13:s}\n'.format(
                   DATASET, nb_samples, budget, nb_trees,
                   NB_TREES_PER_ENSEMBLE,
                   model_params.get('max_depth'),

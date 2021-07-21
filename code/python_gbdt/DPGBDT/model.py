@@ -26,7 +26,7 @@ logger = logging.GetLogger(__name__)
 verificationLogger = None
 cv_fold_counter = 0
 
-RANDOMIZATION = False
+RANDOMIZATION = True    # TODO random on
 VALIDATION = True
 
 
@@ -308,7 +308,7 @@ class GradientBoostingEnsemble:
           
           gr_sum = np.sum(gradients)
           gr_sum = 0 if gr_sum < 0 and gr_sum >= float("-1e-10") else gr_sum
-          logger.info("GRADIENTSUM {:.8f}".format(gr_sum))
+          logger.debug("GRADIENTSUM {:.8f}".format(gr_sum))
           verificationLogger.log("GRADIENTSUM {:.8f}".format(gr_sum))
 
           assert gradients is not None
@@ -357,7 +357,7 @@ class GradientBoostingEnsemble:
 
           # Add the tree to its corresponding ensemble
           k_trees.append(tree)
-          
+
       else:
         # Fit a normal decision tree
         k_trees = []
@@ -1343,7 +1343,7 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
     logger.debug('({0:.3f} -> {1:.3f})'.format(np.float(leaf.prediction), np.float(leaf.prediction) + noise))
     leaf.prediction += noise
 
-  logger.info("LEAFSUM {:.8f}".format(np.sum([leaf.prediction for leaf in leaves])))
+  logger.debug("LEAFSUM {:.8f}".format(np.sum([leaf.prediction for leaf in leaves])))
   verificationLogger.log("LEAFVALUESSUM {:.10f}".format(np.sum([leaf.prediction for leaf in leaves])))
 
 

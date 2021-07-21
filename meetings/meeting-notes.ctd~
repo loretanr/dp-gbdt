@@ -973,7 +973,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626771787.74" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626771803.07" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1109,7 +1109,9 @@ adult
 
 hardcoded nB_trees int get_adult! as well as NB_TREES_PER_ENS in test_adult.py
 
-now check out why print_recursive does weird!</rich_text>
+now check out why print_recursive does weird!
+
+and maybe test if verification is actually correct!</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
@@ -1124,7 +1126,7 @@ now check out why print_recursive does weird!</rich_text>
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626450557.52" unique_id="19">
+	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1626853655.54" unique_id="19">
 		<rich_text scale="h2">Algorithm</rich_text>
 		<rich_text>
 
@@ -1186,6 +1188,9 @@ now check out why print_recursive does weird!</rich_text>
 • stackoverflow code review?
 
 • try on a fresh ubuntu VM to get the setup / installs / requirements.txt
+
+• if RANDOMIZATION : write to logfile does not seem to be easily removed
+   ◇ need to delete entire
 
 </rich_text>
 		<rich_text scale="h2">Bonus*</rich_text>

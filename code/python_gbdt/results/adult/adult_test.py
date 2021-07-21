@@ -19,7 +19,7 @@ PRIVACY_BUDGETS = [0.1]
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
-SAMPLES = [300, 5000]
+SAMPLES = [300]
 # Nb trees for each ensemble
 NB_TREES_PER_ENSEMBLE = 5
 
@@ -30,11 +30,6 @@ with open(PATH + 'model_params.json') as json_file:
   MODEL_PARAMS = json.load(json_file)
 
 if __name__ == '__main__':
-  now = datetime.now().strftime("%d-%m-%y_%H:%M")
-  output = open(PATH + 'data_' + now + '.csv', 'a')
-  output.write('dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,'
-               'max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,'
-               'model,config,balance_partition\n')
 
   for nb_samples in SAMPLES:
     # Read the data
@@ -77,17 +72,10 @@ if __name__ == '__main__':
               use_3_trees=model_params.get('use_3_trees', False),
               cat_idx=cat_idx,
               num_idx=num_idx,
-              verbosity=1)  # type: ignore
+              verbosity=0)  # type: ignore
           scores = cross_val_score(
               m, X, y, scoring='accuracy', n_jobs=1)
+          print(scores)
           mean, std = 100 - (scores.mean() * 100), (scores.std() * 100 / 2)
-          output.write(
-              '{0:s},{1:d},{2:f},{3:d},{4:d},{5:d},{6:d},{7:f},'  # type: ignore
-              '{8:d},{9:f},{10:f},{11:s},{12:s}\n'.format(
-                  DATASET, nb_samples, budget, nb_trees,
-                  NB_TREES_PER_ENSEMBLE,
-                  model_params.get('max_depth'),
-                  -1, model_params.get('learning_rate'), NB_SPLITS, mean, std,
-                  model_name, config,
-                  str(model_params.get('balance_partition'))))
-  output.close()
+          print("====== PB {} SCORE {} ======".format(budget, mean))
+

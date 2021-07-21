@@ -5,20 +5,20 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+from datetime import datetime
 from evaluation import estimator
 
-PATH = './'
-SAMPLES = [300, 5000]
+PATH = './results/adult/'
+SAMPLES = [5000]
 
 if __name__ == '__main__':
-  data = pd.read_csv(PATH + 'data.csv', usecols=[
+  data = pd.read_csv(PATH + 'data_21-07-21_09:37.csv', usecols=[
       'dataset', 'nb_samples', 'privacy_budget', 'nb_tree',
       'nb_tree_per_ensemble', 'max_depth',
       'max_leaves', 'learning_rate', 'nb_of_runs', 'mean', 'std', 'model',
       'config', 'balance_partition'])
 
-  privacy_budgets = np.arange(0.1, 1.0, 0.1)
+  privacy_budgets = [0.5,2,4,6,8,10]
   param_values = data.iloc[0]
 
   # Own model
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     plt.grid(True)
     for model in models:
       model_name = str(model).split('.')[-1][:-2]
-      for config in ['Vanilla', 'BFS', 'DFS', '3-trees']:
+      for config in ['DFS']:
         if config in ['BFS']:
           continue
         if model_name == 'DPRef' and config != 'DFS':
@@ -63,7 +63,7 @@ if __name__ == '__main__':
                      capsize=3,
                      label=label)
 
-    plt.axis([0, 1, 0, int(max(
+    plt.axis([0, 11, 0, int(max(
         data[data['nb_samples'] == nb_samples]['mean']) + max(
             data[data['nb_samples'] == nb_samples]['std']) + 5)])
     plt.legend(loc='upper right')
@@ -72,5 +72,7 @@ if __name__ == '__main__':
         data[data['nb_samples'] == nb_samples].iloc[0]['nb_tree']))
     plt.xlabel('Privacy budget')
     plt.ylabel('Test Error (%)')
+    now = datetime.now().strftime("%d-%m-%y_%H:%M")
     plt.savefig(
-        PATH + 'results_{0!s}.png'.format(nb_samples), format='png', dpi=600)
+        PATH + 'results_21-07-21_09:37{0!s}_{1!s}.png'.format(nb_samples, now),
+        format='png', dpi=600)
