@@ -973,7 +973,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626771803.07" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626882387.5" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1107,11 +1107,71 @@ adult
 			<rich_text foreground="#ffffc0c0cbcb">TODO cpp, need some kind of Predictlabels function for classification</rich_text>
 			<rich_text>
 
-hardcoded nB_trees int get_adult! as well as NB_TREES_PER_ENS in test_adult.py
+</rich_text>
+			<rich_text foreground="#ffffffff0000">hardcoded nB_trees int get_adult! as well as NB_TREES_PER_ENS in test_adult.py</rich_text>
+			<rich_text>
 
-now check out why print_recursive does weird!
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">now check out why print_recursive does weird!
+    </rich_text>
+			<rich_text foreground="#9090eeee9090">gains match but splitting on different attributes
+    I guess it's not a problem algorithm wise, but not very n1</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">
+</rich_text>
+			<rich_text>
+and maybe test if verification is actually correct!
+    </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">5k samples pb of 10:</rich_text>
+			<rich_text>
+        [0.756 0.73  0.738 0.771 0.755]
+        === PB 10.0 SCORE (mean) 25.0 ===
+    </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">15k samples 
+        pb 0.5:</rich_text>
+			<rich_text>
+            [0.664      0.69833333 0.70433333 0.67466667 0.699     ]
+            === PB 0.5 SCORE (mean) 31.193333333333342 ===
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">        pb 2:
+</rich_text>
+			<rich_text>            [0.748      0.767      0.766      0.75366667 0.75166667]
+            === PB 2.0 SCORE (mean) 24.27333333333334 ===
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">        pb 4:
+</rich_text>
+			<rich_text>            [0.74133333 0.76366667 0.765      0.74733333 0.752     ]
+            === PB 4.0 SCORE (mean) 24.613333333333344 ===
+        </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">pb 6:</rich_text>
+			<rich_text>
+            [0.74133333 0.759      0.765      0.74733333 0.752     ]
+            === PB 6.0 SCORE (mean) 24.706666666666663 ===
+        </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">pb 8:</rich_text>
+			<rich_text>
+            [0.74133333 0.759      0.765      0.74733333 0.752     ]
+            === PB 8.0 SCORE (mean) 24.706666666666663 ===
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">        pb 10:
+</rich_text>
+			<rich_text>            [0.74133333 0.759      0.765      0.74733333 0.752     ]
+            === PB 10.0 SCORE (mean) 24.706666666666663 ===
+   </rich_text>
+			<rich_text foreground="#ffffffff0000"> </rich_text>
+			<rich_text foreground="#ffff00000000">very strange</rich_text>
+			<rich_text foreground="#ffffffff0000">, check if np.random.uniform() is deterministic</rich_text>
+			<rich_text>
+      •   no it's not. giving no seed is implicitly seeding it randomly
 
-and maybe test if verification is actually correct!</rich_text>
+leaf values are slightly off (already in tree 1)
+   • tree 0 is matching up to at least 8 digits
+   • gain and gradients are clipped to 10 and 15 digits
+   • tree 1 compute_prediction where we have 26 samples in one leaf is off
+      ◇ somehow different samples (-&gt;gradients) end up in that leaf
+         ▪ though the numerical values of the gradients are ok
+         ▪ but it's the wrong ones.
+         ▪ X is wrong
+            - last column nation theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use

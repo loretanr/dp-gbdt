@@ -1340,10 +1340,10 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
     noise = 0
     if (RANDOMIZATION):
       noise = np.random.laplace(0, scale)
-    logger.debug('({0:.3f} -> {1:.3f})'.format(np.float(leaf.prediction), np.float(leaf.prediction) + noise))
+    logger.debug('({0:.3f} -> {1:.8f})'.format(np.float(leaf.prediction), np.float(leaf.prediction) + noise))
     leaf.prediction += noise
 
-  logger.debug("LEAFSUM {:.8f}".format(np.sum([leaf.prediction for leaf in leaves])))
+  logger.debug("NUMLEAVES {} LEAFSUM {:.8f}".format(len(leaves), np.sum([leaf.prediction for leaf in leaves])))
   verificationLogger.log("LEAFVALUESSUM {:.10f}".format(np.sum([leaf.prediction for leaf in leaves])))
 
 

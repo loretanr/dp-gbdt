@@ -204,7 +204,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
             max_gain = (gain > max_gain) ? gain : max_gain; // TODO unused ?
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
             candidate.lhs_size = lhs_size;
-            candidate.rhs_size = X_live.size() - lhs_size;
+            candidate.rhs_size = gradients_live.size() - lhs_size;
             probabilities.push_back(candidate);
         }
     }
@@ -241,6 +241,8 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
 
     int _lhs_size = std::count(lhs.begin(), lhs.end(), true);
     int _rhs_size = std::count(lhs.begin(), lhs.end(), false);
+
+    lhs_size = _lhs_size;
 
     // if all samples go on the same side it's useless to split on this value
     if ( _lhs_size == 0 or _rhs_size == 0 ) {
@@ -350,7 +352,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
 
         leaf->prediction += noise;
 
-        LOG_DEBUG("({1:.3f} -> {2:.3f})", leaf->prediction, leaf->prediction+noise);
+        LOG_DEBUG("({1:.3f} -> {2:.8f})", leaf->prediction, leaf->prediction+noise);
     }
 
     // rest is just for validation
@@ -358,7 +360,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
     for (auto leaf : this->leaves) {
         sum += leaf->prediction;
     }
-    LOG_DEBUG("LEAFSUM {1:.8f}", sum);
+    LOG_INFO("NUMLEAVES {1} LEAFSUM {2:.8f}", this->leaves.size(), sum);
     if(VERIFICATION_MODE) {
         VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
     }

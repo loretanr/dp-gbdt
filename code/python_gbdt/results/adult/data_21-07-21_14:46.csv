@@ -1,0 +1,7 @@
+dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,model,config,balance_partition
+adult,15000,0.500000,50,50,6,-1,0.100000,5,31.193333,0.790035,DPGBDT,DFS,True
+adult,15000,2.000000,50,50,6,-1,0.100000,5,24.273333,0.388072,DPGBDT,DFS,True
+adult,15000,4.000000,50,50,6,-1,0.100000,5,24.613333,0.460024,DPGBDT,DFS,True
+adult,15000,6.000000,50,50,6,-1,0.100000,5,24.706667,0.417852,DPGBDT,DFS,True
+adult,15000,8.000000,50,50,6,-1,0.100000,5,24.706667,0.417852,DPGBDT,DFS,True
+adult,15000,10.000000,50,50,6,-1,0.100000,5,24.706667,0.417852,DPGBDT,DFS,True

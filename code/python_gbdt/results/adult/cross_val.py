@@ -19,7 +19,7 @@ PRIVACY_BUDGETS = [0.5,2,4,6,8,10]
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
-SAMPLES = [5000]
+SAMPLES = [300]
 # Nb trees for each ensemble
 NB_TREES_PER_ENSEMBLE = 50
 

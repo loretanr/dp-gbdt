@@ -249,9 +249,9 @@ class Parser:
     else:
       y = np.where(adult.iloc[:, -1] == '>50K', 1, -1)
     adult = adult.iloc[:, :-1]
-    for idx, row in adult.iterrows():
-      if str(row.values[-1]).strip() != 'United-States':
-        adult.at[idx, 13] = 'Other'
+    # for idx, row in adult.iterrows():
+    #   if str(row.values[-1]).strip() != 'United-States':    # bullshit -.-
+    #     adult.at[idx, 13] = 'Other'                         # wastetd hours debugging this
     adult.columns = range(adult.shape[1])
     categorical_indices = adult.select_dtypes(
         include=['object']).columns.tolist()

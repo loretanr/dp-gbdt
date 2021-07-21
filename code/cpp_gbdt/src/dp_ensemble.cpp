@@ -100,7 +100,7 @@ void DPEnsemble::train(DataSet *dataset)
         // intermediate output for validation
         double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
         sum = sum < 0 && sum >= -1e-10 ? 0 : sum;  // avoid "-0.00000.. != 0.00000.."
-        LOG_DEBUG("GRADIENTSUM {1:.8f}", sum);
+        LOG_INFO("GRADIENTSUM {1:.8f}", sum);
         if(VERIFICATION_MODE) {
             VERIFICATION_LOG("GRADIENTSUM {0:.8f}", sum);
         }
