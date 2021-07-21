@@ -1,4 +1,14 @@
+#include <numeric>
+#include <vector>
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <iomanip>
 #include "verification.h"
+#include "dp_ensemble.h"
+#include "dataset_parser.h"
+#include "spdlog/spdlog.h"
+
 
 /* 
     Verification:
@@ -16,8 +26,8 @@ int Verification::main(int argc, char *argv[])
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     // store datasets and their corresponding parameters here
-    vector<DataSet> datasets;
-    vector<ModelParams> parameters;
+    std::vector<DataSet> datasets;
+    std::vector<ModelParams> parameters;
 
     // select dataset(s) here. So far only abalone and year work correctly
     // you can either append some ModelParams to parameters here, or let 
@@ -36,11 +46,11 @@ int Verification::main(int argc, char *argv[])
 
         // Set up logging for verification
         verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset.name));
-        cout << dataset.name << endl;
+        std::cout << dataset.name << std::endl;
 
         // do cross validation
-        vector<double> rmses;
-        vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
+        std::vector<double> rmses;
+        std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
         cv_fold_index = 0;
 
         for (auto split : cv_inputs) {
@@ -53,7 +63,7 @@ int Verification::main(int argc, char *argv[])
             ensemble.train(&split.train);
             
             // compute score
-            vector<double> y_pred = ensemble.predict(split.test.X);
+            std::vector<double> y_pred = ensemble.predict(split.test.X);
 
             // invert the feature scale
             inverse_scale(split.train.scaler, y_pred);
@@ -65,9 +75,9 @@ int Verification::main(int argc, char *argv[])
             double rmse = std::sqrt(average);
 
             rmses.push_back(rmse);
-            cout << setprecision(9) << rmse << " " << std::flush;
+            std::cout << std::setprecision(9) << rmse << " " << std::flush;
             cv_fold_index++;
-        } cout << endl;
+        } std::cout << std::endl;
     
         verification_logfile.close();
     }

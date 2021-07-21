@@ -3,10 +3,10 @@
 
 #include <vector>
 #include <set>
-#include "utils.h"
+#include <fstream>
 #include "tree_node.h"
-#include "laplace.h"
-#include "spdlog/spdlog.h"
+
+#include "utils.h"
 
 extern std::ofstream verification_logfile;
 
@@ -18,20 +18,20 @@ private:
     TreeParams *tree_params;
     DataSet *dataset;
     size_t tree_index;
-    vector<set<double>> X_unique;
-    vector<TreeNode *> leaves;
+    std::vector<std::set<double>> X_unique;
+    std::vector<TreeNode *> leaves;
 
-    TreeNode *make_tree_DFS(int current_depth, vector<int> live_samples);
+    TreeNode *make_tree_DFS(int current_depth, std::vector<int> live_samples);
 
-    TreeNode *make_leaf_node(int current_depth, vector<int> &live_samples);
-    double compute_prediction(vector<double> gradients, vector<double> y);
-    double _predict(vector<double> *row, TreeNode *node);
-    vector<TreeNode> collect_nodes(TreeNode rootnode);
+    TreeNode *make_leaf_node(int current_depth, std::vector<int> &live_samples);
+    double compute_prediction(std::vector<double> gradients, std::vector<double> y);
+    double _predict(std::vector<double> *row, TreeNode *node);
+    std::vector<TreeNode> collect_nodes(TreeNode rootnode);
 
-    TreeNode *find_best_split(VVD &X_live, vector<double> &gradients_live, int current_depth);
-    void samples_left_right_partition(vector<bool> &lhs, VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value);
-    double compute_gain(VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value, int &lhs_size);
-    int exponential_mechanism(vector<SplitCandidate> &probs, double max_gain);
+    TreeNode *find_best_split(VVD &X_live, std::vector<double> &gradients_live, int current_depth);
+    void samples_left_right_partition(std::vector<bool> &lhs, VVD &samples, std::vector<double> &gradients_live, int feature_index, double feature_value);
+    double compute_gain(VVD &samples, std::vector<double> &gradients_live, int feature_index, double feature_value, int &lhs_size);
+    int exponential_mechanism(std::vector<SplitCandidate> &probs, double max_gain);
     void add_laplacian_noise(double laplace_scale);
 
 public:
@@ -43,7 +43,7 @@ public:
 
     TreeNode *root_node;
 
-    vector<double> predict(VVD &X);
+    std::vector<double> predict(VVD &X);
     void fit();
 };
 

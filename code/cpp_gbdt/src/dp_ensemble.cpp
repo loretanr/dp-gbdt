@@ -1,4 +1,10 @@
+#include <numeric>
+#include <algorithm>
 #include "dp_ensemble.h"
+#include "spdlog/spdlog.h"
+
+
+using namespace std;
 
 
 DPEnsemble::DPEnsemble(ModelParams *parameters)
@@ -50,7 +56,7 @@ void DPEnsemble::train(DataSet *dataset)
 
         // compute sensitivity
         tree_params.delta_g = 3 * pow(params.l2_threshold, 2); // TODO move out of loop
-        tree_params.delta_v = min((double) (params.l2_threshold / (1 + params.l2_lambda)),
+        tree_params.delta_v = std::min((double) (params.l2_threshold / (1 + params.l2_lambda)),
                             2 * params.l2_threshold *
                             pow(1-params.learning_rate, tree_index));
 

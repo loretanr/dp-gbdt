@@ -1,4 +1,13 @@
+#include <numeric>
+#include <iostream>
+#include <iomanip>
+#include <cmath>
 #include "dp_tree.h"
+#include "laplace.h"
+#include "spdlog/spdlog.h"
+
+
+using namespace std;
 
 
 DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index): 

@@ -1,17 +1,21 @@
-#include "dataset_parser.h"
 #include <memory>
 #include <map>
+#include <numeric>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+#include "dataset_parser.h"
 
 
-
-DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
+DataSet Parser::get_abalone(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
 {
-    ifstream infile("datasets/real/abalone.data");
-    string line; VVD X; vector<double> y;
+    std::ifstream infile("datasets/real/abalone.data");
+    std::string line; VVD X; std::vector<double> y;
     num_samples = std::min(num_samples, (size_t) 4177);
 
     // regression task -> LSE
-    shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
+    std::shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
 
     if (use_default_params) {
         // create some default parameters
@@ -29,10 +33,10 @@ DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples,
 
     // parse dataset, label-encode categorical feature
     size_t current_index = 0;
-    while (getline(infile, line,'\n') && current_index < num_samples) {
-        stringstream ss(line);
-        vector<string> strings = split_string(line, ',');
-        vector<double> X_row;
+    while (std::getline(infile, line,'\n') && current_index < num_samples) {
+        std::stringstream ss(line);
+        std::vector<std::string> strings = split_string(line, ',');
+        std::vector<double> X_row;
         if(strings[0] == "M"){ // first col categorical (gender M/F/I)
             X_row.push_back(1.0f);
         } else if (strings[0] == "F") {
@@ -59,13 +63,13 @@ DataSet Parser::get_abalone(vector<ModelParams> &parameters, size_t num_samples,
 }
 
 
-DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
+DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
 {
-    ifstream infile("datasets/real/YearPredictionMSD.txt");
-    string line; VVD X; vector<double> y;
+    std::ifstream infile("datasets/real/YearPredictionMSD.txt");
+    std::string line; VVD X; std::vector<double> y;
 
     // regression task -> LSE
-    shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
+    std::shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
 
     // all 90 columns are numerical -> create vector with numbers 0..89
     std::vector<int> num_idx(90);
@@ -86,10 +90,10 @@ DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t nu
 
     // parse dataset, only has numerical features
     size_t current_index = 0;
-    while (getline(infile, line,'\n') && current_index < num_samples) {
-        stringstream ss(line);
-        vector<string> strings = split_string(line, ',');
-        vector<double> X_row;
+    while (std::getline(infile, line,'\n') && current_index < num_samples) {
+        std::stringstream ss(line);
+        std::vector<std::string> strings = split_string(line, ',');
+        std::vector<double> X_row;
         for(size_t i=1;i<strings.size(); i++){
             X_row.push_back(stof(strings[i]));
         }
@@ -109,16 +113,16 @@ DataSet Parser::get_YearPredictionMSD(vector<ModelParams> &parameters, size_t nu
 }
 
 
-DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
+DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
 {
-    ifstream train_infile("datasets/real/adult.data");
-    ifstream test_infile("datasets/real/adult.test");
-    VVD X; vector<double> y;
+    std::ifstream train_infile("datasets/real/adult.data");
+    std::ifstream test_infile("datasets/real/adult.test");
+    VVD X; std::vector<double> y;
 
     // column types for parsing
-    vector<int> numerical = {0,4,10,11,12};
-    vector<int> categorical = {1,3,5,6,7,8,9,13};
-    vector<int> drop = {2}; // drop fnlwgt column
+    std::vector<int> numerical = {0,4,10,11,12};
+    std::vector<int> categorical = {1,3,5,6,7,8,9,13};
+    std::vector<int> drop = {2}; // drop fnlwgt column
 
     int nb_trees = 5;           // TODO remove, for debug
     // if (num_samples <= 300)
@@ -126,7 +130,7 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
 
 
     // create / adjust model parameters
-    shared_ptr<BinomialDeviance> lossfunction(new BinomialDeviance());
+    std::shared_ptr<BinomialDeviance> lossfunction(new BinomialDeviance());
     if (use_default_params) {
         ModelParams params = create_default_params();
         params.num_idx = {0,3,9,10,11}; // adjusted for dropped column
@@ -142,12 +146,12 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
     }
     
     // use this map for label encoding of categorical features (string -> float)
-    vector<map<string,float>> mappings(14);
+    std::vector<std::map<std::string,float>> mappings(14);
 
     // parse training dataset
     size_t current_index = 0;
-    string line;
-    while (getline(train_infile, line,'\n') && current_index < num_samples) {
+    std::string line;
+    while (std::getline(train_infile, line,'\n') && current_index < num_samples) {
         
         // drop dataset rows that contain missing entries
         if (line.find('?') < line.length() or line.empty()) {
@@ -155,9 +159,9 @@ DataSet Parser::get_adult(vector<ModelParams> &parameters, size_t num_samples, b
         }
 
         // fill X and y
-        stringstream ss(line);
-        vector<string> strings = split_string(line, ',');
-        vector<double> X_row;
+        std::stringstream ss(line);
+        std::vector<std::string> strings = split_string(line, ',');
+        std::vector<double> X_row;
         for(size_t i=0; i<strings.size()-1; i++){
             if (std::find(drop.begin(), drop.end(), i) != drop.end()) {
                 // drop column

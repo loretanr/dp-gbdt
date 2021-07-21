@@ -2,28 +2,15 @@
 #define UTILS_H
 
 #include <vector>
-#include <algorithm>
-#include <random>
-#include <ctime>
-#include <stdexcept>
-#include <string>
-#include <iostream>
-#include <iomanip> 
-#include <sstream>
-#include <numeric>
-#include <queue>
-#include <cmath>
-#include <limits>
-#include <iterator>
-#include <fstream>
-#include <cstdlib>
-#include <spdlog/sinks/stdout_sinks.h>
-// #include "spdlog/spdlog.h"
 #include <memory>
+#include <string>
+#include "loss.h"
+
+// #include <spdlog/sinks/stdout_sinks.h>
+// #include "spdlog/spdlog.h"
 
 typedef std::vector<std::vector<double>> VVD;
 
-#include "loss.h"
 
 /* Logging, to be removed */
 #define concat(one, two) ((std::string) one + (std::string) two).c_str()
@@ -49,13 +36,11 @@ extern bool VERIFICATION_MODE;
 extern size_t cv_fold_index;
 
 
-using namespace std;
-
 struct ModelParams {
     int nb_trees;
     double learning_rate = 0.1;
     double privacy_budget = 1.0;
-    shared_ptr<LossFunction> lossfunction;
+    std::shared_ptr<LossFunction> lossfunction;
     int max_depth = 6;
     int early_stop = 5;
     int max_leaves;
@@ -74,8 +59,8 @@ struct ModelParams {
     double l2_lambda = 0.1;
 
     double init_score;
-    vector<int> cat_idx;
-    vector<int> num_idx;
+    std::vector<int> cat_idx;
+    std::vector<int> num_idx;
 };
 
 
@@ -90,8 +75,8 @@ struct Scaler {
 
 struct DataSet {
     VVD X;
-    vector<double> y;
-    vector<double> gradients;
+    std::vector<double> y;
+    std::vector<double> gradients;
     int length;
     int num_x_cols;
     bool empty;
@@ -100,9 +85,9 @@ struct DataSet {
     std::string task;
 
     DataSet();
-    DataSet(VVD X, vector<double> y);
+    DataSet(VVD X, std::vector<double> y);
 
-    void add_row(vector<double> xrow, double yval);
+    void add_row(std::vector<double> xrow, double yval);
     void scale(double lower, double upper);
 };
 
@@ -127,14 +112,14 @@ struct TreeParams {
 };
 
 ModelParams create_default_params();
-void inverse_scale(Scaler &scaler, vector<double> &vec);
+void inverse_scale(Scaler &scaler, std::vector<double> &vec);
 double clip(double n, double lower, double upper);
-vector<string> split_string(const string &s, char delim);           // TODO enable shuffle
+std::vector<std::string> split_string(const std::string &s, char delim);           // TODO enable shuffle
 TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio = 0.70, bool shuffle = false);
-vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle);
+std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle);
 
 
-double log_sum_exp(vector<double> arr);
+double log_sum_exp(std::vector<double> arr);
 void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');
 
 
