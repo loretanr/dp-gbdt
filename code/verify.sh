@@ -8,6 +8,7 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 
 # mkdirs if not already exist
+mkdir -p verification/outputs
 mkdir -p cpp_gbdt/verification_logs
 mkdir -p python_gbdt/verification/verification_logs
 

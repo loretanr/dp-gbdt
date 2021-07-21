@@ -30,7 +30,7 @@ if __name__ == '__main__':
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
     SAMPLES = [300,5000]
-    SAMPLES = [300]
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     DATASET = 'yearMSD'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
-    SAMPLES = [300]
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     DATASET = 'adult'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
-    SAMPLES = []
+    SAMPLES = [300]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
