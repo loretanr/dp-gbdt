@@ -2,9 +2,11 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 #include "dp_ensemble.h"
 #include "dataset_parser.h"
 #include "verification.h"
+#include "spdlog/spdlog.h"
 
 
 
@@ -12,7 +14,7 @@ int main(int argc, char** argv)
 {
     // parse flags
     for(int i = 1; i < argc; i++){
-		if ( !strcmp(argv[i], "--verify") ){
+		if ( ! std::strcmp(argv[i], "--verify") ){
             // go into verification mode -> run model on small datasets
             RANDOMIZATION = false;
 			VERIFICATION_MODE = true;
