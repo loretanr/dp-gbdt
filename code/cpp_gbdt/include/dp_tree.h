@@ -1,8 +1,11 @@
 #ifndef DIFFPRIVTREE_H
 #define DIFFPRIVTREE_H
 
+#include <vector>
+#include <set>
 #include "utils.h"
 #include "tree_node.h"
+#include "laplace.h"
 #include "spdlog/spdlog.h"
 
 extern std::ofstream verification_logfile;
@@ -17,7 +20,6 @@ private:
     size_t tree_index;
     vector<set<double>> X_unique;
     vector<TreeNode *> leaves;
-    vector<TreeNode> *nodes;  // TODO = necessary?
 
     TreeNode *make_tree_DFS(int current_depth, vector<int> live_samples);
 

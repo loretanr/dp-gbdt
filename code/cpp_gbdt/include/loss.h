@@ -1,12 +1,7 @@
 #ifndef LOSS_FUNCTION_H
 #define LOSS_FUNCTION_H
 
-#include <map>
-#include <set>
 #include <vector>
-#include <cmath>
-#include <numeric>
-#include <algorithm>
 
 // abstract class
 class LossFunction

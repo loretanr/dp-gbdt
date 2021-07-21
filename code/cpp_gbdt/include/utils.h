@@ -2,8 +2,6 @@
 #define UTILS_H
 
 #include <vector>
-#include <set>
-#include <map>
 #include <algorithm>
 #include <random>
 #include <ctime>
@@ -104,7 +102,7 @@ struct DataSet {
     DataSet();
     DataSet(VVD X, vector<double> y);
 
-    void add_row(vector<double> xrow, double yval); // probably broken because theres no self/this
+    void add_row(vector<double> xrow, double yval);
     void scale(double lower, double upper);
 };
 
@@ -139,19 +137,5 @@ vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int fold
 double log_sum_exp(vector<double> arr);
 void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');
 
-class Laplace
-{
-private:
-    double scale;
-    std::mt19937 generator;
-    std::default_random_engine generator1;
-    std::default_random_engine generator2;
-    std::exponential_distribution<double> distribution;
-public:
-    Laplace(int seed): generator(seed){};
-    Laplace(double scale, int seed): scale(scale), generator(seed), distribution(1.0/scale){};
-    double return_a_random_variable();
-    double return_a_random_variable(double scale);
-};
 
 #endif // UTILS_H

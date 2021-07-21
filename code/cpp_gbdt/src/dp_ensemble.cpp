@@ -49,7 +49,7 @@ void DPEnsemble::train(DataSet *dataset)
         }
 
         // compute sensitivity
-        tree_params.delta_g = 3 * pow(params.l2_threshold, 2); // todo move out of loop
+        tree_params.delta_g = 3 * pow(params.l2_threshold, 2); // TODO move out of loop
         tree_params.delta_v = min((double) (params.l2_threshold / (1 + params.l2_lambda)),
                             2 * params.l2_threshold *
                             pow(1-params.learning_rate, tree_index));
@@ -94,7 +94,7 @@ void DPEnsemble::train(DataSet *dataset)
         // intermediate output for validation
         double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
         sum = sum < 0 && sum >= -1e-10 ? 0 : sum;  // avoid "-0.00000.. != 0.00000.."
-        LOG_INFO("GRADIENTSUM {1:.8f}", sum);
+        LOG_DEBUG("GRADIENTSUM {1:.8f}", sum);
         if(VERIFICATION_MODE) {
             VERIFICATION_LOG("GRADIENTSUM {0:.8f}", sum);
         }

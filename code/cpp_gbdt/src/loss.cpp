@@ -1,4 +1,9 @@
 #include "loss.h"
+#include <set>
+#include <map>
+#include <cmath>
+#include <numeric>
+#include <algorithm>
 
 /* ---------- LSE ---------- */
 
