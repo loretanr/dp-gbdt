@@ -17,11 +17,11 @@ as of right now:
 - There is a global variable RANDOMIZATION that turns on/off randomization (introduced by e.g. the exponential mechanism and through adding laplacian noise to leaves)
   - I have **not yet** seriously played around and tested the code **with randomization turned on**, as I'm still developing the algorithm and thus require deterministic runs to compare C++ and python
 
-- Code is not optimized at all yet
+- C++ code is not optimized at all yet
   - Have to do some profiling, think about data movement, cacheing, etc.
   - Not planning to use threading (because it's not useful for my thesis, as it should run in an enclave)
   - so far it's compilied with -O0
-  - still much faster than the python one
+  - still much faster than the python code
 
 
 ## Requirements
