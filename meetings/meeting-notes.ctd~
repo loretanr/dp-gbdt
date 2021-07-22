@@ -973,7 +973,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626882387.5" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626941371.27" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1102,11 +1102,11 @@ adult
 			<rich_text foreground="#9090eeee9090">TODO need BinomialDeviance loss function in CPP
     and a more modular way, maybe pass loss function around?</rich_text>
 			<rich_text>
-    
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">TODO cpp, need some kind of Predictlabels function for classification</rich_text>
+			<rich_text foreground="#9090eeee9090">    
+TODO cpp, need some kind of Predictlabels function for classification
+</rich_text>
 			<rich_text>
-
 </rich_text>
 			<rich_text foreground="#ffffffff0000">hardcoded nB_trees int get_adult! as well as NB_TREES_PER_ENS in test_adult.py</rich_text>
 			<rich_text>
@@ -1163,15 +1163,16 @@ and maybe test if verification is actually correct!
 			<rich_text>
       •   no it's not. giving no seed is implicitly seeding it randomly
 
-leaf values are slightly off (already in tree 1)
-   • tree 0 is matching up to at least 8 digits
-   • gain and gradients are clipped to 10 and 15 digits
-   • tree 1 compute_prediction where we have 26 samples in one leaf is off
-      ◇ somehow different samples (-&gt;gradients) end up in that leaf
-         ▪ though the numerical values of the gradients are ok
-         ▪ but it's the wrong ones.
-         ▪ X is wrong
-            - last column nation theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
+</rich_text>
+			<rich_text foreground="#ffff00000000">leaf values are slightly off</rich_text>
+			<rich_text foreground="#9090eeee9090"> (already in tree 1)
+       - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
+			<rich_text>
+       
+       
+TODO 
+    right score for cpp classification
+    some function on the loss I guess (for usage in main and verification)</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use

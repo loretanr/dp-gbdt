@@ -13,7 +13,8 @@
 /* 
     Verification:
     run the model on various (small to medium size) datasets for 
-    easy verification of correctness
+    easy verification of correctness. intermediate values are written to
+    verification_logfile.
 */
 
 std::ofstream verification_logfile;
@@ -39,6 +40,7 @@ int Verification::main(int argc, char *argv[])
     datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
     datasets.push_back(parser.get_adult(parameters, 300, true)); // small adult
+    // datasets.push_back(parser.get_adult(parameters, 1000, true)); // medium adult
 
     for(size_t i=0; i<datasets.size(); i++) {
         DataSet &dataset = datasets[i];

@@ -191,7 +191,7 @@ DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_sampl
 
     // TODO
     // go through all lines of the test dataset file and append to X and y (we'll have our own splits)
-    // for now it's fine since we're using tiny amounts of samples
+    // for now it's fine since we're using small amounts of samples (training is already 30k)
 
 
     DataSet dataset = DataSet(X,y);

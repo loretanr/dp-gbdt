@@ -29,7 +29,8 @@ if __name__ == '__main__':
 
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
-    SAMPLES = [300,5000]
+    # SAMPLES = [300,5000]
+    # SAMPLES = []
     SAMPLES = [300]
 
     for num_samples in SAMPLES:
@@ -58,9 +59,11 @@ if __name__ == '__main__':
         print(scores)
         logging.CloseVerificationLogger()
 
+
     DATASET = 'yearMSD'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
+    # SAMPLES = []
     SAMPLES = [300]
 
     for num_samples in SAMPLES:
@@ -88,6 +91,7 @@ if __name__ == '__main__':
         mean, std = scores.mean(), (scores.std() / 2)
         print(scores)
         logging.CloseVerificationLogger()
+
 
     DATASET = 'adult'
     parser = Parser(dataset=DATASET)

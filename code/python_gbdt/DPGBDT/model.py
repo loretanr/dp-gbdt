@@ -26,7 +26,7 @@ logger = logging.GetLogger(__name__)
 verificationLogger = None
 cv_fold_counter = 0
 
-RANDOMIZATION = True    # TODO random on
+RANDOMIZATION = False    # TODO random on
 VALIDATION = True
 
 

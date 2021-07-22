@@ -973,7 +973,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626885632.35" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626941371.27" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1102,11 +1102,11 @@ adult
 			<rich_text foreground="#9090eeee9090">TODO need BinomialDeviance loss function in CPP
     and a more modular way, maybe pass loss function around?</rich_text>
 			<rich_text>
-    
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">TODO cpp, need some kind of Predictlabels function for classification</rich_text>
+			<rich_text foreground="#9090eeee9090">    
+TODO cpp, need some kind of Predictlabels function for classification
+</rich_text>
 			<rich_text>
-
 </rich_text>
 			<rich_text foreground="#ffffffff0000">hardcoded nB_trees int get_adult! as well as NB_TREES_PER_ENS in test_adult.py</rich_text>
 			<rich_text>
@@ -1163,8 +1163,16 @@ and maybe test if verification is actually correct!
 			<rich_text>
       •   no it's not. giving no seed is implicitly seeding it randomly
 
-leaf values are slightly off (already in tree 1)
+</rich_text>
+			<rich_text foreground="#ffff00000000">leaf values are slightly off</rich_text>
+			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
+			<rich_text>
+       
+       
+TODO 
+    right score for cpp classification
+    some function on the loss I guess (for usage in main and verification)</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
@@ -1258,7 +1266,7 @@ leaf values are slightly off (already in tree 1)
 
 • seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1626169666.86" unique_id="21">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1626941406.17" unique_id="21">
 		<rich_text>Suddenly python problem (after apt update/upgrade I believe).
       </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">File &quot;/home/loretanr/.local/lib/python3.7/site-packages/matplotlib/__init__.py&quot;, line 107, in &lt;module&gt;
@@ -1292,5 +1300,10 @@ stuuuuupid    </rich_text>
         because I clicked on breakpoints “Raised Exceptions” in VScode
         
 -------------------------------------------------------------------------------------------------------</rich_text>
+	</node>
+	<node custom_icon_id="0" foreground="" is_bold="False" name="Moritz" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626941406.17" ts_lastsave="1626941478.49" unique_id="23">
+		<rich_text scale="h2">Questions</rich_text>
+		<rich_text>
+• What are you working on and what is your goal/vision for dp gbdt?</rich_text>
 	</node>
 </cherrytree>
