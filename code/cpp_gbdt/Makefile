@@ -1,5 +1,5 @@
 COMPILER=g++
-CFLAGS=-c -Wall -std=c++11 -g -O0
+CFLAGS=-c -Wall -std=c++11 -g -O3				# todo -O0 for hardening
 SOURCES=$(wildcard src/*.cpp)
 INC=-I./include/# -L ./src/ -lfmt
 

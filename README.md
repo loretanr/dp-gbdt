@@ -21,7 +21,7 @@ as of right now:
   - Have to do some profiling, think about data movement, cacheing, etc.
   - Not planning to use threading (because it's not useful for my thesis, as it should run in an enclave)
   - so far it's compilied with -O0
-  - still much faster than the python code
+  - still much faster than the python code (with just -O3 it's gotta be like 20x)
 
 
 ## Requirements
