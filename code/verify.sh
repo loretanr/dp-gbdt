@@ -1,5 +1,19 @@
 #!/bin/bash
 
+#
+# Script to verify that both python and C++ gbdt produce the exact same output.
+# This requires both implementations to have randomness turned off. That means 
+# no shuffling of input data, no exp-mechanism, no addition of laplace noise to 
+# the leaf values. 
+# How it works: Both implementations write intermediate values (gradients & leaf 
+# values) to logfiles after building each tree they build. This script (compiles
+# and) runs both python and C++ gbdt, collects these logfiles and compares them.
+# It helps tracking down if and where errors/differences start occuring. This is 
+# convenient, because in gbdt tiny differences in intermediate values can lead to 
+# completely different end results. (e.g. different gradients -> diff gains ->
+# diff split chosen -> diff trees -> diff score)
+#
+
 CURR_DIR=$PWD
 SHIFT_RIGHT='sed "s/^/    /"'
 NRR=false
@@ -56,6 +70,7 @@ fi
 # compare the outputs
 echo "------------ diff ---------------"
 cd verification/outputs
+# loop over python logs
 for py_filename in *.python.log; do
     # get matching cpp log file
     IFS='.'
@@ -71,11 +86,11 @@ for py_filename in *.python.log; do
     DIFF_OUTPUT=$(icdiff --color-map='description:cyan,change:red_bold' -U 2 --cols=65 $py_filename $cpp_filename)
     if [ $(wc -l <<< "$DIFF_OUTPUT") -eq 1 ] ; then
         echo -e "${CYAN}$py_filename\n$cpp_filename${NC}"
-        echo -e "${GREEN}files are equal${NC}"
+        echo -e "${GREEN}files (and thus trees, splits etc.) are equal${NC}"
     else
     numlines=$(diff $py_filename $cpp_filename | grep "^>" | wc -l)
     echo "$numlines lines not matching, starting with:" | eval "$SHIFT_RIGHT"
-        echo "$DIFF_OUTPUT" | head -n 12  # only show first few lines
+        echo "$DIFF_OUTPUT" | head -n 12  # change number here if you need more output lines
     fi
     echo "------------"
 done
