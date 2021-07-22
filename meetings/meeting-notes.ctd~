@@ -1266,7 +1266,7 @@ TODO
 
 • seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1626169666.86" unique_id="21">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1626941406.17" unique_id="21">
 		<rich_text>Suddenly python problem (after apt update/upgrade I believe).
       </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">File &quot;/home/loretanr/.local/lib/python3.7/site-packages/matplotlib/__init__.py&quot;, line 107, in &lt;module&gt;
@@ -1300,5 +1300,10 @@ stuuuuupid    </rich_text>
         because I clicked on breakpoints “Raised Exceptions” in VScode
         
 -------------------------------------------------------------------------------------------------------</rich_text>
+	</node>
+	<node custom_icon_id="0" foreground="" is_bold="False" name="Moritz" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626941406.17" ts_lastsave="1626941478.49" unique_id="23">
+		<rich_text scale="h2">Questions</rich_text>
+		<rich_text>
+• What are you working on and what is your goal/vision for dp gbdt?</rich_text>
 	</node>
 </cherrytree>
