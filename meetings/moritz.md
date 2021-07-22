@@ -29,13 +29,17 @@
 
 
 
+----------------------------------------------------------------------------------------
 
+### Notes and findings
 
+- probably can leave away scaling  [-1, 1]
 
+​	*nice, that would give better accuracy. At least in the case of regression where y is a bit spread out (like in abalone). For classification it likely has no effect.*
 
-probably can leave away scaling -1, 1
+- need to read about python cpp
 
+  *numpy uses C under the hood, need to find out when and how*
 
-
-read about python cpp
+- For DP-GBDT they sometimes don't use all columns for training. This speeds up things and also makes the exponential mechanism work better. Because if you have a lot of probabilities, and you divide each one through the total sum to get them into [0,1] then they get very similar and youre not choosing the good one as often as you want.
 

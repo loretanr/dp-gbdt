@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
-    # SAMPLES = [300,5000]
+    SAMPLES = [5000]
     # SAMPLES = []
     SAMPLES = [300]
 

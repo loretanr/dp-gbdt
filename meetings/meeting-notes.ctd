@@ -336,7 +336,7 @@ Or do we need to scale X before training? Or does it not make a difference?</ric
 
 • special consideration required for stuff like “continue;”</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="07_01" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625144466.79" ts_lastsave="1625154146.07" unique_id="20">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="07_01" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625144466.79" ts_lastsave="1626959234.14" unique_id="20">
 			<rich_text>
     SLIDES IN GOOGLE SLIDES
     
@@ -349,6 +349,38 @@ otherwise go on as roadmap
 And for the hardened version will need big comments with formulas etc to make it understandable.
 
 Esfandiar said BFS is better for small datasets than DFS -&gt; might be important to do it doch no</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="07_22" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626959234.14" ts_lastsave="1626962622.29" unique_id="24">
+			<rich_text>
+With </rich_text>
+			<rich_text foreground="#a0a02020f0f0">Ivan Paddu</rich_text>
+			<rich_text>
+
+    in general, if we have no secret dependant branches or data accesses, we are safe.
+
+    no secret dependant branches
+        -&gt; can observe differences in program counter
+    or secret dependant accesses
+        -&gt; con observe differences in cache accesses
+    
+    
+   •  if we have a e.g. an array that fits into 1 cache line. Then we would not need to care about the secret dependant access
+      ◇ IF WE ASSUME CACHE LINE IS MAX ATTACK GRANULARITY
+      ◇ however that is a stupid assumption to make because it is prone to be broken and already kinda is given the right circumstances
+      ◇ And it's also not much additional work if you're doing the thing anyways for larger datastructures
+        
+   •   </rich_text>
+			<rich_text link="webs https://arxiv.org/abs/2104.10749">https://arxiv.org/abs/2104.10749</rich_text>
+			<rich_text>
+            • this paper does automatic hardening. it might be interesting to compare it to my (by hand hardened) compiled assembly to see if we do the same
+            • but it hardens everything so it could get very messy.
+            • maybe just use on snippets.
+            • see what the tool does for simple stuff
+            • could be really useful
+    
+   •  working on C level is not enough. because gcc does weird things even with -O0
+      ◇ need th manually check the assembly code in each location!
+</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1624438373.44" unique_id="5">
@@ -973,7 +1005,7 @@ Theo weirdly rounds privacy_budget_for node to 7 decimals for some reason!
 
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626941371.27" unique_id="22">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 2.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625738159.26" ts_lastsave="1626955266.28" unique_id="22">
 			<rich_text scale="h2">Validation</rich_text>
 			<rich_text>
 
@@ -1167,12 +1199,17 @@ and maybe test if verification is actually correct!
 			<rich_text foreground="#ffff00000000">leaf values are slightly off</rich_text>
 			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
-			<rich_text>
-       
-       
-TODO 
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1626955393.67" unique_id="23">
+			<rich_text>TODO 
     right score for cpp classification
-    some function on the loss I guess (for usage in main and verification)</rich_text>
+    some function on the loss I guess (for usage in main and verification)
+    
+TODO
+    add time in seconds to verify.sh for comparison
+    
+    
+</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
 			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
@@ -1300,8 +1337,5 @@ stuuuuupid    </rich_text>
         because I clicked on breakpoints “Raised Exceptions” in VScode
         
 -------------------------------------------------------------------------------------------------------</rich_text>
-	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="Moritz" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626941406.17" ts_lastsave="1626943689.69" unique_id="23">
-		<rich_text></rich_text>
 	</node>
 </cherrytree>
