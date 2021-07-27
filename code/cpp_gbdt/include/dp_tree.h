@@ -26,7 +26,6 @@ private:
     TreeNode *make_leaf_node(int current_depth, std::vector<int> &live_samples);
     double compute_prediction(std::vector<double> gradients, std::vector<double> y);
     double _predict(std::vector<double> *row, TreeNode *node);
-    std::vector<TreeNode> collect_nodes(TreeNode rootnode);
 
     TreeNode *find_best_split(VVD &X_live, std::vector<double> &gradients_live, int current_depth);
     void samples_left_right_partition(std::vector<bool> &lhs, VVD &samples, std::vector<double> &gradients_live, int feature_index, double feature_value);

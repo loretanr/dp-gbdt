@@ -120,14 +120,6 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
 }
 
 
-vector<TreeNode> DPTree::collect_nodes(TreeNode rootnode)
-{
-    // dummy return val
-    vector<TreeNode> bla;
-    return bla;
-}
-
-
 double DPTree::compute_prediction(vector<double> gradients, vector<double> y)
 {
     double prediction = (-1 * std::accumulate(gradients.begin(), gradients.end(), 0.0)

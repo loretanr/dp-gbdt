@@ -5,10 +5,11 @@
 #include <numeric>
 #include <algorithm>
 
-/* ---------- LSE ---------- */
+/* ---------- Regression ---------- */
 
-std::vector<double> LeastSquaresError::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
+std::vector<double> Regression::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
     {
+        // TODO negative or positive gradient? what is this?
         std::vector<double> gradients(y.size());
         for (size_t i=0; i<y.size(); i++) {
             gradients[i] = y_pred[i] - y[i];
@@ -19,19 +20,34 @@ std::vector<double> LeastSquaresError::compute_gradients(std::vector<double> &y,
         return gradients;
     }
     
-double LeastSquaresError::compute_init_score(std::vector<double> &y)
+double Regression::compute_init_score(std::vector<double> &y)
 {
-    // for regression simply start with mean
+    // mean
     double sum = std::accumulate(y.begin(), y.end(), 0.0);
     return sum / y.size();
 }
 
-/* ---------- Binominal Deviance ---------- */
+double Regression::compute_score(std::vector<double> &y, std::vector<double> &y_pred)
+{
+    // RMSE
+    std::transform(y.begin(), y.end(), 
+            y_pred.begin(), y_pred.begin(), std::minus<double>());
+    std::transform(y_pred.begin(), y_pred.end(),
+            y_pred.begin(), [](double &c){return std::pow(c,2);});
+    double average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
+    double rmse = std::sqrt(average);
+    return rmse;
+}
 
-std::vector<double> BinomialDeviance::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
+
+/* ---------- Binary Classification ---------- */
+
+// TODO, link between theory (expit/logit) and code
+
+std::vector<double> BinaryClassification::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
     {
-        // positive gradient = expit(y_pred) - y
-        // expit(x) (logistic sigmoid function) = 1/(1+exp(-x))
+        // positive gradient: expit(y_pred) - y
+        // expit(x): (logistic sigmoid function) = 1/(1+exp(-x))
         std::vector<double> gradients(y.size());
         for (size_t i=0; i<y.size(); i++) {
             gradients[i] = 1 / (1 + std::exp(-y_pred[i])) - y[i];
@@ -42,7 +58,7 @@ std::vector<double> BinomialDeviance::compute_gradients(std::vector<double> &y, 
         return gradients;
     }
 
-double BinomialDeviance::compute_init_score(std::vector<double> &y)
+double BinaryClassification::compute_init_score(std::vector<double> &y)
 {
     // count how many samples are in each of the 2 classes
     std::map<double,double> occurrences;
@@ -54,7 +70,7 @@ double BinomialDeviance::compute_init_score(std::vector<double> &y)
             occurrences.insert({elem, 1});
         }
     }
-    // just need the smaller value   ????? TODO 
+    // just need the smaller value   ????? TODO why
     std::set<double, std::greater<double>> occs;
     for(auto &elem : occurrences){
         occs.insert( (double) elem.second / y.size());
@@ -63,4 +79,22 @@ double BinomialDeviance::compute_init_score(std::vector<double> &y)
     // "log(x / (1-x)) is the inverse of the sigmoid (expit) function"
     double prediction = std::log(smaller_value / (1- smaller_value));
     return prediction;
+}
+
+double BinaryClassification::compute_score(std::vector<double> &y, std::vector<double> &y_pred)
+{
+    // classification task -> transform continuous predictions back to labels
+    std::transform(y_pred.begin(), y_pred.end(), // expit
+        y_pred.begin(), [](double &c){ return 1 / (1 + std::exp(-c)); });
+    for(auto &elem : y_pred){
+        elem = (elem < 1-elem) ? 0 : 1;
+    }
+
+    // accuracy
+    std::vector<bool> correct_preds(y.size());
+    for(size_t i=0; i<y.size();i++) {
+        correct_preds[i] = (y[i] == y_pred[i]);
+    }
+    double true_preds = std::count(correct_preds.begin(), correct_preds.end(), true);
+    return true_preds / y.size();
 }

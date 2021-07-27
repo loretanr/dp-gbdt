@@ -15,7 +15,7 @@ DataSet Parser::get_abalone(std::vector<ModelParams> &parameters, size_t num_sam
     num_samples = std::min(num_samples, (size_t) 4177);
 
     // regression task -> LSE
-    std::shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
+    std::shared_ptr<Regression> lossfunction(new Regression());
 
     if (use_default_params) {
         // create some default parameters
@@ -69,7 +69,7 @@ DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, size
     std::string line; VVD X; std::vector<double> y;
 
     // regression task -> LSE
-    std::shared_ptr<LeastSquaresError> lossfunction(new LeastSquaresError());
+    std::shared_ptr<Regression> lossfunction(new Regression());
 
     // all 90 columns are numerical -> create vector with numbers 0..89
     std::vector<int> num_idx(90);
@@ -130,7 +130,7 @@ DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_sampl
 
 
     // create / adjust model parameters
-    std::shared_ptr<BinomialDeviance> lossfunction(new BinomialDeviance());
+    std::shared_ptr<BinaryClassification> lossfunction(new BinaryClassification());
     if (use_default_params) {
         ModelParams params = create_default_params();
         params.num_idx = {0,3,9,10,11}; // adjusted for dropped column

@@ -40,7 +40,7 @@ struct ModelParams {
     int nb_trees;
     double learning_rate = 0.1;
     double privacy_budget = 1.0;
-    std::shared_ptr<LossFunction> lossfunction;
+    std::shared_ptr<Task> lossfunction;
     int max_depth = 6;
     int early_stop = 5;
     int max_leaves;

@@ -51,7 +51,7 @@ int Verification::main(int argc, char *argv[])
         std::cout << dataset.name << std::endl;
 
         // do cross validation
-        std::vector<double> rmses;
+        std::vector<double> scores;
         std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
         cv_fold_index = 0;
 
@@ -67,17 +67,15 @@ int Verification::main(int argc, char *argv[])
             // compute score
             std::vector<double> y_pred = ensemble.predict(split.test.X);
 
-            // invert the feature scale
+            // invert the feature scale (if necessary)
             inverse_scale(split.train.scaler, y_pred);
 
-            // compute RMSE
-            std::transform(split.test.y.begin(), split.test.y.end(), y_pred.begin(), y_pred.begin(), std::minus<double>());
-            std::transform(y_pred.begin(), y_pred.end(), y_pred.begin(), [](double &c){return std::pow(c,2);});
-            double average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
-            double rmse = std::sqrt(average);
+            // compute score
+            
+            double score = param.lossfunction->compute_score(split.test.y, y_pred);
 
-            rmses.push_back(rmse);
-            std::cout << std::setprecision(9) << rmse << " " << std::flush;
+            scores.push_back(score);
+            std::cout << std::setprecision(9) << score << " " << std::flush;
             cv_fold_index++;
         } std::cout << std::endl;
     
