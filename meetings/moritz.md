@@ -42,4 +42,5 @@
   *numpy uses C under the hood, need to find out when and how*
 
 - For DP-GBDT they sometimes don't use all columns for training. This speeds up things and also makes the exponential mechanism work better. Because if you have a lot of probabilities, and you divide each one through the total sum to get them into [0,1] then they get very similar and youre not choosing the good one as often as you want.
+- actually DPBoost also forgets to add noise to the init_score, which is a mistake
 
