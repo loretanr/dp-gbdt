@@ -26,8 +26,8 @@ logger = logging.GetLogger(__name__)
 verificationLogger = None
 cv_fold_counter = 0
 
-RANDOMIZATION = False    # TODO random on
-VALIDATION = True
+RANDOMIZATION = True    # TODO random on
+VERIFICATION_MODE = False
 
 
 class GradientBoostingEnsemble:
@@ -172,15 +172,10 @@ class GradientBoostingEnsemble:
       # Since we're building 3-node trees it's the same anyways.
       self.use_bfs = False
 
-    # Manage logging
-    if self.verbosity <= -1:
-      logger.setLevel(logging.WARNING)
-    elif self.verbosity == 0:
-      logger.setLevel(logging.INFO)
-    else:
-      logger.setLevel(logging.DEBUG)
-    global verificationLogger
-    verificationLogger = logging.GetVerificationLogger()
+    # set up verification logging
+    if VERIFICATION_MODE:
+      global verificationLogger
+      verificationLogger = logging.GetVerificationLogger()
 
     # This handles attribute comparison depending on the attribute's nature
     self.feature_to_op = defaultdict(
@@ -204,6 +199,14 @@ class GradientBoostingEnsemble:
     
     global cv_fold_counter
 
+    # set up logging level again here, otherwise multithreading can mess this up
+    if self.verbosity <= -1:
+      logger.setLevel(logging.WARNING)
+    elif self.verbosity == 0:
+      logger.setLevel(logging.INFO)
+    else:
+      logger.setLevel(logging.DEBUG)
+
     # Init gradients
     self.init_.fit(X, y)
     self.init_score = self.loss_.get_init_raw_predictions(
@@ -224,7 +227,8 @@ class GradientBoostingEnsemble:
     # Train all trees
     for tree_index in range(self.nb_trees):
 
-      verificationLogger.log("Tree {} CV-Ensemble {}".format(tree_index, cv_fold_counter))
+      if VERIFICATION_MODE:
+        verificationLogger.log("Tree {} CV-Ensemble {}".format(tree_index, cv_fold_counter))
 
       # Compute sensitivity
       delta_g = 3 * np.square(self.l2_threshold)
@@ -309,7 +313,8 @@ class GradientBoostingEnsemble:
           gr_sum = np.sum(gradients)
           gr_sum = 0 if gr_sum < 0 and gr_sum >= float("-1e-10") else gr_sum
           logger.debug("GRADIENTSUM {:.8f}".format(gr_sum))
-          verificationLogger.log("GRADIENTSUM {:.8f}".format(gr_sum))
+          if VERIFICATION_MODE:
+            verificationLogger.log("GRADIENTSUM {:.8f}".format(gr_sum))
 
           assert gradients is not None
           gradients_tree = gradients[rows]
@@ -1344,7 +1349,8 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
     leaf.prediction += noise
 
   logger.debug("NUMLEAVES {} LEAFSUM {:.8f}".format(len(leaves), np.sum([leaf.prediction for leaf in leaves])))
-  verificationLogger.log("LEAFVALUESSUM {:.10f}".format(np.sum([leaf.prediction for leaf in leaves])))
+  if VERIFICATION_MODE:
+    verificationLogger.log("LEAFVALUESSUM {:.10f}".format(np.sum([leaf.prediction for leaf in leaves])))
 
 
 def ComputePredictions(gradients: np.ndarray,

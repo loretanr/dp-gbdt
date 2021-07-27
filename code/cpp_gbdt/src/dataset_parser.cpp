@@ -124,11 +124,6 @@ DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_sampl
     std::vector<int> categorical = {1,3,5,6,7,8,9,13};
     std::vector<int> drop = {2}; // drop fnlwgt column
 
-    int nb_trees = 5;           // TODO remove, for debug
-    // if (num_samples <= 300)
-    //     nb_trees = 5;
-
-
     // create / adjust model parameters
     std::shared_ptr<BinaryClassification> lossfunction(new BinaryClassification());
     if (use_default_params) {
@@ -136,13 +131,11 @@ DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_sampl
         params.num_idx = {0,3,9,10,11}; // adjusted for dropped column
         params.cat_idx = {1,2,4,5,6,7,8,12};
         params.lossfunction = lossfunction;
-        params.nb_trees = nb_trees;
         parameters.push_back(params);
     } else {
         parameters.back().num_idx = {0,3,9,10,11};
         parameters.back().cat_idx = {1,2,4,5,6,7,8,12};
         parameters.back().lossfunction = lossfunction;
-        parameters.back().nb_trees = nb_trees;
     }
     
     // use this map for label encoding of categorical features (string -> float)

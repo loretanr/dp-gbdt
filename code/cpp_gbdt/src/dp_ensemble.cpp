@@ -27,9 +27,9 @@ void DPEnsemble::train(DataSet *dataset)
     LOG_DEBUG("Training initialized with score: {1}", this->init_score);
 
     // second split (& shuffle), not used so far
-    TrainTestSplit split = train_test_split_random(*dataset, 1.0f, false);
     DataSet *train_set, *test_set;
     if(params.second_split) {
+        TrainTestSplit split = train_test_split_random(*dataset, 1.0f, false);
         train_set = &split.train;
         test_set = &split.test;
     } else {

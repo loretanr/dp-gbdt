@@ -28,8 +28,9 @@ int Benchmark::main(int argc, char *argv[])
     // the get_xy function do that (it'll create and append some default ones)
 
     Parser parser = Parser();
-    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
-    datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
+    // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
+    datasets.push_back(parser.get_YearPredictionMSD(parameters, 4000, true)); // medium yearMSD
+    // datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
 
     for(size_t i=0; i<datasets.size(); i++) {
         DataSet &dataset = datasets[i];
@@ -66,7 +67,7 @@ int Benchmark::main(int argc, char *argv[])
             std::cout << std::setprecision(9) << score << " " << std::flush;
             cv_fold_index++;
         } 
-        // stop time (for 5 fold cv)
+        // print elapsed time (for 5 fold cv)
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
         std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)" << std::endl;

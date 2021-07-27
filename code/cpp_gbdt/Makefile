@@ -21,3 +21,7 @@ objs/%.o: src/%.cpp
 # 	make
 rebuild:
 	make
+
+# let the compiler do it's magic
+fast: clean
+	make CFLAGS="-c -Werror -std=c++11 -O3 -ffast-math -march=native"

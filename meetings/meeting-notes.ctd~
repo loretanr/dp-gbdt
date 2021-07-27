@@ -350,9 +350,11 @@ And for the hardened version will need big comments with formulas etc to make it
 
 Esfandiar said BFS is better for small datasets than DFS -&gt; might be important to do it doch no</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="07_22" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626959234.14" ts_lastsave="1626962588.65" unique_id="24">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="07_22" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626959234.14" ts_lastsave="1626962622.29" unique_id="24">
 			<rich_text>
-With Ivan Paddu
+With </rich_text>
+			<rich_text foreground="#a0a02020f0f0">Ivan Paddu</rich_text>
+			<rich_text>
 
     in general, if we have no secret dependant branches or data accesses, we are safe.
 
@@ -1198,13 +1200,22 @@ and maybe test if verification is actually correct!
 			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1626955393.67" unique_id="23">
-			<rich_text>TODO 
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627389293.12" unique_id="23">
+			<rich_text foreground="#9090eeee9090">TODO 
     right score for cpp classification
     some function on the loss I guess (for usage in main and verification)
     
 TODO
-    add time in seconds to verify.sh for comparison
+    add time in seconds to verify.sh for comparison</rich_text>
+			<rich_text>
+    
+TODO 
+    make the use_dp parameter write to RANDOMIZATION
+    
+TODO
+    try -march=native ?
+    
+python forgets the randomization
     
     
 </rich_text>

@@ -1,0 +1,9 @@
+
+		   OS Processor <-> Physical/Logical Mapping
+		   -----------------------------------------
+	  OS Processor	  Phys. Package	      Core	Logical Processor	Core Type
+		0		0		0		0		core
+		1		0		1		0		core
+		2		0		0		1		core
+		3		0		1		1		core
+		   -----------------------------------------

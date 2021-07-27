@@ -27,10 +27,12 @@ MAX_DEPTH = 6
 
 if __name__ == '__main__':
 
+    DPGBDT.model.VERIFICATION_MODE = True
+    DPGBDT.model.RANDOMIZATION = False
+
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
-    SAMPLES = [5000]
-    # SAMPLES = []
+    # SAMPLES = [5000]
     SAMPLES = [300]
 
     for num_samples in SAMPLES:
@@ -63,7 +65,6 @@ if __name__ == '__main__':
     DATASET = 'yearMSD'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
-    # SAMPLES = []
     SAMPLES = [300]
 
     for num_samples in SAMPLES:
@@ -107,7 +108,7 @@ if __name__ == '__main__':
         rmse = make_scorer(metrics.mean_squared_error, squared=False)
 
         m = estimator.DPGBDT(  # type: ignore
-            PRIVACY_BUDGET, 5, 5, MAX_DEPTH, LEARNING_RATE,
+            PRIVACY_BUDGET, NB_TREES, NB_TREES_PER_ENSEMBLE, MAX_DEPTH, LEARNING_RATE,
             n_classes=len(set(y)) if task == 'classification' else None,
             gradient_filtering=True,
             leaf_clipping=True,
