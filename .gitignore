@@ -28,3 +28,6 @@ code/stuff/github_gbdts/DPBoost/
 code/verification/outputs/*.log
 code/python_gbdt/verification/verification_logs/*.log
 code/cpp_gbdt/verification_logs/*.log
+
+# profiling output
+vtune/
