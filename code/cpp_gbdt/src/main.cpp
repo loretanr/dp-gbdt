@@ -29,7 +29,7 @@ int main(int argc, char** argv)
             // Keep RAMDOMIZATION off for now
             // otherwise impossible to verify algorithm while writing code
             RANDOMIZATION = false;      
-            VERIFICATION_MODE = false;  
+            VERIFICATION_MODE = false;
         } 
 	}
 

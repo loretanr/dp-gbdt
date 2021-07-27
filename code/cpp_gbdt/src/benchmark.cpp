@@ -8,9 +8,13 @@
 #include "dataset_parser.h"
 #include "spdlog/spdlog.h"
 
+#include <thread>
+
 /* 
     Benchmark:
-    Compare python and cpp runtimes
+    - to be compiled with agressive optimization flags (use "make fast")
+    - threading: each cv-fold get his own thread
+    - spicy speedup (40-70x compared to python)
 */
 
 int Benchmark::main(int argc, char *argv[])
@@ -28,48 +32,59 @@ int Benchmark::main(int argc, char *argv[])
     // the get_xy function do that (it'll create and append some default ones)
 
     Parser parser = Parser();
-    // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
+    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
     datasets.push_back(parser.get_YearPredictionMSD(parameters, 4000, true)); // medium yearMSD
-    // datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
+    datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
 
     for(size_t i=0; i<datasets.size(); i++) {
         DataSet &dataset = datasets[i];
         ModelParams &param = parameters[i];
 
-        // Set up logging for verification
         std::cout << dataset.name << std::endl;
 
-        // do cross validation
-        std::vector<double> scores;
+        /* perform cross validation */
+
+        // split the data for each fold
         std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
-        cv_fold_index = 0;
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-
-
-        for (auto split : cv_inputs) {
-
+        std::chrono::steady_clock::time_point time_begin = std::chrono::steady_clock::now();
+        
+        // prepare the ressources for each thread
+        std::vector<std::thread> threads(cv_inputs.size());
+        std::vector<DPEnsemble> ensembles;
+        for (auto &split : cv_inputs) {
             // scale the features (y) to [-1,1] if necessary
             split.train.scale(-1, 1);
+            ensembles.push_back(DPEnsemble(&param) );
+        }
 
-            // train the ensemble
-            DPEnsemble ensemble = DPEnsemble(&param);
-            ensemble.train(&split.train);
+        // threads start training on ther respective folds
+        for(int thread_id=0; thread_id<threads.size(); thread_id++){
+            threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id], &(cv_inputs[thread_id].train));
+        }
+        for (auto &thread : threads) {
+            thread.join(); // join once done
+        }
+
+        /* compute scores */
+
+        for (int ensemble_id = 0; ensemble_id < ensembles.size(); ensemble_id++) {
+
+            DPEnsemble *ensemble = &ensembles[ensemble_id];
+            TrainTestSplit *split = &cv_inputs[ensemble_id];
             
-            // compute score
-            std::vector<double> y_pred = ensemble.predict(split.test.X);
+            std::vector<double> y_pred = ensemble->predict(split->test.X);
 
             // invert the feature scale (if necessary)
-            inverse_scale(split.train.scaler, y_pred);
+            inverse_scale(split->train.scaler, y_pred);
 
             // compute score            
-            double score = param.lossfunction->compute_score(split.test.y, y_pred);
-            scores.push_back(score);
+            double score = param.lossfunction->compute_score(split->test.y, y_pred);
             std::cout << std::setprecision(9) << score << " " << std::flush;
-            cv_fold_index++;
         } 
+
         // print elapsed time (for 5 fold cv)
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
+        std::chrono::steady_clock::time_point time_end = std::chrono::steady_clock::now();
+        double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count();
         std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)" << std::endl;
     }
     return 0;
