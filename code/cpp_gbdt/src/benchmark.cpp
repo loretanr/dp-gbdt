@@ -2,23 +2,18 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
-#include "verification.h"
+#include <chrono>
+#include "benchmark.h"
 #include "dp_ensemble.h"
 #include "dataset_parser.h"
 #include "spdlog/spdlog.h"
 
-
 /* 
-    Verification:
-    run the model on various (small to medium size) datasets for 
-    easy verification of correctness. intermediate values are written to
-    verification_logfile.
+    Benchmark:
+    Compare python and cpp runtimes
 */
 
-std::ofstream verification_logfile;
-
-
-int Verification::main(int argc, char *argv[])
+int Benchmark::main(int argc, char *argv[])
 {
     // Set up logging for debugging
     spdlog::set_level(spdlog::level::err);
@@ -33,25 +28,22 @@ int Verification::main(int argc, char *argv[])
     // the get_xy function do that (it'll create and append some default ones)
 
     Parser parser = Parser();
-    datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
-    // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
-    datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
-    // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
-    datasets.push_back(parser.get_adult(parameters, 300, true)); // small adult
-    // datasets.push_back(parser.get_adult(parameters, 1000, true)); // medium adult
+    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
+    datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
 
     for(size_t i=0; i<datasets.size(); i++) {
         DataSet &dataset = datasets[i];
         ModelParams &param = parameters[i];
 
         // Set up logging for verification
-        verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset.name));
         std::cout << dataset.name << std::endl;
 
         // do cross validation
         std::vector<double> scores;
         std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
         cv_fold_index = 0;
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
 
         for (auto split : cv_inputs) {
 
@@ -68,16 +60,16 @@ int Verification::main(int argc, char *argv[])
             // invert the feature scale (if necessary)
             inverse_scale(split.train.scaler, y_pred);
 
-            // compute score
-
+            // compute score            
             double score = param.lossfunction->compute_score(split.test.y, y_pred);
-
             scores.push_back(score);
             std::cout << std::setprecision(9) << score << " " << std::flush;
             cv_fold_index++;
-        } std::cout << std::endl;
-    
-        verification_logfile.close();
+        } 
+        // stop time (for 5 fold cv)
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count();
+        std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)" << std::endl;
     }
     return 0;
 }
