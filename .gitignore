@@ -30,4 +30,4 @@ code/python_gbdt/verification/verification_logs/*.log
 code/cpp_gbdt/verification_logs/*.log
 
 # profiling output
-#vtune/
+vtune/
