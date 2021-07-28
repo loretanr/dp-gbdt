@@ -16,7 +16,7 @@ DataSet Parser::get_abalone(std::vector<ModelParams> &parameters, size_t num_sam
     std::string line; VVD X; std::vector<double> y;
     num_samples = std::min(num_samples, (size_t) 4177);
 
-    // regression task -> LSE
+    // regression task -> Least Squares
     std::shared_ptr<Regression> task(new Regression());
 
     if (use_default_params) {
@@ -70,7 +70,7 @@ DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, size
     std::ifstream infile("datasets/real/YearPredictionMSD.txt");
     std::string line; VVD X; std::vector<double> y;
 
-    // regression task -> LSE
+    // regression task -> Least Squares
     std::shared_ptr<Regression> task(new Regression());
 
     // all 90 columns are numerical -> create vector with numbers 0..89

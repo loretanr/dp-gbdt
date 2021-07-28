@@ -1200,7 +1200,7 @@ and maybe test if verification is actually correct!
 			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627464070.45" unique_id="23">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627480813.53" unique_id="23">
 			<rich_text foreground="#9090eeee9090">TODO 
     right score for cpp classification
     some function on the loss I guess (for usage in main and verification)
@@ -1225,9 +1225,38 @@ python forgets the randomization
 
 TODO turn on random again for cpp
 
-
 TODO remove obsolete utils inclusions
     now that data is outside
+    and also nicify comments about fields, methods etc.
+    
+TODO need distinction no_dp and no_rand
+    because we might want to run no_dp but still shuffle the inputs!
+   •  note: because of the threads
+      ◇ benchmark is random even for unseeded (-&gt;order messed up)
+      ◇ single core is deterministic for no seed!
+    
+    
+    
+expected results (randomness off):
+    abalone_small
+    2.88222994 2.55149196 2.73325348 2.91773305 4.34151562 
+    yearMSD_small
+    6.22939954 4.85741386 3.376275 27.7920027 12.9163679 
+    yearMSD_medium
+    10.1605594 12.5226877 16.4173384 16.8806547 10.9421091 
+    adult_small
+    0.783333333 0.7 0.833333333 0.733333333 0.733333333
+    abalone_full
+    4.03066375 2.07501924 2.91422413 2.15795362 2.19252593
+    yearMSD_custom_size_4000
+    13.385726671 9.533193631 8.738949105 9.128121727 9.172172780
+    yearMSD_custom_size_8000
+11.880975788 9.047804182 10.753555420 9.161782541 10.534661462
+            
+            • yearMSD RMSE is what internet expects it to be ~9-10 (rather good!)
+            • adult saw numbers around 0.8, also what we would expect.
+    
+
     
     
 </rich_text>

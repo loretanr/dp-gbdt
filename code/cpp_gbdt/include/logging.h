@@ -15,7 +15,7 @@
     GET_9TH_ARG(__VA_ARGS__, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_ARG, LOG_DEBUG_NO_ARG, )
 
 // Logging functions
-// - can call these two functions with variable number of args, like python.
+// - can call these two functions with variable number of args, as in python.
 // - only difference is that you have to start enumerating at one, e.g.:
 //   LOG_INFO("This {1} has {2:.0f} bugs", "logger", 0.42)
 #define LOG_INFO(...) LOG_INFO_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)

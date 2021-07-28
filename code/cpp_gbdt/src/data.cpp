@@ -91,7 +91,6 @@ void inverse_scale(Scaler &scaler, std::vector<double> &vec)
 TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool shuffle)
 {
     if(shuffle) {
-        srand(time(0));
         std::random_shuffle(dataset.X.begin(), dataset.X.end());
         std::random_shuffle(dataset.y.begin(), dataset.y.end());
     }
@@ -122,7 +121,6 @@ TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool
 std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle)
 {
     if(shuffle) {
-        srand(time(0));
         std::random_shuffle(dataset.X.begin(), dataset.X.end());
         std::random_shuffle(dataset.y.begin(), dataset.y.end());
     }

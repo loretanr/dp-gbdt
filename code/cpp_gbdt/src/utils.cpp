@@ -10,6 +10,8 @@ bool RANDOMIZATION;
 size_t cv_fold_index;
 
 
+/** Methods */
+
 // create some default parameters for quick testing
 ModelParams create_default_params()
 {
@@ -22,25 +24,14 @@ ModelParams create_default_params()
     return params;
 };
 
-
-
-
-
-double clip(double n, double lower, double upper)
+// put a value between two bounds, not in std::algorithm in c++11
+double clamp(double n, double lower, double upper)
 {
   return std::max(lower, std::min(n, upper));
 }
 
 
-std::string string_pad(std::string str, const size_t num, const char paddingChar)
-{
-    if(num > str.size())
-        str.insert(0, num - str.size(), paddingChar);
-    return str;
-}
-
-
-// TODO does this overflow?
+// TODO formula
 double log_sum_exp(std::vector<double> vec)
 {
     size_t count = vec.size();

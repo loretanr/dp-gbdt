@@ -12,29 +12,36 @@
 #include "benchmark.h"
 #include "spdlog/spdlog.h"
 
+extern bool RANDOMIZATION;
+extern bool VERIFICATION_MODE;
 
 
 int main(int argc, char** argv)
 {
+    // seed randomness once and for all
+    srand(time(NULL));
+
     // parse flags
-    for(int i = 1; i < argc; i++){
-		if ( ! std::strcmp(argv[i], "--verify") ){
-            // go into verification mode -> run model on small datasets
-            RANDOMIZATION = false;
-			VERIFICATION_MODE = true;
-            return Verification::main(argc, argv);
-		} else if ( ! std::strcmp(argv[i], "--bench") ){
-            // go into benchmark mode
-            RANDOMIZATION = false;    // TODOOOOOOOOOOOOOOOOOOOOOOO
-			VERIFICATION_MODE = false;
-            return Benchmark::main(argc, argv);
-		} else {
-            // Keep RAMDOMIZATION off for now
-            // otherwise impossible to verify algorithm while writing code
-            RANDOMIZATION = false;      
-            VERIFICATION_MODE = false;
-        } 
-	}
+    if(argc != 1){
+        for(int i = 1; i < argc; i++){
+            if ( ! std::strcmp(argv[i], "--verify") ){
+                // go into verification mode -> run model on small datasets
+                RANDOMIZATION = false;
+                VERIFICATION_MODE = true;
+                return Verification::main(argc, argv);
+            } else if ( ! std::strcmp(argv[i], "--bench") ){
+                // go into benchmark mode
+                RANDOMIZATION = false;    // TODOOOOOOOOOOOOOOOOOOOOOOO
+                VERIFICATION_MODE = false;
+                return Benchmark::main(argc, argv);
+            } else {
+                throw std::runtime_error("unkown command line flag encountered");
+            } 
+        }
+    } else { // no flags given
+        RANDOMIZATION = true;      
+        VERIFICATION_MODE = false;
+    }
 
     // Set up logging
     spdlog::set_level(spdlog::level::err);
@@ -50,7 +57,7 @@ int main(int argc, char** argv)
     params.push_back(current_params);
 
     Parser parser = Parser();
-    DataSet dataset = parser.get_abalone(params, 300, false);
+    DataSet dataset = parser.get_abalone(params, 5000, false);
 
     // create cross validation inputs
     std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);

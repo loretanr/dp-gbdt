@@ -35,7 +35,7 @@ int Benchmark::main(int argc, char *argv[])
 
     Parser parser = Parser();
     datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
-    datasets.push_back(parser.get_YearPredictionMSD(parameters, 4000, true)); // medium yearMSD
+    datasets.push_back(parser.get_YearPredictionMSD(parameters, 8000, true)); // medium yearMSD
     datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
 
     for(size_t i=0; i<datasets.size(); i++) {

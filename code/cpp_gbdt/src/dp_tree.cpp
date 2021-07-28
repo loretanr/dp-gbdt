@@ -44,7 +44,7 @@ void DPTree::fit()
     if (params->leaf_clipping) {
         double threshold = this->params->l2_threshold * std::pow((1-this->params->learning_rate), this->tree_index);
         for (auto &leaf : this->leaves) {
-            leaf->prediction = clip(leaf->prediction, -1 * threshold, threshold);
+            leaf->prediction = clamp(leaf->prediction, -1 * threshold, threshold);
         }
     }
 
@@ -290,21 +290,21 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain
     // calculate the probabilities from the gains
     vector<double> gains, probabilities, partials(probs.size());
     for (auto p : probs) {
-        if (p.gain != 0) {
-            gains.push_back(p.gain);
-        }
+        gains.push_back(p.gain);
     }
-    for (auto &prob : probs) {
+    double lse = log_sum_exp(gains);
+    for (auto prob : probs) {
         if (prob.gain <= 0) {
             probabilities.push_back(0);   
         } else {
-            probabilities.push_back( exp( (double) prob.gain - log_sum_exp(gains)) );
+            probabilities.push_back( exp(prob.gain - lse) );
         }
     }
 
     // option to disable randomness for validation / debugging
     if (not RANDOMIZATION) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
+        // return index of the max_elem
         return std::distance(probabilities.begin(), max_elem);
     }
 
@@ -312,7 +312,6 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain
     // all values will be in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
-    srand(time(0));
     double rand01 = ((double) std::rand() / (RAND_MAX));
 
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
@@ -333,7 +332,6 @@ void DPTree::add_laplacian_noise(double laplace_scale)
 {
     LOG_INFO("Adding Laplace noise to leaves (Scale {1:.2f})", laplace_scale);
 
-    srand(time(NULL));
     Laplace lap(laplace_scale, rand());
 
     // add noise from laplace distribution to leaves

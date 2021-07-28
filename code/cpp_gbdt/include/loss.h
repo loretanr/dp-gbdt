@@ -13,7 +13,7 @@ public:
 };
 
 
-// uses LSE as cost/loss function
+// uses Least Squares as cost/loss function
 class Regression : public Task
 {
 public:

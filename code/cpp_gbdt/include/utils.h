@@ -10,7 +10,7 @@ typedef std::vector<std::vector<double>> VVD;
 
 // method declarations
 ModelParams create_default_params();
-double clip(double n, double lower, double upper);
+double clamp(double n, double lower, double upper);
 double log_sum_exp(std::vector<double> arr);
 void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');
 

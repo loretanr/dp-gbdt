@@ -110,7 +110,7 @@ void DPEnsemble::train(DataSet *dataset)
         if(params->gradient_filtering) {
             for(DataSet &dset : tree_samples) {
                 for (auto &grad : dset.gradients){
-                    grad = clip(grad, -params->l2_threshold, params->l2_threshold);
+                    grad = clamp(grad, -params->l2_threshold, params->l2_threshold);
                 }
             }
         }
