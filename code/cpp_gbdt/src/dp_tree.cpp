@@ -265,12 +265,12 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples, vector
     // if the feature is categorical
     if(std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end()) {
         for (auto sample : samples[feature_index]) {
-            size_t value = sample == feature_value ? 1 : 0;
+            size_t value = sample == feature_value;
             lhs.push_back(value);
         }
     } else { // feature is numerical
         for (auto sample : samples[feature_index]) {
-            size_t value = sample < feature_value ? 1 : 0;
+            size_t value = sample < feature_value;
             lhs.push_back(value);
         }
     }
