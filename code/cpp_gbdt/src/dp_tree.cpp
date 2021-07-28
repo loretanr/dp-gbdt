@@ -95,7 +95,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
 
     // Update live samples and continue recursion
-    vector<bool> lhs;
+    vector<int> lhs;
     samples_left_right_partition(lhs, X_live, gradients_live, node->split_attr, node->split_value);
     vector<int> left_live_samples, right_live_samples;
     for (size_t i=0; i<live_samples.size(); i++) {
@@ -231,11 +231,11 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
     int feature_index, double feature_value, int &lhs_size)
 {
     // partition into lhs / rhs
-    vector<bool> lhs;
+    vector<int> lhs;
     samples_left_right_partition(lhs, samples, gradients_live, feature_index, feature_value);
 
-    int _lhs_size = std::count(lhs.begin(), lhs.end(), true);
-    int _rhs_size = std::count(lhs.begin(), lhs.end(), false);
+    int _lhs_size = std::count(lhs.begin(), lhs.end(), 1);
+    int _rhs_size = std::count(lhs.begin(), lhs.end(), 0);
 
     lhs_size = _lhs_size;
 
@@ -246,8 +246,8 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
 
     double lhs_gain = 0, rhs_gain = 0;
     for (size_t index=0; index<lhs.size(); index++) {
-        lhs_gain += (unsigned) lhs[index] * (gradients_live)[index];
-        rhs_gain += (unsigned) (not lhs[index]) * (gradients_live)[index];
+        lhs_gain += lhs[index] * (gradients_live)[index];
+        rhs_gain += (not lhs[index]) * (gradients_live)[index];
     }
     lhs_gain = std::pow(lhs_gain,2) / (_lhs_size + params->l2_lambda);
     rhs_gain = std::pow(rhs_gain,2) / (_rhs_size + params->l2_lambda);
@@ -260,16 +260,18 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
 
 
 // the result is a bool array that will indicate left/right
-void DPTree::samples_left_right_partition(vector<bool> &lhs, VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value)
+void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples, vector<double> &gradients_live, int feature_index, double feature_value)
 {
     // if the feature is categorical
     if(std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end()) {
         for (auto sample : samples[feature_index]) {
-            lhs.push_back(sample == feature_value);
+            size_t value = sample == feature_value ? 1 : 0;
+            lhs.push_back(value);
         }
     } else { // feature is numerical
         for (auto sample : samples[feature_index]) {
-            lhs.push_back(sample < feature_value);
+            size_t value = sample < feature_value ? 1 : 0;
+            lhs.push_back(value);
         }
     }
 }
@@ -278,6 +280,7 @@ void DPTree::samples_left_right_partition(vector<bool> &lhs, VVD &samples, vecto
 // Computes probabilities from the gains. (Larger gain -> larger probability to 
 // be chosen for split). Then a cumulative distribution function is created from
 // these probabilities. Then we can sample from it using a RNG.
+// Returns the index of the chosen split.
 int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain)
 {
     // if no split has a positive gain, return. Node will become a leaf

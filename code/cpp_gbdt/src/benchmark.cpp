@@ -16,7 +16,7 @@
     Benchmark:
     - to be compiled with agressive optimization flags (use "make fast")
     - threading: each cv-fold get his own thread
-    - spicy speedup (40-70x compared to python)
+    - spicy speedup (>200x compared to python)
 */
 
 int Benchmark::main(int argc, char *argv[])
@@ -34,9 +34,9 @@ int Benchmark::main(int argc, char *argv[])
     // the get_xy function do that (it'll create and append some default ones)
 
     Parser parser = Parser();
-    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
-    datasets.push_back(parser.get_YearPredictionMSD(parameters, 8000, true)); // medium yearMSD
-    datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
+    // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
+    datasets.push_back(parser.get_YearPredictionMSD(parameters, 20000, true)); // medium yearMSD
+    // datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
 
     for(size_t i=0; i<datasets.size(); i++) {
         DataSet &dataset = datasets[i];

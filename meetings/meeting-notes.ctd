@@ -1200,7 +1200,7 @@ and maybe test if verification is actually correct!
 			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627480877.84" unique_id="23">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627486993.89" unique_id="23">
 			<rich_text foreground="#9090eeee9090">TODO 
     right score for cpp classification
     some function on the loss I guess (for usage in main and verification)
@@ -1237,7 +1237,11 @@ TODO need distinction no_dp and no_rand
       ◇ single core is deterministic for no seed!</rich_text>
 			<rich_text>
     
+
+TODO profile again with like 15k yearMSD
+    (random on)    
     
+--------------------------------------------------------------    
     
 expected results (randomness off):
     abalone_small
@@ -1254,6 +1258,9 @@ expected results (randomness off):
     13.385726671 9.533193631 8.738949105 9.128121727 9.172172780
     yearMSD_custom_size_8000
 11.880975788 9.047804182 10.753555420 9.161782541 10.534661462
+    yearMSD_custom_size_20000
+390.042167 385.951543 364.001642 390.910298 346.114023 
+
             
             • yearMSD RMSE is what internet expects it to be ~9-10 (rather good!)
             • adult saw numbers around 0.8, also what we would expect.

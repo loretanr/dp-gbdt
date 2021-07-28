@@ -24,4 +24,6 @@ rebuild:
 
 # let the compiler do it's magic
 fast:
-	make CFLAGS="-c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread"
+	make CFLAGS="-c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread -g"
+	# todooooooooooo -g
+	# -ftree-vectorize -fopt-info-vec

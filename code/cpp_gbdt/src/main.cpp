@@ -31,7 +31,7 @@ int main(int argc, char** argv)
                 return Verification::main(argc, argv);
             } else if ( ! std::strcmp(argv[i], "--bench") ){
                 // go into benchmark mode
-                RANDOMIZATION = false;    // TODOOOOOOOOOOOOOOOOOOOOOOO
+                RANDOMIZATION = true;    // TODOOOOOOOOOOOOOOOOOOOOOOO
                 VERIFICATION_MODE = false;
                 return Benchmark::main(argc, argv);
             } else {
