@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include "verification.h"
+#include "parameters.h"
+#include "data.h"
 #include "dp_ensemble.h"
 #include "dataset_parser.h"
 #include "spdlog/spdlog.h"
@@ -28,7 +30,7 @@ int Verification::main(int argc, char *argv[])
     std::vector<DataSet> datasets;
     std::vector<ModelParams> parameters;
 
-    // select dataset(s) here. So far only abalone and year work correctly
+    // select dataset(s) here.
     // you can either append some ModelParams to parameters here, or let 
     // the get_xy function do that (it'll create and append some default ones)
 
@@ -70,7 +72,7 @@ int Verification::main(int argc, char *argv[])
 
             // compute score
 
-            double score = param.lossfunction->compute_score(split.test.y, y_pred);
+            double score = param.task->compute_score(split.test.y, y_pred);
 
             scores.push_back(score);
             std::cout << std::setprecision(9) << score << " " << std::flush;

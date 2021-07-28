@@ -1,18 +1,21 @@
 #include <numeric>
 #include <algorithm>
 #include "dp_ensemble.h"
+#include "logging.h"
 #include "spdlog/spdlog.h"
 
+extern std::ofstream verification_logfile;
+extern size_t cv_fold_index;
+extern bool RANDOMIZATION;
+extern bool VERIFICATION_MODE;
 
 using namespace std;
 
 
-DPEnsemble::DPEnsemble(ModelParams *parameters)
-{
-    params = *parameters; // local copy for now
-}
-    
+/** Constructors */
 
+DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters) {};
+    
 DPEnsemble::~DPEnsemble() {
     for (auto tree : trees) {
         tree.delete_tree(tree.root_node);
@@ -20,51 +23,49 @@ DPEnsemble::~DPEnsemble() {
 };
 
 
+/** Methods */
+
 void DPEnsemble::train(DataSet *dataset)
 {
     // compute initial prediction
-    this->init_score = params.lossfunction->compute_init_score(dataset->y);
+    this->init_score = params->task->compute_init_score(dataset->y);
     LOG_DEBUG("Training initialized with score: {1}", this->init_score);
 
     // second split (& shuffle), not used so far
-    DataSet *train_set, *test_set;
-    if(params.second_split) {
-        TrainTestSplit split = train_test_split_random(*dataset, 1.0f, false);
-        train_set = &split.train;
-        test_set = &split.test;
-    } else {
-        train_set = dataset;
+    
+    if(params->second_split) {
+        // TrainTestSplit split = train_test_split_random(*dataset, 0.8f, false);
+        throw runtime_error("2nd-split not yet implemented.");
     }
 
-    TreeParams tree_params;
-
     // Each tree gets the full pb, as they train on distinct data
-    tree_params.tree_privacy_budget = params.privacy_budget;
+    TreeParams tree_params;
+    tree_params.tree_privacy_budget = params->privacy_budget;
 
     // distribute training instances amongst trees
     vector<DataSet> tree_samples;
-    distribute_samples(&tree_samples, train_set);
+    distribute_samples(&tree_samples, dataset);
     
     // train all trees
-    for(int tree_index = 0; tree_index<params.nb_trees;  tree_index++) {
+    for(int tree_index = 0; tree_index < params->nb_trees;  tree_index++) {
 
-        LOG_DEBUG(BOLD("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),
+        LOG_DEBUG(YELLOW("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),
             tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
         if(VERIFICATION_MODE) {
             VERIFICATION_LOG("Tree {0} CV-Ensemble {1}", tree_index, cv_fold_index);
         }
 
         // compute sensitivity
-        tree_params.delta_g = 3 * pow(params.l2_threshold, 2); // TODO move out of loop
-        tree_params.delta_v = std::min((double) (params.l2_threshold / (1 + params.l2_lambda)),
-                            2 * params.l2_threshold *
-                            pow(1-params.learning_rate, tree_index));
+        tree_params.delta_g = 3 * pow(params->l2_threshold, 2); // TODO move out of loop
+        tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
+                            2 * params->l2_threshold *
+                            pow(1-params->learning_rate, tree_index));
 
         // update/init gradients of all training instances (using last tree(s))
         vector<double> gradients;
         if(tree_index == 0) {
-            vector<double> init_scores(train_set->length, this->init_score);
-            gradients = params.lossfunction->compute_gradients(train_set->y, init_scores);
+            vector<double> init_scores(dataset->length, this->init_score);
+            gradients = params->task->compute_gradients(dataset->y, init_scores);
             // store the gradients back to their corresponding samples
             int index = 0;
             for(DataSet &dset : tree_samples) {
@@ -86,7 +87,7 @@ void DPEnsemble::train(DataSet *dataset)
             vector<double> y_pred = predict(pred_samples);
 
             // update gradients
-            gradients = (params.lossfunction)->compute_gradients(y_samples, y_pred);
+            gradients = (params->task)->compute_gradients(y_samples, y_pred);
 
             // store the gradients back to their corresponding samples
             vector<double>::const_iterator iter = gradients.begin();
@@ -106,17 +107,17 @@ void DPEnsemble::train(DataSet *dataset)
         }
 
         // gradient-based data filtering
-        if(params.gradient_filtering) {
+        if(params->gradient_filtering) {
             for(DataSet &dset : tree_samples) {
                 for (auto &grad : dset.gradients){
-                    grad = clip(grad, -params.l2_threshold, params.l2_threshold);
+                    grad = clip(grad, -params->l2_threshold, params->l2_threshold);
                 }
             }
         }
 
         // build tree, add noise to leaves
         LOG_INFO("Building tree {1}...", tree_index);
-        DPTree tree = DPTree(&params, &tree_params, &tree_samples[tree_index], tree_index);
+        DPTree tree = DPTree(params, &tree_params, &tree_samples[tree_index], tree_index);
         tree.fit();
         trees.push_back(tree);
         
@@ -125,7 +126,7 @@ void DPEnsemble::train(DataSet *dataset)
             tree.recursive_print_tree(tree.root_node);
         }
 
-        LOG_INFO(BOLD("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
+        LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
     }
 }
 
@@ -143,7 +144,7 @@ vector<double>  DPEnsemble::predict(VVD &X)
     }
 
     // TODO optimize those 2 transforms in 1
-    double learning_rate = params.learning_rate;
+    double learning_rate = params->learning_rate;
     std::transform(predictions.begin(), predictions.end(),
             predictions.begin(), [learning_rate](double &c){return c*learning_rate;});
 
@@ -158,12 +159,12 @@ vector<double>  DPEnsemble::predict(VVD &X)
 // distribute training samples amongst trees
 void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set)
 {
-    if(params.balance_partition) { // perfect split
-        int quotient = train_set->length / params.nb_trees;
-        //int remainder = train_set->length % params.nb_trees;
+    if(params->balance_partition) { // perfect split
+        int quotient = train_set->length / params->nb_trees;
+        //int remainder = train_set->length % params->nb_trees;
         int current_index = 0;
         // same amount for every tree
-        for(int i=0; i<params.nb_trees; i++) {
+        for(int i=0; i < params->nb_trees; i++) {
             VVD x_tree = {};
             vector<double> y_tree = {};
             for(int j=0; j<quotient; j++){

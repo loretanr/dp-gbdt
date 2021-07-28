@@ -1,11 +1,15 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "parameters.h"
+#include "data.h"
 #include "utils.h"
+
 
 class Parser
 {
 private:
+    std::vector<std::string> split_string(const std::string &s, char delim);
 
 public:
     Parser() {};

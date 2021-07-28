@@ -6,6 +6,8 @@
 #include <string>
 #include <algorithm>
 #include "dataset_parser.h"
+#include "data.h"
+
 
 
 DataSet Parser::get_abalone(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
@@ -15,12 +17,12 @@ DataSet Parser::get_abalone(std::vector<ModelParams> &parameters, size_t num_sam
     num_samples = std::min(num_samples, (size_t) 4177);
 
     // regression task -> LSE
-    std::shared_ptr<Regression> lossfunction(new Regression());
+    std::shared_ptr<Regression> task(new Regression());
 
     if (use_default_params) {
         // create some default parameters
         ModelParams params = create_default_params();
-        params.lossfunction = lossfunction;
+        params.task = task;
         params.cat_idx = {0}; // first column is categorical
         params.num_idx = {1,2,3,4,5,6,7};
         parameters.push_back(params);
@@ -28,7 +30,7 @@ DataSet Parser::get_abalone(std::vector<ModelParams> &parameters, size_t num_sam
         // you have already defined your parameters, then just abalone specific ones are added
         parameters.back().num_idx = {1,2,3,4,5,6,7};
         parameters.back().cat_idx = {0};
-        parameters.back().lossfunction = lossfunction;
+        parameters.back().task = task;
     }
 
     // parse dataset, label-encode categorical feature
@@ -69,7 +71,7 @@ DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, size
     std::string line; VVD X; std::vector<double> y;
 
     // regression task -> LSE
-    std::shared_ptr<Regression> lossfunction(new Regression());
+    std::shared_ptr<Regression> task(new Regression());
 
     // all 90 columns are numerical -> create vector with numbers 0..89
     std::vector<int> num_idx(90);
@@ -79,13 +81,13 @@ DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, size
         ModelParams params = create_default_params();
         params.cat_idx = {};
         params.num_idx = num_idx;
-        params.lossfunction = lossfunction;
+        params.task = task;
         parameters.push_back(params);
     } else {
         // you have already defined your parameters, then just yearMSD specific ones are added
         parameters.back().cat_idx = {};
         parameters.back().num_idx = num_idx;
-        parameters.back().lossfunction = lossfunction;
+        parameters.back().task = task;
     }
 
     // parse dataset, only has numerical features
@@ -125,17 +127,17 @@ DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_sampl
     std::vector<int> drop = {2}; // drop fnlwgt column
 
     // create / adjust model parameters
-    std::shared_ptr<BinaryClassification> lossfunction(new BinaryClassification());
+    std::shared_ptr<BinaryClassification> task(new BinaryClassification());
     if (use_default_params) {
         ModelParams params = create_default_params();
         params.num_idx = {0,3,9,10,11}; // adjusted for dropped column
         params.cat_idx = {1,2,4,5,6,7,8,12};
-        params.lossfunction = lossfunction;
+        params.task = task;
         parameters.push_back(params);
     } else {
         parameters.back().num_idx = {0,3,9,10,11};
         parameters.back().cat_idx = {1,2,4,5,6,7,8,12};
-        parameters.back().lossfunction = lossfunction;
+        parameters.back().task = task;
     }
     
     // use this map for label encoding of categorical features (string -> float)
@@ -196,4 +198,19 @@ DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_sampl
     }
     dataset.task = "classification";  // TODO unsused for now
     return dataset;
+}
+
+
+
+/** Utility functions */
+
+std::vector<std::string> Parser::split_string(const std::string &s, char delim)
+{
+    std::vector<std::string> result;
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        result.push_back(item);
+    }
+    return result;
 }

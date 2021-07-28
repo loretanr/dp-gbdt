@@ -3,12 +3,14 @@
 #include <iostream>
 #include <iomanip>
 #include <chrono>
+#include <thread>
+#include "parameters.h"
 #include "benchmark.h"
 #include "dp_ensemble.h"
 #include "dataset_parser.h"
+#include "data.h"
 #include "spdlog/spdlog.h"
 
-#include <thread>
 
 /* 
     Benchmark:
@@ -27,7 +29,7 @@ int Benchmark::main(int argc, char *argv[])
     std::vector<DataSet> datasets;
     std::vector<ModelParams> parameters;
 
-    // select dataset(s) here. So far only abalone and year work correctly
+    // select dataset(s) here.
     // you can either append some ModelParams to parameters here, or let 
     // the get_xy function do that (it'll create and append some default ones)
 
@@ -58,7 +60,7 @@ int Benchmark::main(int argc, char *argv[])
         }
 
         // threads start training on ther respective folds
-        for(int thread_id=0; thread_id<threads.size(); thread_id++){
+        for(size_t thread_id=0; thread_id<threads.size(); thread_id++){
             threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id], &(cv_inputs[thread_id].train));
         }
         for (auto &thread : threads) {
@@ -67,7 +69,7 @@ int Benchmark::main(int argc, char *argv[])
 
         /* compute scores */
 
-        for (int ensemble_id = 0; ensemble_id < ensembles.size(); ensemble_id++) {
+        for (size_t ensemble_id = 0; ensemble_id < ensembles.size(); ensemble_id++) {
 
             DPEnsemble *ensemble = &ensembles[ensemble_id];
             TrainTestSplit *split = &cv_inputs[ensemble_id];
@@ -78,7 +80,7 @@ int Benchmark::main(int argc, char *argv[])
             inverse_scale(split->train.scaler, y_pred);
 
             // compute score            
-            double score = param.lossfunction->compute_score(split->test.y, y_pred);
+            double score = param.task->compute_score(split->test.y, y_pred);
             std::cout << std::setprecision(9) << score << " " << std::flush;
         } 
 

@@ -4,28 +4,31 @@
 #include <vector>
 #include <fstream>
 #include "dp_tree.h"
-#include "loss.h"
+#include "parameters.h"
+#include "data.h"
 
-#include "utils.h"
-
-
-extern std::ofstream verification_logfile;
-extern size_t cv_fold_index;
 
 class DPEnsemble
 {
 public:
+    // constructors
     DPEnsemble(ModelParams *params);
     ~DPEnsemble();
 
-    void train(DataSet *dataset);
-    std::vector<double> predict(VVD &X);
+    // fields
     std::vector<DPTree> trees;
 
+    // methods
+    void train(DataSet *dataset);
+    std::vector<double> predict(VVD &X);
+
 private:
-    ModelParams params;
-    void distribute_samples(std::vector<DataSet> *storage_vec, DataSet *train_set);
+    // fields
+    ModelParams *params;
     double init_score;
+
+    // methods
+    void distribute_samples(std::vector<DataSet> *storage_vec, DataSet *train_set);
 };
 
 #endif // DPTREEENSEMBLE_H

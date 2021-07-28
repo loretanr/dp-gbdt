@@ -4,11 +4,17 @@
 #include <cmath>
 #include "dp_tree.h"
 #include "laplace.h"
+#include "logging.h"
 #include "spdlog/spdlog.h"
 
+extern std::ofstream verification_logfile;
+extern bool RANDOMIZATION;
+extern bool VERIFICATION_MODE;
 
 using namespace std;
 
+
+/** Constructors */
 
 DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index): 
     params(params),
@@ -18,6 +24,8 @@ DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, s
 
 DPTree::~DPTree() {}
 
+
+/** Methods */
 
 // Fit the tree to the data
 void DPTree::fit()
@@ -51,7 +59,8 @@ void DPTree::fit()
 TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 {
     // max depth reached or not enough samples -> leaf node
-    if ( (current_depth == params->max_depth) or live_samples.size() < (size_t) params->min_samples_split) {
+    if ( (current_depth == params->max_depth) or 
+            live_samples.size() < (size_t) params->min_samples_split) {
         TreeNode *leaf = make_leaf_node(current_depth, live_samples);
         LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
             current_depth, live_samples.size(), leaf->prediction);
@@ -114,17 +123,11 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
         y.push_back((this->dataset->y)[index]);
         gradients.push_back(this->dataset->gradients[index]);
     }
-    leaf->prediction = compute_prediction(gradients, y);
+    // compute prediction
+    leaf->prediction = (-1 * std::accumulate(gradients.begin(), gradients.end(), 0.0)
+                            / (gradients.size() + this->params->l2_lambda));
     this->leaves.push_back(leaf);
     return(leaf);
-}
-
-
-double DPTree::compute_prediction(vector<double> gradients, vector<double> y)
-{
-    double prediction = (-1 * std::accumulate(gradients.begin(), gradients.end(), 0.0)
-                            / (gradients.size() + this->params->l2_lambda));
-    return prediction;
 }
 
 
@@ -358,7 +361,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
     }
 }
 
-// active in debug mode
+// active in debug mode, prints the tree to console
 void DPTree::recursive_print_tree(TreeNode* node) {
 
     if (node->is_leaf()) {
@@ -377,7 +380,7 @@ void DPTree::recursive_print_tree(TreeNode* node) {
 
     if (!categorical) {
         cout << "Attr" << std::setprecision(3) << node->split_attr << " < " << std::setprecision(3) << node->split_value;
-    } else { // else if (node->split_attr == 2)
+    } else {
         double split_value = (node->split_value); // categorical, hacked
         cout << "Attr" << node->split_attr << " = " << split_value;
     }

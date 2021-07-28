@@ -3,8 +3,11 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include "logging.h"
+#include "parameters.h"
 #include "dp_ensemble.h"
 #include "dataset_parser.h"
+#include "data.h"
 #include "verification.h"
 #include "benchmark.h"
 #include "spdlog/spdlog.h"
@@ -22,7 +25,7 @@ int main(int argc, char** argv)
             return Verification::main(argc, argv);
 		} else if ( ! std::strcmp(argv[i], "--bench") ){
             // go into benchmark mode
-            RANDOMIZATION = true;
+            RANDOMIZATION = false;    // TODOOOOOOOOOOOOOOOOOOOOOOO
 			VERIFICATION_MODE = false;
             return Benchmark::main(argc, argv);
 		} else {
