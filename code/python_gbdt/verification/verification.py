@@ -43,8 +43,8 @@ if __name__ == '__main__':
 
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
-    # SAMPLES = [5000]
-    SAMPLES = [320]
+    # SAMPLES = [4177]
+    SAMPLES = [320, 4177]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0

@@ -76,7 +76,6 @@ void DPEnsemble::train(DataSet *dataset)
                     index++;
                 }
             }
-            gradients.resize(index); // for validation log, TODO resolve
         } else {
             // only have to update gradients of unused samples
             VVD pred_samples;

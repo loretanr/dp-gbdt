@@ -58,7 +58,6 @@ DataSet Parser::get_abalone(std::vector<ModelParams> &parameters,
     DataSet dataset = DataSet(X,y);
     switch(num_samples){
         case 300: dataset.name = "abalone_small"; break;
-        case 4177: dataset.name = "abalone_full"; break;
         default: dataset.name = std::string("abalone_custom_size_").append(
             std::to_string(num_samples));
     }
