@@ -18,22 +18,23 @@ struct Scaler {
 // basic wrapper around our data:
 //  - matrix X
 //  - target y
-//  - space to store the gradients that are always updated
+//  - vector for the samples' gradients (which get constantly updated)
 //  - some useful attributes
 struct DataSet {
-    VVD X;
-    std::vector<double> y;
-    std::vector<double> gradients;
-    int length;
-    int num_x_cols;
-    bool empty;
-    Scaler scaler;
-    std::string name;
-    std::string task;
-
+    // constructors
     DataSet();
     DataSet(VVD X, std::vector<double> y);
 
+    // fields
+    VVD X;
+    std::vector<double> y;
+    std::vector<double> gradients;
+    int length, num_x_cols;
+    bool empty;
+    Scaler scaler;
+    std::string name, task;
+
+    // methods
     void add_row(std::vector<double> xrow, double yval);
     void scale(double lower, double upper);
 };

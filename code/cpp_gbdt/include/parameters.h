@@ -12,7 +12,6 @@ struct ModelParams {
     double privacy_budget = 1.0;
     std::shared_ptr<Task> task;
     int max_depth = 6;
-    int early_stop = 5;
     int max_leaves;
     int min_samples_split = 2;
     bool second_split = false;
@@ -21,18 +20,15 @@ struct ModelParams {
     bool leaf_clipping = false;
     bool use_dp = true;
     bool use_dfs = true;
-    bool use_3_trees = false;
     bool use_decay = false;
-    int test_size = 0.3;    // TODO 1st or 2nd split?
     double l2_threshold = 1.0;
     double l2_lambda = 0.1;
-    double init_score;
     int verbosity = -1;
     std::vector<int> cat_idx;
     std::vector<int> num_idx;
 };
 
-// each tree has these additional varying parameters
+// each tree has these additional parameters
 struct TreeParams {
     double delta_g;
     double delta_v;

@@ -9,7 +9,6 @@
 #include "dataset_parser.h"
 #include "spdlog/spdlog.h"
 
-
 /* 
     Verification:
     runs the model on various (small to medium size) datasets for 
@@ -33,8 +32,9 @@ int Verification::main(int argc, char *argv[])
 
     // --------------------------------------
     // select dataset(s) here.
-    // you can either append some ModelParams to parameters here, or let 
-    // the get_xy function do that (it'll create and append some default ones)
+    // you can either append some ModelParams to parameters here (and pass 
+    // "false" to the parsing function), or let the get_xy function
+    // do that (it'll create and append some default ones to the vector)
     Parser parser = Parser();
     datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
     datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
@@ -44,8 +44,8 @@ int Verification::main(int argc, char *argv[])
     // datasets.push_back(parser.get_adult(parameters, 1000, true)); // medium adult
     // --------------------------------------
 
-    // turn off use_dp for verification. We are in VERIFICATION_MODE anyways, 
-    // but this ensures that the input data is not shuffled. -> we get completely
+    // this (in combination with VERIFICATION_MODE, which disables dataset shuffling
+    // in create_cross_val_inputs) turns off randomness completely -> we get completely
     // deterministic runs that are comparable to the python output.
     for(auto &elem : parameters){
         elem.use_dp = false;

@@ -19,11 +19,11 @@ objs/%.o: src/%.cpp
 
 # rebuild: clean 
 # 	make
+
 rebuild:
 	make
 
 # let the compiler do it's magic
 fast:
-	make CFLAGS="-c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread -g"
-	# todooooooooooo -g
+	make CFLAGS="-c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread"
 	# -ftree-vectorize -fopt-info-vec

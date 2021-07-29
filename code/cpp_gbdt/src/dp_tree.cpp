@@ -165,22 +165,15 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 }
 
 
-//Find best split of data using the exponential mechanism
+// Find best split of data using the exponential mechanism
 TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, int current_depth)
 {
     double privacy_budget_for_node;
     if ((current_depth != 0) and params->use_decay) {
         privacy_budget_for_node = (tree_params->tree_privacy_budget) / 2 / pow(2, current_depth);
     } else {
-        privacy_budget_for_node = (tree_params->tree_privacy_budget)/2/params->max_depth;
+        privacy_budget_for_node = (tree_params->tree_privacy_budget) / 2 / params->max_depth;
     }
-    // TODO 3_trees not implemented yet
-    if (params->use_3_trees and (current_depth != 0)) {
-        // Except for the root node, budget is divided by the 3-nodes
-        privacy_budget_for_node /= 2;
-    }
-
-    // LOG_DEBUG("Using {1:.4f} budget for internal leaf nodes", privacy_budget_for_node);
 
     vector<SplitCandidate> probabilities;
     double max_gain = numeric_limits<double>::min();
@@ -306,8 +299,8 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain
         }
     }
 
-    // if verification mode or non-dp, deterministically choose largest probability
-    if (VERIFICATION_MODE or !this->params->use_dp) {
+    // non-dp: just choose largest probability
+    if (!this->params->use_dp) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         // return index of the max_elem
         return std::distance(probabilities.begin(), max_elem);
@@ -344,7 +337,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
         double noise = 0;
 
         // but only in dp mode
-        if (!VERIFICATION_MODE or this->params->use_dp) {
+        if (this->params->use_dp) {
             noise = lap.return_a_random_variable(laplace_scale);
         }
 

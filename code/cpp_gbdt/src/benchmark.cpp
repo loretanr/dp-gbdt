@@ -11,11 +11,12 @@
 #include "data.h"
 #include "spdlog/spdlog.h"
 
-
 /* 
     Benchmark:
-    - to be compiled with agressive optimization flags (use "make fast")
-        - should work especially well for skylake or later
+    in order for this code to be fast, it has to be compiled with agressive 
+    optimization flags (-> use "make clean; make fast")
+    - vectorization: code is written such that the compiler can do it's thing 
+        - should work well for intel skylake or later
     - threading: each cv-fold get his own thread
     - spicy speedup (>1200x measured compared to python)
 */
@@ -32,8 +33,9 @@ int Benchmark::main(int argc, char *argv[])
 
     // --------------------------------------
     // select dataset(s) here.
-    // you can either append some ModelParams to parameters here, or let 
-    // the get_xy function do that (it'll create and append some default ones)
+    // you can either append some ModelParams to parameters here (and pass 
+    // "false" to the parsing function), or let the get_xy function
+    // do that (it'll create and append some default ones to the vector)
     Parser parser = Parser();
     datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
     datasets.push_back(parser.get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD

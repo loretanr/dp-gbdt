@@ -1,11 +1,14 @@
 #ifndef TREENODE_H
 #define TREENODE_H
 
+
 class TreeNode {
 public:
+    // constructors
     TreeNode(bool is_leaf);
     ~TreeNode();
 
+    // fields
     TreeNode *left, *right;
     int depth;
     int split_attr;
@@ -15,6 +18,7 @@ public:
     double weight;  // TODO remove?
     double prediction; // if it's a leaf
 
+    // methods
     bool is_leaf();
 };
 
