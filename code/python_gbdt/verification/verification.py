@@ -25,6 +25,17 @@ LEARNING_RATE = 0.1
 MAX_DEPTH = 6
 
 
+def get_dataset_name(num_samples):
+    if num_samples == 300:
+        dataset_name = DATASET + "_small"
+    elif num_samples == 1000:
+        dataset_name = DATASET + "_medium"
+    else:
+        dataset_name = DATASET + "_custom_size_" + str(num_samples)
+    return dataset_name
+
+
+
 if __name__ == '__main__':
 
     DPGBDT.model.VERIFICATION_MODE = True
@@ -33,11 +44,11 @@ if __name__ == '__main__':
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [5000]
-    SAMPLES = [300]
+    SAMPLES = [320]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
-        dataset_name = DATASET + "_small" if num_samples == 300 else DATASET + "_full"
+        dataset_name = get_dataset_name(num_samples)
         print(dataset_name)
         logging.SetupVerificationLogger(dataset_name)
         X, y, cat_idx, num_idx, task = parser.Parse(n_rows=num_samples)
@@ -69,7 +80,7 @@ if __name__ == '__main__':
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
-        dataset_name = DATASET + "_small" if num_samples == 300 else DATASET + "_medium"
+        dataset_name = get_dataset_name(num_samples)
         print(dataset_name)
         logging.SetupVerificationLogger(dataset_name)
         X, y, cat_idx, num_idx, task = parser.Parse(n_rows=num_samples)
@@ -97,11 +108,11 @@ if __name__ == '__main__':
     DATASET = 'adult'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
-    SAMPLES = [300]
+    SAMPLES = [320]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
-        dataset_name = DATASET + "_small" if num_samples == 300 else DATASET + "_medium"
+        dataset_name = get_dataset_name(num_samples)
         print(dataset_name)
         logging.SetupVerificationLogger(dataset_name)
         X, y, cat_idx, num_idx, task = parser.Parse(n_rows=num_samples)

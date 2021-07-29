@@ -26,7 +26,7 @@ logger = logging.GetLogger(__name__)
 verificationLogger = None
 cv_fold_counter = 0
 
-RANDOMIZATION = True    # TODO random on
+RANDOMIZATION = False    # TODO random on
 VERIFICATION_MODE = False
 
 
@@ -196,8 +196,6 @@ class GradientBoostingEnsemble:
     Returns:
       GradientBoostingEnsemble: A GradientBoostingEnsemble object.
     """
-    global RANDOMIZATION
-    RANDOMIZATION = True
     
     global cv_fold_counter
 
@@ -225,6 +223,13 @@ class GradientBoostingEnsemble:
     if self.loss_.is_multi_class:
       tree_privacy_budget /= self.loss_.K
 
+    # distribute samples
+    num_samples_per_tree = int(np.floor(len(X) / self.nb_trees))
+    samples_remainder = len(X) % self.nb_trees
+    remainder_counter = 0
+    # work on a copy, as we're deleting used rows
+    X_ensemble = np.copy(X)
+    y_ensemble = np.copy(y)
 
     # Train all trees
     for tree_index in range(self.nb_trees):
@@ -237,36 +242,17 @@ class GradientBoostingEnsemble:
       delta_v = min(self.l2_threshold / (1 + self.l2_lambda),
                     2 * self.l2_threshold * math.pow(
                       (1 - self.learning_rate), tree_index))
-
-      current_tree_for_ensemble = tree_index % self.nb_trees_per_ensemble
-      if current_tree_for_ensemble == 0:
-
-        # remove extra samples for debug determinism
-        num_samples_per_tree = int(np.floor(len(X) / self.nb_trees))
-        X = X[range(num_samples_per_tree * self.nb_trees),:]
-        y = y[range(num_samples_per_tree * self.nb_trees)]
-
-        # Initialize the dataset and the gradients
-        X_ensemble = np.copy(X)       # take X and y here for alltrees
-        y_ensemble = np.copy(y)
-        # gradient initialization will happen later in the per-class-loop
-
+        
       if self.use_dp:
         # Compute the number of rows that the current tree will use for training
         if self.balance_partition:
-          # All trees will receive same amount of samples
-          if self.nb_trees % self.nb_trees_per_ensemble == 0:
-            # Perfect split
-            number_of_rows = int(len(X) / self.nb_trees_per_ensemble)
-          else:
-            # Partitioning data across ensembles
-            if np.ceil(tree_index / self.nb_trees_per_ensemble) == np.ceil(
-                self.nb_trees / self.nb_trees_per_ensemble):
-              number_of_rows = int(len(X) / (
-                  self.nb_trees % self.nb_trees_per_ensemble))
-            else:
-              number_of_rows = int(len(X) / self.nb_trees_per_ensemble) + int(
-                  len(X) / (self.nb_trees % self.nb_trees_per_ensemble))
+          # All trees will receive same share of samples
+          number_of_rows = int(len(X) / self.nb_trees_per_ensemble)
+          if(remainder_counter < samples_remainder):
+            # remaing samples are given out one by one until no more are left
+            number_of_rows += 1
+            remainder_counter += 1
+            
         else:
           # Line 8 of Algorithm 2 from the paper
           number_of_rows = int((len(X) * self.learning_rate * math.pow(
@@ -287,13 +273,8 @@ class GradientBoostingEnsemble:
         elif number_of_rows > len(X_ensemble):
           number_of_rows = len(X_ensemble)
 
-        # Select <number_of_rows> rows at random from the ensemble dataset
-        # rows = np.random.choice(range(len(X_ensemble)),
-        #                         size=number_of_rows,
-        #                         replace=False)
-        # rows = [elem for elem in range(row_counter, row_counter + number_of_rows)]
+
         rows = [elem for elem in range(number_of_rows)]
-        # row_counter += number_of_rows
         X_tree = X_ensemble[rows, :]
         y_tree = y_ensemble[rows]
 

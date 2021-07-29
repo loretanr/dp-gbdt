@@ -55,12 +55,14 @@ void DPEnsemble::train(DataSet *dataset)
         }
 
         // compute sensitivity
-        tree_params.delta_g = 3 * pow(params->l2_threshold, 2); // TODO move out of loop
+        tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
         tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
                             2 * params->l2_threshold *
                             pow(1-params->learning_rate, tree_index));
 
-        // update/init gradients of all training instances (using last tree(s))
+
+
+        // update/init gradients of all training instances (using last tree(s))         TODO
         vector<double> gradients;
         if(tree_index == 0) {
             vector<double> init_scores(dataset->length, this->init_score);
@@ -96,6 +98,8 @@ void DPEnsemble::train(DataSet *dataset)
                 iter += tree_samples[i].length;
             }
         }
+
+
 
         // intermediate output for validation
         double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
@@ -158,15 +162,26 @@ vector<double>  DPEnsemble::predict(VVD &X)
 // distribute training samples amongst trees
 void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set)
 {
-    if(params->balance_partition) { // perfect split
-        int quotient = train_set->length / params->nb_trees;
-        //int remainder = train_set->length % params->nb_trees;
+    if(params->balance_partition) {
+        int num_samples = train_set->length / params->nb_trees;
         int current_index = 0;
+        int remainder = train_set->length % params->nb_trees;
+        int remainder_index = 0;
         // same amount for every tree
         for(int i=0; i < params->nb_trees; i++) {
+
             VVD x_tree = {};
             vector<double> y_tree = {};
-            for(int j=0; j<quotient; j++){
+
+            // also distribute remainder samples one by one
+            int number_of_samples = num_samples;
+            if(remainder_index < remainder){
+                number_of_samples++;
+                remainder_index++;
+            }
+
+            // get corresponding rows from the dataset
+            for(int j=0; j<number_of_samples; j++){
                 x_tree.push_back((train_set->X)[current_index]);
                 y_tree.push_back((train_set->y)[current_index]);
                 current_index++;
@@ -174,12 +189,6 @@ void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train
             DataSet d = DataSet(x_tree,y_tree);
             (*storage_vec).push_back(d);
         }
-        // evenly distribute leftover training instances   // TODO
-        // for(int i=0; i<remainder; i++) {
-        //     (*storage_vec)[i].add_row((train_set->X)[current_index], 
-        //                             (train_set->y)[current_index]);
-        //     current_index++;
-        // }
     } else {
         throw runtime_error("non-balanced split, resp. paper formula \
             partitioning not implemented yet");

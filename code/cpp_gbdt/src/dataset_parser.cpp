@@ -10,7 +10,8 @@
 
 
 
-DataSet Parser::get_abalone(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
+DataSet Parser::get_abalone(std::vector<ModelParams> &parameters,
+        size_t num_samples, bool use_default_params)
 {
     std::ifstream infile("datasets/real/abalone.data");
     std::string line; VVD X; std::vector<double> y;
@@ -65,7 +66,8 @@ DataSet Parser::get_abalone(std::vector<ModelParams> &parameters, size_t num_sam
 }
 
 
-DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
+DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, 
+        size_t num_samples, bool use_default_params)
 {
     std::ifstream infile("datasets/real/YearPredictionMSD.txt");
     std::string line; VVD X; std::vector<double> y;
@@ -115,10 +117,10 @@ DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, size
 }
 
 
-DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params)
+DataSet Parser::get_adult(std::vector<ModelParams> &parameters,
+        size_t num_samples, bool use_default_params)
 {
     std::ifstream train_infile("datasets/real/adult.data");
-    std::ifstream test_infile("datasets/real/adult.test");
     VVD X; std::vector<double> y;
 
     // column types for parsing
@@ -184,11 +186,6 @@ DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_sampl
         current_index++;
     }
 
-    // TODO
-    // go through all lines of the test dataset file and append to X and y (we'll have our own splits)
-    // for now it's fine since we're using small amounts of samples (training is already 30k)
-
-
     DataSet dataset = DataSet(X,y);
     switch(num_samples){
         case 300: dataset.name = "adult_small"; break;
@@ -196,7 +193,6 @@ DataSet Parser::get_adult(std::vector<ModelParams> &parameters, size_t num_sampl
         default: dataset.name = std::string("adult_custom_size_").append(
             std::to_string(num_samples));
     }
-    dataset.task = "classification";  // TODO unsused for now
     return dataset;
 }
 

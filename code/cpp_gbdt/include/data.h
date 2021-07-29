@@ -32,7 +32,7 @@ struct DataSet {
     int length, num_x_cols;
     bool empty;
     Scaler scaler;
-    std::string name, task;
+    std::string name;
 
     // methods
     void add_row(std::vector<double> xrow, double yval);

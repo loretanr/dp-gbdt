@@ -357,6 +357,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
     }
 }
 
+
 // active in debug mode, prints the tree to console
 void DPTree::recursive_print_tree(TreeNode* node) {
 
@@ -364,7 +365,8 @@ void DPTree::recursive_print_tree(TreeNode* node) {
         return;
     }
     // check if split uses categorical attr
-    bool categorical = std::find( ((*(this->params)).cat_idx).begin(), ((*(this->params)).cat_idx).end(), node->split_attr) != ((*(this->params)).cat_idx).end();
+    bool categorical = std::find( ((*(this->params)).cat_idx).begin(),
+        ((*(this->params)).cat_idx).end(), node->split_attr) != ((*(this->params)).cat_idx).end();
     
     if (categorical) {
         std::cout << std::defaultfloat;
@@ -375,13 +377,14 @@ void DPTree::recursive_print_tree(TreeNode* node) {
     for (int i = 0; i < node->depth; ++i) { cout << ":  "; }
 
     if (!categorical) {
-        cout << "Attr" << std::setprecision(3) << node->split_attr << " < " << std::setprecision(3) << node->split_value;
+        cout << "Attr" << std::setprecision(3) << node->split_attr << 
+            " < " << std::setprecision(3) << node->split_value;
     } else {
         double split_value = (node->split_value); // categorical, hacked
         cout << "Attr" << node->split_attr << " = " << split_value;
     }
     if (node->left->is_leaf()) {
-        cout << " (" << "L-leaf" << ")" << endl; // node->left->weight
+        cout << " (" << "L-leaf" << ")" << endl;
     } else {
         cout << endl;
     }
@@ -396,7 +399,8 @@ void DPTree::recursive_print_tree(TreeNode* node) {
 
     for (int i = 0; i < node->depth; ++i) { cout << ":  "; }
     if (!categorical) {
-        cout << "Attr" << std::setprecision(3) << node->split_attr << " >= " << std::setprecision(3) << node->split_value;
+        cout << "Attr" << std::setprecision(3) << node->split_attr <<
+            " >= " << std::setprecision(3) << node->split_value;
     } else {
         double split_value = node->split_value;
         cout << "Attr" << node->split_attr << " != " << split_value;
