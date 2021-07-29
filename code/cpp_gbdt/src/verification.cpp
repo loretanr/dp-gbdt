@@ -12,7 +12,7 @@
 
 /* 
     Verification:
-    run the model on various (small to medium size) datasets for 
+    runs the model on various (small to medium size) datasets for 
     easy verification of correctness. intermediate values are written to
     verification_logfile.
 */
@@ -31,18 +31,27 @@ int Verification::main(int argc, char *argv[])
     std::vector<DataSet> datasets;
     std::vector<ModelParams> parameters;
 
+    // --------------------------------------
     // select dataset(s) here.
     // you can either append some ModelParams to parameters here, or let 
     // the get_xy function do that (it'll create and append some default ones)
-
     Parser parser = Parser();
     datasets.push_back(parser.get_abalone(parameters, 300, true)); // small abalone
-    // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
+    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
     datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
-    datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
+    // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
     datasets.push_back(parser.get_adult(parameters, 300, true)); // small adult
     // datasets.push_back(parser.get_adult(parameters, 1000, true)); // medium adult
+    // --------------------------------------
 
+    // turn off use_dp for verification. We are in VERIFICATION_MODE anyways, 
+    // but this ensures that the input data is not shuffled. -> we get completely
+    // deterministic runs that are comparable to the python output.
+    for(auto &elem : parameters){
+        elem.use_dp = false;
+    }
+
+    // do verification on all added datasets
     for(size_t i=0; i<datasets.size(); i++) {
         DataSet &dataset = datasets[i];
         ModelParams &param = parameters[i];
@@ -51,9 +60,8 @@ int Verification::main(int argc, char *argv[])
         verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset.name));
         std::cout << dataset.name << std::endl;
 
-        // do cross validation
-        std::vector<double> scores;
-        std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
+        // do cross validation, always 5 fold for now
+        std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
         cv_fold_index = 0;
 
         for (auto split : cv_inputs) {
@@ -61,21 +69,19 @@ int Verification::main(int argc, char *argv[])
             // scale the features (y) to [-1,1] if necessary
             split.train.scale(-1, 1);
 
-            // train the ensemble
+            // train the model
             DPEnsemble ensemble = DPEnsemble(&param);
             ensemble.train(&split.train);
             
-            // compute score
+            // predict with the test set
             std::vector<double> y_pred = ensemble.predict(split.test.X);
 
             // invert the feature scale (if necessary)
             inverse_scale(split.train.scaler, y_pred);
-
+            
             // compute score
-
             double score = param.task->compute_score(split.test.y, y_pred);
 
-            scores.push_back(score);
             std::cout << std::setprecision(9) << score << " " << std::flush;
             cv_fold_index++;
         } std::cout << std::endl;

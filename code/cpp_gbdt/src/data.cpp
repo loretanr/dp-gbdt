@@ -1,11 +1,14 @@
 #include <vector>
 #include <numeric>
 #include <queue>
-// #include <limits>
 #include <algorithm>
 #include <sstream>
 #include <cmath>
 #include "data.h"
+
+
+extern bool VERIFICATION_MODE;
+
 
 Scaler::Scaler(double min_val, double max_val, double fmin, double fmax, bool scaling_required) : data_min(min_val), data_max(max_val),
         feature_min(fmin), feature_max(fmax), scaling_required(scaling_required)
@@ -117,9 +120,11 @@ TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool
 }
 
 // "reverse engineered" the python sklearn.model_selection.cross_val_score
-// Returns a std::vector of the train-test-splits
-std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle)
+// Returns a std::vector of the train-test-splits. Will by default shuffle 
+// the dataset rows, unless we're in verification mode.
+std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds)
 {
+    bool shuffle = !VERIFICATION_MODE;
     if(shuffle) {
         std::random_shuffle(dataset.X.begin(), dataset.X.end());
         std::random_shuffle(dataset.y.begin(), dataset.y.end());

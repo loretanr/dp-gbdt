@@ -19,7 +19,7 @@ struct ModelParams {
     bool balance_partition = true;
     bool gradient_filtering = false;
     bool leaf_clipping = false;
-    bool use_dp = false; // TODO remove this default
+    bool use_dp = true;
     bool use_dfs = true;
     bool use_3_trees = false;
     bool use_decay = false;

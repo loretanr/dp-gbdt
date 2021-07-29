@@ -8,7 +8,6 @@
 #include "spdlog/spdlog.h"
 
 extern std::ofstream verification_logfile;
-extern bool RANDOMIZATION;
 extern bool VERIFICATION_MODE;
 
 using namespace std;
@@ -307,8 +306,8 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain
         }
     }
 
-    // option to disable randomness for validation / debugging
-    if (not RANDOMIZATION) {
+    // if verification mode or non-dp, deterministically choose largest probability
+    if (VERIFICATION_MODE or !this->params->use_dp) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         // return index of the max_elem
         return std::distance(probabilities.begin(), max_elem);
@@ -344,8 +343,8 @@ void DPTree::add_laplacian_noise(double laplace_scale)
     for (auto &leaf : this->leaves) {
         double noise = 0;
 
-        // but only if RANDOMIZATION is turned on
-        if (RANDOMIZATION) {
+        // but only in dp mode
+        if (!VERIFICATION_MODE or this->params->use_dp) {
             noise = lap.return_a_random_variable(laplace_scale);
         }
 

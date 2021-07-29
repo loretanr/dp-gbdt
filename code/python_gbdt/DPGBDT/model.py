@@ -196,6 +196,8 @@ class GradientBoostingEnsemble:
     Returns:
       GradientBoostingEnsemble: A GradientBoostingEnsemble object.
     """
+    global RANDOMIZATION
+    RANDOMIZATION = True
     
     global cv_fold_counter
 

@@ -49,7 +49,7 @@ struct TrainTestSplit {
 // method declarations
 void inverse_scale(Scaler &scaler, std::vector<double> &vec);
 TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio = 0.70, bool shuffle = false);
-std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds, bool shuffle);
+std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds);
 
 
 #endif /* DATA_H */

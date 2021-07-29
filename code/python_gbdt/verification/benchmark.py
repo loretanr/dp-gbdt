@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     DATASET = 'yearMSD'
     parser = Parser(dataset=DATASET)
-    SAMPLES = [4000]
+    SAMPLES = [10000]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0

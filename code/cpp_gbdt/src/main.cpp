@@ -12,7 +12,6 @@
 #include "benchmark.h"
 #include "spdlog/spdlog.h"
 
-extern bool RANDOMIZATION;
 extern bool VERIFICATION_MODE;
 
 
@@ -21,25 +20,22 @@ int main(int argc, char** argv)
     // seed randomness once and for all
     srand(time(NULL));
 
-    // parse flags
+    // parse flags, currently supporting "--verify" and "--bench"
     if(argc != 1){
         for(int i = 1; i < argc; i++){
             if ( ! std::strcmp(argv[i], "--verify") ){
-                // go into verification mode -> run model on small datasets
-                RANDOMIZATION = false;
+                // go into verification mode
                 VERIFICATION_MODE = true;
                 return Verification::main(argc, argv);
             } else if ( ! std::strcmp(argv[i], "--bench") ){
                 // go into benchmark mode
-                RANDOMIZATION = true;    // TODOOOOOOOOOOOOOOOOOOOOOOO
                 VERIFICATION_MODE = false;
                 return Benchmark::main(argc, argv);
             } else {
                 throw std::runtime_error("unkown command line flag encountered");
             } 
         }
-    } else { // no flags given
-        RANDOMIZATION = true;      
+    } else { // no flags given, continue in this file
         VERIFICATION_MODE = false;
     }
 
@@ -49,18 +45,23 @@ int main(int argc, char** argv)
     LOG_INFO("hello MA start");
 
     // Define model parameters
+    // only reason to use a vector is because parser expects it
     std::vector<ModelParams> params;
     ModelParams current_params = create_default_params();
 
     // change current params here if required:
-    // current_params.privacy_budget = 42;
+    // e.g. current_params.privacy_budget = 42;
+    current_params.privacy_budget = 1;
+    current_params.use_dp = false;
     params.push_back(current_params);
 
+    // Choose your dataset
     Parser parser = Parser();
     DataSet dataset = parser.get_abalone(params, 5000, false);
+    std::cout << dataset.name << std::endl;
 
     // create cross validation inputs
-    std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
+    std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
 
     // do cross validation
     std::vector<double> rmses;
@@ -73,27 +74,16 @@ int main(int argc, char** argv)
         DPEnsemble ensemble = DPEnsemble(&params[0]);
         ensemble.train(&split.train);
         
-        // compute score
+        // predict with the test set
         std::vector<double> y_pred = ensemble.predict(split.test.X);
 
-        // invert the feature scaling
+        // invert the feature scaling (if necessary)
         inverse_scale(split.train.scaler, y_pred);
 
-        // compute RMSE
-        std::transform(split.test.y.begin(), split.test.y.end(), 
-                y_pred.begin(), y_pred.begin(), std::minus<double>());
-        std::transform(y_pred.begin(), y_pred.end(),
-                y_pred.begin(), [](double &c){return std::pow(c,2);});
-        double average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
-        double rmse = std::sqrt(average);
+        // compute score
+        double score = params[0].task->compute_score(split.test.y, y_pred);
 
-        rmses.push_back(rmse);
-        std::cout << rmse << " " << std::flush;
-    }
-
-    std::cout << std::endl << "RMSEs: " << std::setprecision(9);
-    for(auto elem : rmses) {
-        std::cout << elem << " ";
+        std::cout << score << " " << std::flush;
     } std::cout << std::endl;
 
     LOG_INFO("hello MA end");

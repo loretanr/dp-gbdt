@@ -6,7 +6,6 @@
 /** Global Variables */
 
 bool VERIFICATION_MODE;
-bool RANDOMIZATION;
 size_t cv_fold_index;
 
 

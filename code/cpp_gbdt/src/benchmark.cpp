@@ -17,7 +17,7 @@
     - to be compiled with agressive optimization flags (use "make fast")
         - should work especially well for skylake or later
     - threading: each cv-fold get his own thread
-    - spicy speedup (>TODOcompared to python)     TODO
+    - spicy speedup (>1200x measured compared to python)
 */
 
 int Benchmark::main(int argc, char *argv[])
@@ -30,25 +30,25 @@ int Benchmark::main(int argc, char *argv[])
     std::vector<DataSet> datasets;
     std::vector<ModelParams> parameters;
 
+    // --------------------------------------
     // select dataset(s) here.
     // you can either append some ModelParams to parameters here, or let 
     // the get_xy function do that (it'll create and append some default ones)
-
     Parser parser = Parser();
-    // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
-    datasets.push_back(parser.get_YearPredictionMSD(parameters, 20000, true)); // medium yearMSD
-    // datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
+    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
+    datasets.push_back(parser.get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD
+    datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
+    // --------------------------------------
 
     for(size_t i=0; i<datasets.size(); i++) {
         DataSet &dataset = datasets[i];
         ModelParams &param = parameters[i];
-
         std::cout << dataset.name << std::endl;
 
-        /* perform cross validation */
+        /* cross validation */
 
         // split the data for each fold
-        std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5, false);
+        std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
         std::chrono::steady_clock::time_point time_begin = std::chrono::steady_clock::now();
         
         // prepare the ressources for each thread
@@ -71,10 +71,10 @@ int Benchmark::main(int argc, char *argv[])
         /* compute scores */
 
         for (size_t ensemble_id = 0; ensemble_id < ensembles.size(); ensemble_id++) {
-
             DPEnsemble *ensemble = &ensembles[ensemble_id];
             TrainTestSplit *split = &cv_inputs[ensemble_id];
             
+            // predict with the test set
             std::vector<double> y_pred = ensemble->predict(split->test.X);
 
             // invert the feature scale (if necessary)

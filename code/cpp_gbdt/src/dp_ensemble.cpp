@@ -6,7 +6,6 @@
 
 extern std::ofstream verification_logfile;
 extern size_t cv_fold_index;
-extern bool RANDOMIZATION;
 extern bool VERIFICATION_MODE;
 
 using namespace std;
