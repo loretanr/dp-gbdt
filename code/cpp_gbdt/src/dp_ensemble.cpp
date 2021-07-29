@@ -25,7 +25,10 @@ DPEnsemble::~DPEnsemble() {
 /** Methods */
 
 void DPEnsemble::train(DataSet *dataset)
-{
+{   
+    // store pointer also here, so we don't need to pass it to all helper functions
+    this->dataset = dataset;
+
     // compute initial prediction
     this->init_score = params->task->compute_init_score(dataset->y);
     LOG_DEBUG("Training initialized with score: {1}", this->init_score);
@@ -60,45 +63,8 @@ void DPEnsemble::train(DataSet *dataset)
                             2 * params->l2_threshold *
                             pow(1-params->learning_rate, tree_index));
 
-
-
-        // update/init gradients of all training instances (using last tree(s))         TODO
-        vector<double> gradients;
-        if(tree_index == 0) {
-            vector<double> init_scores(dataset->length, this->init_score);
-            gradients = params->task->compute_gradients(dataset->y, init_scores);
-            // store the gradients back to their corresponding samples
-            int index = 0;
-            for(DataSet &dset : tree_samples) {
-                for (auto row : dset.X){
-                    // store each gradient next to its corresponding sample
-                    dset.gradients.push_back(gradients[index]);  
-                    index++;
-                }
-            }
-        } else {
-            // only have to update gradients of unused samples
-            VVD pred_samples;
-            vector<double> y_samples;
-            for (size_t i=tree_index; i<tree_samples.size(); i++) {
-                pred_samples.insert(pred_samples.end(), tree_samples[i].X.begin(), tree_samples[i].X.end());
-                y_samples.insert(y_samples.end(), tree_samples[i].y.begin(), tree_samples[i].y.end());
-            }
-            vector<double> y_pred = predict(pred_samples);
-
-            // update gradients
-            gradients = (params->task)->compute_gradients(y_samples, y_pred);
-
-            // store the gradients back to their corresponding samples
-            vector<double>::const_iterator iter = gradients.begin();
-            for (size_t i=tree_index; i<tree_samples.size(); i++) {
-                vector<double> curr_grads = vector<double>(iter, iter + tree_samples[i].length);
-                tree_samples[i].gradients = curr_grads;
-                iter += tree_samples[i].length;
-            }
-        }
-
-
+        // init gradients resp. update gradients before building each tree
+        vector<double> gradients= update_gradients(tree_samples, tree_index);
 
         // intermediate output for validation
         double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
@@ -158,7 +124,8 @@ vector<double>  DPEnsemble::predict(VVD &X)
 }
 
 
-// distribute training samples amongst trees
+// distribute training samples in train_set amongst trees
+// by splitting into even chunks and storing them to storage_vec
 void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set)
 {
     if(params->balance_partition) {
@@ -192,4 +159,46 @@ void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train
         throw runtime_error("non-balanced split, resp. paper formula \
             partitioning not implemented yet");
     }
+}
+
+
+std::vector<double> DPEnsemble::update_gradients(vector<DataSet> &tree_samples, int tree_index)
+{
+    vector<double> gradients;
+    if(tree_index == 0) {
+        // init gradients
+        vector<double> init_scores(dataset->length, this->init_score);
+        gradients = this->params->task->compute_gradients(dataset->y, init_scores);
+        // store the gradients back to their corresponding samples
+        int index = 0;
+        for(DataSet &dset : tree_samples) {
+            for (auto row : dset.X){
+                // store each gradient next to its corresponding sample
+                dset.gradients.push_back(gradients[index]);  
+                index++;
+            }
+        }
+    } else { // update gradients
+        
+        // get the samples and corresponding gradients of all unused samples
+        VVD pred_samples;
+        vector<double> y_samples;
+        for (size_t i=tree_index; i<tree_samples.size(); i++) {
+            pred_samples.insert(pred_samples.end(), tree_samples[i].X.begin(), tree_samples[i].X.end());
+            y_samples.insert(y_samples.end(), tree_samples[i].y.begin(), tree_samples[i].y.end());
+        }
+        vector<double> y_pred = predict(pred_samples);
+
+        // update gradients
+        gradients = (this->params->task)->compute_gradients(y_samples, y_pred);
+
+        // store the gradients back to their corresponding samples
+        vector<double>::const_iterator iter = gradients.begin();
+        for (size_t i=tree_index; i<tree_samples.size(); i++) {
+            vector<double> curr_grads = vector<double>(iter, iter + tree_samples[i].length);
+            tree_samples[i].gradients = curr_grads;
+            iter += tree_samples[i].length;
+        }
+    }
+    return gradients;
 }

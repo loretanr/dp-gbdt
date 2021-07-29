@@ -95,8 +95,10 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 
     // Update live samples and continue recursion
     vector<int> lhs;
-    bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), node->split_attr) != (params->cat_idx).end();
-    samples_left_right_partition(lhs, X_live, gradients_live, node->split_attr, node->split_value, categorical);
+    bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(),
+            node->split_attr) != (params->cat_idx).end();
+    samples_left_right_partition(lhs, X_live, gradients_live,
+            node->split_attr, node->split_value, categorical);
     vector<int> left_live_samples, right_live_samples;
     for (size_t i=0; i<live_samples.size(); i++) {
         if (lhs[i]) {
