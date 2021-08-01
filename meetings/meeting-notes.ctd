@@ -1200,7 +1200,7 @@ and maybe test if verification is actually correct!
 			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627550886.71" unique_id="23">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627816390.4" unique_id="23">
 			<rich_text foreground="#9090eeee9090">TODO 
     right score for cpp classification
     some function on the loss I guess (for usage in main and verification)
@@ -1260,7 +1260,17 @@ expected results (randomness off):
     yearMSD_custom_size_8000
 11.880975788 9.047804182 10.753555420 9.161782541 10.534661462
     yearMSD_custom_size_20000
-390.042167 385.951543 364.001642 390.910298 346.114023 
+390.042167 385.951543 364.001642 390.910298 346.114023
+
+--------------- now with remaining samples -----------------
+    abalone_custom_size_320
+    2.76826829 2.44113116 2.76676384 2.74056334 4.68368458 
+    abalone_custom_size_4177
+    4.06450969 1.96837234 2.86513017 2.1307377 2.15829296 
+    yearMSD_small
+    5.23538978 5.88349551 4.39299692 27.5872253 12.5884538 
+    adult_custom_size_320
+    0.765625 0.734375 0.796875 0.734375 0.78125 
 
             
             • yearMSD RMSE is what internet expects it to be ~9-10 (rather good!)

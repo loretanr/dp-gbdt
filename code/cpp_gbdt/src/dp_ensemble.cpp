@@ -102,7 +102,6 @@ void DPEnsemble::train(DataSet *dataset)
 // Predict values from the ensemble of gradient boosted trees
 vector<double>  DPEnsemble::predict(VVD &X)
 {
-    // TODO inefficient, currently recomputes predictions for all trees after each tree
     vector<double> predictions(X.size(),0);
     for (auto tree : trees) {
         vector<double> pred = tree.predict(X);
@@ -111,14 +110,10 @@ vector<double>  DPEnsemble::predict(VVD &X)
             predictions.begin(), predictions.begin(), std::plus<double>());
     }
 
-    // TODO optimize those 2 transforms in 1
-    double learning_rate = params->learning_rate;
-    std::transform(predictions.begin(), predictions.end(),
-            predictions.begin(), [learning_rate](double &c){return c*learning_rate;});
-
     double innit_score = this->init_score;
-    std::transform(predictions.begin(), predictions.end(),
-                    predictions.begin(), [innit_score](double &c){return c+innit_score;});
+    double learning_rate = params->learning_rate;
+    std::transform(predictions.begin(), predictions.end(), predictions.begin(), 
+            [learning_rate, innit_score](double &c){return c*learning_rate + innit_score;});
 
     return predictions;
 }
