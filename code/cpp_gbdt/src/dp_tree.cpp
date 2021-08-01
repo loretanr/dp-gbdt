@@ -136,6 +136,7 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
 vector<double> DPTree::predict(VVD &X)
 {
     vector<double> predictions;
+    // iterate over all samples
     for (auto row : X) {
         double pred = _predict(&row, this->root_node);
         predictions.push_back(pred);
@@ -143,6 +144,7 @@ vector<double> DPTree::predict(VVD &X)
 
     return predictions;
 }
+
 
 // recursively walk through decision tree
 double DPTree::_predict(vector<double> *row, TreeNode *node)
@@ -157,9 +159,9 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
         if (row_val == node->split_value){
             return _predict(row, node->left);
         }
-    } else {
-        if (row_val < node->split_value){               // have LEQ here, theo has LT (but should only
-            return _predict(row, node->left);            // rarely affect debugging determinism)
+    } else { // numerical feature
+        if (row_val < node->split_value){
+            return _predict(row, node->left);
         }
     }
     
@@ -167,7 +169,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 }
 
 
-// Find best split of data using the exponential mechanism
+// find best split of data using the exponential mechanism
 TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, int current_depth)
 {
     double privacy_budget_for_node;
@@ -178,13 +180,12 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     }
 
     vector<SplitCandidate> probabilities;
-    double max_gain = numeric_limits<double>::min();
     int lhs_size;
     
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
-        for (double feature_value : X_live[feature_index]) { // TODO, don't iterate over duplicates in X_live
+        for (double feature_value : X_live[feature_index]) {
             // compute gain
             double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size, categorical);
             // feature cannot be chosen, skipping
@@ -192,7 +193,6 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
                 continue;
             }
             gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
-            max_gain = (gain > max_gain) ? gain : max_gain; // TODO unused ?
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
             candidate.lhs_size = lhs_size;
             candidate.rhs_size = gradients_live.size() - lhs_size;
@@ -201,7 +201,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     }
 
     // choose a split using the exponential mechanism
-    int index = exponential_mechanism(probabilities, max_gain);
+    int index = exponential_mechanism(probabilities);
 
     // construct the node
     TreeNode *node;
@@ -222,7 +222,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
 }
 
 
-// This gain is the simplified formula for least squares loss function // TODO adapt for classification
+// todo formula, same for both regress/classif ?
 double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
     int feature_index, double feature_value, int &lhs_size, bool categorical)
 {
@@ -278,7 +278,7 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples, vector
 // be chosen for split). Then a cumulative distribution function is created from
 // these probabilities. Then we can sample from it using a RNG.
 // Returns the index of the chosen split.
-int DPTree::exponential_mechanism(vector<SplitCandidate> &probs, double max_gain)
+int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 {
     // if no split has a positive gain, return. Node will become a leaf
     int count = std::count_if(probs.begin(), probs.end(),

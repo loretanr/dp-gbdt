@@ -39,7 +39,7 @@ private:
                 int feature_index, double feature_value, bool categorical);
     double compute_gain(VVD &samples, std::vector<double> &gradients_live, int feature_index,
                 double feature_value, int &lhs_size, bool categorical);
-    int exponential_mechanism(std::vector<SplitCandidate> &probs, double max_gain);
+    int exponential_mechanism(std::vector<SplitCandidate> &probs);
     void add_laplacian_noise(double laplace_scale);
 
 public:
