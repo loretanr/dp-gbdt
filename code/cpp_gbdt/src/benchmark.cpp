@@ -6,7 +6,7 @@
 #include <thread>
 #include "parameters.h"
 #include "benchmark.h"
-#include "dp_ensemble.h"
+#include "gbdt/dp_ensemble.h"
 #include "dataset_parser.h"
 #include "data.h"
 #include "spdlog/spdlog.h"

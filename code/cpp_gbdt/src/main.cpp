@@ -5,7 +5,7 @@
 #include <cmath>
 #include "logging.h"
 #include "parameters.h"
-#include "dp_ensemble.h"
+#include "gbdt/dp_ensemble.h"
 #include "dataset_parser.h"
 #include "data.h"
 #include "verification.h"

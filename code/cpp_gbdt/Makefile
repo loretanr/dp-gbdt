@@ -1,13 +1,12 @@
 COMPILER=g++
-OBJDIR=objs/
-SRCDIR=src/
 CFLAGS=-c -Wall -std=c++11 -g -O0# todo -O0 for hardening
-SOURCES=$(wildcard src/*.cpp)
-INC=-I./include/# -L ./src/ -lfmt
+SOURCES=$(wildcard src/*.cpp src/gbdt/*.cpp)
+INC=-I./include/ -I./include/gbdt/# -L ./src/ -lfmt
 
 BUILD_PRINT = \e[1;34mBuilding $<\e[0m
 
 $(shell mkdir -p objs)
+$(shell mkdir -p objs/gbdt)
 
 run: $(SOURCES:src/%.cpp=objs/%.o)
 	$(COMPILER) -pthread $^ -o $@
@@ -18,13 +17,9 @@ clean:
 
 objs/%.o: src/%.cpp
 	$(COMPILER) $(CFLAGS) $(INC) $< -o $@
+objs/gbdt/%.o: src/gbdt/%.cpp
+	$(COMPILER) $(CFLAGS) $(INC) $< -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-    @$(ECHO) "$< -> $@"
-    @test -d $(OBJDIR) || mkdir -pm 775 $(OBJDIR)
-    @test -d $(@D) || mkdir -pm 775 $(@D)
-    @-$(RM) $@
-    $(COMPILER) $(CFLAGS) $(INC) -c $< -o $@
 
 # rebuild: clean 
 # 	make

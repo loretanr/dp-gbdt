@@ -5,7 +5,7 @@
 #include "verification.h"
 #include "parameters.h"
 #include "data.h"
-#include "dp_ensemble.h"
+#include "gbdt/dp_ensemble.h"
 #include "dataset_parser.h"
 #include "spdlog/spdlog.h"
 
