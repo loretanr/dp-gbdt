@@ -57,7 +57,9 @@ int main(int argc, char** argv)
 
     // Choose your dataset
     Parser parser = Parser();
-    DataSet dataset = parser.get_abalone(params, 5000, false);
+    // DataSet dataset = parser.get_abalone(params, 5000, false);
+    DataSet dataset = parser.get_adult(params, 1000, false); // medium adult
+
     std::cout << dataset.name << std::endl;
 
     // create cross validation inputs
