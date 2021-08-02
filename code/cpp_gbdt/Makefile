@@ -1,4 +1,6 @@
 COMPILER=g++
+OBJDIR=objs/
+SRCDIR=src/
 CFLAGS=-c -Wall -std=c++11 -g -O0# todo -O0 for hardening
 SOURCES=$(wildcard src/*.cpp)
 INC=-I./include/# -L ./src/ -lfmt
@@ -16,6 +18,13 @@ clean:
 
 objs/%.o: src/%.cpp
 	$(COMPILER) $(CFLAGS) $(INC) $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+    @$(ECHO) "$< -> $@"
+    @test -d $(OBJDIR) || mkdir -pm 775 $(OBJDIR)
+    @test -d $(@D) || mkdir -pm 775 $(@D)
+    @-$(RM) $@
+    $(COMPILER) $(CFLAGS) $(INC) -c $< -o $@
 
 # rebuild: clean 
 # 	make

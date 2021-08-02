@@ -44,8 +44,8 @@ int Verification::main(int argc, char *argv[])
     // datasets.push_back(parser.get_adult(parameters, 1000, true)); // medium adult
     // --------------------------------------
 
-    // this (in combination with VERIFICATION_MODE, which disables dataset shuffling
-    // in create_cross_val_inputs and rounding at ceartain places) turns off randomness completely
+    // use_dp (in combination with VERIFICATION_MODE, which disables dataset shuffling
+    // in create_cross_val_inputs and rounding at certain places) turns off randomness completely
     // -> we get completely deterministic runs that are comparable to the python output.
     for(auto &elem : parameters){
         elem.use_dp = false;

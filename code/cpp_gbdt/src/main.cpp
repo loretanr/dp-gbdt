@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 
     // change current params here if required:
     // e.g. current_params.privacy_budget = 42;
-    current_params.privacy_budget = 4;
+    current_params.privacy_budget = 0.1;
     current_params.use_dp = true;
     params.push_back(current_params);
 
