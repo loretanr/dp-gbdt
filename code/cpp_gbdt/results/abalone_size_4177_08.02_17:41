@@ -1,0 +1,16 @@
+dataset,nb_samples,privacy_budget,mean
+abalone_size_4177,4177,0.1,121.503
+abalone_size_4177,4177,0.2,56.3982
+abalone_size_4177,4177,0.3,39.7443
+abalone_size_4177,4177,0.4,31.337
+abalone_size_4177,4177,0.5,25.8115
+abalone_size_4177,4177,0.6,19.9643
+abalone_size_4177,4177,0.7,16.2397
+abalone_size_4177,4177,0.8,13.9133
+abalone_size_4177,4177,0.9,12.3621
+abalone_size_4177,4177,1,11.4699
+abalone_size_4177,4177,1.5,7.70197
+abalone_size_4177,4177,2,6.03043
+abalone_size_4177,4177,2.5,5.41425
+abalone_size_4177,4177,3,4.88242
+abalone_size_4177,4177,4,4.11631

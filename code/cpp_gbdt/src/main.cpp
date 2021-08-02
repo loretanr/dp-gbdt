@@ -10,6 +10,7 @@
 #include "data.h"
 #include "verification.h"
 #include "benchmark.h"
+#include "evaluation.h"
 #include "spdlog/spdlog.h"
 
 extern bool VERIFICATION_MODE;
@@ -20,7 +21,7 @@ int main(int argc, char** argv)
     // seed randomness once and for all
     srand(time(NULL));
 
-    // parse flags, currently supporting "--verify" and "--bench"
+    // parse flags, currently supporting "--verify", "--bench", "--eval"
     if(argc != 1){
         for(int i = 1; i < argc; i++){
             if ( ! std::strcmp(argv[i], "--verify") ){
@@ -31,6 +32,10 @@ int main(int argc, char** argv)
                 // go into benchmark mode
                 VERIFICATION_MODE = false;
                 return Benchmark::main(argc, argv);
+            } else if ( ! std::strcmp(argv[i], "--eval") ){
+                // go into evaluation mode
+                VERIFICATION_MODE = false;
+                return Evaluation::main(argc, argv); 
             } else {
                 throw std::runtime_error("unkown command line flag encountered");
             } 
@@ -49,7 +54,7 @@ int main(int argc, char** argv)
     std::vector<ModelParams> params;
     ModelParams current_params = create_default_params();
 
-    // change current params here if required:
+    // change model params here if required:
     // e.g. current_params.privacy_budget = 42;
     current_params.privacy_budget = 0.1;
     current_params.use_dp = true;
