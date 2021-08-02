@@ -105,7 +105,7 @@ DataSet Parser::parse_file(std::string dataset_file, std::string dataset_name, i
 
     // parse dataset, label-encode categorical features
     int current_index = 0;
-    std::vector<std::map<std::string,float>> mappings(num_cols + 1);
+    std::vector<std::map<std::string,float>> mappings(num_cols + 1); // last (additional) one is for y
 
     while (std::getline(infile, line,'\n') && current_index < num_samples) {
         std::stringstream ss(line);
@@ -128,6 +128,7 @@ DataSet Parser::parse_file(std::string dataset_file, std::string dataset_name, i
             // y
             if(std::find(target_idx.begin(), target_idx.end(), i) != target_idx.end()){
                 if (dynamic_cast<Regression*>(task.get())) {
+                    // regression -> y is numerical
                     y.push_back(stof(strings[i]));
                 } else {
                     try { // categorical
