@@ -9,7 +9,7 @@
 #include "data.h"
 
 
-DataSet Parser::get_abalone2(std::vector<ModelParams> &parameters,
+DataSet Parser::get_abalone(std::vector<ModelParams> &parameters,
         size_t num_samples, bool use_default_params)
 {
     std::string file = "datasets/real/abalone.data";
@@ -27,7 +27,7 @@ DataSet Parser::get_abalone2(std::vector<ModelParams> &parameters,
 }
 
 
-DataSet Parser::get_YearPredictionMSD2(std::vector<ModelParams> &parameters, 
+DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, 
         size_t num_samples, bool use_default_params)
 {
     std::string file = "datasets/real/YearPredictionMSD.txt";
@@ -46,112 +46,7 @@ DataSet Parser::get_YearPredictionMSD2(std::vector<ModelParams> &parameters,
 }
 
 
-DataSet Parser::get_abalone(std::vector<ModelParams> &parameters,
-        size_t num_samples, bool use_default_params)
-{
-    std::ifstream infile("datasets/real/abalone.data");
-    std::string line; VVD X; std::vector<double> y;
-    num_samples = std::min(num_samples, (size_t) 4177);
-
-    // regression task -> Least Squares
-    std::shared_ptr<Regression> task(new Regression());
-
-    if (use_default_params) {
-        // create some default parameters
-        ModelParams params = create_default_params();
-        params.task = task;
-        params.cat_idx = {0}; // first column is categorical
-        params.num_idx = {1,2,3,4,5,6,7};
-        parameters.push_back(params);
-    } else {
-        // you have already defined your parameters, then just abalone specific ones are added
-        parameters.back().num_idx = {1,2,3,4,5,6,7};
-        parameters.back().cat_idx = {0};
-        parameters.back().task = task;
-    }
-
-    // parse dataset, label-encode categorical feature
-    size_t current_index = 0;
-    while (std::getline(infile, line,'\n') && current_index < num_samples) {
-        std::stringstream ss(line);
-        std::vector<std::string> strings = split_string(line, ',');
-        std::vector<double> X_row;
-        if(strings[0] == "M"){ // first col categorical (gender M/F/I)
-            X_row.push_back(1.0f);
-        } else if (strings[0] == "F") {
-            X_row.push_back(2.0f);
-        } else {
-            X_row.push_back(3.0f);
-        }
-        for(size_t i=1;i<strings.size()-1; i++){
-            X_row.push_back(stof(strings[i]));
-        }
-        y.push_back(stof(strings.back()));
-        X.push_back(X_row);
-        current_index++;
-    }
-    
-    DataSet dataset = DataSet(X,y);
-    switch(num_samples){
-        case 300: dataset.name = "abalone_small"; break;
-        default: dataset.name = std::string("abalone_custom_size_").append(
-            std::to_string(num_samples));
-    }
-    return dataset;
-}
-
-
-DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, 
-        size_t num_samples, bool use_default_params)
-{
-    std::ifstream infile("datasets/real/YearPredictionMSD.txt");
-    std::string line; VVD X; std::vector<double> y;
-
-    // regression task -> Least Squares
-    std::shared_ptr<Regression> task(new Regression());
-
-    // all 90 columns are numerical -> create vector with numbers 0..89
-    std::vector<int> num_idx(90);
-    std::iota(std::begin(num_idx), std::end(num_idx), 0);
-    if (use_default_params){
-        // create some default parameters
-        ModelParams params = create_default_params();
-        params.cat_idx = {};
-        params.num_idx = num_idx;
-        params.task = task;
-        parameters.push_back(params);
-    } else {
-        // you have already defined your parameters, then just yearMSD specific ones are added
-        parameters.back().cat_idx = {};
-        parameters.back().num_idx = num_idx;
-        parameters.back().task = task;
-    }
-
-    // parse dataset, only has numerical features
-    size_t current_index = 0;
-    while (std::getline(infile, line,'\n') && current_index < num_samples) {
-        std::stringstream ss(line);
-        std::vector<std::string> strings = split_string(line, ',');
-        std::vector<double> X_row;
-        for(size_t i=1;i<strings.size(); i++){
-            X_row.push_back(stof(strings[i]));
-        }
-        y.push_back(stof(strings[0]));
-        X.push_back(X_row);
-        current_index++;
-    }
-
-    DataSet dataset = DataSet(X,y);
-    switch(num_samples){
-        case 300: dataset.name = "yearMSD_small"; break;
-        case 1000: dataset.name = "yearMSD_medium"; break;
-        default: dataset.name = std::string("yearMSD_custom_size_").append(
-            std::to_string(num_samples));
-    }
-    return dataset;
-}
-
-DataSet Parser::get_adult2(std::vector<ModelParams> &parameters,
+DataSet Parser::get_adult(std::vector<ModelParams> &parameters,
         size_t num_samples, bool use_default_params)
 {
     std::string file = "datasets/real/adult.data";
@@ -202,7 +97,7 @@ DataSet Parser::parse_file(std::string dataset_file, std::string dataset_name, i
         params.num_idx = num_idx;
         parameters.push_back(params);
     } else {
-        // you have already defined your parameters, then just abalone specific ones are added
+        // you have already defined your parameters, then just add dataset specific ones
         parameters.back().num_idx = num_idx;
         parameters.back().cat_idx = cat_idx;
         parameters.back().task = task;
@@ -217,7 +112,7 @@ DataSet Parser::parse_file(std::string dataset_file, std::string dataset_name, i
         std::vector<std::string> strings = split_string(line, ',');
         std::vector<double> X_row;
 
-        // drop dataset rows that contain missing entries
+        // drop dataset rows that contain missing entries ("?")
         if (line.find('?') < line.length() or line.empty()) {
             continue;
         }
@@ -225,7 +120,7 @@ DataSet Parser::parse_file(std::string dataset_file, std::string dataset_name, i
         // go through each column
         for(size_t i=0; i<strings.size(); i++){
 
-            // drop column
+            // is it a drop column?
             if (std::find(drop_idx.begin(), drop_idx.end(), i) != drop_idx.end()) {
                 continue;
             }

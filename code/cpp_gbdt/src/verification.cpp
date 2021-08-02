@@ -37,13 +37,10 @@ int Verification::main(int argc, char *argv[])
     // do that (it'll create and append some default ones to the vector)
     Parser parser = Parser();
     datasets.push_back(parser.get_abalone(parameters, 320, true)); // small abalone
-    datasets.push_back(parser.get_abalone2(parameters, 320, true)); // small abalone
-    // datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
+    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
     datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
-    datasets.push_back(parser.get_YearPredictionMSD2(parameters, 300, true)); // small yearMSD
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
     datasets.push_back(parser.get_adult(parameters, 320, true)); // small adult
-    datasets.push_back(parser.get_adult2(parameters, 320, true)); // small adult
     // datasets.push_back(parser.get_adult(parameters, 1000, true)); // medium adult
     // --------------------------------------
 

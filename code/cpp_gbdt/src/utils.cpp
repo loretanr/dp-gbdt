@@ -16,6 +16,7 @@ ModelParams create_default_params()
 {
     ModelParams params;
     params.nb_trees = 50;
+    params.use_dp = true;
     params.max_depth = 6;
     params.gradient_filtering = true;
     params.leaf_clipping = true;

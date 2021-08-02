@@ -27,14 +27,6 @@ public:
         size_t num_samples, bool use_default_params = false);
     DataSet get_adult(std::vector<ModelParams> &parameters, size_t num_samples,
         bool use_default_params = false);
-
-
-    DataSet get_abalone2(std::vector<ModelParams> &parameters,
-        size_t num_samples, bool use_default_params = false);
-    DataSet get_YearPredictionMSD2(std::vector<ModelParams> &parameters, 
-        size_t num_samples, bool use_default_params = false);
-    DataSet get_adult2(std::vector<ModelParams> &parameters, size_t num_samples,
-        bool use_default_params = false);
 };
 
 #endif // PARSER_H
