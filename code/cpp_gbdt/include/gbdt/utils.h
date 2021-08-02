@@ -13,6 +13,10 @@ ModelParams create_default_params();
 double clamp(double n, double lower, double upper);
 double log_sum_exp(std::vector<double> arr);
 void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');
+double compute_mean(std::vector<double> &vec);
+double compute_stdev(std::vector<double> &vec, double mean);
+
+
 
 
 #endif // UTILS_H

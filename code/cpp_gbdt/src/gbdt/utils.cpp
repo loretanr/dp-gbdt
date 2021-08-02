@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <numeric>
 #include "utils.h"
 
 
@@ -45,5 +46,17 @@ double log_sum_exp(std::vector<double> vec)
     } else {
         return 0.0;
     }
+}
+
+double compute_mean(std::vector<double> &vec)
+{
+    double sum = std::accumulate(vec.begin(), vec.end(), 0.0);
+    return sum / vec.size();
+}
+
+double compute_stdev(std::vector<double> &vec, double mean)
+{
+    double sq_sum = std::inner_product(vec.begin(), vec.end(), vec.begin(), 0.0);
+    return std::sqrt(sq_sum / vec.size() - mean * mean);
 }
 
