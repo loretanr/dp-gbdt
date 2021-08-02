@@ -66,10 +66,10 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         return leaf;
     }
 
-    // only use the samples that actually end up in this node
+    // get the samples (and their gradients) that actually end up in this node
     // note that the cols of X are rows in X_live
     VVD X_live; vector<double> gradients_live;
-    for(int col=0; col < dataset->num_x_cols; col++) {      // TODO ugly
+    for(int col=0; col < dataset->num_x_cols; col++) {
         vector<double> temp;    
         for (auto elem : live_samples) {
             temp.push_back((dataset->X)[elem][col]);
@@ -93,11 +93,11 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         node->split_attr, node->split_value, node->split_gain, current_depth, 
         node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
 
-    // Update live samples and continue recursion
+    // prepare the live samples to continue recursion
     vector<int> lhs;
     bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(),
             node->split_attr) != (params->cat_idx).end();
-    samples_left_right_partition(lhs, X_live, gradients_live,
+    samples_left_right_partition(lhs, X_live,
             node->split_attr, node->split_value, categorical);
     vector<int> left_live_samples, right_live_samples;
     for (size_t i=0; i<live_samples.size(); i++) {
@@ -192,6 +192,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
             if (gain == -1) {
                 continue;
             }
+            // Gi = epsilon_nleaf * Gi / (2 * delta_G)
             gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
             candidate.lhs_size = lhs_size;
@@ -222,13 +223,19 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
 }
 
 
-// todo formula, same for both regress/classif ?
+/*
+    Computes the gain of a split
+
+               sum(elem : IL)^2  +  sum(elem : IR)^2
+    G(IL,IR) = ----------------     ----------------
+                |IL| + lambda        |IR| + lambda
+*/
 double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
     int feature_index, double feature_value, int &lhs_size, bool categorical)
 {
     // partition into lhs / rhs
     vector<int> lhs;
-    samples_left_right_partition(lhs, samples, gradients_live, feature_index, feature_value, categorical);
+    samples_left_right_partition(lhs, samples, feature_index, feature_value, categorical);
 
     int _lhs_size = std::count(lhs.begin(), lhs.end(), 1);
     int _rhs_size = std::count(lhs.begin(), lhs.end(), 0);
@@ -249,14 +256,18 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
     rhs_gain = std::pow(rhs_gain,2) / (_rhs_size + params->l2_lambda);
 
     double total_gain = lhs_gain + rhs_gain;
-    total_gain = std::floor(total_gain * 1e10) / 1e10;
+
+    if(VERIFICATION_MODE){
+        // round to 10 decimals to avoid numeric issues in verification
+        total_gain = std::floor(total_gain * 1e10) / 1e10;
+    }
 
     return std::max(total_gain, 0.0);
 }
 
 
-// the result is a bool array that will indicate left/right
-void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples, vector<double> &gradients_live,
+// the result is am int array that will indicate left/right resp. 0/1
+void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples,
             int feature_index, double feature_value, bool categorical)
 {
     // if the feature is categorical
@@ -277,7 +288,7 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples, vector
 // Computes probabilities from the gains. (Larger gain -> larger probability to 
 // be chosen for split). Then a cumulative distribution function is created from
 // these probabilities. Then we can sample from it using a RNG.
-// Returns the index of the chosen split.
+// The function returns the index of the chosen split.
 int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 {
     // if no split has a positive gain, return. Node will become a leaf
@@ -297,11 +308,11 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
         if (prob.gain <= 0) {
             probabilities.push_back(0);   
         } else {
-            probabilities.push_back( exp(prob.gain - lse) );
+            probabilities.push_back( exp(prob.gain - lse) );        // TODO why the softmax here???
         }
     }
 
-    // non-dp: just choose largest probability
+    // non-dp: just choose the split with the largest probability
     if (!this->params->use_dp) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         // return index of the max_elem

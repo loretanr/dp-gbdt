@@ -37,6 +37,7 @@ int Verification::main(int argc, char *argv[])
     // do that (it'll create and append some default ones to the vector)
     Parser parser = Parser();
     datasets.push_back(parser.get_abalone(parameters, 320, true)); // small abalone
+    datasets.push_back(parser.get_abalone2(parameters, 320, true)); // small abalone
     datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
     datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
@@ -45,8 +46,8 @@ int Verification::main(int argc, char *argv[])
     // --------------------------------------
 
     // this (in combination with VERIFICATION_MODE, which disables dataset shuffling
-    // in create_cross_val_inputs) turns off randomness completely -> we get completely
-    // deterministic runs that are comparable to the python output.
+    // in create_cross_val_inputs and rounding at ceartain places) turns off randomness completely
+    // -> we get completely deterministic runs that are comparable to the python output.
     for(auto &elem : parameters){
         elem.use_dp = false;
     }

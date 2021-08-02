@@ -35,7 +35,7 @@ private:
     TreeNode *make_leaf_node(int current_depth, std::vector<int> &live_samples);
     double _predict(std::vector<double> *row, TreeNode *node);
     TreeNode *find_best_split(VVD &X_live, std::vector<double> &gradients_live, int current_depth);
-    void samples_left_right_partition(std::vector<int> &lhs, VVD &samples, std::vector<double> &gradients_live, 
+    void samples_left_right_partition(std::vector<int> &lhs, VVD &samples,
                 int feature_index, double feature_value, bool categorical);
     double compute_gain(VVD &samples, std::vector<double> &gradients_live, int feature_index,
                 double feature_value, int &lhs_size, bool categorical);
