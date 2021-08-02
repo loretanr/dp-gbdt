@@ -1200,7 +1200,7 @@ and maybe test if verification is actually correct!
 			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627900477.58" unique_id="23">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627906443.45" unique_id="23">
 			<rich_text foreground="#9090eeee9090">TODO 
     right score for cpp classification
     some function on the loss I guess (for usage in main and verification)
@@ -1230,12 +1230,6 @@ TODO
 			<rich_text foreground="#ffffffff0000"> (-&gt;order messed up)
       ◇ single core is deterministic for no seed!</rich_text>
 			<rich_text>
-    
-    
-TODO can improve the CPP parser -&gt; easier to add new datasets   
-
-TODO, change the py parser task name
-TODO don't drop the adult column 
     
     
 </rich_text>

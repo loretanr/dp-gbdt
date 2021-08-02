@@ -8,6 +8,16 @@
 #include "dataset_parser.h"
 #include "data.h"
 
+/* Parsing:
+    - the data file needs to be comma separated
+    - so far it only looks out for "?" as missing values, and then gets rid of those rows
+    - you need to specify stuff like size, which features are numerical/categorical,
+      which feature is the target and which features you want to drop.
+
+    Given these requirements, it should be easy to add new datasets in the same 
+    fashion as the ones below. But make sure to double check what you get.
+*/
+
 
 DataSet Parser::get_abalone(std::vector<ModelParams> &parameters,
         size_t num_samples, bool use_default_params)
