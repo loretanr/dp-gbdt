@@ -1072,27 +1072,6 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       binary_split = len(np.unique(X[:, feature_index])) == 2
       # Iterate over unique value for this feature
       for idx, value in enumerate(X[:, feature_index]):   # removed unique for debug
-        # Find gain for that split
-        # if binary_split and idx == 0:
-        #   gain = self.ComputeGain(
-        #       feature_index, value, X, gradients, X_sibling=X_sibling,
-        #       gradients_sibling=gradients_sibling)
-        #   gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-        #   # print("==== binary case (attr {}), gain0: {}".format(feature_index, gain))
-        # if binary_split and idx == 1:
-        #   # If the attribute only has 2 values then we don't need to care for
-        #   # both gains as they're equal
-        #   prob = {
-        #     'index': feature_index,
-        #     'value': value,
-        #     'gain': 0.
-        #   }
-        #   gain = self.ComputeGain(
-        #       feature_index, value, X, gradients, X_sibling=X_sibling,
-        #       gradients_sibling=gradients_sibling)
-        #   gain = (privacy_budget_for_node * gain) / (2. * self.delta_g)
-        #   # print("==== binary case (attr {}), gain1: {}".format(feature_index, gain))
-        # else:
         gain = self.ComputeGain(
             feature_index, value, X, gradients, X_sibling=X_sibling,
             gradients_sibling=gradients_sibling)

@@ -235,11 +235,11 @@ class Parser:
     if not os.path.isfile(test_real_path):
       urlretrieve(get_adult_test_url, test_real_path)
 
-    adult = pd.read_csv(train_real_path, header=None, sep=', ')     # diabled test set for now
-    # adult = adult.append(
-    #     pd.read_csv(test_real_path, header=None, skiprows=1, sep=', '))
+    adult = pd.read_csv(train_real_path, header=None, sep=', ')
+    adult = adult.append(
+        pd.read_csv(test_real_path, header=None, skiprows=1, sep=', '))
     # Drop weight info
-    adult.drop(columns=[2], axis=1, inplace=True)
+    # adult.drop(columns=[2], axis=1, inplace=True)       # disabled this column
     # Drop rows with missing information
     adult = adult[~(adult.astype(str) == '?').any(1)]
     if n_rows:
@@ -250,8 +250,8 @@ class Parser:
       y = np.where(adult.iloc[:, -1] == '>50K', 1, -1)
     adult = adult.iloc[:, :-1]
     # for idx, row in adult.iterrows():
-    #   if str(row.values[-1]).strip() != 'United-States':    # bullshit -.-
-    #     adult.at[idx, 13] = 'Other'                         # wastetd hours debugging this
+    #   if str(row.values[-1]).strip() != 'United-States':    # bullshit -.- why would you ever put this in here
+    #     adult.at[idx, 13] = 'Other'                         # wasted hours debugging this
     adult.columns = range(adult.shape[1])
     categorical_indices = adult.select_dtypes(
         include=['object']).columns.tolist()
@@ -259,8 +259,8 @@ class Parser:
         exclude=['object']).columns.tolist()
     for column in adult:
       if column in categorical_indices:
-        # adult[column] = pd.get_dummies(adult[column])
-        adult[column] = adult[column].astype('category') # fixed
+        # adult[column] = pd.get_dummies(adult[column])    # this here was another (intentional?) severe bug, deletes a
+        adult[column] = adult[column].astype('category')   # lot of information in the dataset
         adult[column] = adult[column].cat.codes
     X = adult.values
     return X, y, categorical_indices, numerical_indices, task

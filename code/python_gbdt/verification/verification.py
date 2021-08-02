@@ -26,13 +26,7 @@ MAX_DEPTH = 6
 
 
 def get_dataset_name(num_samples):
-    if num_samples == 300:
-        dataset_name = DATASET + "_small"
-    elif num_samples == 1000:
-        dataset_name = DATASET + "_medium"
-    else:
-        dataset_name = DATASET + "_custom_size_" + str(num_samples)
-    return dataset_name
+    return DATASET + "_size_" + str(num_samples)
 
 
 
