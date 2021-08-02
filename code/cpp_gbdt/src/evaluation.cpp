@@ -19,7 +19,6 @@
 
 int Evaluation::main(int argc, char *argv[])
 {
-    std::cout << "evaluation, writing results to xyz TODO" << std::endl;
     // Set up logging for debugging
     spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
@@ -45,8 +44,10 @@ int Evaluation::main(int argc, char *argv[])
     char buffer [80];
     strftime(buffer,80,"%m.%d_%H:%M",now);
     std::ofstream output;
-    output.open(fmt::format("results/{}_{}", dataset.name, buffer));
-    output << "dataset,nb_samples,privacy_budget,mean" << std::endl;
+    std::string outfile_name = fmt::format("results/{}_{}.csv", dataset.name, buffer);
+    output.open(outfile_name);
+    std::cout << "evaluation, writing results to " << outfile_name << std::endl;
+    output << "dataset,nb_samples,nb_trees,privacy_budget,mean,std" << std::endl;
 
     for(auto budget : budgets) {
         ModelParams param = parameters[0];
@@ -101,9 +102,12 @@ int Evaluation::main(int argc, char *argv[])
         std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)" << std::endl;
 
         // write mean score to file
-        double mean = std::accumulate(scores.begin(), scores.end(), 0.0) / 5;
-        output << fmt::format("{},{},{},{}", dataset.name, dataset.length,
-            param.privacy_budget, mean) << std::endl;
+        double sum = std::accumulate(scores.begin(), scores.end(), 0.0);
+        double mean = sum / scores.size();
+        double sq_sum = std::inner_product(scores.begin(), scores.end(), scores.begin(), 0.0);
+        double stdev = std::sqrt(sq_sum / scores.size() - mean * mean);
+        output << fmt::format("{},{},{},{},{},{}", dataset.name, dataset.length, param.nb_trees,
+            param.privacy_budget, mean, stdev) << std::endl;
     }
     output.close();
     return 0;
