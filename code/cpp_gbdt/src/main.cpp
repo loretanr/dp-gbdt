@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 
         // we should fit the Scaler only on the training set, according to
         // https://datascience.stackexchange.com/questions/38395/standardscaler-before-and-after-splitting-data
-        split.train.scale(-1, 1);
+        split.train.scale(params[0], -1, 1);
 
         DPEnsemble ensemble = DPEnsemble(&params[0]);
         ensemble.train(&split.train);
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
         std::vector<double> y_pred = ensemble.predict(split.test.X);
 
         // invert the feature scaling (if necessary)
-        inverse_scale(split.train.scaler, y_pred);
+        inverse_scale(params[0], split.train.scaler, y_pred);
 
         // compute score
         double score = params[0].task->compute_score(split.test.y, y_pred);

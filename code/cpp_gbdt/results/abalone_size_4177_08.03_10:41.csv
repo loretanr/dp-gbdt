@@ -1,0 +1,17 @@
+dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std
+abalone_size_4177,4177,50,false,0,3.3252,0.097764
+abalone_size_4177,4177,50,true,0.1,10.4265,1.08483
+abalone_size_4177,4177,50,true,0.2,5.24416,0.29265
+abalone_size_4177,4177,50,true,0.3,4.2478,0.0753256
+abalone_size_4177,4177,50,true,0.4,3.95102,0.180281
+abalone_size_4177,4177,50,true,0.5,3.68412,0.10467
+abalone_size_4177,4177,50,true,0.6,3.56052,0.145278
+abalone_size_4177,4177,50,true,0.7,3.45324,0.0725123
+abalone_size_4177,4177,50,true,0.8,3.44938,0.220805
+abalone_size_4177,4177,50,true,0.9,3.33644,0.0877215
+abalone_size_4177,4177,50,true,1,3.35017,0.128407
+abalone_size_4177,4177,50,true,1.5,3.27277,0.083855
+abalone_size_4177,4177,50,true,2,3.2588,0.0878353
+abalone_size_4177,4177,50,true,2.5,3.25741,0.128291
+abalone_size_4177,4177,50,true,3,3.23467,0.0426531
+abalone_size_4177,4177,50,true,4,3.23936,0.0591173

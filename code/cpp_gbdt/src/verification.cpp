@@ -67,7 +67,7 @@ int Verification::main(int argc, char *argv[])
         for (auto split : cv_inputs) {
 
             // scale the features (y) to [-1,1] if necessary
-            split.train.scale(-1, 1);
+            split.train.scale(param, -1, 1);
 
             // train the model
             DPEnsemble ensemble = DPEnsemble(&param);
@@ -77,7 +77,7 @@ int Verification::main(int argc, char *argv[])
             std::vector<double> y_pred = ensemble.predict(split.test.X);
 
             // invert the feature scale (if necessary)
-            inverse_scale(split.train.scaler, y_pred);
+            inverse_scale(param, split.train.scaler, y_pred);
             
             // compute score
             double score = param.task->compute_score(split.test.y, y_pred);

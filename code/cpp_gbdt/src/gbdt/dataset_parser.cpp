@@ -111,6 +111,9 @@ DataSet Parser::parse_file(std::string dataset_file, std::string dataset_name, i
         parameters.back().num_idx = num_idx;
         parameters.back().cat_idx = cat_idx;
         parameters.back().task = task;
+        if(parameters.back().privacy_budget == 0){
+            parameters.back().use_dp = false;
+        }
     }
 
     // parse dataset, label-encode categorical features
