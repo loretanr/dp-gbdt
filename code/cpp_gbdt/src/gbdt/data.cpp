@@ -52,7 +52,7 @@ void DataSet::add_row(std::vector<double> xrow, double yval)
 void DataSet::scale(ModelParams &params, double lower, double upper)
 {
     // only scale in dp mode
-    if(params.use_dp){
+    if(params.use_dp or VERIFICATION_MODE){
         
         // return if no scaling required (y already in [-1,1])
         bool scaling_required = false;
@@ -82,7 +82,7 @@ void DataSet::scale(ModelParams &params, double lower, double upper)
 
 void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec)
 {
-    if(params.use_dp){
+    if(params.use_dp or VERIFICATION_MODE){
         // return if no scaling required
         if(not scaler.scaling_required){
             return;
