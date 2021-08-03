@@ -5,7 +5,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-SAMPLES = 4177
 privacy_budgets = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.5, 2, 2.5, 3, 4]
 
 
@@ -13,6 +12,7 @@ def create_plot(filename):
     data = pd.read_csv(filename, usecols=[
         'dataset', 'nb_samples', 'nb_trees', 'privacy_budget', 'mean', 'std'])
     param_values = data.iloc[0]
+    SAMPLES = data['nb_samples'][0]
     plt.clf()
     plt.grid(True)
 
@@ -44,10 +44,11 @@ def create_plot(filename):
     plt.xlabel('Privacy budget')
     plt.ylabel('RMSE')
     plt.savefig(filename.rsplit(".", 1)[0] + '.png', format='png', dpi=600)
-    plt.show()
+    # plt.show()
 
 
 if __name__ == '__main__':
     for filename in os.listdir(os.getcwd()):
         if filename.endswith(".csv"):
-            create_plot(filename)
+            if not os.path.exists(os.getcwd() + "/" + filename.rsplit(".", 1)[0] + ".png"):
+                create_plot(filename)

@@ -1,5 +1,7 @@
 #include <numeric>
 #include <algorithm>
+#include <mutex>
+#include <iostream>
 #include "dp_ensemble.h"
 #include "logging.h"
 #include "spdlog/spdlog.h"
@@ -7,19 +9,26 @@
 extern std::ofstream verification_logfile;
 extern size_t cv_fold_index;
 extern bool VERIFICATION_MODE;
+extern std::once_flag flag1;
 
 using namespace std;
 
 
 /** Constructors */
 
-DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters) {};
+DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
+{
+    // only output this once, in case we're running with multiple threads
+    if (parameters->privacy_budget == 0){
+        std::call_once(flag1, [](){std::cout << "!!! DP disabled !!!" << std::endl;});
+    }
+}
     
 DPEnsemble::~DPEnsemble() {
     for (auto tree : trees) {
         tree.delete_tree(tree.root_node);
     }
-};
+}
 
 
 /** Methods */

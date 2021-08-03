@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cmath>
 #include <numeric>
+#include <mutex>
 #include "utils.h"
 
 
@@ -8,6 +9,7 @@
 
 bool VERIFICATION_MODE;
 size_t cv_fold_index;
+std::once_flag flag1;
 
 
 /** Methods */
@@ -60,3 +62,11 @@ double compute_stdev(std::vector<double> &vec, double mean)
     return std::sqrt(sq_sum / vec.size() - mean * mean);
 }
 
+std::string get_time_string()
+{
+    time_t t = time(0);
+    struct tm *now = localtime(&t);
+    char buffer [80];
+    strftime(buffer,80,"%m.%d_%H:%M",now);
+    return std::string(buffer);
+}

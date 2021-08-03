@@ -1,0 +1,17 @@
+dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std
+yearMSD_size_10000,10000,50,false,0,20.5381,5.09075
+yearMSD_size_10000,10000,50,true,0.1,372.643,15.3233
+yearMSD_size_10000,10000,50,true,0.2,179.838,13.919
+yearMSD_size_10000,10000,50,true,0.3,114.565,9.58188
+yearMSD_size_10000,10000,50,true,0.4,92.1715,3.77329
+yearMSD_size_10000,10000,50,true,0.5,74.8519,9.75308
+yearMSD_size_10000,10000,50,true,0.6,60.7479,5.33095
+yearMSD_size_10000,10000,50,true,0.7,49.3716,3.19563
+yearMSD_size_10000,10000,50,true,0.8,45.6876,1.49376
+yearMSD_size_10000,10000,50,true,0.9,41.9227,1.46879
+yearMSD_size_10000,10000,50,true,1,36.953,2.90755
+yearMSD_size_10000,10000,50,true,1.5,24.8287,1.34204
+yearMSD_size_10000,10000,50,true,2,19.9492,0.813977
+yearMSD_size_10000,10000,50,true,2.5,17.1381,0.376009
+yearMSD_size_10000,10000,50,true,3,15.5769,0.371747
+yearMSD_size_10000,10000,50,true,4,13.7561,0.417515

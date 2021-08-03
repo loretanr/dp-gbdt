@@ -7,14 +7,18 @@
 #include <algorithm>
 #include "parameters.h"
 #include "evaluation.h"
+#include "utils.h"
 #include "gbdt/dp_ensemble.h"
 #include "dataset_parser.h"
 #include "data.h"
 #include "spdlog/spdlog.h"
 
+typedef std::chrono::steady_clock::time_point Timer;
+
 /* 
     Evaluation
-        TODO
+    - also uses threads, so we should compile with "make fast"
+    - runs your dataset for different pb's and writes output to results/xy.csv
 */
 
 int Evaluation::main(int argc, char *argv[])
@@ -32,19 +36,16 @@ int Evaluation::main(int argc, char *argv[])
     parameters.push_back(params);
     // --------------------------------------
     // select 1 dataset here
-    DataSet dataset = parser.get_abalone(parameters, 4177, false); // full abalone
+    DataSet dataset = parser.get_YearPredictionMSD(parameters, 10000, false);
     // --------------------------------------
     // select privacy budgets
     std::vector<double> budgets = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.5, 2, 2.5, 3, 4};
     // --------------------------------------
 
     // output file
-    time_t t = time(0);   // get time now
-    struct tm *now = localtime(&t);
-    char buffer [80];
-    strftime(buffer,80,"%m.%d_%H:%M",now);
+    std::string time_string = get_time_string();
+    std::string outfile_name = fmt::format("results/{}_{}.csv", dataset.name, time_string);
     std::ofstream output;
-    std::string outfile_name = fmt::format("results/{}_{}.csv", dataset.name, buffer);
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
     output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std" << std::endl;
@@ -53,14 +54,16 @@ int Evaluation::main(int argc, char *argv[])
     for(auto budget : budgets) {
         ModelParams param = parameters[0];
         param.privacy_budget = budget;
-        param.use_dp = budget != 0;
         std::cout << dataset.name << " pb=" << budget << std::endl;
+
+        // toggle use_dp if budget is 0
+        param.use_dp = budget != 0;
 
         /* cross validation */
 
         // split the data for each fold
         std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
-        std::chrono::steady_clock::time_point time_begin = std::chrono::steady_clock::now();
+        Timer time_begin = std::chrono::steady_clock::now();
         
         // prepare the ressources for each thread
         std::vector<std::thread> threads(cv_inputs.size());
@@ -73,7 +76,8 @@ int Evaluation::main(int argc, char *argv[])
 
         // threads start training on ther respective folds
         for(size_t thread_id=0; thread_id<threads.size(); thread_id++){
-            threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id], &(cv_inputs[thread_id].train));
+            threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id],
+                &(cv_inputs[thread_id].train));
         }
         for (auto &thread : threads) {
             thread.join(); // join once done
@@ -99,7 +103,7 @@ int Evaluation::main(int argc, char *argv[])
         } 
 
         // print elapsed time
-        std::chrono::steady_clock::time_point time_end = std::chrono::steady_clock::now();
+        Timer time_end = std::chrono::steady_clock::now();
         double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count();
         std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)" << std::endl;
 
