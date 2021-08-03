@@ -4,6 +4,7 @@
 #include <cmath>
 #include <numeric>
 #include <algorithm>
+#include <iostream>
 
 extern bool VERIFICATION_MODE;
 

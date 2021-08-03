@@ -3,8 +3,6 @@ CFLAGS=-c -Wall -std=c++11 -g -O0# todo -O0 for hardening
 SOURCES=$(wildcard src/*.cpp src/gbdt/*.cpp)
 INC=-I./include/ -I./include/gbdt/# -L ./src/ -lfmt
 
-BUILD_PRINT = \e[1;34mBuilding $<\e[0m
-
 $(shell mkdir -p objs)
 $(shell mkdir -p objs/gbdt)
 
@@ -29,5 +27,4 @@ rebuild:
 
 # let the compiler do it's magic
 fast:
-	make CFLAGS="-c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread"
-	# -ftree-vectorize -fopt-info-vec
+	make CFLAGS="-c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread" -j 4

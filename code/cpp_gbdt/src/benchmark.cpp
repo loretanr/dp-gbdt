@@ -47,7 +47,7 @@ int Benchmark::main(int argc, char *argv[])
         ModelParams &param = parameters[i];
         std::cout << dataset.name << std::endl;
 
-        /* cross validation */
+        /* threaded cross validation */
 
         // split the data for each fold
         std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);

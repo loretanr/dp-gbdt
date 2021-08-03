@@ -56,8 +56,10 @@ int main(int argc, char** argv)
 
     // change model params here if required:
     // e.g. current_params.privacy_budget = 42;
-    current_params.privacy_budget = 0.1;
-    current_params.use_dp = true;
+    current_params.privacy_budget = 0;
+    current_params.use_dp = false;
+    current_params.gradient_filtering = false;
+    current_params.leaf_clipping = false;
     params.push_back(current_params);
 
     // Choose your dataset
@@ -75,7 +77,7 @@ int main(int argc, char** argv)
 
         // we should fit the Scaler only on the training set, according to
         // https://datascience.stackexchange.com/questions/38395/standardscaler-before-and-after-splitting-data
-        split.train.scale(params[0], -1, 1);
+        // split.train.scale(params[0], -1, 1);
 
         DPEnsemble ensemble = DPEnsemble(&params[0]);
         ensemble.train(&split.train);
@@ -84,7 +86,7 @@ int main(int argc, char** argv)
         std::vector<double> y_pred = ensemble.predict(split.test.X);
 
         // invert the feature scaling (if necessary)
-        inverse_scale(params[0], split.train.scaler, y_pred);
+        // inverse_scale(params[0], split.train.scaler, y_pred);
 
         // compute score
         double score = params[0].task->compute_score(split.test.y, y_pred);
