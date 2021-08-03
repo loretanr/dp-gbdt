@@ -383,7 +383,7 @@ With </rich_text>
 </rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1624438373.44" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1627973945.07" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -1200,7 +1200,7 @@ and maybe test if verification is actually correct!
 			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627900477.58" unique_id="23">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1627982339.46" unique_id="23">
 			<rich_text foreground="#9090eeee9090">TODO 
     right score for cpp classification
     some function on the loss I guess (for usage in main and verification)
@@ -1232,18 +1232,25 @@ TODO
 			<rich_text>
     
     
-TODO can improve the CPP parser -&gt; easier to add new datasets   
-
-TODO, change the py parser task name
-TODO don't drop the adult column 
-    
-    
 </rich_text>
 			<rich_text foreground="#ffffffff0000">TODO the next optimization (according to intel advisor) would be getting rid of the find-syscall in left-right-partition
    •  however, put this on hold for now!</rich_text>
 			<rich_text>
+   </rich_text>
+			<rich_text foreground="#ffffa5a50000">• having a use_dp = false somewhere the program  made the 10k yearMSD go from 4s to 6s again. So previously the compiler could probably optimize away the entire branches related to this, but now not anymore, but need this, so egal.</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">not scaling has a big impact on accuracy!
+    TODO plot in presentation</rich_text>
+			<rich_text>
 
 
+TODO list of changes to public gbdt
+
+TODO finish formulas
+
+TODO multiclass
 
 --------------------------------------------------------------    
     
@@ -1410,5 +1417,8 @@ stuuuuupid    </rich_text>
         because I clicked on breakpoints “Raised Exceptions” in VScode
         
 -------------------------------------------------------------------------------------------------------</rich_text>
+	</node>
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1627973949.25" unique_id="25">
+		<rich_text>• Google if another compiler is better at not reordering, maybe ask ivan</rich_text>
 	</node>
 </cherrytree>
