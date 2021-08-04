@@ -19,8 +19,10 @@ using namespace std;
 DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
 {
     // only output this once, in case we're running with multiple threads
-    if (parameters->privacy_budget == 0){
+    if (parameters->privacy_budget == 0 or !parameters->use_dp){
         std::call_once(flag1, [](){std::cout << "!!! DP disabled !!!" << std::endl;});
+        this->params->use_dp = false;
+        this->params->privacy_budget = 0;
     }
 }
     
@@ -67,10 +69,15 @@ void DPEnsemble::train(DataSet *dataset)
         }
 
         // compute sensitivity
-        tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
-        tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
-                            2 * params->l2_threshold *
-                            pow(1-params->learning_rate, tree_index));
+        if(this->params->use_dp){
+            tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
+            tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
+                                2 * params->l2_threshold *
+                                pow(1-params->learning_rate, tree_index));
+        } else {
+            tree_params.delta_g = 0;
+            tree_params.delta_v = 0;
+        }
 
         // init gradients resp. update gradients before building each tree
         vector<double> gradients= update_gradients(tree_samples, tree_index);

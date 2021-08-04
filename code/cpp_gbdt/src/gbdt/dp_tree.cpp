@@ -40,10 +40,12 @@ void DPTree::fit()
     }
 
     // leaf clipping
-    if (params->leaf_clipping) {
-        double threshold = this->params->l2_threshold * std::pow((1-this->params->learning_rate), this->tree_index);
-        for (auto &leaf : this->leaves) {
-            leaf->prediction = clamp(leaf->prediction, -1 * threshold, threshold);
+    if(params->use_dp) {
+        if (params->leaf_clipping) {
+            double threshold = this->params->l2_threshold * std::pow((1-this->params->learning_rate), this->tree_index);
+            for (auto &leaf : this->leaves) {
+                leaf->prediction = clamp(leaf->prediction, -1 * threshold, threshold);
+            }
         }
     }
 
@@ -193,7 +195,9 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
                 continue;
             }
             // Gi = epsilon_nleaf * Gi / (2 * delta_G)
-            gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
+            if(this->params->use_dp){
+                gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
+            }
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
             candidate.lhs_size = lhs_size;
             candidate.rhs_size = gradients_live.size() - lhs_size;

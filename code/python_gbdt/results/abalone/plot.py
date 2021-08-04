@@ -5,31 +5,32 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from datetime import datetime
 from evaluation import estimator
 
 PATH = './results/abalone/'
-SAMPLES = [5000]
+NAME = 'results_AFTERMORITZ_04-08-21_09:07.csv'
+SAMPLES = [4177]
 
 if __name__ == '__main__':
-  data = pd.read_csv(PATH + 'data_alltrees_corr2ndsplit_01-06-21_17:30.csv', usecols=[
+  data = pd.read_csv(PATH + NAME, usecols=[
       'dataset', 'nb_samples', 'privacy_budget', 'nb_tree',
       'nb_tree_per_ensemble', 'max_depth',
       'max_leaves', 'learning_rate', 'nb_of_runs', 'mean', 'std', 'model',
       'config', 'balance_partition'])
 
-  privacy_budgets = np.arange(0.1, 1.0, 0.1)
+  # privacy_budgets = [0.1, 0.3, 0.6, 1, 1.5, 2, 3, 5, 7, 9]
+  privacy_budgets = [0.1]
   param_values = data.iloc[0]
 
   # Own model
-  models = [estimator.DPGBDT]
+  models = [estimator.DPGBDT, estimator.DPRef]
 
   for nb_samples in SAMPLES:
     plt.clf()
     plt.grid(True)
     for model in models:
       model_name = str(model).split('.')[-1][:-2]
-      for config in ['Vanilla', 'BFS', 'DFS', '3-trees']:
+      for config in ['DFS','Vanilla']:
         if config in ['BFS']:
           continue
         if model_name == 'DPRef' and config != 'DFS':
@@ -40,14 +41,11 @@ if __name__ == '__main__':
           mean = values['mean']
           std = values['std']
           if model_name == 'DPRef':
-            label = 'DPGBDT_Ref'
+            marker = '-v'
+            label = 'DPRef'
           else:
-            if config == '3-trees':
-              marker = '-s'
-              label = 'DPGBDT (2-nodes)'
-            else:
-              marker = '-^'
-              label = 'DPGBDT (Depth-first)'
+            marker = '-^'
+            label = 'DPGBDT (DFS)'
         else:
           mean = list([values['mean'].values[0] for _ in range(
             len(privacy_budgets))])
@@ -63,16 +61,14 @@ if __name__ == '__main__':
                      capsize=3,
                      label=label)
 
-    plt.axis([0, 1, 0, int(max(
+    plt.axis([0, int(max(privacy_budgets)), 0, int(max(
         data[data['nb_samples'] == nb_samples]['mean']) + max(
-            data[data['nb_samples'] == nb_samples]['std']) + 5)])
+            data[data['nb_samples'] == nb_samples]['std']) ) * 1.1 ])
     plt.legend(loc='upper right')
     plt.title('Dataset={0!s}, Samples={1!s}, Trees={2!s}'.format(
         param_values['dataset'], nb_samples,
         data[data['nb_samples'] == nb_samples].iloc[0]['nb_tree']))
     plt.xlabel('Privacy budget')
     plt.ylabel('RMSE')
-    now = datetime.now().strftime("%d-%m-%y_%H:%M")
     plt.savefig(
-        PATH + 'results_alltrees_corr2ndsplit_{0!s}_{1!s}.png'.format(nb_samples, now), 
-        format='png', dpi=600)
+        PATH + NAME.rsplit('.',1)[0]  + '.png', format='png', dpi=600)

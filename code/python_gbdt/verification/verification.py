@@ -37,8 +37,8 @@ if __name__ == '__main__':
 
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
-    # SAMPLES = [4177]
-    SAMPLES = [320, 4177]
+    SAMPLES = [4177]
+    # SAMPLES = [320, 4177]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -57,8 +57,7 @@ if __name__ == '__main__':
             balance_partition=True, use_bfs=False, use_3_trees=False,
             cat_idx=cat_idx, num_idx=num_idx,
             verbosity=-1)
-        regressor = TransformedTargetRegressor(regressor=m,
-            transformer=MinMaxScaler(feature_range=(-1, 1)))
+        regressor = TransformedTargetRegressor(regressor=m)                             # REMOVED THE MINMAXSCALER, only here
         validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
         scores = cross_val_score(
             regressor, X, y, cv=validator, scoring=rmse, n_jobs=1) # -1 for multithreading
@@ -70,7 +69,8 @@ if __name__ == '__main__':
     DATASET = 'yearMSD'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
-    SAMPLES = [300]
+    # SAMPLES = [300]
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -102,7 +102,8 @@ if __name__ == '__main__':
     DATASET = 'adult'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
-    SAMPLES = [320]
+    # SAMPLES = [320]
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0

@@ -128,7 +128,8 @@ TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool
 // the dataset rows, unless we're in verification mode.
 std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds)
 {
-    bool shuffle = !VERIFICATION_MODE;
+    bool shuffle = !VERIFICATION_MODE;      // TODO
+    shuffle = true;
     if(shuffle) {
         std::random_shuffle(dataset.X.begin(), dataset.X.end());
         std::random_shuffle(dataset.y.begin(), dataset.y.end());

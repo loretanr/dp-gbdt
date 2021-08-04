@@ -4,13 +4,15 @@
       "balance_partition":true,
       "learning_rate":0.1,
       "max_depth":6,
-      "nb_trees":50
+      "nb_trees":50,
+      "leaf_clipping":false
     },
     "DFS":{
       "balance_partition":true,
       "learning_rate":0.1,
       "max_depth":6,
-      "nb_trees":50
+      "nb_trees":50,
+    "leaf_clipping":true
     },
     "BFS":{
       "balance_partition":true,

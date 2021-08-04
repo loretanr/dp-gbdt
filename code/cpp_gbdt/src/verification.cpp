@@ -36,11 +36,18 @@ int Verification::main(int argc, char *argv[])
     // "false" to the parsing function), or let the get_xy function
     // do that (it'll create and append some default ones to the vector)
     Parser parser = Parser();
-    datasets.push_back(parser.get_abalone(parameters, 320, true)); // small abalone
-    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
-    datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
+    // datasets.push_back(parser.get_abalone(parameters, 320, true)); // small abalone
+
+    ModelParams params = create_default_params();
+    params.privacy_budget = 0;
+    params.leaf_clipping = false;
+    params.gradient_filtering = false;
+    params.use_dp = false;
+    parameters.push_back(params);
+    datasets.push_back(parser.get_abalone(parameters, 4177, false)); // full abalone
+    // datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
     // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
-    datasets.push_back(parser.get_adult(parameters, 320, true)); // small adult
+    // datasets.push_back(parser.get_adult(parameters, 320, true)); // small adult
     // datasets.push_back(parser.get_adult(parameters, 1000, true)); // medium adult
     // --------------------------------------
 
@@ -67,7 +74,7 @@ int Verification::main(int argc, char *argv[])
         for (auto split : cv_inputs) {
 
             // scale the features (y) to [-1,1] if necessary
-            split.train.scale(param, -1, 1);
+            // split.train.scale(param, -1, 1);
 
             // train the model
             DPEnsemble ensemble = DPEnsemble(&param);
@@ -77,7 +84,7 @@ int Verification::main(int argc, char *argv[])
             std::vector<double> y_pred = ensemble.predict(split.test.X);
 
             // invert the feature scale (if necessary)
-            inverse_scale(param, split.train.scaler, y_pred);
+            // inverse_scale(param, split.train.scaler, y_pred);
             
             // compute score
             double score = param.task->compute_score(split.test.y, y_pred);

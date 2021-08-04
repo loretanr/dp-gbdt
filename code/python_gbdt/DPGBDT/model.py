@@ -14,6 +14,7 @@ from queue import Queue
 from typing import List, Any, Optional, Dict
 
 import numpy as np
+from numpy.random import randint
 from scipy.special import logsumexp
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split
