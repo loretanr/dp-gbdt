@@ -1,0 +1,4 @@
+dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,model,config,balance_partition
+abalone,1000,0.000000,10,10,6,-1,0.100000,5,3.084546,0.147017,DPGBDT,Vanilla,True
+abalone,1000,0.100000,10,10,6,-1,0.100000,5,3.272437,0.159204,DPGBDT,DFS,True
+abalone,1000,0.100000,10,10,6,-1,0.100000,5,3.140043,0.162261,DPRef,DFS,True
