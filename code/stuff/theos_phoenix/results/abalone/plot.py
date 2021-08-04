@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from evaluation import estimator
 
 PATH = './results/abalone/'
-NAME = 'results_AFTERMORITZ_04-08-21_09:07.csv'
+NAME = 'results_PHOENIX_04-08-21_16:19.csv'
 SAMPLES = [4177]
 
 if __name__ == '__main__':
@@ -19,7 +19,7 @@ if __name__ == '__main__':
       'config', 'balance_partition'])
 
   # privacy_budgets = [0.1, 0.3, 0.6, 1, 1.5, 2, 3, 5, 7, 9]
-  privacy_budgets = [0.1]
+  privacy_budgets = [0.1, 0.5, 1, 3, 8]
   param_values = data.iloc[0]
 
   # Own model

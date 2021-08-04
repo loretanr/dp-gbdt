@@ -24,7 +24,7 @@ PRIVACY_BUDGETS = [0.1, 0.5, 1, 3, 8]
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
-SAMPLES = [4177]                                        # !!!!!!!!!!!!!!!!!!!!!!!
+SAMPLES = [4177]
 # Nb trees for each ensemble
 NB_TREES = 50
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     for model in models:
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
-      for config in ['Vanilla', 'DFS']:
+      for config in ['DFS','Vanilla']:
         for idx, budget in enumerate(PRIVACY_BUDGETS):
           if config == 'Vanilla' and idx != 0:
             continue
@@ -71,7 +71,7 @@ if __name__ == '__main__':
               model_params.get('max_depth'),
               model_params.get('learning_rate'),
               n_classes=len(set(y)) if task == 'classification' else None,
-              gradient_filtering=False,
+              gradient_filtering=True,
               leaf_clipping=model_params.get('leaf_clipping'),
               max_leaves=model_params.get('max_leaves'),
               min_samples_split=2,
@@ -82,9 +82,9 @@ if __name__ == '__main__':
               num_idx=num_idx,
               verbosity=0)  # type: ignore
           regressor = TransformedTargetRegressor(regressor=m)     # REMOVED MINMAXSCALER
-          validator = model_selection.KFold(n_splits=NB_SPLITS, random_state=np.random.randint(0,100000) ,shuffle=True)               # somehow shuffle=True did not shuffle!!!!
-          # validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)               # somehow shuffle=True did not shuffle!!!!
-          scores = cross_val_score(                                           # leaving it away now shuffles!
+          validator = model_selection.KFold(n_splits=NB_SPLITS, random_state=np.random.randint(0,100000) ,shuffle=True)
+          # validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
+          scores = cross_val_score(
               regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1)
           mean, std = scores.mean(), (scores.std() / 2)
           output.write(

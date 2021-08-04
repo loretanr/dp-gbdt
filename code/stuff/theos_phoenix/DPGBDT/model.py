@@ -24,7 +24,7 @@ from DPGBDT import logging
 logging.SetUpLogger(__name__)
 logger = logging.GetLogger(__name__)
 
-RANDOMIZATION = True    # TODO random on
+RANDOMIZATION = True
 
 
 class GradientBoostingEnsemble:
@@ -223,10 +223,10 @@ class GradientBoostingEnsemble:
                       (1 - self.learning_rate), tree_index))
 
       current_tree_for_ensemble = tree_index % self.nb_trees_per_ensemble
-      # if current_tree_for_ensemble == 0:
+      if current_tree_for_ensemble == 0:
         # Initialize the dataset and the gradients
-        # X = np.copy(X)
-        # y = np.copy(y)
+        X_ensemble = np.copy(X)
+        y_ensemble = np.copy(y)
         # gradient initialization will happen later in the per-class-loop
 
       if self.use_dp:
@@ -235,7 +235,7 @@ class GradientBoostingEnsemble:
           # All trees will receive same amount of samples
           if self.nb_trees % self.nb_trees_per_ensemble == 0:
             # Perfect split
-            number_of_rows = int(len(X) / self.nb_trees_per_ensemble)               # TODO, why work with X here?
+            number_of_rows = int(len(X_ensemble) / (self.nb_trees_per_ensemble - tree_index))
           else:
             # Partitioning data across ensembles
             if np.ceil(tree_index / self.nb_trees_per_ensemble) == np.ceil(
@@ -252,6 +252,8 @@ class GradientBoostingEnsemble:
                 1 - math.pow((
                     1 - self.learning_rate), self.nb_trees_per_ensemble)))
 
+        print()
+
         # If using the formula from the algorithm, some trees may not get
         # samples. In that case we skip the tree and issue a warning. This
         # should hint the user to change its parameters (likely the ensembles
@@ -264,7 +266,7 @@ class GradientBoostingEnsemble:
           continue
 
         # Select <number_of_rows> rows at random from the ensemble dataset
-        rows = np.random.randint(len(X), size=number_of_rows)
+        rows = np.random.randint(len(X_ensemble), size=number_of_rows)
 
         # train for each class a separate tree on the same rows.
         # In regression or binary classification, K has been set to one.
@@ -278,15 +280,16 @@ class GradientBoostingEnsemble:
           else:
             # Update gradients of all training instances on loss l
             gradients = self.ComputeGradientForLossFunction(
-                y, self.Predict(
-                    X), kth_tree)  # type: ignore
+                y_ensemble, self.Predict(
+                    X_ensemble), kth_tree)  # type: ignore
 
           assert gradients is not None
           gradients_tree = gradients[rows]
-          X_tree = X[rows, :]
-          y_tree = y[rows]
+          X_tree = X_ensemble[rows, :]
+          y_tree = y_ensemble[rows]
 
           # Gradient based data filtering
+          gdf_count = len(y_tree)
           # On multi-class deactivated as gradients are reused thus
           # a row has to be used on neither of all K trees to be of effect
           # which is very unlikely in practice.
@@ -302,10 +305,12 @@ class GradientBoostingEnsemble:
             selected_rows = rows[rows_gbf] if tree_index > 0 else rows
           else:
             selected_rows = rows
+          
+          print("GDF rejected ({}/{})".format(gdf_count - len(y_tree),gdf_count))
 
           logger.debug('Tree {0:d} will receive a budget of epsilon={1:f} and '
                        'train on {2:d} instances.'.format(
-              tree_index, tree_privacy_budget, len(X)))
+              tree_index, tree_privacy_budget, len(X_ensemble)))
           # Fit a differentially private decision tree
           tree = DifferentiallyPrivateTree(
               tree_index,
@@ -346,7 +351,7 @@ class GradientBoostingEnsemble:
           else:
             # Update gradients of all training instances on loss l
             gradients = self.ComputeGradientForLossFunction(
-              y, self.Predict(X), kth_tree)  # type: ignore
+              y_ensemble, self.Predict(X_ensemble), kth_tree)  # type: ignore
           tree = DifferentiallyPrivateTree(
               tree_index,
               self.learning_rate,
@@ -377,8 +382,8 @@ class GradientBoostingEnsemble:
             'for the ensemble: {2:d}'.format(
                 tree_index, len(selected_rows), len(X) - len(
                     selected_rows)))
-        X = np.delete(X, selected_rows, axis=0)
-        y = np.delete(y, selected_rows)
+        X_ensemble = np.delete(X_ensemble, selected_rows, axis=0)
+        y_ensemble = np.delete(y_ensemble, selected_rows)
       else:
         early_stop_round = self.early_stop
 
