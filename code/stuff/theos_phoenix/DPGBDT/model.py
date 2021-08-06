@@ -194,7 +194,7 @@ class GradientBoostingEnsemble:
     self.init_.fit(X, y)
     self.init_score = self.loss_.get_init_raw_predictions(
         X, self.init_)  # (n_samples, K)
-    logger.debug('Training initialized with score: {}'.format(self.init_score))
+    logger.debug('Training initialized with score: {}'.format(self.init_score[0]))
 
     # Number of ensembles in the model
     nb_ensembles = int(np.ceil(self.nb_trees / self.nb_trees_per_ensemble))
@@ -375,6 +375,7 @@ class GradientBoostingEnsemble:
           k_trees.append(tree)
       self.trees.append(k_trees)
 
+      logger.info('Tree {0:d} done'.format(tree_index))
 
       if self.use_dp:
         logger.debug(
@@ -469,7 +470,9 @@ class GradientBoostingEnsemble:
       y = (y == k).astype(np.float64)
     # sklearn's impl is using the negative gradient (i.e. y - F).
     # Here the positive gradient is used though
-    return -self.loss_.negative_gradient(y, y_pred, k=k)
+    gradients = -self.loss_.negative_gradient(y, y_pred, k=k)
+    gradients = np.array([math.floor(yi * 1e15) / 1e15 for yi in gradients])
+    return gradients
 
 
 class DecisionNode:
@@ -727,6 +730,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
           X, y, gradients, current_depth, self.max_depth)
 
     leaves = [node for node in self.nodes if node.prediction]
+  
 
     if self.use_dp:
       if self.leaf_clipping or self.loss.is_multi_class:
@@ -741,6 +745,11 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       logger.debug('Adding Laplace noise with scale: {0:f}'.format(
           laplace_scale))
       AddLaplacianNoise(leaves, laplace_scale)
+    else:
+      for leaf in leaves:
+        logger.debug('({0:.3f} -> {1:.8f})'.format(np.float(leaf.prediction), np.float(leaf.prediction)))
+      logger.debug("NUMLEAVES {} LEAFSUM {:.8f}".format(len(leaves), np.sum([leaf.prediction for leaf in leaves])))
+
 
     # Make the tree exportable if we want to print it
     # Assign unique IDs to nodes
@@ -791,7 +800,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     if current_depth == max_depth or len(X) < self.min_samples_split:
       # Max depth reached or not enough samples to split node, node is a leaf
       # node
-      return MakeLeafNode()
+      lleaf = MakeLeafNode()
+      logger.debug('max_depth ({0}) or min_samples ({1}) -> leaf (pred={2})'.format(current_depth, len(X), round(lleaf.prediction,2)))
+      return lleaf;
 
     if not self.use_3_trees:
       best_split = self.FindBestSplit(X, gradients, current_depth)
@@ -803,13 +814,13 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       else:
         best_split = self.FindBestSplit(X, gradients, current_depth)
     if best_split:
-      logger.debug('Tree DFS: best split found at index {0:d}, value {1:f} '
-                   'with gain {2:f}. Current depth is {3:d}'.format(
-          best_split['index'], best_split['value'],
-          best_split['gain'], current_depth))
       lhs_op, rhs_op = self.feature_to_op[best_split['index']]
       lhs = np.where(lhs_op(X[:, best_split['index']], best_split['value']))[0]
       rhs = np.where(rhs_op(X[:, best_split['index']], best_split['value']))[0]
+      logger.debug('DFS: Split @ {0:d}, value {1:f} '
+              'gain {2:f}, depth {3:d}, samples {4} -> ({5},{6})'.format(
+              best_split['index'], best_split['value'],
+              best_split['gain'], current_depth, len(X), len(lhs), len(rhs)))
       if not self.use_3_trees:
         left_child = self.MakeTreeDFS(
             X[lhs],  y[lhs], gradients[lhs], current_depth + 1, max_depth)
@@ -1162,6 +1173,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     rhs_gain = np.square(np.sum(rhs_grad)) / (
         len(rhs) + self.l2_lambda)  # type: float
     total_gain = lhs_gain + rhs_gain
+    
+    total_gain = math.floor(total_gain * 1e10) / 1e10
+
     return total_gain if total_gain >= 0. else 0.
 
   def AssignNodeIDs(self,

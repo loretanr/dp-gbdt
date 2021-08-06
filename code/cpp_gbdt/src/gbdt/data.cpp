@@ -36,15 +36,17 @@ DataSet::DataSet(VVD X, std::vector<double> y) : X(X), y(y)
     length = X.size();
     num_x_cols = X[0].size();
     empty = false;
+    live_rows = std::set<int>();
+    for(int i=0; i<length; i++) { live_rows.insert(live_rows.end(), i); };
 }
 
 
-void DataSet::add_row(std::vector<double> xrow, double yval)
-{
-    this->X.push_back(xrow);
-    this->y.push_back(yval);
-    length++;
-}
+// void DataSet::add_row(std::vector<double> xrow, double yval)
+// {
+//     X.push_back(xrow);
+//     y.push_back(yval);
+//     length++;
+// }
 
 
 // scale the features such that they lie in [lower,upper]
@@ -128,11 +130,16 @@ TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool
 // the dataset rows, unless we're in verification mode.
 std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds)
 {
-    bool shuffle = !VERIFICATION_MODE;      // TODO
-    shuffle = true;
+    bool shuffle = !VERIFICATION_MODE;
     if(shuffle) {
-        std::random_shuffle(dataset.X.begin(), dataset.X.end());
-        std::random_shuffle(dataset.y.begin(), dataset.y.end());
+        std::vector<int> indexes(dataset.length);
+        std::iota(std::begin(indexes), std::end(indexes), 0);
+        std::random_shuffle(indexes.begin(), indexes.end());
+        DataSet copy = dataset;
+        for(int i=0; i<indexes.size(); i++){
+            dataset.X[i] = copy.X[indexes[i]];
+            dataset.y[i] = copy.y[indexes[i]];
+        }
     }
 
     int fold_size = dataset.length / folds;

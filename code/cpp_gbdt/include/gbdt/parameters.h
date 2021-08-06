@@ -14,7 +14,6 @@ struct ModelParams {
     int max_depth = 6;
     int max_leaves;
     int min_samples_split = 2;
-    bool second_split = false;
     bool balance_partition = true;
     bool gradient_filtering = false;
     bool leaf_clipping = false;

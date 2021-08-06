@@ -345,7 +345,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 
 void DPTree::add_laplacian_noise(double laplace_scale)
 {
-    LOG_INFO("Adding Laplace noise to leaves (Scale {1:.2f})", laplace_scale);
+    LOG_DEBUG("Adding Laplace noise to leaves (Scale {1:.2f})", laplace_scale);
 
     Laplace lap(laplace_scale, rand());
 
@@ -368,7 +368,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
     for (auto leaf : this->leaves) {
         sum += leaf->prediction;
     }
-    LOG_INFO("NUMLEAVES {1} LEAFSUM {2:.8f}", this->leaves.size(), sum);
+    LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", this->leaves.size(), sum);
     if(VERIFICATION_MODE) {
         VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
     }

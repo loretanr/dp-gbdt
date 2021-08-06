@@ -2,6 +2,7 @@
 #define DATA_H
 
 #include <vector>
+#include <set>
 #include "utils.h"
 
 // if the target needs to be scaled (into [-1,1]) before training, we store
@@ -29,6 +30,7 @@ struct DataSet {
     VVD X;
     std::vector<double> y;
     std::vector<double> gradients;
+    std::set<int> live_rows;
     int length, num_x_cols;
     bool empty;
     Scaler scaler;

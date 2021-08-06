@@ -44,73 +44,84 @@ void DPEnsemble::train(DataSet *dataset)
     this->init_score = params->task->compute_init_score(dataset->y);
     LOG_DEBUG("Training initialized with score: {1}", this->init_score);
 
-    // second split (& shuffle), not used so far
-    
-    if(params->second_split) {
-        // TrainTestSplit split = train_test_split_random(*dataset, 0.8f, false);
-        throw runtime_error("2nd-split not yet implemented.");
-    }
-
     // Each tree gets the full pb, as they train on distinct data
     TreeParams tree_params;
     tree_params.tree_privacy_budget = params->privacy_budget;
+    tree_params.delta_g = 0;
+    tree_params.delta_v = 0;
 
     // distribute training instances amongst trees
-    vector<DataSet> tree_samples;
-    distribute_samples(&tree_samples, dataset);
+    // vector<DataSet> tree_samples;
+    // distribute_samples(&tree_samples, dataset);
     
     // train all trees
     for(int tree_index = 0; tree_index < params->nb_trees;  tree_index++) {
 
         LOG_DEBUG(YELLOW("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),
-            tree_index, tree_params.tree_privacy_budget, tree_samples[tree_index].length);
+            tree_index, tree_params.tree_privacy_budget, dataset->length);
         if(VERIFICATION_MODE) {
             VERIFICATION_LOG("Tree {0} CV-Ensemble {1}", tree_index, cv_fold_index);
         }
 
-        // compute sensitivity
         if(this->params->use_dp){
+            // build a dp-tree
+
+            // compute sensitivity
             tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
             tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
                                 2 * params->l2_threshold *
                                 pow(1-params->learning_rate, tree_index));
+
         } else {
-            tree_params.delta_g = 0;
-            tree_params.delta_v = 0;
+            // build a non-dp tree
+
+            // update/init gradients
+            update_gradients(dataset->gradients, tree_index);
+
+            // build tree
+            LOG_INFO("Building tree {1}...", tree_index);
+            DPTree tree = DPTree(params, &tree_params, dataset, tree_index);
+            tree.fit();
+            trees.push_back(tree);
+
+             // print the tree if we are in debug mode
+            if (spdlog::default_logger_raw()->level() <= spdlog::level::debug) {
+                tree.recursive_print_tree(tree.root_node);
+        }
         }
 
-        // init gradients resp. update gradients before building each tree
-        vector<double> gradients= update_gradients(tree_samples, tree_index);
+        // // init gradients resp. update gradients before building each tree
+        // vector<double> gradients = update_gradients(tree_samples, tree_index);
 
-        // intermediate output for validation
-        double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
-        sum = sum < 0 && sum >= -1e-10 ? 0 : sum;  // avoid "-0.00000.. != 0.00000.."
-        LOG_INFO("GRADIENTSUM {1:.8f}", sum);
-        if(VERIFICATION_MODE) {
-            VERIFICATION_LOG("GRADIENTSUM {0:.8f}", sum);
-        }
+        // // intermediate output for validation
+        // double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
+        // sum = sum < 0 && sum >= -1e-10 ? 0 : sum;  // avoid "-0.00000.. != 0.00000.."
+        // LOG_INFO("GRADIENTSUM {1:.8f}", sum);
+        // if(VERIFICATION_MODE) {
+        //     VERIFICATION_LOG("GRADIENTSUM {0:.8f}", sum);
+        // }
 
-        // gradient-based data filtering
-        if(params->gradient_filtering) {
-            for(DataSet &dset : tree_samples) {
-                for (auto &grad : dset.gradients){
-                    grad = clamp(grad, -params->l2_threshold, params->l2_threshold);
-                }
-            }
-        }
+        // // gradient-based data filtering
+        // if(params->gradient_filtering) {
+        //     for(DataSet &dset : tree_samples) {
+        //         for (auto &grad : dset.gradients){
+        //             grad = clamp(grad, -params->l2_threshold, params->l2_threshold);
+        //         }
+        //     }
+        // }
 
         // build tree, add noise to leaves
-        LOG_INFO("Building tree {1}...", tree_index);
-        DPTree tree = DPTree(params, &tree_params, &tree_samples[tree_index], tree_index);
-        tree.fit();
-        trees.push_back(tree);
+        // LOG_INFO("Building tree {1}...", tree_index);
+        // DPTree tree = DPTree(params, &tree_params, &tree_samples[tree_index], tree_index);
+        // tree.fit();
+        // trees.push_back(tree);
         
-        // print the tree if we are in debug mode
-        if (spdlog::default_logger_raw()->level() <= spdlog::level::debug) {
-            tree.recursive_print_tree(tree.root_node);
-        }
+        // // print the tree if we are in debug mode
+        // if (spdlog::default_logger_raw()->level() <= spdlog::level::debug) {
+        //     tree.recursive_print_tree(tree.root_node);
+        // }
 
-        LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, "XX");
+        LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, dataset->live_rows.size());
     }
 }
 
@@ -173,43 +184,15 @@ void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train
 }
 
 
-std::vector<double> DPEnsemble::update_gradients(vector<DataSet> &tree_samples, int tree_index)
+void DPEnsemble::update_gradients(vector<double> &gradients, int tree_index)
 {
-    vector<double> gradients;
     if(tree_index == 0) {
         // init gradients
         vector<double> init_scores(dataset->length, this->init_score);
         gradients = this->params->task->compute_gradients(dataset->y, init_scores);
-        // store the gradients back to their corresponding samples
-        int index = 0;
-        for(DataSet &dset : tree_samples) {
-            for (auto row : dset.X){
-                // store each gradient next to its corresponding sample
-                dset.gradients.push_back(gradients[index]);  
-                index++;
-            }
-        }
-    } else { // update gradients
-        
-        // get the samples and corresponding gradients of all unused samples
-        VVD pred_samples;
-        vector<double> y_samples;
-        for (size_t i=tree_index; i<tree_samples.size(); i++) {
-            pred_samples.insert(pred_samples.end(), tree_samples[i].X.begin(), tree_samples[i].X.end());
-            y_samples.insert(y_samples.end(), tree_samples[i].y.begin(), tree_samples[i].y.end());
-        }
-        vector<double> y_pred = predict(pred_samples);
-
+    } else { 
         // update gradients
-        gradients = (this->params->task)->compute_gradients(y_samples, y_pred);
-
-        // store the gradients back to their corresponding samples
-        vector<double>::const_iterator iter = gradients.begin();
-        for (size_t i=tree_index; i<tree_samples.size(); i++) {
-            vector<double> curr_grads = vector<double>(iter, iter + tree_samples[i].length);
-            tree_samples[i].gradients = curr_grads;
-            iter += tree_samples[i].length;
-        }
+        vector<double> y_pred = predict(dataset->X);
+        gradients = (this->params->task)->compute_gradients(dataset->y, y_pred);
     }
-    return gradients;
 }

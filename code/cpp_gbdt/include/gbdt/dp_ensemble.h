@@ -30,7 +30,7 @@ private:
 
     // methods
     void distribute_samples(std::vector<DataSet> *storage_vec, DataSet *train_set);
-    std::vector<double> update_gradients(std::vector<DataSet> &tree_samples, int tree_index);
+    void update_gradients(std::vector<double> &gradients, int tree_index);
 };
 
 #endif // DPTREEENSEMBLE_H
