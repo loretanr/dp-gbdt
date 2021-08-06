@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     }
 
     // Set up logging
-    spdlog::set_level(spdlog::level::err);
+    spdlog::set_level(spdlog::level::info);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
     LOG_INFO("hello MA start");
 
@@ -56,8 +56,8 @@ int main(int argc, char** argv)
 
     // change model params here if required:
     // e.g. current_params.privacy_budget = 42;
-    current_params.privacy_budget = 0;
-    current_params.use_dp = false;
+    current_params.privacy_budget = 5;
+    current_params.use_dp = true;
     current_params.gradient_filtering = false;
     current_params.leaf_clipping = false;
     params.push_back(current_params);

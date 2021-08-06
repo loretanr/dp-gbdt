@@ -30,7 +30,6 @@ struct DataSet {
     VVD X;
     std::vector<double> y;
     std::vector<double> gradients;
-    std::set<int> live_rows;
     int length, num_x_cols;
     bool empty;
     Scaler scaler;
@@ -39,6 +38,9 @@ struct DataSet {
     // methods
     void add_row(std::vector<double> xrow, double yval);
     void scale(ModelParams &params, double lower, double upper);
+    void shuffle_dataset();
+    DataSet get_subset(std::vector<int> &indices);
+    DataSet remove_rows(std::vector<int> &indices);
 };
 
 // wrapper around 2 DataSets that belong together
@@ -51,8 +53,10 @@ struct TrainTestSplit {
 
 // method declarations
 void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec);
-TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio = 0.70, bool shuffle = false);
+TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio = 0.70, bool shuffle = false);
 std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds);
+
+
 
 
 #endif /* DATA_H */

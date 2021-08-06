@@ -36,8 +36,8 @@ DataSet::DataSet(VVD X, std::vector<double> y) : X(X), y(y)
     length = X.size();
     num_x_cols = X[0].size();
     empty = false;
-    live_rows = std::set<int>();
-    for(int i=0; i<length; i++) { live_rows.insert(live_rows.end(), i); };
+    // live_rows = std::set<int>();
+    // for(int i=0; i<length; i++) { live_rows.insert(live_rows.end(), i); };
 }
 
 
@@ -97,11 +97,10 @@ void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec
     }
 }
 
-TrainTestSplit train_test_split_random(DataSet dataset, double train_ratio, bool shuffle)
+TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio, bool shuffle)
 {
     if(shuffle) {
-        std::random_shuffle(dataset.X.begin(), dataset.X.end());
-        std::random_shuffle(dataset.y.begin(), dataset.y.end());
+        dataset.shuffle_dataset();
     }
 
     // [ test |      train      ]
@@ -132,14 +131,7 @@ std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int
 {
     bool shuffle = !VERIFICATION_MODE;
     if(shuffle) {
-        std::vector<int> indexes(dataset.length);
-        std::iota(std::begin(indexes), std::end(indexes), 0);
-        std::random_shuffle(indexes.begin(), indexes.end());
-        DataSet copy = dataset;
-        for(int i=0; i<indexes.size(); i++){
-            dataset.X[i] = copy.X[indexes[i]];
-            dataset.y[i] = copy.y[indexes[i]];
-        }
+        dataset.shuffle_dataset();
     }
 
     int fold_size = dataset.length / folds;
@@ -180,4 +172,53 @@ std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int
         splits.push_back(TrainTestSplit(train,test));
     }
     return splits;
+}
+
+
+void DataSet::shuffle_dataset()
+{
+    std::vector<int> indices(length);
+    std::iota(std::begin(indices), std::end(indices), 0);
+    std::random_shuffle(indices.begin(), indices.end());
+    DataSet copy = *this;
+    for(size_t i=0; i<indices.size(); i++){
+        X[i] = copy.X[indices[i]];
+        y[i] = copy.y[indices[i]];
+        if (not gradients.empty()) {
+            gradients[i] = copy.gradients[i];
+        }
+    }
+}
+
+
+DataSet DataSet::get_subset(std::vector<int> &indices)
+{
+    DataSet dataset;
+    for (int i=0; i<length; i++) {
+        if (std::find(indices.begin(), indices.end(), i) != indices.end()) {
+            dataset.X.push_back(X[i]);
+            dataset.y.push_back(y[i]);
+            dataset.gradients.push_back(gradients[i]);
+        }
+    }
+    dataset.length = dataset.y.size();
+    dataset.num_x_cols = dataset.X[0].size();
+    dataset.empty = false;
+    return dataset;
+}
+
+DataSet DataSet::remove_rows(std::vector<int> &indices)
+{
+    DataSet dataset;
+    for (int i=0; i<length; i++) {
+        if (std::find(indices.begin(), indices.end(), i) == indices.end()) {
+            dataset.X.push_back(X[i]);
+            dataset.y.push_back(y[i]);
+            dataset.gradients.push_back(gradients[i]);
+        }
+    }
+    dataset.length = dataset.y.size();
+    dataset.num_x_cols = dataset.X[0].size();
+    dataset.empty = false;
+    return dataset;
 }
