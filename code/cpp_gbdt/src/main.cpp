@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     }
 
     // Set up logging
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
     LOG_INFO("hello MA start");
 
@@ -58,8 +58,8 @@ int main(int argc, char** argv)
     // e.g. current_params.privacy_budget = 42;
     current_params.privacy_budget = 5;
     current_params.use_dp = true;
-    current_params.gradient_filtering = false;
-    current_params.leaf_clipping = false;
+    current_params.gradient_filtering = true;
+    current_params.leaf_clipping = true;
     params.push_back(current_params);
 
     // Choose your dataset
@@ -70,7 +70,20 @@ int main(int argc, char** argv)
 
     // create cross validation inputs
     std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
+//---------------------------------------------------
+    std::vector<double> means;
+    for(int i=0; i<1000; i++){
+        cv_inputs = create_cross_validation_inputs(dataset, 5);
+        for (auto split : cv_inputs) {
+            std::vector<double> y_predd(split.test.length, compute_mean(split.test.y));
+            double score = params[0].task->compute_score(split.test.y, y_predd);
+            means.push_back(score);
+        }
+    }
+    double boss_mean = compute_mean(means);
+    std::cout << "bossmean " << boss_mean << std::endl;
 
+//---------------------------------------------------
     // do cross validation
     std::vector<double> rmses;
     for (auto split : cv_inputs) {

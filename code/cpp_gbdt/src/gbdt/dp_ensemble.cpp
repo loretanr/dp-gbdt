@@ -101,11 +101,15 @@ void DPEnsemble::train(DataSet *dataset)
                         count++;
                     }
                 }
-                std::cout << fmt::format("GDF: rejecting ({}/{})", count, tree_dataset.length) << std::endl;
+                LOG_INFO("GDF: rejecting ({1}/{2})", count, tree_dataset.length);
                 tree_dataset = tree_dataset.remove_rows(reject_indices);
-                for(auto index : reject_indices) {
-                    indices.erase(indices.begin() + index);
+                std::vector<int> new_indices;
+                for(size_t i=0; i<indices.size(); i++) {
+                    if (std::find(reject_indices.begin(), reject_indices.end(), i) == reject_indices.end()) {
+                        new_indices.push_back(indices[i]);
+                    }
                 }
+                indices = new_indices;
             }
 
             LOG_DEBUG(YELLOW("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),

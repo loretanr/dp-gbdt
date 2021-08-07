@@ -218,7 +218,7 @@ DataSet DataSet::remove_rows(std::vector<int> &indices)
         }
     }
     dataset.length = dataset.y.size();
-    dataset.num_x_cols = dataset.X[0].size();
-    dataset.empty = false;
+    dataset.num_x_cols = X[0].size();
+    dataset.empty = dataset.length == 0;
     return dataset;
 }
