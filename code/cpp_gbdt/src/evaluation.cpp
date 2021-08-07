@@ -39,7 +39,7 @@ int Evaluation::main(int argc, char *argv[])
     DataSet dataset = parser.get_YearPredictionMSD(parameters, 10000, false);
     // --------------------------------------
     // select privacy budgets
-    std::vector<double> budgets = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.5, 2, 2.5, 3, 4};
+    std::vector<double> budgets = {0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
     // --------------------------------------
 
     // output file

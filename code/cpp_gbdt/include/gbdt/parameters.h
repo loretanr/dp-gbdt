@@ -15,10 +15,11 @@ struct ModelParams {
     int max_leaves;
     int min_samples_split = 2;
     bool balance_partition = true;
-    bool gradient_filtering = false;
-    bool leaf_clipping = false;
+    bool gradient_filtering = true;
+    bool leaf_clipping = true;
     bool use_dp = true;
     bool use_dfs = true;
+    bool scale_y = false;
     bool use_decay = false;
     double l2_threshold = 1.0;
     double l2_lambda = 0.1;

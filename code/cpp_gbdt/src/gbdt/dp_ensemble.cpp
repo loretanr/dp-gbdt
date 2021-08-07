@@ -52,11 +52,10 @@ void DPEnsemble::train(DataSet *dataset)
     
     // train all trees
     for(int tree_index = 0; tree_index < params->nb_trees;  tree_index++) {
-
-            
-        // if(VERIFICATION_MODE) {
-        //     VERIFICATION_LOG("Tree {0} CV-Ensemble {1}", tree_index, cv_fold_index);
-        // }
+ 
+        if(VERIFICATION_MODE) {
+            VERIFICATION_LOG("Tree {0} CV-Ensemble {1}", tree_index, cv_fold_index);
+        }
 
          // update/init gradients
         update_gradients(dataset->gradients, tree_index);
@@ -83,25 +82,24 @@ void DPEnsemble::train(DataSet *dataset)
                 }
             }
 
-            // randomly select the rows
+            // randomly select this amount of rows
             vector<int> indices(dataset->length);
             std::iota(std::begin(indices), std::end(indices), 0);
             std::random_shuffle(indices.begin(), indices.end());
             indices = std::vector<int>(indices.begin(), indices.begin() + number_of_rows);
             DataSet tree_dataset = dataset->get_subset(indices);
             
-            // gradient-based data filtering  // TODO, put into subset?
+            // gradient-based data filtering
             if(params->gradient_filtering) {
-                int count = 0;
                 std::vector<int> reject_indices;
                 for (int i=0; i<tree_dataset.length; i++) {
                     int curr_grad = tree_dataset.gradients[i];
                     if (curr_grad < -params->l2_threshold or curr_grad > params->l2_threshold) {
                         reject_indices.push_back(i);
-                        count++;
                     }
                 }
-                LOG_INFO("GDF: rejecting ({1}/{2})", count, tree_dataset.length);
+                // remove these rows
+                LOG_INFO("GDF: rejecting ({1}/{2}) rows", reject_indices.size(), tree_dataset.length);
                 tree_dataset = tree_dataset.remove_rows(reject_indices);
                 std::vector<int> new_indices;
                 for(size_t i=0; i<indices.size(); i++) {
@@ -124,11 +122,6 @@ void DPEnsemble::train(DataSet *dataset)
             // remove rows
             *dataset = dataset->remove_rows(indices);
 
-            if (spdlog::default_logger_raw()->level() <= spdlog::level::debug) {
-                trees.back().recursive_print_tree(trees.back().root_node);
-            }
-            LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, dataset->length);
-
         } else {  // build a non-dp tree
             
             LOG_DEBUG(YELLOW("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),
@@ -139,13 +132,13 @@ void DPEnsemble::train(DataSet *dataset)
             DPTree tree = DPTree(params, &tree_params, dataset, tree_index);
             tree.fit();
             trees.push_back(tree);
-            // print the tree if we are in debug mode
-
-            if (spdlog::default_logger_raw()->level() <= spdlog::level::debug) {
-                trees.back().recursive_print_tree(trees.back().root_node);
-            }
-            LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, dataset->length);
         }
+
+        // print the tree if we are in debug mode
+        if (spdlog::default_logger_raw()->level() <= spdlog::level::debug) {
+            trees.back().recursive_print_tree(trees.back().root_node);
+        }
+        LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, dataset->length);
     }
 }
 

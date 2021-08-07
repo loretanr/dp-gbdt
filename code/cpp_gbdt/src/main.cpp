@@ -47,65 +47,51 @@ int main(int argc, char** argv)
     // Set up logging
     spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
-    LOG_INFO("hello MA start");
 
     // Define model parameters
-    // only reason to use a vector is because parser expects it
-    std::vector<ModelParams> params;
+    // reason to use a vector is because parser expects it
+    std::vector<ModelParams> parameters;
     ModelParams current_params = create_default_params();
 
     // change model params here if required:
-    // e.g. current_params.privacy_budget = 42;
-    current_params.privacy_budget = 5;
-    current_params.use_dp = true;
+    current_params.privacy_budget = 0.1;
+    current_params.use_dp = false;
     current_params.gradient_filtering = true;
+    current_params.balance_partition = true;
     current_params.leaf_clipping = true;
-    params.push_back(current_params);
+    current_params.scale_y = true;
+    parameters.push_back(current_params);
 
     // Choose your dataset
-    Parser parser = Parser();
-    DataSet dataset = parser.get_abalone(params, 5000, false);
+    DataSet dataset = Parser::get_abalone(parameters, 5000, false);
 
     std::cout << dataset.name << std::endl;
 
     // create cross validation inputs
     std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
-//---------------------------------------------------
-    std::vector<double> means;
-    for(int i=0; i<1000; i++){
-        cv_inputs = create_cross_validation_inputs(dataset, 5);
-        for (auto split : cv_inputs) {
-            std::vector<double> y_predd(split.test.length, compute_mean(split.test.y));
-            double score = params[0].task->compute_score(split.test.y, y_predd);
-            means.push_back(score);
-        }
-    }
-    double boss_mean = compute_mean(means);
-    std::cout << "bossmean " << boss_mean << std::endl;
 
-//---------------------------------------------------
     // do cross validation
     std::vector<double> rmses;
     for (auto split : cv_inputs) {
+        ModelParams params = parameters[0];
 
-        // we should fit the Scaler only on the training set, according to
-        // https://datascience.stackexchange.com/questions/38395/standardscaler-before-and-after-splitting-data
-        // split.train.scale(params[0], -1, 1);
+        if(params.scale_y){
+            split.train.scale(params, -1, 1);
+        }
 
-        DPEnsemble ensemble = DPEnsemble(&params[0]);
+        DPEnsemble ensemble = DPEnsemble(&params);
         ensemble.train(&split.train);
         
         // predict with the test set
         std::vector<double> y_pred = ensemble.predict(split.test.X);
 
-        // invert the feature scaling (if necessary)
-        // inverse_scale(params[0], split.train.scaler, y_pred);
+        if(params.scale_y) {
+            inverse_scale(params, split.train.scaler, y_pred);
+        }
 
         // compute score
-        double score = params[0].task->compute_score(split.test.y, y_pred);
+        double score = params.task->compute_score(split.test.y, y_pred);
 
         std::cout << score << " " << std::flush;
     } std::cout << std::endl;
-
-    LOG_INFO("hello MA end");
 }

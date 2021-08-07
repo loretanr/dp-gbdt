@@ -252,7 +252,6 @@ class GradientBoostingEnsemble:
                 1 - math.pow((
                     1 - self.learning_rate), self.nb_trees_per_ensemble)))
 
-        print()
 
         # If using the formula from the algorithm, some trees may not get
         # samples. In that case we skip the tree and issue a warning. This

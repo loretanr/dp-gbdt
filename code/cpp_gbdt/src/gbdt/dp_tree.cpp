@@ -34,25 +34,26 @@ void DPTree::fit()
         vector<int> live_samples(dataset->length);
         std::iota(std::begin(live_samples), std::end(live_samples), 0);
 
-        root_node = make_tree_DFS(0, live_samples);
+        this->root_node = make_tree_DFS(0, live_samples);
     } else {
         throw runtime_error("non-DFS not yet implemented.");
     }
 
-    // leaf clipping
     if(params->use_dp) {
+
+        // leaf clipping
         if (params->leaf_clipping) {
-            double threshold = this->params->l2_threshold * std::pow((1-this->params->learning_rate), this->tree_index);
+            double threshold = params->l2_threshold * std::pow((1 - params->learning_rate), tree_index);
             for (auto &leaf : this->leaves) {
                 leaf->prediction = clamp(leaf->prediction, -1 * threshold, threshold);
             }
         }
-    }
 
-    // add laplace noise to predictions
-    double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
-    double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
-    add_laplacian_noise(laplace_scale);
+        // add laplace noise to leaf values
+        double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
+        double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
+        add_laplacian_noise(laplace_scale);
+    }
 }
 
 
@@ -70,7 +71,8 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 
     // get the samples (and their gradients) that actually end up in this node
     // note that the cols of X are rows in X_live
-    VVD X_live; vector<double> gradients_live;
+    VVD X_live;
+    vector<double> gradients_live;
     for(int col=0; col < dataset->num_x_cols; col++) {
         vector<double> temp;    
         for (auto elem : live_samples) {
@@ -95,12 +97,11 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         node->split_attr, node->split_value, node->split_gain, current_depth, 
         node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
 
-    // prepare the live samples to continue recursion
+    // prepare the new live samples to continue recursion
     vector<int> lhs;
     bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(),
             node->split_attr) != (params->cat_idx).end();
-    samples_left_right_partition(lhs, X_live,
-            node->split_attr, node->split_value, categorical);
+    samples_left_right_partition(lhs, X_live, node->split_attr, node->split_value, categorical);
     vector<int> left_live_samples, right_live_samples;
     for (size_t i=0; i<live_samples.size(); i++) {
         if (lhs[i]) {
@@ -124,13 +125,13 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
 
     vector<double> y, gradients;
     for (auto index : live_samples) {
-        y.push_back((this->dataset->y)[index]);
-        gradients.push_back(this->dataset->gradients[index]);
+        y.push_back((dataset->y)[index]);
+        gradients.push_back(dataset->gradients[index]);
     }
     // compute prediction
     leaf->prediction = (-1 * std::accumulate(gradients.begin(), gradients.end(), 0.0)
-                            / (gradients.size() + this->params->l2_lambda));
-    this->leaves.push_back(leaf);
+                            / (gradients.size() + params->l2_lambda));
+    leaves.push_back(leaf);
     return(leaf);
 }
 
@@ -140,7 +141,7 @@ vector<double> DPTree::predict(VVD &X)
     vector<double> predictions;
     // iterate over all samples
     for (auto row : X) {
-        double pred = _predict(&row, this->root_node);
+        double pred = _predict(&row, root_node);
         predictions.push_back(pred);
     }
 
@@ -195,7 +196,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
                 continue;
             }
             // Gi = epsilon_nleaf * Gi / (2 * delta_G)
-            if(this->params->use_dp){
+            if(params->use_dp){
                 gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
             }
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
@@ -316,8 +317,8 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
         }
     }
 
-    // non-dp: just choose the split with the largest probability
-    if (!this->params->use_dp) {
+    // non-dp: deterministically choose the best split
+    if (!params->use_dp) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         // return index of the max_elem
         return std::distance(probabilities.begin(), max_elem);
@@ -330,7 +331,6 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
     double rand01 = ((double) std::rand() / (RAND_MAX));
 
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
-    // taken from Theos python code
     for (int tries=0; tries<10; tries++) {
         for (size_t index=0; index<partials.size(); index++) {
             if (partials[index] >= rand01) {
@@ -350,25 +350,18 @@ void DPTree::add_laplacian_noise(double laplace_scale)
     Laplace lap(laplace_scale, rand());
 
     // add noise from laplace distribution to leaves
-    for (auto &leaf : this->leaves) {
-        double noise = 0;
-
-        // but only in dp mode
-        if (this->params->use_dp) {
-            noise = lap.return_a_random_variable(laplace_scale);
-        }
-
+    for (auto &leaf : leaves) {
+        double noise = lap.return_a_random_variable(laplace_scale);
         leaf->prediction += noise;
-
         LOG_DEBUG("({1:.3f} -> {2:.8f})", leaf->prediction, leaf->prediction+noise);
     }
 
     // rest is just for validation
     double sum = 0;
-    for (auto leaf : this->leaves) {
+    for (auto leaf : leaves) {
         sum += leaf->prediction;
     }
-    LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", this->leaves.size(), sum);
+    LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", leaves.size(), sum);
     if(VERIFICATION_MODE) {
         VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
     }
@@ -382,8 +375,8 @@ void DPTree::recursive_print_tree(TreeNode* node) {
         return;
     }
     // check if split uses categorical attr
-    bool categorical = std::find( ((*(this->params)).cat_idx).begin(),
-        ((*(this->params)).cat_idx).end(), node->split_attr) != ((*(this->params)).cat_idx).end();
+    bool categorical = std::find( ((*params).cat_idx).begin(),
+        ((*params).cat_idx).end(), node->split_attr) != ((*params).cat_idx).end();
     
     if (categorical) {
         std::cout << std::defaultfloat;

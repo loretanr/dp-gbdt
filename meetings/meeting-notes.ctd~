@@ -1500,7 +1500,7 @@ stuuuuupid    </rich_text>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1628004334.51" unique_id="25">
 		<rich_text>• Google if another compiler is better at not reordering, maybe ask ivan</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="Moritz's blutbad" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1628002202.81" ts_lastsave="1628089673.63" unique_id="27">
+	<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="Moritz's blutbad" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1628002202.81" ts_lastsave="1628090934.14" unique_id="27">
 		<rich_text foreground="#ffffa5a50000">Notice, all these plots have scaling turned off, so that's why no-2nd-split impact is compensated
 </rich_text>
 		<rich_text>
@@ -1580,6 +1580,7 @@ TODO make sure </rich_text>
 		<rich_text>
             - I noticed that GDF sorts out like 5/6 of all abalone rows (sounds bad to me, at least shorter runtime)
             - is GDF required by the thresholds? The paper tells me yes
+            - maybe with balance_partition (*paper formula*) it's better, nope!
                
 
 

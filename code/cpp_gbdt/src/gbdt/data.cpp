@@ -15,8 +15,8 @@ Scaler::Scaler(double min_val, double max_val, double fmin, double fmax, bool sc
 {
     double data_range = data_max - data_min;
     data_range = data_range == 0 ? 1 : data_range;
-    this->scale = (this->feature_max - this->feature_min) / data_range;
-    this->min_ = this->feature_min - this->data_min * this->scale;
+    this->scale = (feature_max - feature_min) / data_range;
+    this->min_ = feature_min - data_min * scale;
 }
 
 
@@ -36,21 +36,10 @@ DataSet::DataSet(VVD X, std::vector<double> y) : X(X), y(y)
     length = X.size();
     num_x_cols = X[0].size();
     empty = false;
-    // live_rows = std::set<int>();
-    // for(int i=0; i<length; i++) { live_rows.insert(live_rows.end(), i); };
 }
 
 
-// void DataSet::add_row(std::vector<double> xrow, double yval)
-// {
-//     X.push_back(xrow);
-//     y.push_back(yval);
-//     length++;
-// }
-
-
-// scale the features such that they lie in [lower,upper]
-// !!! Seems like only y needs to be scaled !!!
+// scale y such that they lie in [lower,upper]
 void DataSet::scale(ModelParams &params, double lower, double upper)
 {
     // only scale in dp mode
@@ -58,13 +47,13 @@ void DataSet::scale(ModelParams &params, double lower, double upper)
         
         // return if no scaling required (y already in [-1,1])
         bool scaling_required = false;
-        for(auto elem : this->y) {
+        for(auto elem : y) {
             if (elem < lower or elem > upper) {
                 scaling_required = true; break;
             }
         }
         if (not scaling_required) {
-            this->scaler = Scaler(0,0,0,0,false);
+            scaler = Scaler(0,0,0,0,false);
             return;
         }
 
@@ -72,15 +61,16 @@ void DataSet::scale(ModelParams &params, double lower, double upper)
         double doublemin = std::numeric_limits<double>::min();
         double minimum_y = doublemax, maximum_y = doublemin;
         for(int i=0; i<length; i++) {
-            minimum_y = std::min(minimum_y, this->y[i]);
-            maximum_y = std::max(maximum_y, this->y[i]);
+            minimum_y = std::min(minimum_y, y[i]);
+            maximum_y = std::max(maximum_y, y[i]);
         }
         for(int i=0; i<length; i++) {
-            this->y[i] = (this->y[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
+            y[i] = (y[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
         }
-        this->scaler = Scaler(minimum_y, maximum_y, lower, upper, true);
+        scaler = Scaler(minimum_y, maximum_y, lower, upper, true);
     }
 }
+
 
 void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec)
 {
@@ -96,6 +86,7 @@ void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec
         }
     }
 }
+
 
 TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio, bool shuffle)
 {
@@ -207,6 +198,7 @@ DataSet DataSet::get_subset(std::vector<int> &indices)
     return dataset;
 }
 
+
 DataSet DataSet::remove_rows(std::vector<int> &indices)
 {
     DataSet dataset;
@@ -220,5 +212,6 @@ DataSet DataSet::remove_rows(std::vector<int> &indices)
     dataset.length = dataset.y.size();
     dataset.num_x_cols = X[0].size();
     dataset.empty = dataset.length == 0;
+    dataset.scaler = scaler;
     return dataset;
 }

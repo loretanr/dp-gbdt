@@ -85,7 +85,7 @@ if __name__ == '__main__':
           regressor = TransformedTargetRegressor(regressor=m)     # REMOVED MINMAXSCALER
           # validator = model_selection.KFold(n_splits=NB_SPLITS, random_state=np.random.randint(0,100000) ,shuffle=True)
           validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
-          X, y = shuffle(X, y)
+          # X, y = shuffle(X, y)
           scores = cross_val_score(
               regressor, X, y, cv=validator, scoring=rmse, n_jobs=1, verbose=10)
           mean, std = scores.mean(), (scores.std() / 2)
