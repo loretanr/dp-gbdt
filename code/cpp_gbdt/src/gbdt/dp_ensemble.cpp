@@ -92,10 +92,10 @@ void DPEnsemble::train(DataSet *dataset)
             DataSet tree_dataset = dataset->get_subset(indices);
             
             // gradient-based data filtering
-            if(params->gradient_filtering) {
+            if(params->gradient_filtering && tree_index > 0) {
                 std::vector<int> reject_indices;
                 for (int i=0; i<tree_dataset.length; i++) {
-                    int curr_grad = tree_dataset.gradients[i];
+                    double curr_grad = tree_dataset.gradients[i];
                     if (curr_grad < -params->l2_threshold or curr_grad > params->l2_threshold) {
                         reject_indices.push_back(i);
                     }

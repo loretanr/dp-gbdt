@@ -1066,7 +1066,7 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
                 2, current_depth)), decimals=7)
       else:
         privacy_budget_for_node = np.around(
-            np.divide(self.privacy_budget/2, self.max_depth), decimals=7)
+            np.divide(self.privacy_budget/2, self.max_depth))
 
       if self.use_3_trees and current_depth != 0:
         # If not for the root node splitting, budget is divided by the 3-nodes

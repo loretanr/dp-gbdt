@@ -56,7 +56,7 @@ int main(int argc, char** argv)
     // change model params here if required:
     current_params.privacy_budget = 5;
     current_params.nb_trees = 10;
-    current_params.use_dp = true;
+    current_params.use_dp = false;
     current_params.gradient_filtering = true;
     current_params.balance_partition = true;
     current_params.leaf_clipping = true;

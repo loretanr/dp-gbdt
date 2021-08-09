@@ -35,12 +35,13 @@ int Verification::main(int argc, char *argv[])
     // you can either append some ModelParams to parameters here (and pass 
     // "false" to the parsing function), or let the get_xy function
     // do that (it'll create and append some default ones to the vector)
-
-    // datasets.push_back(parser.get_abalone(parameters, 320, true)); // small abalone
-
     ModelParams params = create_default_params();
     params.privacy_budget = 0.1;
     params.nb_trees = 5;
+    params.gradient_filtering = true;
+    params.balance_partition = true;
+    params.leaf_clipping = true;
+    params.use_dp = true;
     parameters.push_back(params);
     datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
     parameters.push_back(params);
@@ -52,9 +53,6 @@ int Verification::main(int argc, char *argv[])
     // use_dp (in combination with VERIFICATION_MODE, which disables dataset shuffling
     // in create_cross_val_inputs and rounding at certain places) turns off randomness completely
     // -> we get completely deterministic runs that are comparable to the python output.
-    for(auto &elem : parameters){
-        elem.use_dp = true;
-    }
 
     // do verification on all added datasets
     for(size_t i=0; i<datasets.size(); i++) {

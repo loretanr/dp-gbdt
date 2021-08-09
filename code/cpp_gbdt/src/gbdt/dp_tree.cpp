@@ -49,12 +49,10 @@ void DPTree::fit()
             }
         }
 
-        if(!VERIFICATION_MODE){
-            // add laplace noise to leaf values
-            double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
-            double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
-            add_laplacian_noise(laplace_scale);
-        }
+        // add laplace noise to leaf values
+        double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
+        double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
+        add_laplacian_noise(laplace_scale);
     }
 }
 
@@ -347,6 +345,16 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 
 void DPTree::add_laplacian_noise(double laplace_scale)
 {
+    if(VERIFICATION_MODE){
+        double sum = 0;
+        for (auto leaf : leaves) {
+            sum += leaf->prediction;
+        }
+        LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", leaves.size(), sum);
+        VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
+        return;
+    }
+
     LOG_DEBUG("Adding Laplace noise to leaves (Scale {1:.2f})", laplace_scale);
 
     Laplace lap(laplace_scale, rand());
@@ -356,16 +364,6 @@ void DPTree::add_laplacian_noise(double laplace_scale)
         double noise = lap.return_a_random_variable(laplace_scale);
         leaf->prediction += noise;
         LOG_DEBUG("({1:.3f} -> {2:.8f})", leaf->prediction, leaf->prediction+noise);
-    }
-
-    // rest is just for validation
-    double sum = 0;
-    for (auto leaf : leaves) {
-        sum += leaf->prediction;
-    }
-    LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", leaves.size(), sum);
-    if(VERIFICATION_MODE) {
-        VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
     }
 }
 

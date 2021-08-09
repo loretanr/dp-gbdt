@@ -59,7 +59,7 @@ if __name__ == '__main__':
             use_bfs=False, 
             use_3_trees=False,
             cat_idx=cat_idx, num_idx=num_idx,
-            verbosity=-1)
+            verbosity=1)
         regressor = TransformedTargetRegressor(regressor=m)
         validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
         scores = cross_val_score(
