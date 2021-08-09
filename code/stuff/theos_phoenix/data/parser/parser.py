@@ -55,7 +55,7 @@ class Parser:
     ssl._create_default_https_context = ssl._create_unverified_context
     # pylint: enable=protected-access
 
-    if dataset not in ['abalone', 'questionnaires', 'bcw', 'adult', 'year',
+    if dataset not in ['abalone', 'questionnaires', 'bcw', 'adult', 'yearMSD',
                        'synthetic_A', 'synthetic_B', 'synthetic_C',
                        'synthetic_D']:
       raise NotImplementedError('Parser not implemented for this dataset.')
@@ -66,9 +66,9 @@ class Parser:
     self.bins = bins
     self.binary_classification = binary_classification
     self.paths = {
-        'abalone': 'src/real/abalone.data',
-        'questionnaires': 'src/real/questionnaires.csv',
-        'bcw': 'src/real/breast-cancer-wisconsin.data',
+        'abalone': 'datasets/real/abalone.data',
+        'questionnaires': 'datasets/real/questionnaires.csv',
+        'bcw': 'datasets/real/breast-cancer-wisconsin.data',
         'synthetic_A': 'src/synthetic/synthetic_A.csv',
         'synthetic_B': 'src/synthetic/synthetic_B.csv',
         'synthetic_C': 'src/synthetic/synthetic_C.csv',
@@ -127,7 +127,7 @@ class Parser:
       return self.get_bcw(n_rows=n_rows)
     if self.dataset == 'adult':
       return self.get_adult(n_rows=n_rows)
-    if self.dataset == 'year':
+    if self.dataset == 'yearMSD':
       return self.get_year(n_rows=n_rows)
     if self.dataset.startswith('synthetic'):
       return self.get_synthetic(n_rows=n_rows)
@@ -139,7 +139,7 @@ class Parser:
     task = 'regression'
     get_year_url = ('https://archive.ics.uci.edu/ml/machine-learning'
                     '-databases/00203/YearPredictionMSD.txt.zip')
-    filename = 'src/real/YearPredictionMSD.txt.zip'
+    filename = 'datasets/real/YearPredictionMSD.txt.zip'
     filename_real_path = os.path.join(os.path.dirname(os.path.dirname(
         os.path.realpath(__file__))), filename)
     if not os.path.isfile(filename_real_path):
@@ -174,23 +174,23 @@ class Parser:
       self,
       n_rows: Optional[int] = None) -> Any:
     """Return the abalone dataset."""
-    # Re-encode gender information
     task = 'regression'
-    gender = []
-    for i in range(len(self.data['sex'].values)):
-      if self.data['sex'].values[i] == 'M':
-        value = 1
-      elif self.data['sex'].values[i] == 'F':
-        value = 2
-      else:
-        value = 3
-      gender.append(value)
-    self.data['sex'] = gender
-    if n_rows:
-      self.data = self.data.head(n_rows)
-    y = self.data.rings.values.astype(np.float)
-    del self.data['rings']
-    X = self.data.values.astype(np.float)
+    # Re-encode gender information (if not already done)
+    if isinstance(self.data['sex'].values[0], str):
+      gender = []
+      for i in range(len(self.data['sex'].values)):
+        if self.data['sex'].values[i] == 'M':
+          value = 1
+        elif self.data['sex'].values[i] == 'F':
+          value = 2
+        else:
+          value = 3
+        gender.append(value)
+      self.data['sex'] = gender
+    current_data = self.data.head(n_rows)
+    y = current_data.rings.values.astype(np.float)
+    # del self.data['rings']
+    X = (current_data.drop('rings', axis=1)).values.astype(np.float)
     categorical_indices = [0]  # Sex
     numerical_indices = list(range(1, X.shape[1]))  # Other attributes
     return X, y, categorical_indices, numerical_indices, task
@@ -211,6 +211,7 @@ class Parser:
     categorical_indices = list(range(0, X.shape[1]))  # All
     numerical_indices = []  # type: List[int]
     return X, y, categorical_indices, numerical_indices, task
+
 
   def get_adult(self, n_rows: Optional[int] = None) -> Any:
     """Return the Adult dataset."""
@@ -238,19 +239,19 @@ class Parser:
     adult = adult.append(
         pd.read_csv(test_real_path, header=None, skiprows=1, sep=', '))
     # Drop weight info
-    adult.drop(columns=[2], axis=1, inplace=True)
-    if n_rows:
-      adult = adult[:n_rows]
+    # adult.drop(columns=[2], axis=1, inplace=True)       # disabled this column
     # Drop rows with missing information
     adult = adult[~(adult.astype(str) == '?').any(1)]
+    if n_rows:
+      adult = adult[:n_rows]
     if not self.binary_classification:
       y = np.where(adult.iloc[:, -1] == '>50K', 1, 0)
     else:
       y = np.where(adult.iloc[:, -1] == '>50K', 1, -1)
     adult = adult.iloc[:, :-1]
-    for idx, row in adult.iterrows():
-      if str(row.values[-1]).strip() != 'United-States':
-        adult.at[idx, 13] = 'Other'
+    # for idx, row in adult.iterrows():
+    #   if str(row.values[-1]).strip() != 'United-States':    # bullshit -.- why would you ever put this in here
+    #     adult.at[idx, 13] = 'Other'                         # wasted hours debugging this
     adult.columns = range(adult.shape[1])
     categorical_indices = adult.select_dtypes(
         include=['object']).columns.tolist()
@@ -258,9 +259,12 @@ class Parser:
         exclude=['object']).columns.tolist()
     for column in adult:
       if column in categorical_indices:
-        adult[column] = pd.get_dummies(adult[column])
+        # adult[column] = pd.get_dummies(adult[column])    # this here was another (intentional?) severe bug, deletes a
+        adult[column] = adult[column].astype('category')   # lot of information in the dataset
+        adult[column] = adult[column].cat.codes
     X = adult.values
     return X, y, categorical_indices, numerical_indices, task
+
 
   def get_synthetic(self,
                       n_rows: Optional[int] = None) -> Any:

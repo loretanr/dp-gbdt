@@ -49,10 +49,12 @@ void DPTree::fit()
             }
         }
 
-        // add laplace noise to leaf values
-        double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
-        double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
-        add_laplacian_noise(laplace_scale);
+        if(!VERIFICATION_MODE){
+            // add laplace noise to leaf values
+            double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
+            double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
+            add_laplacian_noise(laplace_scale);
+        }
     }
 }
 
@@ -318,7 +320,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
     }
 
     // non-dp: deterministically choose the best split
-    if (!params->use_dp) {
+    if (!params->use_dp or VERIFICATION_MODE) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         // return index of the max_elem
         return std::distance(probabilities.begin(), max_elem);

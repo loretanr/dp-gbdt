@@ -26,8 +26,10 @@ compatible terminals."""
 
 import logging
 import random
+import typing
 import sys
 from typing import List
+import os
 
 DEBUG = logging.DEBUG
 INFO = logging.INFO
@@ -64,7 +66,7 @@ BOLD = '\u001b[1m'  # Bold / bright modifier
 
 # We'll get something like this:
 # [2020-07-09 18:06:05,187] [libcloudforensics] INFO   Disk successfully copied
-LOG_FORMAT = ('[%(asctime)s] [{0:s}{color:s}%(name)s.%(funcName)-20s{1:s}] %(levelname)-8s'
+LOG_FORMAT = ('[%(asctime)s] [{0:s}{color:s}%(name)s.%(funcName)-15s{1:s}] %(levelname)-8s'
               ' %(message)s')
 
 LEVEL_COLOR_MAP = {
@@ -92,6 +94,7 @@ class Formatter(logging.Formatter):
     """
     self.colorize = colorize
     kwargs['fmt'] = LOG_FORMAT.format('', '', color='')
+    kwargs['datefmt'] = '%m-%d %H:%M'
     if self.colorize:
       color = ''
       if random_color:
@@ -148,3 +151,40 @@ def GetLogger(name: str) -> logging.Logger:
     logging.Logger: The logger.
   """
   return logging.getLogger(name)
+
+
+
+# global name and file handle of current verification logfile
+verification_logfile = typing.TextIO()
+verification_logfilename = ""
+
+
+class VerificationLogger:
+  """ Writes the output used for algorithm validation to log files """
+
+  filename = ""
+  logfile = typing.TextIO()
+
+  def __init__(self):
+    # print(os.getcwd() + "/logs/" + logfilename + "_validation_output.log")
+    # global verification_logfile
+    # global verification_logfilename
+    self.filename = verification_logfilename
+    self.logfile = verification_logfile
+  
+  def log(self, msg: str):
+    self.logfile.write(msg + "\n")
+    self.logfile.flush()
+
+def GetVerificationLogger():
+  return VerificationLogger()
+
+def SetupVerificationLogger(name: str):
+  global verification_logfile
+  global verification_logfilename
+  verification_logfile = open(os.getcwd() + "/verification/verification_logs/" + name + ".python.log", "w")
+  verification_logfilename = name
+
+def CloseVerificationLogger():
+  global verification_logfile
+  verification_logfile.close()

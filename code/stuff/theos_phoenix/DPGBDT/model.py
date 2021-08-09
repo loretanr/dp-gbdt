@@ -24,7 +24,9 @@ from DPGBDT import logging
 logging.SetUpLogger(__name__)
 logger = logging.GetLogger(__name__)
 
-RANDOMIZATION = True
+verificationLogger = None
+cv_fold_counter = 0
+VERIFICATION_MODE = False
 
 
 class GradientBoostingEnsemble:
@@ -161,13 +163,6 @@ class GradientBoostingEnsemble:
       # Since we're building 3-node trees it's the same anyways.
       self.use_bfs = False
 
-    if self.verbosity <= -1:
-      logger.setLevel(logging.WARNING)
-    elif self.verbosity == 0:
-      logger.setLevel(logging.INFO)
-    else:
-      logger.setLevel(logging.DEBUG)
-
     # This handles attribute comparison depending on the attribute's nature
     self.feature_to_op = defaultdict(
         lambda: (operator.lt, operator.ge))  # type: Dict[int, Any]
@@ -189,6 +184,18 @@ class GradientBoostingEnsemble:
     Returns:
       GradientBoostingEnsemble: A GradientBoostingEnsemble object.
     """
+
+    # make sure logging is set
+    global cv_fold_counter
+    if self.verbosity <= -1:
+      logger.setLevel(logging.WARNING)
+    elif self.verbosity == 0:
+      logger.setLevel(logging.INFO)
+    else:
+      logger.setLevel(logging.DEBUG)
+    if VERIFICATION_MODE:
+      global verificationLogger
+      verificationLogger = logging.GetVerificationLogger()
 
     # Init gradients
     self.init_.fit(X, y)
@@ -216,6 +223,10 @@ class GradientBoostingEnsemble:
 
     # Train all trees
     for tree_index in range(self.nb_trees):
+
+      if VERIFICATION_MODE:
+        verificationLogger.log("Tree {} CV-Ensemble {}".format(tree_index, cv_fold_counter))
+
       # Compute sensitivity
       delta_g = 3 * np.square(self.l2_threshold)
       delta_v = min(self.l2_threshold / (1 + self.l2_lambda),
@@ -264,8 +275,12 @@ class GradientBoostingEnsemble:
                          'balance_partition=True or change your parameters.')
           continue
 
-        # Select <number_of_rows> rows at random from the ensemble dataset
-        rows = np.random.randint(len(X_ensemble), size=number_of_rows)
+        if(VERIFICATION_MODE):
+          # deterministically select first <number_of_rows> rows
+          rows = np.array([elem for elem in range(number_of_rows)])
+        else:
+          # Select <number_of_rows> rows at random from the ensemble dataset
+          rows = np.random.randint(len(X_ensemble), size=number_of_rows)
 
         # train for each class a separate tree on the same rows.
         # In regression or binary classification, K has been set to one.
@@ -305,7 +320,7 @@ class GradientBoostingEnsemble:
           else:
             selected_rows = rows
           
-          print("GDF rejected ({}/{})".format(gdf_count - len(y_tree),gdf_count))
+          logger.info("GDF rejected ({}/{})".format(gdf_count - len(y_tree),gdf_count))
 
           logger.debug('Tree {0:d} will receive a budget of epsilon={1:f} and '
                        'train on {2:d} instances.'.format(
@@ -387,6 +402,7 @@ class GradientBoostingEnsemble:
       else:
         early_stop_round = self.early_stop
 
+    cv_fold_counter += 1
     return self
 
   def Predict(self, X: np.array) -> np.array:
@@ -471,6 +487,11 @@ class GradientBoostingEnsemble:
     # Here the positive gradient is used though
     gradients = -self.loss_.negative_gradient(y, y_pred, k=k)
     gradients = np.array([math.floor(yi * 1e15) / 1e15 for yi in gradients])
+    # rest is just for verification
+    if VERIFICATION_MODE:
+      gr_sum = np.sum(gradients)
+      gr_sum = 0 if gr_sum < 0 and gr_sum >= float("-1e-10") else gr_sum
+      verificationLogger.log("GRADIENTSUM {:.8f}".format(gr_sum))
     return gradients
 
 
@@ -843,7 +864,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
       self.nodes.append(node)
       return node
 
-    return MakeLeafNode()
+    lleaf = MakeLeafNode()
+    logger.debug('Making leaf node, depth ({0}) samples ({1}) -> leaf (pred={2})'.format(current_depth, len(X), round(lleaf.prediction,2)))
+    return lleaf
 
   def MakeTreeBFS(self,
                   X: np.array,
@@ -1240,10 +1263,14 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
 
   for leaf in leaves:
     noise = 0
-    if (RANDOMIZATION):
+    if (not VERIFICATION_MODE):
       noise = np.random.laplace(0, scale)
     logger.debug('({0:.3f} -> {1:.8f})'.format(np.float(leaf.prediction), np.float(leaf.prediction) + noise))
     leaf.prediction += noise
+  
+  logger.debug("NUMLEAVES {} LEAFSUM {:.8f}".format(len(leaves), np.sum([leaf.prediction for leaf in leaves])))
+  if VERIFICATION_MODE:
+    verificationLogger.log("LEAFVALUESSUM {:.10f}".format(np.sum([leaf.prediction for leaf in leaves])))
 
 
 def ComputePredictions(gradients: np.ndarray,
@@ -1348,7 +1375,7 @@ def ExponentialMechanism(
         else:
           prob['probability'] = 0.
 
-    if (not RANDOMIZATION):
+    if (VERIFICATION_MODE):
       max_prob = max(probabilities, key=lambda x:x['probability'], )
       return max_prob
 

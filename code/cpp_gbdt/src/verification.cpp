@@ -39,23 +39,21 @@ int Verification::main(int argc, char *argv[])
     // datasets.push_back(parser.get_abalone(parameters, 320, true)); // small abalone
 
     ModelParams params = create_default_params();
-    params.privacy_budget = 0;
-    params.leaf_clipping = false;
-    params.gradient_filtering = false;
-    params.use_dp = false;
+    params.privacy_budget = 0.1;
+    params.nb_trees = 5;
     parameters.push_back(params);
-    datasets.push_back(Parser::get_abalone(parameters, 5000, false)); // full abalone
-    // datasets.push_back(parser.get_YearPredictionMSD(parameters, 300, true)); // small yearMSD
-    // datasets.push_back(parser.get_YearPredictionMSD(parameters, 1000, true)); // medium yearMSD
-    // datasets.push_back(parser.get_adult(parameters, 320, true)); // small adult
-    // datasets.push_back(parser.get_adult(parameters, 1000, true)); // medium adult
+    datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
+    parameters.push_back(params);
+    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 150, false)); // small yearMSD
+    parameters.push_back(params);
+    datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
     // --------------------------------------
 
     // use_dp (in combination with VERIFICATION_MODE, which disables dataset shuffling
     // in create_cross_val_inputs and rounding at certain places) turns off randomness completely
     // -> we get completely deterministic runs that are comparable to the python output.
     for(auto &elem : parameters){
-        elem.use_dp = false;
+        elem.use_dp = true;
     }
 
     // do verification on all added datasets

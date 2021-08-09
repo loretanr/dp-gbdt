@@ -85,7 +85,9 @@ void DPEnsemble::train(DataSet *dataset)
             // randomly select this amount of rows
             vector<int> indices(dataset->length);
             std::iota(std::begin(indices), std::end(indices), 0);
-            std::random_shuffle(indices.begin(), indices.end());
+            if (!VERIFICATION_MODE) {
+                std::random_shuffle(indices.begin(), indices.end());
+            }
             indices = std::vector<int>(indices.begin(), indices.begin() + number_of_rows);
             DataSet tree_dataset = dataset->get_subset(indices);
             
@@ -211,5 +213,10 @@ void DPEnsemble::update_gradients(vector<double> &gradients, int tree_index)
         // update gradients
         vector<double> y_pred = predict(dataset->X);
         gradients = (params->task)->compute_gradients(dataset->y, y_pred);
+    }
+    if(VERIFICATION_MODE) {
+        double sum = std::accumulate(gradients.begin(), gradients.end(), 0.0);
+        sum = sum < 0 && sum >= -1e-10 ? 0 : sum;  // avoid "-0.00000.. != 0.00000.."
+        VERIFICATION_LOG("GRADIENTSUM {0:.8f}", sum);
     }
 }
