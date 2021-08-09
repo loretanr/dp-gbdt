@@ -114,7 +114,7 @@ void DPEnsemble::train(DataSet *dataset)
                     tree_index, tree_params.tree_privacy_budget, tree_dataset.length);
 
             // build tree
-            LOG_INFO("Building tree {1}...", tree_index);
+            LOG_INFO("Building dp-tree {1} using {2} samples...", tree_index, tree_dataset.length);
             DPTree tree = DPTree(params, &tree_params, &tree_dataset, tree_index);
             tree.fit();
             trees.push_back(tree);
@@ -128,7 +128,7 @@ void DPEnsemble::train(DataSet *dataset)
                     tree_index, tree_params.tree_privacy_budget, dataset->length);
 
             // build tree
-            LOG_INFO("Building tree {1}...", tree_index);
+            LOG_INFO("Building non-dp-tree {1} using {2} samples...", tree_index, dataset->length);
             DPTree tree = DPTree(params, &tree_params, dataset, tree_index);
             tree.fit();
             trees.push_back(tree);

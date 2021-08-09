@@ -22,6 +22,7 @@ ModelParams create_default_params()
     params.use_dp = true;
     params.max_depth = 6;
     params.gradient_filtering = true;
+    params.balance_partition = true;
     params.leaf_clipping = true;
     params.privacy_budget = 0.1;
     return params;

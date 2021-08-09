@@ -12,7 +12,6 @@ struct ModelParams {
     double privacy_budget = 1.0;
     std::shared_ptr<Task> task;
     int max_depth = 6;
-    int max_leaves;
     int min_samples_split = 2;
     bool balance_partition = true;
     bool gradient_filtering = true;

@@ -36,10 +36,9 @@ int Benchmark::main(int argc, char *argv[])
     // you can either append some ModelParams to parameters here (and pass 
     // "false" to the parsing function), or let the get_xy function
     // do that (it'll create and append some default ones to the vector)
-    Parser parser = Parser();
-    datasets.push_back(parser.get_abalone(parameters, 4177, true)); // full abalone
-    datasets.push_back(parser.get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD
-    datasets.push_back(parser.get_adult(parameters, 4000, true)); // medium adult
+    datasets.push_back(Parser::get_abalone(parameters, 5000, true)); // full abalone
+    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD
+    datasets.push_back(Parser::get_adult(parameters, 4000, true)); // medium adult
     // --------------------------------------
 
     for(size_t i=0; i<datasets.size(); i++) {
@@ -57,8 +56,9 @@ int Benchmark::main(int argc, char *argv[])
         std::vector<std::thread> threads(cv_inputs.size());
         std::vector<DPEnsemble> ensembles;
         for (auto &split : cv_inputs) {
-            // scale the features (y) to [-1,1] if necessary
-            split.train.scale(param, -1, 1);
+            if(param.scale_y){
+                split.train.scale(param, -1, 1);
+            }
             ensembles.push_back(DPEnsemble(&param) );
         }
 
@@ -79,8 +79,9 @@ int Benchmark::main(int argc, char *argv[])
             // predict with the test set
             std::vector<double> y_pred = ensemble->predict(split->test.X);
 
-            // invert the feature scale (if necessary)
-            inverse_scale(param, split->train.scaler, y_pred);
+            if(param.scale_y){
+                inverse_scale(param, split->train.scaler, y_pred);
+            }
 
             // compute score            
             double score = param.task->compute_score(split->test.y, y_pred);

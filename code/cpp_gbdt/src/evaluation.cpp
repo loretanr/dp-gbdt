@@ -24,21 +24,27 @@ typedef std::chrono::steady_clock::time_point Timer;
 int Evaluation::main(int argc, char *argv[])
 {
     // Set up logging for debugging
-    spdlog::set_level(spdlog::level::err);
+    spdlog::set_level(spdlog::level::info);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     std::vector<ModelParams> parameters;
-    Parser parser = Parser();
 
     // --------------------------------------
     // define ModelParams here
-    ModelParams params = create_default_params();
-    parameters.push_back(params);
+    ModelParams current_params;
+    current_params.nb_trees = 50;
+    current_params.gradient_filtering = true;
+    current_params.balance_partition = true;
+    current_params.leaf_clipping = true;
+    current_params.scale_y = false;
+    parameters.push_back(current_params);
     // --------------------------------------
     // select 1 dataset here
-    DataSet dataset = parser.get_YearPredictionMSD(parameters, 10000, false);
+    DataSet dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    // DataSet dataset = Parser::get_YearPredictionMSD(parameters, 10000, false);
     // --------------------------------------
     // select privacy budgets
+    // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
     std::vector<double> budgets = {0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
     // --------------------------------------
 
@@ -69,8 +75,9 @@ int Evaluation::main(int argc, char *argv[])
         std::vector<std::thread> threads(cv_inputs.size());
         std::vector<DPEnsemble> ensembles;
         for (auto &split : cv_inputs) {
-            // scale the features (y) to [-1,1] if necessary
-            split.train.scale(param, -1, 1);
+            if(param.scale_y){
+                split.train.scale(param, -1, 1);
+            }
             ensembles.push_back(DPEnsemble(&param) );
         }
 
@@ -93,8 +100,9 @@ int Evaluation::main(int argc, char *argv[])
             // predict with the test set
             std::vector<double> y_pred = ensemble->predict(split->test.X);
 
-            // invert the feature scale (if necessary)
-            inverse_scale(param, split->train.scaler, y_pred);
+            if(param.scale_y){
+                inverse_scale(param, split->train.scaler, y_pred);
+            }
 
             // compute score            
             double score = param.task->compute_score(split->test.y, y_pred);
