@@ -1,8 +1,0 @@
-dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,model,config,balance_partition
-abalone,1000,0.000000,10,10,6,-1,0.100000,5,2.902085,0.048960,DPGBDT,Vanilla,True
-abalone,1000,0.100000,10,10,6,-1,0.100000,5,3.011913,0.073645,DPGBDT,DFS,True
-abalone,1000,0.100000,10,10,6,-1,0.100000,5,2.872956,0.098514,DPRef,DFS,True
-dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,model,config,balance_partition
-abalone,1000,0.000000,10,10,6,-1,0.100000,5,2.839378,0.056206,DPGBDT,Vanilla,True
-abalone,1000,0.100000,10,10,6,-1,0.100000,5,2.981948,0.114421,DPGBDT,DFS,True
-abalone,1000,0.100000,10,10,6,-1,0.100000,5,2.851066,0.111403,DPRef,DFS,True
