@@ -5,23 +5,10 @@ WIP: repo for sharing and backup
 
 ## Limitations
 as of right now:
-- so far the C++ algorithm seems to _work_ for regression and binary classification.
+- C++ algorithm can do **regression** and **binary classification**.
   - **regression** can be performed on abalone & yearMSD
-    - for yearMSD I have only tested it on small subsets of yearMSD because the dataset is so large
   - **classification** can be performed on the adult dataset
-  - _"work"_ meaning it gives the same results as Theo's python code and that the results are more or less in the range of the DPBoost paper results.
-    - I am unsure why DPBoost seems to perform a little better (accuracy) than our python/cpp code.
-    - Therefore I need to go over the entire algorithm at some point and check all the formulas etc. sigh.
-      - **I'd say it's very likely that the python code has certain things wrong that I took over.**
-  
-- There is a global variable RANDOMIZATION that turns on/off randomization (introduced by e.g. the exponential mechanism and through adding laplacian noise to leaves)
-  - I have **not yet** seriously played around and tested the code **with randomization turned on**, as I'm still developing the algorithm and thus require deterministic runs to compare C++ and python
-
-- C++ code is not optimized at all yet
-  - Have to do some profiling, think about data movement, cacheing, etc.
-  - Not planning to use threading (because it's not useful for my thesis, as it should run in an enclave)
-  - so far it's compilied with -O0
-  - still much faster than the python code (with just -O3 it's gotta be like 20x)
+  - though it should be easy to add new datasets (have a look at _dataset_parser.cpp_)
 
 
 ## Requirements
@@ -36,11 +23,22 @@ and add this to your .bashrc
 ```bash
 export PYTHONPATH=$PYTHONPATH:/path/to/.../code/python_gbdt
 ```
-I don't know how this is usually done, please tell if you do
+
+## CPP-DP-GBDT
+
+Components:
+- **main.cpp**
+If you just want to play around with different parameters, different logging levels etc. you can do this in here. Use `make`, then `./run`.
+- **benchmark.cpp**
+this component is to show how the potential speed of the implementation. It e.g. takes advantage of multithreading. To use it, adjust _benchmark.cpp_ according to your needs, compile the project with `make fast`, then do `./run --bench`.
+- **evaluation.cpp**
+this component allows running the model successively with multiple privacy budgets. It will create a .csv in the results/ directory. In there you can use _plot.py_ to create plots from these files. To compile and run, use `make fast`, then `./run --eval`.
+- **verification.cpp**
+this is just to show that our algorithm results are consistent with the python implementation. (you can run this with _verify.sh_). It works by running both implementations without randomness, and then comparing intermediate values.
 
 
-## Running
-- **Running the verification  script to compare Python and C++**
+### Running
+- **Running the verification script to compare Python and C++**
 ```bash
 cd code/
 ./verify.sh
@@ -51,7 +49,14 @@ cd code/cpp_gbdt/
 make
 ./run
 (./run --verify)
+(./run --eval)
+(./run --bench)
 ```
+
+## Python-DP-GBDT
+
+### Running
+
 - **Running python gbdt**
 ```bash
 cd code/python_gbdt/
