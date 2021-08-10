@@ -11,7 +11,6 @@ from sklearn import metrics, model_selection
 from sklearn.compose import TransformedTargetRegressor
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import cross_val_score
-from sklearn.preprocessing import MinMaxScaler
 
 from data.parser.parser import Parser
 from evaluation import estimator
@@ -28,9 +27,6 @@ MAX_DEPTH = 6
 
 
 if __name__ == '__main__':
-
-    DPGBDT.model.RANDOMIZATION = True
-
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
     SAMPLES = [5000]
@@ -51,12 +47,10 @@ if __name__ == '__main__':
             balance_partition=True, use_bfs=False, use_3_trees=False,
             cat_idx=cat_idx, num_idx=num_idx,
             verbosity=-1)
-        regressor = TransformedTargetRegressor(regressor=m,
-            transformer=MinMaxScaler(feature_range=(-1, 1)))
-        validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
+        validator = model_selection.KFold(n_splits=NB_SPLITS)
         start = time.time()
         scores = cross_val_score(
-            regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # -1 for multithreading
+            m, X, y, cv=validator, scoring=rmse, n_jobs=-1) # -1 for multithreading
         stop = time.time()
         print(str(scores) + "   ({:.1f}s)".format(stop-start))
 
@@ -81,12 +75,10 @@ if __name__ == '__main__':
             balance_partition=True, use_bfs=False, use_3_trees=False,
             cat_idx=cat_idx, num_idx=num_idx,
             verbosity=-1)
-        regressor = TransformedTargetRegressor(regressor=m,
-            transformer=MinMaxScaler(feature_range=(-1, 1)))
-        validator = model_selection.KFold(n_splits=NB_SPLITS, shuffle=False)
+        validator = model_selection.KFold(n_splits=NB_SPLITS)
         start = time.time()
         scores = cross_val_score(
-            regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1) # -1 for multithreading
+            m, X, y, cv=validator, scoring=rmse, n_jobs=-1) # -1 for multithreading
         stop = time.time()
         print(str(scores) + "   ({:.1f}s)".format(stop-start))
 
@@ -111,8 +103,9 @@ if __name__ == '__main__':
             balance_partition=True, use_bfs=False, use_3_trees=False,
             cat_idx=cat_idx, num_idx=num_idx,
             verbosity=-1)
+        validator = model_selection.KFold(n_splits=NB_SPLITS)
         start = time.time()
         scores = cross_val_score(
-            m, X, y, scoring='accuracy', n_jobs=-1) # -1 for multithreading
+            m, X, y, validator=validator, scoring='accuracy', n_jobs=-1) # -1 for multithreading
         stop = time.time()
         print(str(scores) + "   ({:.1f}s)".format(stop-start))        

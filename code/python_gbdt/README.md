@@ -1,4 +1,6 @@
-![pylint](https://gitlab.inf.ethz.ch/kkari/ppml-insurance/-/jobs/artifacts/master/raw/pylint/pylint.svg?job=pylint) ![mypy](https://gitlab.inf.ethz.ch/kkari/ppml-insurance/-/jobs/artifacts/master/raw/mypy/mypy.svg?job=mypy)
+The code in this directory was written by Theo Giovanna (https://github.com/giovannt0/dpgbdt), but I made a bunch of small changes here and there, fixed some bugs etc. I believe the model is now correct. 
+There is a bunch of stuff in _data/_, _baseline/_, _stuff/_ and other places, that I didn't understand/use. But let's keep those in here in case we ever need it.
+
 
 ## Privacy Preserving Machine Learning for Cyber Insurance
 
