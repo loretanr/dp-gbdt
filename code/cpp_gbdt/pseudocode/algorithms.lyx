@@ -119,7 +119,7 @@ algolyx
 \begin_body
 
 \begin_layout Standard
-\begin_inset double algorithm
+\begin_inset Float algorithm
 wide false
 sideways false
 status open
@@ -202,7 +202,7 @@ split = find_best_split(samples)
 \end_layout
 
 \begin_layout Standard
-\begin_inset double algorithm
+\begin_inset Float algorithm
 wide false
 sideways false
 status open
