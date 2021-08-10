@@ -1638,7 +1638,13 @@ for tree in n_trees:
    3) build tree
    5) delete these rows from X_remain</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1628584337.65" unique_id="25">
-		<rich_text>• Google if another compiler is better at not reordering, maybe ask ivan</rich_text>
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1628588694.68" unique_id="25">
+		<rich_text>• Put code into enclave, holy moly.
+
+• Google if another compiler is better at not reordering, maybe ask ivan
+
+• For hardening development I want verification in the enclave for now
+   ◇ However, can't write to a file from within an enclave (ocall)
+   ◇ need to test on a sample enclave</rich_text>
 	</node>
 </cherrytree>
