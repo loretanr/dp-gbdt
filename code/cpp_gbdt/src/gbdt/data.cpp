@@ -39,7 +39,7 @@ DataSet::DataSet(VVD X, std::vector<double> y) : X(X), y(y)
 }
 
 
-// scale y such that they lie in [lower,upper]
+// scale y values to be in [lower,upper]
 void DataSet::scale(ModelParams &params, double lower, double upper)
 {
     // only scale in dp mode
