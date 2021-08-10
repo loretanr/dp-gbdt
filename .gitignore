@@ -20,6 +20,7 @@ code/stuff/github_gbdts/DPBoost/
 **/.vscode/
 **/run
 **/objs/
+*~
 
 # datasets
 **/YearPredictionMSD.txt*
