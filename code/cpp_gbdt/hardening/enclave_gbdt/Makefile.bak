@@ -81,8 +81,8 @@ else
 	Urts_Library_Name := sgx_urts
 endif
 
-App_Cpp_Files := src/*.cpp $(wildcard src/TrustedLibrary/*.cpp)
-App_Include_Paths := -I./include -I$(SGX_SDK)/include
+App_Cpp_Files := App/App.cpp $(wildcard App/TrustedLibrary/*.cpp)
+App_Include_Paths := -IApp -I$(SGX_SDK)/include
 
 App_C_Flags := -fPIC -Wno-attributes $(App_Include_Paths)
 

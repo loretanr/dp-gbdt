@@ -118,6 +118,7 @@ void DPEnsemble::train(DataSet *dataset)
             // build tree
             LOG_INFO("Building dp-tree {1} using {2} samples...", tree_index, tree_dataset.length);
             DPTree tree = DPTree(params, &tree_params, &tree_dataset, tree_index);
+            // DPTree tree = DPTree(params, &tree_params, dataset, tree_index);
             tree.fit();
             trees.push_back(tree);
 

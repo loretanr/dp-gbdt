@@ -24,7 +24,7 @@
 int Benchmark::main(int argc, char *argv[])
 {
     // Set up logging for debugging
-    spdlog::set_level(spdlog::level::err);
+    spdlog::set_level(spdlog::level::info);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     // store datasets and their corresponding parameters here
@@ -36,9 +36,14 @@ int Benchmark::main(int argc, char *argv[])
     // you can either append some ModelParams to parameters here (and pass 
     // "false" to the parsing function), or let the get_xy function
     // do that (it'll create and append some default ones to the vector)
-    datasets.push_back(Parser::get_abalone(parameters, 5000, true)); // full abalone
-    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD
-    datasets.push_back(Parser::get_adult(parameters, 4000, true)); // medium adult
+    ModelParams params;
+    params.use_dp = true;
+    params.privacy_budget = 6;
+    params.nb_trees = 10;
+    parameters.push_back(params);
+    datasets.push_back(Parser::get_abalone(parameters, 5000, false)); // full abalone
+    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD
+    // datasets.push_back(Parser::get_adult(parameters, 4000, true)); // medium adult
     // --------------------------------------
 
     for(size_t i=0; i<datasets.size(); i++) {
