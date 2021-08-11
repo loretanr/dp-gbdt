@@ -20,7 +20,7 @@ DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
 {
     // only output this once, in case we're running with multiple threads
     if (parameters->privacy_budget == 0 or !parameters->use_dp){
-        std::call_once(flag1, [](){std::cout << "!!! DP disabled !!!" << std::endl;});
+        std::call_once(flag1, [](){std::cout << "!!! DP disabled !!! (slower than dp!)" << std::endl;});
         params->use_dp = false;
         params->privacy_budget = 0;
     }
@@ -82,48 +82,67 @@ void DPEnsemble::train(DataSet *dataset)
                 }
             }
 
-            // randomly select this amount of rows
-            vector<int> indices(dataset->length);
-            std::iota(std::begin(indices), std::end(indices), 0);
-            if (!VERIFICATION_MODE) {
-                std::random_shuffle(indices.begin(), indices.end());
-            }
-            indices = std::vector<int>(indices.begin(), indices.begin() + number_of_rows);
-            DataSet tree_dataset = dataset->get_subset(indices);
-            
+            vector<int> tree_indices;
+
             // gradient-based data filtering
             if(params->gradient_filtering && tree_index > 0) {
                 std::vector<int> reject_indices;
-                for (int i=0; i<tree_dataset.length; i++) {
-                    double curr_grad = tree_dataset.gradients[i];
+                std::vector<int> remaining_indices;
+                for (int i=0; i<dataset->length; i++) {
+                    double curr_grad = dataset->gradients[i];
                     if (curr_grad < -params->l2_threshold or curr_grad > params->l2_threshold) {
                         reject_indices.push_back(i);
+                    } else {
+                        remaining_indices.push_back(i);
                     }
                 }
-                // remove these rows
-                LOG_INFO("GDF: rejecting ({1}/{2}) rows", reject_indices.size(), tree_dataset.length);
-                tree_dataset = tree_dataset.remove_rows(reject_indices);
-                std::vector<int> new_indices;
-                for(size_t i=0; i<indices.size(); i++) {
-                    if (std::find(reject_indices.begin(), reject_indices.end(), i) == reject_indices.end()) {
-                        new_indices.push_back(indices[i]);
+                LOG_INFO("GDF: {1} of {2} rows fulfill gradient criterion", remaining_indices.size(), dataset->length);
+
+                if (number_of_rows <= remaining_indices.size()) {
+                    // we have enough samples that were not filtered out
+                    std::random_shuffle(remaining_indices.begin(), remaining_indices.end());
+                    for(int i=0; i<number_of_rows; i++){
+                        tree_indices.push_back(remaining_indices[i]);
+                    }
+                } else {
+                    // we don't have enough -> take all samples that were not filtered out, and fill up with (clipped) filtered ones
+                    for(auto filtered : remaining_indices){
+                        tree_indices.push_back(filtered);
+                    }
+                    // fill up with clipped "rejected" ones
+                    LOG_INFO("GDF: filling up with {1} rows (clipping those gradients)", number_of_rows - tree_indices.size());
+                    std::random_shuffle(reject_indices.begin(), reject_indices.end());
+                    int reject_index = 0;
+                    for(int i=tree_indices.size(); i<number_of_rows; i++){
+                        int curr_index = reject_indices[reject_index++];
+                        dataset->gradients[curr_index] = clamp(dataset->gradients[curr_index], -params->l2_threshold, params->l2_threshold);
+                        tree_indices.push_back(curr_index);
                     }
                 }
-                indices = new_indices;
+            } else {
+                // no GDF, just randomly select <number_of_rows> rows
+                tree_indices = vector<int>(dataset->length);
+                std::iota(std::begin(tree_indices), std::end(tree_indices), 0);
+                if (!VERIFICATION_MODE) {
+                    std::random_shuffle(tree_indices.begin(), tree_indices.end());
+                }
+                tree_indices = std::vector<int>(tree_indices.begin(), tree_indices.begin() + number_of_rows);
             }
 
+            DataSet tree_dataset = dataset->get_subset(tree_indices);
+            
             LOG_DEBUG(YELLOW("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),
                     tree_index, tree_params.tree_privacy_budget, tree_dataset.length);
 
             // build tree
-            LOG_INFO("Building dp-tree {1} using {2} samples...", tree_index, tree_dataset.length);
+            LOG_INFO("Building dp-tree-{1} using {2} samples...", tree_index, tree_dataset.length);
             DPTree tree = DPTree(params, &tree_params, &tree_dataset, tree_index);
             // DPTree tree = DPTree(params, &tree_params, dataset, tree_index);
             tree.fit();
             trees.push_back(tree);
 
             // remove rows
-            *dataset = dataset->remove_rows(indices);
+            *dataset = dataset->remove_rows(tree_indices);
 
         } else {  // build a non-dp tree
             

@@ -24,7 +24,7 @@
 int Benchmark::main(int argc, char *argv[])
 {
     // Set up logging for debugging
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     // store datasets and their corresponding parameters here

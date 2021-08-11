@@ -26,5 +26,5 @@ rebuild:
 fast:
 	make CFLAGS="-c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread"
 
-profile:
-	make CFLAGS="-g -pg -shared-libgcc -D TBB_USE_THREADING_TOOLS -c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread" -j 4
+# profile:
+# 	make CFLAGS="-g -pg -shared-libgcc -D TBB_USE_THREADING_TOOLS -c -Werror -std=c++11 -O3 -ffast-math -march=native -pthread" -j 4
