@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011-2020 Intel Corporation. All rights reserved.
+# Copyright (C) 2011-2021 Intel Corporation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -63,7 +63,7 @@ endif
 ifeq ($(SGX_DEBUG), 1)
         SGX_COMMON_FLAGS += -O0 -g
 else
-        SGX_COMMON_FLAGS += -O2	# TODO
+        SGX_COMMON_FLAGS += -O2
 endif
 
 SGX_COMMON_FLAGS += -Wall -Wextra -Winit-self -Wpointer-arith -Wreturn-type \
@@ -81,8 +81,8 @@ else
 	Urts_Library_Name := sgx_urts
 endif
 
-App_Cpp_Files := src/*.cpp $(wildcard src/TrustedLibrary/*.cpp)
-App_Include_Paths := -I./include -I$(SGX_SDK)/include
+App_Cpp_Files := App/App.cpp $(wildcard App/TrustedLibrary/*.cpp)
+App_Include_Paths := -IApp -I$(SGX_SDK)/include 
 
 App_C_Flags := -fPIC -Wno-attributes $(App_Include_Paths)
 
@@ -126,8 +126,8 @@ else
 endif
 Crypto_Library_Name := sgx_tcrypto
 
-Enclave_Cpp_Files := Enclave/Enclave.cpp $(wildcard Enclave/TrustedLibrary/*.cpp)
-Enclave_Include_Paths := -IEnclave -I$(SGX_SDK)/include -I$(SGX_SDK)/include/libcxx -I$(SGX_SDK)/include/tlibc 
+Enclave_Cpp_Files := Enclave/Enclave.cpp $(wildcard Enclave/TrustedLibrary/*.cpp) $(wildcard Enclave/dp-gbdt/src/*.cpp)
+Enclave_Include_Paths := -IEnclave -I$(SGX_SDK)/include -I$(SGX_SDK)/include/libcxx -I$(SGX_SDK)/include/tlibc -IEnclave/dp-gbdt/include
 
 Enclave_C_Flags := -nostdinc -fvisibility=hidden -fpie -fstack-protector $(Enclave_Include_Paths)
 Enclave_Cpp_Flags := $(Enclave_C_Flags) -nostdinc++

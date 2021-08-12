@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <set>
+#include "utils.h"
 
 // if the target needs to be scaled (into [-1,1]) before training, we store
 // everything in this struct, that is required to invert the scaling after training 

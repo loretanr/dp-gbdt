@@ -1649,18 +1649,84 @@ for tree in n_trees:
    3) build tree
    5) delete these rows from X_remain</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1628611899.49" unique_id="25">
-		<rich_text>• Put code into enclave, holy moly.
-   ◇ do I need edger8r ?
-   ◇ maybe I can create a symbolic link to libspdlog for the moment
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1628759062.78" unique_id="25">
+		<rich_text foreground="#a0a02020f0f0" scale="h2">Data in data out</rich_text>
+		<rich_text>
+</rich_text>
+		<rich_text foreground="#ffffffffffff">◇ For my GBDT it seems like I want to 
+      ▪ pass encrypted dataset into enclave, decrypt it there
+         - </rich_text>
+		<rich_text foreground="#ffffffffffff" link="webs https://github.com/prasadkjose/confidential-ml-sgx">https://github.com/prasadkjose/confidential-ml-sgx</rich_text>
+		<rich_text foreground="#ffffffffffff"> (complique :/)</rich_text>
+		<rich_text foreground="#ffffa5a50000">
+</rich_text>
+		<rich_text>      </rich_text>
+		<rich_text foreground="#ffffa5a50000">▪ people have done it, but too complicated and not my task!</rich_text>
+		<rich_text>
 
+• The youtube guy suggests copying the cpp sample enclave, and apply changes
+   </rich_text>
+		<rich_text foreground="#9090eeee9090">◇ sounds good</rich_text>
+		<rich_text>
+
+• check out how a private machine learning project passes data in and out
+   ◇ I think we only want one ecall @ start and one ocall/seal @ end, right?
+      ▪ we have no system calls and such
+
+</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">Where to put stuff</rich_text>
+		<rich_text>
+• I think I should parse outside and assemble the DataSet inside enclave
+   ◇ </rich_text>
+		<rich_text foreground="#ffffa5a50000">seems like a tedious programming task that I don't have time for</rich_text>
+		<rich_text>
+</rich_text>
+		<rich_text foreground="#9090eeee9090">I'll parse from within the enclave with e/ocalls</rich_text>
+		<rich_text>
+
+</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">EDL</rich_text>
+		<rich_text>
+• do we put ALL our gbdt functions into the trusted in the edl?
+   </rich_text>
+		<rich_text foreground="#9090eeee9090">◇ test it out with small main</rich_text>
+		<rich_text>
+
+
+</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">C++</rich_text>
+		<rich_text>
+• can I use std::bla inside the enclave? I can't go in/out enclave for that
+
+• For hardening development I want verification in the enclave for now
+   ◇ might work, need a wrapper and so on
+      ▪ maybe I can create a symbolic link to libspdlog for the moment
+   </rich_text>
+		<rich_text foreground="#9090eeee9090">◇ actually no, I will be hardening outside the enclave, and can utilitzy my verify.sh</rich_text>
+		<rich_text>
+      ▪ remove logging for “first put stuff into enclave” task
+         - jsut some printf of score should suffice
+
+</rich_text>
+		<rich_text foreground="#a0a02020f0f0" scale="h2">General</rich_text>
+		<rich_text>
+• do I need edger8r
+   ◇ yeah, should use it I think
+      ▪ specify the .edl file
+      ▪ then let edger8tr to its thing I guess
+
+• In the end I would like to seal the result “way to get secrets out of your enclave”
+   ◇ However we can postpone this
 --------------------------------------------------------------------------------------------------
 
 • Google if another compiler is better at not reordering, maybe ask ivan
 
-• For hardening development I want verification in the enclave for now
-   ◇ However, can't write to a file from within an enclave (ocall)
-   ◇ need to test on a sample enclave
+• parallel enclaves for our CV folds, might be interesting?
+   ◇ seems possible. Does it make sense to implement though?
+   ◇ </rich_text>
+		<rich_text link="webs https://stackoverflow.com/questions/56758193/how-can-we-run-two-functions-in-different-enclaves-in-parallel">https://stackoverflow.com/questions/56758193/how-can-we-run-two-functions-in-different-enclaves-in-parallel</rich_text>
+		<rich_text>
+
 
 --------------------------------------------------------------------------------------------------
 Enclave examples:
