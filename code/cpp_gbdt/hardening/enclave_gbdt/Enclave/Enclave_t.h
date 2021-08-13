@@ -15,7 +15,16 @@
 extern "C" {
 #endif
 
+#ifndef _gaggi
+#define _gaggi
+typedef struct gaggi {
+	int bla;
+	int bla2;
+} gaggi;
+#endif
+
 void ecall_start_gbdt(int testnumber);
+void ecall_pass_in_dataset(gaggi dataset);
 void ecall_lambdas_demo(void);
 void ecall_auto_demo(void);
 void ecall_decltype_demo(void);

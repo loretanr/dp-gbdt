@@ -32,7 +32,11 @@
 /* Enclave.edl - Top EDL file. */
 
 enclave {
-    
+
+    // include "../Enclave/dp-gbdt/include/data.h"
+    struct gaggi {
+        int bla; int bla2;
+    };
 
     /* Import ECALL/OCALL from sub-directory EDLs.
      *  [from]: specifies the location of EDL file. 
@@ -50,6 +54,9 @@ enclave {
      */
     untrusted {
         void ocall_print_string([in, string] const char *str);
+
+        // gaggi ocall_get_abalone();
+        // ModelParams ocall_get_parameters();
     };
 
     /* 
@@ -59,6 +66,8 @@ enclave {
      */
     trusted {
         public void ecall_start_gbdt(int testnumber);
+
+        public void ecall_pass_in_dataset(gaggi dataset);
     };
 
 };

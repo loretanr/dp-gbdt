@@ -41,6 +41,8 @@
 #include "App.h"
 #include "Enclave_u.h"
 
+#include "../Enclave/dp-gbdt/include/data.h"
+
 /* Global EID shared by multiple threads */
 sgx_enclave_id_t global_eid = 0;
 
@@ -197,7 +199,15 @@ int SGX_CDECL main(int argc, char *argv[])
  
     
     /* Utilize trusted libraries */ 
-    ecall_libcxx_functions();
+    // ecall_libcxx_functions();
+    std::vector<double> bla1 = {8,9,10};
+    VVD bla2 = {{1,2,3},{4,5,6}};
+    // DataSet dset = DataSet(bla1,bla2);
+
+    printf("wtf");
+
+    gaggi gagi; gagi.bla = 42; gagi.bla2 = 41;
+    ecall_pass_in_dataset(global_eid, gagi);
     ecall_start_gbdt(global_eid, 42);
     
     /* Destroy the enclave */

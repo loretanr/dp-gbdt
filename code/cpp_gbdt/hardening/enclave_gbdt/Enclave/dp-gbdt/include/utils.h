@@ -15,10 +15,10 @@ double log_sum_exp(std::vector<double> arr);
 void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');
 double compute_mean(std::vector<double> &vec);
 double compute_stdev(std::vector<double> &vec, double mean);
-std::string get_time_string();
 
 // sgx methods
 int sgx_random_int();
+
 template <typename T, typename A>
 void sgx_vector_shuffle(std::vector<T,A> &vec)
 {

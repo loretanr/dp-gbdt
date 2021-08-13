@@ -1412,7 +1412,7 @@ expected results (randomness off):
 
 • seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1628587402.88" unique_id="21">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1628843408.1" unique_id="21">
 		<rich_text>Suddenly python problem (after apt update/upgrade I believe).
       </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">File &quot;/home/loretanr/.local/lib/python3.7/site-packages/matplotlib/__init__.py&quot;, line 107, in &lt;module&gt;
@@ -1449,6 +1449,22 @@ stuuuuupid    </rich_text>
 
 </rich_text>
 		<rich_text foreground="#ffff00000000">python's cross val shuffle is not a real shuffle, need to do it ourselves to be sure.</rich_text>
+		<rich_text>
+
+-----------------------------------------------------------------------------------------------------
+</rich_text>
+		<rich_text scale="h3" underline="single">Enclave debugging</rich_text>
+		<rich_text>
+sgx-gdb  behaves stupid, wouldn't start. Uncomment some stuff from launch.json helped.
+then could see such errors in the debug console
+        Warning: /home/loretanr/ma/sgxsdk/lib64/gdb-sgx-plugin: No such file or directory. </rich_text>
+		<rich_text foreground="#cca700">Source directories
+        searched: /home/loretanr/ma/sgxsdk/lib64/gdb-sgx-plugin:$cdir:$cwd </rich_text>
+		<rich_text>
+   • “solved” dirtily by putting a softlink to sgxsdk into ma/
+   • putting the env variables in launch.json dd not help whatsoever. maybe sgx-gdb overwrites some of them or something.
+   • also had to make clean and make again after such (softlink blabla) changes.
+</rich_text>
 	</node>
 	<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="Moritz's blutbad" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1628002202.81" ts_lastsave="1628669829.76" unique_id="27">
 		<rich_text foreground="#ffffa5a50000">Notice, all these plots have scaling turned off, so that's why no-2nd-split impact is compensated

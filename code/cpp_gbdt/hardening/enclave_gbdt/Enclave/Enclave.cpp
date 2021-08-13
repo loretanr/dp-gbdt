@@ -59,10 +59,19 @@ void printf(const char *fmt, ...)
     ocall_print_string(buf);
 }
 
+gaggi global_dataset;
+
+void ecall_pass_in_dataset(gaggi dataset)
+{
+    global_dataset = dataset;
+}
+
+
 /* Where the real deal starts */
 
 void ecall_start_gbdt(int testnumber)
 {
+    printf("I'm alive\n");
     // Define model parameters
     // reason to use a vector is because parser expects it
     std::vector<ModelParams> parameters;
@@ -79,7 +88,7 @@ void ecall_start_gbdt(int testnumber)
     parameters.push_back(current_params);
 
     // Choose your dataset
-    DataSet dataset = Parser::get_abalone(parameters, 5000, false);
+    DataSet dataset; // = Parser::get_abalone(parameters, 5000, false);
 
     printf("%s\n", dataset.name);
 

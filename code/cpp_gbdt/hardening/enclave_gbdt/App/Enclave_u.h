@@ -16,6 +16,14 @@
 extern "C" {
 #endif
 
+#ifndef _gaggi
+#define _gaggi
+typedef struct gaggi {
+	int bla;
+	int bla2;
+} gaggi;
+#endif
+
 #ifndef OCALL_PRINT_STRING_DEFINED__
 #define OCALL_PRINT_STRING_DEFINED__
 void SGX_UBRIDGE(SGX_NOCONVENTION, ocall_print_string, (const char* str));
@@ -42,6 +50,7 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (cons
 #endif
 
 sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid, int testnumber);
+sgx_status_t ecall_pass_in_dataset(sgx_enclave_id_t eid, gaggi dataset);
 sgx_status_t ecall_lambdas_demo(sgx_enclave_id_t eid);
 sgx_status_t ecall_auto_demo(sgx_enclave_id_t eid);
 sgx_status_t ecall_decltype_demo(sgx_enclave_id_t eid);

@@ -64,12 +64,3 @@ double compute_stdev(std::vector<double> &vec, double mean)
     double sq_sum = std::inner_product(vec.begin(), vec.end(), vec.begin(), 0.0);
     return std::sqrt(sq_sum / vec.size() - mean * mean);
 }
-
-std::string get_time_string()
-{
-    time_t t = time(0);
-    struct tm *now = localtime(&t);
-    char buffer [80];
-    strftime(buffer,80,"%m.%d_%H:%M",now);
-    return std::string(buffer);
-}

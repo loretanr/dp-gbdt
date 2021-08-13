@@ -31,6 +31,10 @@ typedef struct ms_ecall_start_gbdt_t {
 	int ms_testnumber;
 } ms_ecall_start_gbdt_t;
 
+typedef struct ms_ecall_pass_in_dataset_t {
+	gaggi ms_dataset;
+} ms_ecall_pass_in_dataset_t;
+
 typedef struct ms_ocall_print_string_t {
 	const char* ms_str;
 } ms_ocall_print_string_t;
@@ -76,6 +80,24 @@ static sgx_status_t SGX_CDECL sgx_ecall_start_gbdt(void* pms)
 
 
 	ecall_start_gbdt(ms->ms_testnumber);
+
+
+	return status;
+}
+
+static sgx_status_t SGX_CDECL sgx_ecall_pass_in_dataset(void* pms)
+{
+	CHECK_REF_POINTER(pms, sizeof(ms_ecall_pass_in_dataset_t));
+	//
+	// fence after pointer checks
+	//
+	sgx_lfence();
+	ms_ecall_pass_in_dataset_t* ms = SGX_CAST(ms_ecall_pass_in_dataset_t*, pms);
+	sgx_status_t status = SGX_SUCCESS;
+
+
+
+	ecall_pass_in_dataset(ms->ms_dataset);
 
 
 	return status;
@@ -291,11 +313,12 @@ static sgx_status_t SGX_CDECL sgx_ecall_condition_variable_load(void* pms)
 
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
-	struct {void* ecall_addr; uint8_t is_priv; uint8_t is_switchless;} ecall_table[27];
+	struct {void* ecall_addr; uint8_t is_priv; uint8_t is_switchless;} ecall_table[28];
 } g_ecall_table = {
-	27,
+	28,
 	{
 		{(void*)(uintptr_t)sgx_ecall_start_gbdt, 0, 0},
+		{(void*)(uintptr_t)sgx_ecall_pass_in_dataset, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_lambdas_demo, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_auto_demo, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_decltype_demo, 0, 0},
@@ -327,16 +350,16 @@ SGX_EXTERNC const struct {
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[6][27];
+	uint8_t entry_table[6][28];
 } g_dyn_entry_table = {
 	6,
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 	}
 };
 
