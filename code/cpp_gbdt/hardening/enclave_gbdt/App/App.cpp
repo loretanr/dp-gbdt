@@ -183,6 +183,12 @@ void ocall_print_string(const char *str)
 }
 
 
+double *parse_abalone()
+{
+    // todo
+}
+
+
 /* Application entry */
 int SGX_CDECL main(int argc, char *argv[])
 {
@@ -206,7 +212,10 @@ int SGX_CDECL main(int argc, char *argv[])
 
     printf("wtf");
 
-    gaggi gagi; gagi.bla = 42; gagi.bla2 = 41;
+    double *matrix = (double *) malloc(3 * 3 * sizeof(double));
+    for(int i=0; i<9; i++){ matrix[i] = 42;}
+
+    gaggi gagi; gagi.matrix = matrix;
     ecall_pass_in_dataset(global_eid, gagi);
     ecall_start_gbdt(global_eid, 42);
     

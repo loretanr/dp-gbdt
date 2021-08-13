@@ -19,8 +19,7 @@ extern "C" {
 #ifndef _gaggi
 #define _gaggi
 typedef struct gaggi {
-	int bla;
-	int bla2;
+	double* matrix;
 } gaggi;
 #endif
 
