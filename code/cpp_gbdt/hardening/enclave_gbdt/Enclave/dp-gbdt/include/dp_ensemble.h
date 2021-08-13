@@ -29,7 +29,6 @@ private:
     double init_score;
 
     // methods
-    void distribute_samples(std::vector<DataSet> *storage_vec, DataSet *train_set);
     void update_gradients(std::vector<double> &gradients, int tree_index);
 };
 

@@ -154,44 +154,6 @@ vector<double>  DPEnsemble::predict(VVD &X)
 }
 
 
-// distribute training samples in train_set amongst trees
-// by splitting into even chunks and storing them to storage_vec
-void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set)
-{
-    if(params->balance_partition) {
-        int num_samples = train_set->length / params->nb_trees;
-        int current_index = 0;
-        int remainder = train_set->length % params->nb_trees;
-        int remainder_index = 0;
-        // same amount for every tree
-        for(int i=0; i < params->nb_trees; i++) {
-
-            VVD x_tree = {};
-            vector<double> y_tree = {};
-
-            // also distribute remainder samples one by one
-            int number_of_samples = num_samples;
-            if(remainder_index < remainder){
-                number_of_samples++;
-                remainder_index++;
-            }
-
-            // get corresponding rows from the dataset
-            for(int j=0; j<number_of_samples; j++){
-                x_tree.push_back((train_set->X)[current_index]);
-                y_tree.push_back((train_set->y)[current_index]);
-                current_index++;
-            }
-            DataSet d = DataSet(x_tree,y_tree);
-            (*storage_vec).push_back(d);
-        }
-    } else {
-        throw runtime_error("non-balanced split, resp. paper formula \
-            partitioning not implemented yet");
-    }
-}
-
-
 void DPEnsemble::update_gradients(vector<double> &gradients, int tree_index)
 {
     if(tree_index == 0) {

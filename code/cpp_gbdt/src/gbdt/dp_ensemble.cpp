@@ -71,6 +71,7 @@ void DPEnsemble::train(DataSet *dataset)
             // determine number of rows
             int number_of_rows = 0;
             if (params->balance_partition) {
+                // num_unused_rows / num_remaining_trees
                 number_of_rows = dataset->length / (params->nb_trees - tree_index);
             } else {
                 // line 8 of Algorithm 2 from the paper
@@ -98,7 +99,7 @@ void DPEnsemble::train(DataSet *dataset)
                 }
                 LOG_INFO("GDF: {1} of {2} rows fulfill gradient criterion", remaining_indices.size(), dataset->length);
 
-                if (number_of_rows <= remaining_indices.size()) {
+                if ((size_t) number_of_rows <= remaining_indices.size()) {
                     // we have enough samples that were not filtered out
                     std::random_shuffle(remaining_indices.begin(), remaining_indices.end());
                     for(int i=0; i<number_of_rows; i++){
@@ -182,44 +183,6 @@ vector<double>  DPEnsemble::predict(VVD &X)
             [learning_rate, innit_score](double &c){return c*learning_rate + innit_score;});
 
     return predictions;
-}
-
-
-// distribute training samples in train_set amongst trees
-// by splitting into even chunks and storing them to storage_vec
-void DPEnsemble::distribute_samples(vector<DataSet> *storage_vec, DataSet *train_set)
-{
-    if(params->balance_partition) {
-        int num_samples = train_set->length / params->nb_trees;
-        int current_index = 0;
-        int remainder = train_set->length % params->nb_trees;
-        int remainder_index = 0;
-        // same amount for every tree
-        for(int i=0; i < params->nb_trees; i++) {
-
-            VVD x_tree = {};
-            vector<double> y_tree = {};
-
-            // also distribute remainder samples one by one
-            int number_of_samples = num_samples;
-            if(remainder_index < remainder){
-                number_of_samples++;
-                remainder_index++;
-            }
-
-            // get corresponding rows from the dataset
-            for(int j=0; j<number_of_samples; j++){
-                x_tree.push_back((train_set->X)[current_index]);
-                y_tree.push_back((train_set->y)[current_index]);
-                current_index++;
-            }
-            DataSet d = DataSet(x_tree,y_tree);
-            (*storage_vec).push_back(d);
-        }
-    } else {
-        throw runtime_error("non-balanced split, resp. paper formula \
-            partitioning not implemented yet");
-    }
 }
 
 
