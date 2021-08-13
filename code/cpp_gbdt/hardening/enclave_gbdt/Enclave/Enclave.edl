@@ -33,9 +33,14 @@
 
 enclave {
 
-    // include "../Enclave/dp-gbdt/include/data.h"
-    struct gaggi {
-        double *matrix;
+    struct sgx_dataset {
+        double *X;
+        double *y;
+    };
+
+    struct sgx_modelparams {
+        bool use_dp;
+        char *task;
     };
 
     /* Import ECALL/OCALL from sub-directory EDLs.
@@ -67,7 +72,7 @@ enclave {
     trusted {
         public void ecall_start_gbdt(int testnumber);
 
-        public void ecall_pass_in_dataset(gaggi dataset);
+        public void ecall_pass_in_dataset(sgx_dataset dataset);
     };
 
 };
