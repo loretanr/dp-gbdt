@@ -39,7 +39,7 @@ enclave {
     };
 
     struct sgx_modelparams {
-        bool use_dp;
+        unsigned use_dp;
         char *task;
     };
 
@@ -64,15 +64,11 @@ enclave {
         // ModelParams ocall_get_parameters();
     };
 
-    /* 
-     * ocall_print_string - invokes OCALL to display string buffer inside the enclave.
-     *  [in]: copy the string buffer to App outside.
-     *  [string]: specifies 'str' is a NULL terminated buffer.
-     */
     trusted {
         public void ecall_start_gbdt(int testnumber);
 
-        public void ecall_pass_in_dataset(sgx_dataset dataset);
+        public void ecall_load_dataset_into_enclave(sgx_dataset dataset);
+        public void ecall_load_modelparams_into_enclave(sgx_modelparams modelparams);
     };
 
 };

@@ -45,6 +45,11 @@
 #include "dp-gbdt/include/dataset_parser.h"
 #include "dp-gbdt/include/data.h"
 
+// global variables 
+DataSet dataset;
+ModelParams modelparams; 
+
+
 /* 
  * printf: 
  *   Invokes OCALL to display the enclave buffer to the terminal.
@@ -59,11 +64,14 @@ void printf(const char *fmt, ...)
     ocall_print_string(buf);
 }
 
-gaggi global_dataset;
 
-void ecall_pass_in_dataset(gaggi dataset)
+void ecall_load_dataset_into_enclave(sgx_dataset dataset)
 {
-    global_dataset = dataset;
+    // dataset = nullptr;
+}
+void ecall_load_modelparams_into_enclave(sgx_modelparams dataset)
+{
+    // modelparams = nullptr;
 }
 
 

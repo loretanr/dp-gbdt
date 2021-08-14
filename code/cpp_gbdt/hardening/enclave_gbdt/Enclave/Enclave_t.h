@@ -15,15 +15,25 @@
 extern "C" {
 #endif
 
-#ifndef _gaggi
-#define _gaggi
-typedef struct gaggi {
-	double* matrix;
-} gaggi;
+#ifndef _sgx_dataset
+#define _sgx_dataset
+typedef struct sgx_dataset {
+	double* X;
+	double* y;
+} sgx_dataset;
+#endif
+
+#ifndef _sgx_modelparams
+#define _sgx_modelparams
+typedef struct sgx_modelparams {
+	unsigned int use_dp;
+	char* task;
+} sgx_modelparams;
 #endif
 
 void ecall_start_gbdt(int testnumber);
-void ecall_pass_in_dataset(gaggi dataset);
+void ecall_load_dataset_into_enclave(sgx_dataset dataset);
+void ecall_load_modelparams_into_enclave(sgx_modelparams modelparams);
 void ecall_lambdas_demo(void);
 void ecall_auto_demo(void);
 void ecall_decltype_demo(void);

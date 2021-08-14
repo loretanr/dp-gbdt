@@ -31,9 +31,13 @@ typedef struct ms_ecall_start_gbdt_t {
 	int ms_testnumber;
 } ms_ecall_start_gbdt_t;
 
-typedef struct ms_ecall_pass_in_dataset_t {
-	gaggi ms_dataset;
-} ms_ecall_pass_in_dataset_t;
+typedef struct ms_ecall_load_dataset_into_enclave_t {
+	sgx_dataset ms_dataset;
+} ms_ecall_load_dataset_into_enclave_t;
+
+typedef struct ms_ecall_load_modelparams_into_enclave_t {
+	sgx_modelparams ms_modelparams;
+} ms_ecall_load_modelparams_into_enclave_t;
 
 typedef struct ms_ocall_print_string_t {
 	const char* ms_str;
@@ -85,19 +89,37 @@ static sgx_status_t SGX_CDECL sgx_ecall_start_gbdt(void* pms)
 	return status;
 }
 
-static sgx_status_t SGX_CDECL sgx_ecall_pass_in_dataset(void* pms)
+static sgx_status_t SGX_CDECL sgx_ecall_load_dataset_into_enclave(void* pms)
 {
-	CHECK_REF_POINTER(pms, sizeof(ms_ecall_pass_in_dataset_t));
+	CHECK_REF_POINTER(pms, sizeof(ms_ecall_load_dataset_into_enclave_t));
 	//
 	// fence after pointer checks
 	//
 	sgx_lfence();
-	ms_ecall_pass_in_dataset_t* ms = SGX_CAST(ms_ecall_pass_in_dataset_t*, pms);
+	ms_ecall_load_dataset_into_enclave_t* ms = SGX_CAST(ms_ecall_load_dataset_into_enclave_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
 
 
 
-	ecall_pass_in_dataset(ms->ms_dataset);
+	ecall_load_dataset_into_enclave(ms->ms_dataset);
+
+
+	return status;
+}
+
+static sgx_status_t SGX_CDECL sgx_ecall_load_modelparams_into_enclave(void* pms)
+{
+	CHECK_REF_POINTER(pms, sizeof(ms_ecall_load_modelparams_into_enclave_t));
+	//
+	// fence after pointer checks
+	//
+	sgx_lfence();
+	ms_ecall_load_modelparams_into_enclave_t* ms = SGX_CAST(ms_ecall_load_modelparams_into_enclave_t*, pms);
+	sgx_status_t status = SGX_SUCCESS;
+
+
+
+	ecall_load_modelparams_into_enclave(ms->ms_modelparams);
 
 
 	return status;
@@ -313,12 +335,13 @@ static sgx_status_t SGX_CDECL sgx_ecall_condition_variable_load(void* pms)
 
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
-	struct {void* ecall_addr; uint8_t is_priv; uint8_t is_switchless;} ecall_table[28];
+	struct {void* ecall_addr; uint8_t is_priv; uint8_t is_switchless;} ecall_table[29];
 } g_ecall_table = {
-	28,
+	29,
 	{
 		{(void*)(uintptr_t)sgx_ecall_start_gbdt, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_pass_in_dataset, 0, 0},
+		{(void*)(uintptr_t)sgx_ecall_load_dataset_into_enclave, 0, 0},
+		{(void*)(uintptr_t)sgx_ecall_load_modelparams_into_enclave, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_lambdas_demo, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_auto_demo, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_decltype_demo, 0, 0},
@@ -350,16 +373,16 @@ SGX_EXTERNC const struct {
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[6][28];
+	uint8_t entry_table[6][29];
 } g_dyn_entry_table = {
 	6,
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
 	}
 };
 

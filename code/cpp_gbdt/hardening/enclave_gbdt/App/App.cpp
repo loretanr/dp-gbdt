@@ -41,8 +41,6 @@
 #include "App.h"
 #include "Enclave_u.h"
 
-#include "../Enclave/dp-gbdt/include/data.h"
-
 /* Global EID shared by multiple threads */
 sgx_enclave_id_t global_eid = 0;
 
@@ -183,9 +181,14 @@ void ocall_print_string(const char *str)
 }
 
 
-double *parse_abalone()
+sgx_dataset parse_abalone()
 {
     // todo
+}
+
+sgx_modelparams create_some_params()
+{
+    // TODO
 }
 
 
@@ -203,20 +206,19 @@ int SGX_CDECL main(int argc, char *argv[])
         return -1; 
     }
  
-    
     /* Utilize trusted libraries */ 
     // ecall_libcxx_functions();
-    std::vector<double> bla1 = {8,9,10};
-    VVD bla2 = {{1,2,3},{4,5,6}};
-    // DataSet dset = DataSet(bla1,bla2);
 
-    printf("wtf");
 
     double *matrix = (double *) malloc(3 * 3 * sizeof(double));
     for(int i=0; i<9; i++){ matrix[i] = 42;}
 
-    gaggi gagi; gagi.matrix = matrix;
-    ecall_pass_in_dataset(global_eid, gagi);
+    sgx_dataset dataset = parse_abalone();
+    sgx_modelparams modelparams = create_some_params();
+
+    ecall_load_dataset_into_enclave(global_eid, dataset);
+    ecall_load_modelparams_into_enclave(global_eid, modelparams);
+    
     ecall_start_gbdt(global_eid, 42);
     
     /* Destroy the enclave */
