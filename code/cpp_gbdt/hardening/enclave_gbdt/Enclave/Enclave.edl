@@ -36,6 +36,7 @@ enclave {
     struct sgx_dataset {
         double *X;
         double *y;
+        // char *name;
     };
 
     struct sgx_modelparams {
@@ -67,8 +68,8 @@ enclave {
     trusted {
         public void ecall_start_gbdt(int testnumber);
 
-        public void ecall_load_dataset_into_enclave(sgx_dataset dataset);
-        public void ecall_load_modelparams_into_enclave(sgx_modelparams modelparams);
+        public void ecall_load_dataset_into_enclave(struct sgx_dataset dataset);
+        public void ecall_load_modelparams_into_enclave(struct sgx_modelparams modelparams);
     };
 
 };

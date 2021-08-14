@@ -58,8 +58,8 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (cons
 #endif
 
 sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid, int testnumber);
-sgx_status_t ecall_load_dataset_into_enclave(sgx_enclave_id_t eid, sgx_dataset dataset);
-sgx_status_t ecall_load_modelparams_into_enclave(sgx_enclave_id_t eid, sgx_modelparams modelparams);
+sgx_status_t ecall_load_dataset_into_enclave(sgx_enclave_id_t eid, struct sgx_dataset dataset);
+sgx_status_t ecall_load_modelparams_into_enclave(sgx_enclave_id_t eid, struct sgx_modelparams modelparams);
 sgx_status_t ecall_lambdas_demo(sgx_enclave_id_t eid);
 sgx_status_t ecall_auto_demo(sgx_enclave_id_t eid);
 sgx_status_t ecall_decltype_demo(sgx_enclave_id_t eid);

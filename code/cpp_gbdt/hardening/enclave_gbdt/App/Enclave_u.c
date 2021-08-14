@@ -6,11 +6,11 @@ typedef struct ms_ecall_start_gbdt_t {
 } ms_ecall_start_gbdt_t;
 
 typedef struct ms_ecall_load_dataset_into_enclave_t {
-	sgx_dataset ms_dataset;
+	struct sgx_dataset ms_dataset;
 } ms_ecall_load_dataset_into_enclave_t;
 
 typedef struct ms_ecall_load_modelparams_into_enclave_t {
-	sgx_modelparams ms_modelparams;
+	struct sgx_modelparams ms_modelparams;
 } ms_ecall_load_modelparams_into_enclave_t;
 
 typedef struct ms_ocall_print_string_t {
@@ -116,7 +116,7 @@ sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid, int testnumber)
 	return status;
 }
 
-sgx_status_t ecall_load_dataset_into_enclave(sgx_enclave_id_t eid, sgx_dataset dataset)
+sgx_status_t ecall_load_dataset_into_enclave(sgx_enclave_id_t eid, struct sgx_dataset dataset)
 {
 	sgx_status_t status;
 	ms_ecall_load_dataset_into_enclave_t ms;
@@ -125,7 +125,7 @@ sgx_status_t ecall_load_dataset_into_enclave(sgx_enclave_id_t eid, sgx_dataset d
 	return status;
 }
 
-sgx_status_t ecall_load_modelparams_into_enclave(sgx_enclave_id_t eid, sgx_modelparams modelparams)
+sgx_status_t ecall_load_modelparams_into_enclave(sgx_enclave_id_t eid, struct sgx_modelparams modelparams)
 {
 	sgx_status_t status;
 	ms_ecall_load_modelparams_into_enclave_t ms;

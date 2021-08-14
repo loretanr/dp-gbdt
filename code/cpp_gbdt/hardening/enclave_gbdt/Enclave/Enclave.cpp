@@ -65,11 +65,11 @@ void printf(const char *fmt, ...)
 }
 
 
-void ecall_load_dataset_into_enclave(sgx_dataset dataset)
+void ecall_load_dataset_into_enclave(sgx_dataset &dataset)
 {
     // dataset = nullptr;
 }
-void ecall_load_modelparams_into_enclave(sgx_modelparams dataset)
+void ecall_load_modelparams_into_enclave(sgx_modelparams &modelparams)
 {
     // modelparams = nullptr;
 }
