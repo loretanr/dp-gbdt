@@ -221,8 +221,8 @@ int SGX_CDECL main(int argc, char *argv[])
 
     // load dataset and model parameters into enclave
     sgx_modelparams modelparams = create_some_modelparams();
-    ecall_load_modelparams_into_enclave(global_eid, &modelparams);
     sgx_dataset dataset = SGX_Parser::get_abalone(modelparams, 300);
+    ecall_load_modelparams_into_enclave(global_eid, &modelparams);
     ecall_load_dataset_into_enclave(global_eid, &dataset);
     
     // start gbdt
