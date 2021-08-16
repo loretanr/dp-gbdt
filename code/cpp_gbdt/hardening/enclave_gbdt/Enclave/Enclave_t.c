@@ -27,10 +27,6 @@
 )
 
 
-typedef struct ms_ecall_start_gbdt_t {
-	int ms_testnumber;
-} ms_ecall_start_gbdt_t;
-
 typedef struct ms_ecall_load_dataset_into_enclave_t {
 	struct sgx_dataset* ms_dset;
 } ms_ecall_load_dataset_into_enclave_t;
@@ -73,19 +69,9 @@ typedef struct ms_sgx_thread_set_multiple_untrusted_events_ocall_t {
 
 static sgx_status_t SGX_CDECL sgx_ecall_start_gbdt(void* pms)
 {
-	CHECK_REF_POINTER(pms, sizeof(ms_ecall_start_gbdt_t));
-	//
-	// fence after pointer checks
-	//
-	sgx_lfence();
-	ms_ecall_start_gbdt_t* ms = SGX_CAST(ms_ecall_start_gbdt_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
-
-
-
-	ecall_start_gbdt(ms->ms_testnumber);
-
-
+	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
+	ecall_start_gbdt();
 	return status;
 }
 

@@ -1,10 +1,6 @@
 #include "Enclave_u.h"
 #include <errno.h>
 
-typedef struct ms_ecall_start_gbdt_t {
-	int ms_testnumber;
-} ms_ecall_start_gbdt_t;
-
 typedef struct ms_ecall_load_dataset_into_enclave_t {
 	struct sgx_dataset* ms_dset;
 } ms_ecall_load_dataset_into_enclave_t;
@@ -107,12 +103,10 @@ static const struct {
 		(void*)Enclave_sgx_thread_set_multiple_untrusted_events_ocall,
 	}
 };
-sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid, int testnumber)
+sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid)
 {
 	sgx_status_t status;
-	ms_ecall_start_gbdt_t ms;
-	ms.ms_testnumber = testnumber;
-	status = sgx_ecall(eid, 0, &ocall_table_Enclave, &ms);
+	status = sgx_ecall(eid, 0, &ocall_table_Enclave, NULL);
 	return status;
 }
 

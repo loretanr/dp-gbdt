@@ -45,7 +45,10 @@
 #include "dp-gbdt/include/dataset_parser.h"
 #include "dp-gbdt/include/data.h"
 
-// global variables 
+
+// global variables, will be populated with
+//  - ecall_load_dataset_into_enclave
+//  - ecall_load_modelparams_into_enclave
 DataSet dataset;
 ModelParams modelparams; 
 
@@ -54,7 +57,7 @@ ModelParams modelparams;
  * printf: 
  *   Invokes OCALL to display the enclave buffer to the terminal.
  */
-void printf(const char *fmt, ...)
+void sgx_printf(const char *fmt, ...)
 {
     char buf[BUFSIZ] = {'\0'};
     va_list ap;
@@ -67,12 +70,12 @@ void printf(const char *fmt, ...)
 
 void ecall_load_dataset_into_enclave(sgx_dataset *dset)
 {
-    // translate the arrays back to convenient vectors
+    // translate the C-arrays back to convenient C++ vectors
     VVD X;
     std::vector<double> y;
-    for(int row=0; row<dset->num_rows; row++){
+    for(size_t row=0; row<dset->num_rows; row++){
         std::vector<double> X_row;
-        for(int col=0; col<dset->num_cols; col++){
+        for(size_t col=0; col<dset->num_cols; col++){
             double value = dset->X[row * dset->num_cols + col];
             X_row.push_back(value);
         }
@@ -82,37 +85,44 @@ void ecall_load_dataset_into_enclave(sgx_dataset *dset)
     // X = {{1,2,3},{4,5,6}};
     // y = {7,8};
     dataset = DataSet(X, y);
+    dataset.name = dset->name;
 }
+
 
 void ecall_load_modelparams_into_enclave(sgx_modelparams *mparams)
 {
-    printf("%i", mparams->num_idx[0]);
+    // create ModelParams from the sgx_modelparams
+    modelparams.nb_trees = mparams->nb_trees;
+    modelparams.privacy_budget = mparams->privacy_budget;
+    modelparams.use_dp = mparams->use_dp == 1;
+    modelparams.gradient_filtering = mparams->gradient_filtering == 1;
+    modelparams.balance_partition = mparams->balance_partition == 1;
+    modelparams.leaf_clipping = mparams->leaf_clipping == 1;
+    modelparams.scale_y = mparams->scale_y == 1;
+    std::vector<int> m_idx;
+    for(int i=0; i<mparams->num_idx_len; i++){
+        m_idx.push_back(mparams->num_idx[i]);
+    }
+    modelparams.num_idx = m_idx;
+    m_idx = {};
+    for(int i=0; i<mparams->cat_idx_len; i++){
+        m_idx.push_back(mparams->cat_idx[i]);
+    }
+    modelparams.cat_idx = m_idx;
+
+    if(std::string(mparams->task).compare(std::string("regression")) == 0){
+        modelparams.task = std::shared_ptr<Regression>(new Regression());
+    } else {
+        modelparams.task = std::shared_ptr<BinaryClassification>(new BinaryClassification());
+    }
 }
 
 
-/* Where the real deal starts */
-
-void ecall_start_gbdt(int testnumber)
+void ecall_start_gbdt()
 {
-    printf("I'm alive\n");
-    // Define model parameters
-    // reason to use a vector is because parser expects it
-    std::vector<ModelParams> parameters;
-    ModelParams current_params = create_default_params();
+    sgx_printf("Hello from the other side\n");
 
-    // change model params here if required:
-    current_params.privacy_budget = 5;
-    current_params.nb_trees = 10;
-    current_params.use_dp = false;
-    current_params.gradient_filtering = true;
-    current_params.balance_partition = true;
-    current_params.leaf_clipping = true;
-    current_params.scale_y = false;
-    parameters.push_back(current_params);
-
-    // Choose your dataset
-
-    ocall_print_string(dataset.name.c_str());
+    sgx_printf("%s_size_%i\n", dataset.name.c_str(), dataset.length);
 
     // create cross validation inputs
     std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
@@ -120,25 +130,25 @@ void ecall_start_gbdt(int testnumber)
     // do cross validation
     std::vector<double> rmses;
     for (auto split : cv_inputs) {
-        ModelParams params = parameters[0];
 
-        if(params.scale_y){
-            split.train.scale(params, -1, 1);
+        if(modelparams.scale_y){
+            split.train.scale(modelparams, -1, 1);
         }
 
-        DPEnsemble ensemble = DPEnsemble(&params);
+        // train ensemble
+        DPEnsemble ensemble = DPEnsemble(&modelparams);
         ensemble.train(&split.train);
         
         // predict with the test set
         std::vector<double> y_pred = ensemble.predict(split.test.X);
 
-        if(params.scale_y) {
-            inverse_scale(params, split.train.scaler, y_pred);
+        if(modelparams.scale_y) {
+            inverse_scale(modelparams, split.train.scaler, y_pred);
         }
 
         // compute score
-        double score = params.task->compute_score(split.test.y, y_pred);
+        double score = modelparams.task->compute_score(split.test.y, y_pred);
 
-        printf("%d ", score);
-    } printf("\n");
+        sgx_printf("%d ", score);
+    } sgx_printf("\n");
 }

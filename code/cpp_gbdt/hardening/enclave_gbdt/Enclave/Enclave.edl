@@ -33,23 +33,7 @@
 
 enclave {
 
-    struct sgx_dataset {
-        double *X;
-        double *y;
-        size_t num_rows;
-        size_t num_cols;
-        char *name;
-    };
-
-    struct sgx_modelparams {
-        unsigned use_dp;
-        char *task;
-        size_t task_len;
-        int *num_idx;
-        size_t num_idx_len;
-        int *cat_idx;
-        size_t cat_idx_len;
-    };
+    include "../App/dp-gbdt/user_types.h"
 
     /* Import ECALL/OCALL from sub-directory EDLs.
      *  [from]: specifies the location of EDL file. 
@@ -70,7 +54,7 @@ enclave {
     };
 
     trusted {
-        public void ecall_start_gbdt(int testnumber);
+        public void ecall_start_gbdt();
 
         public void ecall_load_dataset_into_enclave([in] struct sgx_dataset *dset);
         public void ecall_load_modelparams_into_enclave([in] struct sgx_modelparams *mparams);

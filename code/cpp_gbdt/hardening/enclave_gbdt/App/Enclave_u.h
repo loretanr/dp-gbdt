@@ -7,6 +7,7 @@
 #include <string.h>
 #include "sgx_edger8r.h" /* for sgx_status_t etc. */
 
+#include "../App/dp-gbdt/user_types.h"
 
 #include <stdlib.h> /* for size_t */
 
@@ -14,30 +15,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#ifndef _sgx_dataset
-#define _sgx_dataset
-typedef struct sgx_dataset {
-	double* X;
-	double* y;
-	size_t num_rows;
-	size_t num_cols;
-	char* name;
-} sgx_dataset;
-#endif
-
-#ifndef _sgx_modelparams
-#define _sgx_modelparams
-typedef struct sgx_modelparams {
-	unsigned int use_dp;
-	char* task;
-	size_t task_len;
-	int* num_idx;
-	size_t num_idx_len;
-	int* cat_idx;
-	size_t cat_idx_len;
-} sgx_modelparams;
 #endif
 
 #ifndef OCALL_PRINT_STRING_DEFINED__
@@ -65,7 +42,7 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_setwait_untrusted_events_ocall, (const voi
 int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (const void** waiters, size_t total));
 #endif
 
-sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid, int testnumber);
+sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid);
 sgx_status_t ecall_load_dataset_into_enclave(sgx_enclave_id_t eid, struct sgx_dataset* dset);
 sgx_status_t ecall_load_modelparams_into_enclave(sgx_enclave_id_t eid, struct sgx_modelparams* mparams);
 sgx_status_t ecall_lambdas_demo(sgx_enclave_id_t eid);

@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include "sgx_edger8r.h" /* for sgx_ocall etc. */
 
+#include "../App/dp-gbdt/user_types.h"
 
 #include <stdlib.h> /* for size_t */
 
@@ -15,31 +16,7 @@
 extern "C" {
 #endif
 
-#ifndef _sgx_dataset
-#define _sgx_dataset
-typedef struct sgx_dataset {
-	double* X;
-	double* y;
-	size_t num_rows;
-	size_t num_cols;
-	char* name;
-} sgx_dataset;
-#endif
-
-#ifndef _sgx_modelparams
-#define _sgx_modelparams
-typedef struct sgx_modelparams {
-	unsigned int use_dp;
-	char* task;
-	size_t task_len;
-	int* num_idx;
-	size_t num_idx_len;
-	int* cat_idx;
-	size_t cat_idx_len;
-} sgx_modelparams;
-#endif
-
-void ecall_start_gbdt(int testnumber);
+void ecall_start_gbdt(void);
 void ecall_load_dataset_into_enclave(struct sgx_dataset* dset);
 void ecall_load_modelparams_into_enclave(struct sgx_modelparams* mparams);
 void ecall_lambdas_demo(void);

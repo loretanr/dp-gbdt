@@ -61,9 +61,9 @@ endif
 endif
 
 ifeq ($(SGX_DEBUG), 1)
-        SGX_COMMON_FLAGS += -O0 -g
+        SGX_COMMON_FLAGS += -O0 -g -ggdb
 else
-        SGX_COMMON_FLAGS += -O0 -g
+        SGX_COMMON_FLAGS += -O0 -g -ggdb
 endif
 
 SGX_COMMON_FLAGS += -Wall -Wextra -Winit-self -Wpointer-arith -Wreturn-type \
@@ -81,8 +81,8 @@ else
 	Urts_Library_Name := sgx_urts
 endif
 
-App_Cpp_Files := App/App.cpp $(wildcard App/TrustedLibrary/*.cpp)
-App_Include_Paths := -IApp -I$(SGX_SDK)/include
+App_Cpp_Files := App/App.cpp $(wildcard App/TrustedLibrary/*.cpp) App/dp-gbdt/sgx_dataset_parser.cpp
+App_Include_Paths := -IApp -I$(SGX_SDK)/include -IApp/dp-gbdt/
 
 App_C_Flags := -fPIC -Wno-attributes $(App_Include_Paths)
 

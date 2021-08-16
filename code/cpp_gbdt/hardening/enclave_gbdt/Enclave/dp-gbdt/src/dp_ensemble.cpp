@@ -63,9 +63,9 @@ void DPEnsemble::train(DataSet *dataset)
                 number_of_rows = dataset->length / (params->nb_trees - tree_index);
             } else {
                 // line 8 of Algorithm 2 from the paper
-                number_of_rows = (original_length * params->learning_rate *
+                number_of_rows = (int) ((original_length * params->learning_rate *
                         std::pow(1 - params->learning_rate, tree_index)) / 
-                        (1 - std::pow(1 - params->learning_rate, params->nb_trees));
+                        (1 - std::pow(1 - params->learning_rate, params->nb_trees)));
                 if (number_of_rows == 0) {
                     throw std::runtime_error("Warning: tree is not getting any samples");
                 }
@@ -100,7 +100,7 @@ void DPEnsemble::train(DataSet *dataset)
                     // fill up with clipped "rejected" ones
                     sgx_vector_shuffle(reject_indices);
                     int reject_index = 0;
-                    for(int i=tree_indices.size(); i<number_of_rows; i++){
+                    for(int i = (int) tree_indices.size(); i<number_of_rows; i++){
                         int curr_index = reject_indices[reject_index++];
                         dataset->gradients[curr_index] = clamp(dataset->gradients[curr_index], -params->l2_threshold, params->l2_threshold);
                         tree_indices.push_back(curr_index);
@@ -129,7 +129,7 @@ void DPEnsemble::train(DataSet *dataset)
             tree.fit();
             trees.push_back(tree);
         }
-        printf("Tree %i done. Instances left: %i\n", tree_index, dataset->length);
+        sgx_printf("Tree %i done. Instances left: %i\n", tree_index, dataset->length);
     }
 }
 
