@@ -152,6 +152,6 @@ void ecall_start_gbdt()
         scores.push_back(score);
     }
     for(auto elem : scores){
-        sgx_printf("%d ", elem);
+        sgx_printf("%f ", elem);
     } sgx_printf("\n");
 }

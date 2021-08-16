@@ -192,7 +192,7 @@ sgx_modelparams create_some_modelparams()
     params.gradient_filtering = 1;
     params.balance_partition = 1;
     params.leaf_clipping = 1;
-    params.scale_y = 1;
+    params.scale_y = 0;
     return params;
 }
 

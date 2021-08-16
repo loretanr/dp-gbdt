@@ -74,7 +74,7 @@ void DPEnsemble::train(DataSet *dataset)
             vector<int> tree_indices;
 
             // gradient-based data filtering
-            if(params->gradient_filtering && tree_index > 0) {
+            if(params->gradient_filtering) {
                 std::vector<int> reject_indices;
                 std::vector<int> remaining_indices;
                 for (int i=0; i<dataset->length; i++) {
@@ -85,6 +85,7 @@ void DPEnsemble::train(DataSet *dataset)
                         remaining_indices.push_back(i);
                     }
                 }
+                // sgx_printf("GDF: %i of %i rows fulfill gradient criterion\n", remaining_indices.size(), dataset->length);
 
                 if (number_of_rows <= remaining_indices.size()) {
                     // we have enough samples that were not filtered out
