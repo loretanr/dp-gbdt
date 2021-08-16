@@ -9,11 +9,11 @@ using namespace std;
 
 /** Constructors */
 
-DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index): 
-    params(params),
-    tree_params(tree_params), 
-    dataset(dataset),
-    tree_index(tree_index) {}
+DPTree::DPTree(ModelParams *_params, TreeParams *_tree_params, DataSet *_dataset, size_t _tree_index): 
+    params(_params),
+    tree_params(_tree_params), 
+    dataset(_dataset),
+    tree_index(_tree_index) {}
 
 DPTree::~DPTree() {}
 

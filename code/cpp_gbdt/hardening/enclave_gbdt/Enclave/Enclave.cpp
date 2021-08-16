@@ -128,7 +128,7 @@ void ecall_start_gbdt()
     std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
 
     // do cross validation
-    std::vector<double> rmses;
+    std::vector<double> scores;
     for (auto split : cv_inputs) {
 
         if(modelparams.scale_y){
@@ -149,6 +149,9 @@ void ecall_start_gbdt()
         // compute score
         double score = modelparams.task->compute_score(split.test.y, y_pred);
 
-        sgx_printf("%d ", score);
+        scores.push_back(score);
+    }
+    for(auto elem : scores){
+        sgx_printf("%d ", elem);
     } sgx_printf("\n");
 }

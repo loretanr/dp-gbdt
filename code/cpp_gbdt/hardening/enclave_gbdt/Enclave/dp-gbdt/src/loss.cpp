@@ -23,7 +23,7 @@ double Regression::compute_init_score(std::vector<double> &y)
 {
     // mean
     double sum = std::accumulate(y.begin(), y.end(), 0.0);
-    return sum / y.size();
+    return sum / (double) y.size();
 }
 
 double Regression::compute_score(std::vector<double> &y, std::vector<double> &y_pred)
@@ -33,7 +33,7 @@ double Regression::compute_score(std::vector<double> &y, std::vector<double> &y_
             y_pred.begin(), y_pred.begin(), std::minus<double>());
     std::transform(y_pred.begin(), y_pred.end(),
             y_pred.begin(), [](double &c){return std::pow(c,2);});
-    double average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / y_pred.size();
+    double average = std::accumulate(y_pred.begin(),y_pred.end(), 0.0) / (double) y_pred.size();
     double rmse = std::sqrt(average);
     return rmse;
 }
@@ -70,7 +70,7 @@ double BinaryClassification::compute_init_score(std::vector<double> &y)
     // just need the smaller value   ????? TODO why
     std::set<double, std::greater<double>> occs;
     for(auto &elem : occurrences){
-        occs.insert( (double) elem.second / y.size());
+        occs.insert( (double) elem.second / (double) y.size());
     }
     double smaller_value = *occs.rbegin();
     // "log(x / (1-x)) is the inverse of the sigmoid (expit) function"
@@ -92,6 +92,6 @@ double BinaryClassification::compute_score(std::vector<double> &y, std::vector<d
     for(size_t i=0; i<y.size();i++) {
         correct_preds[i] = (y[i] == y_pred[i]);
     }
-    double true_preds = std::count(correct_preds.begin(), correct_preds.end(), true);
-    return true_preds / y.size();
+    double true_preds = (double) std::count(correct_preds.begin(), correct_preds.end(), true);
+    return true_preds / (double) y.size();
 }

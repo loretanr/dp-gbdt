@@ -47,7 +47,7 @@ struct DataSet {
 struct TrainTestSplit {
     DataSet train;
     DataSet test;
-    TrainTestSplit(DataSet train, DataSet test) : train(train), test(test) {};
+    TrainTestSplit(DataSet _train, DataSet _test) : train(_train), test(_test) {};
 };
 
 
