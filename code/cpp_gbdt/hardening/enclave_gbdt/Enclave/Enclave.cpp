@@ -65,13 +65,28 @@ void printf(const char *fmt, ...)
 }
 
 
-void ecall_load_dataset_into_enclave(sgx_dataset &dataset)
+void ecall_load_dataset_into_enclave(sgx_dataset *dset)
 {
-    // dataset = nullptr;
+    // translate the arrays back to convenient vectors
+    VVD X;
+    std::vector<double> y;
+    for(int row=0; row<dset->num_rows; row++){
+        std::vector<double> X_row;
+        for(int col=0; col<dset->num_cols; col++){
+            double value = dset->X[row * dset->num_cols + col];
+            X_row.push_back(value);
+        }
+        X.push_back(X_row);
+        y.push_back(dset->y[row]);
+    }
+    // X = {{1,2,3},{4,5,6}};
+    // y = {7,8};
+    dataset = DataSet(X, y);
 }
-void ecall_load_modelparams_into_enclave(sgx_modelparams &modelparams)
+
+void ecall_load_modelparams_into_enclave(sgx_modelparams *mparams)
 {
-    // modelparams = nullptr;
+    printf("%i", mparams->num_idx[0]);
 }
 
 
@@ -96,9 +111,8 @@ void ecall_start_gbdt(int testnumber)
     parameters.push_back(current_params);
 
     // Choose your dataset
-    DataSet dataset; // = Parser::get_abalone(parameters, 5000, false);
 
-    printf("%s\n", dataset.name);
+    ocall_print_string(dataset.name.c_str());
 
     // create cross validation inputs
     std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);

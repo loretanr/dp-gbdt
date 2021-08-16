@@ -11,8 +11,8 @@
 
 int sgx_random_int()
 {
-    uint32_t rval; 
-    sgx_read_rand((unsigned char *) &rval, 4);
+    uint16_t rval; 
+    sgx_read_rand((unsigned char *) &rval, sizeof(uint16_t));
     return (int) rval;
 }
 

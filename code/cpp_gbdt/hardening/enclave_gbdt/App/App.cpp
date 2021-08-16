@@ -187,6 +187,7 @@ void ocall_print_string(const char *str)
 #include <numeric>
 #include <sstream>
 #include <fstream>
+#include <cstring>
 #include <string>
 #include <algorithm>
 #include <vector>
@@ -226,25 +227,43 @@ sgx_dataset parse_file(const char *dataset_file, const char *dataset_name, int n
     std::string line;
     num_samples = std::min(num_samples, num_rows);
 
-    modelparams.num_idx = num_idx;
-    modelparams.cat_idx = cat_idx;
-    modelparams.task = task;
+    int fill_index = 0;
+    int *num_idx_arr = (int *) malloc(num_idx.size() * sizeof(int));
+    for(auto elem : num_idx){
+        num_idx_arr[fill_index++] = elem;
+    }
+    int *cat_idx_arr = (int *) malloc(cat_idx.size() * sizeof(int));
+    fill_index = 0;
+    for(auto elem : cat_idx){
+        cat_idx_arr[fill_index++] = elem;
+    }
+    char *task_arr = (char *) malloc(std::strlen(task) * sizeof(char));
+    for(int i=0; i<strlen(task); i++){
+        task_arr[i] = task[i];
+    }
 
-    int num_cols = num_idx.size() + cat_idx.size() - drop_idx.size();
-    double *X = (double *) malloc(num_cols * num_samples * sizeof(double));
+    modelparams.num_idx = num_idx_arr;
+    modelparams.num_idx_len = num_idx.size();
+    modelparams.cat_idx = cat_idx_arr;
+    modelparams.cat_idx_len = cat_idx.size();
+    modelparams.task = task_arr;
+    modelparams.task_len = std::strlen(task);
+
+    int num_used_cols = (int) (num_idx.size() + cat_idx.size() - drop_idx.size());
+    double *X = (double *) malloc(num_used_cols * num_samples * sizeof(double));
     double *y = (double *) malloc(num_samples * sizeof(double));
 
     // parse dataset, label-encode categorical features
     int current_index = 0;
-    std::vector<std::map<std::string,float>> mappings(num_cols + 1); // last (additional) one is for y
+    std::vector<std::map<std::string,double>> mappings(num_used_cols + 1); // last (additional) one is for y
 
     while (std::getline(infile, line,'\n') && current_index < num_samples) {
         std::stringstream ss(line);
         std::vector<std::string> strings = split_string(line, ',');
-        // double *X_row = (double *) malloc(num_cols * sizeof(double));
 
         // go through each column
-        for(size_t i=0; i<strings.size(); i++){
+        int current_used_col = 0;
+        for(int i=0; i<strings.size(); i++){
 
             // is it a drop column?
             if (std::find(drop_idx.begin(), drop_idx.end(), i) != drop_idx.end()) {
@@ -252,52 +271,53 @@ sgx_dataset parse_file(const char *dataset_file, const char *dataset_name, int n
             }
 
             // y
-            if(std::find(target_idx.begin(), target_idx.end(), i) != target_idx.end()){
-                if (dynamic_cast<Regression*>(task.get())) {
+            if(i == target_idx){
+                if (std::string(task).compare(std::string("regression")) == 0) {
                     // regression -> y is numerical
                     y[current_index] = stof(strings[i]);
                 } else {
                     try { // categorical
-                        float dummy_value = mappings.back().at(strings[i]);
+                        double dummy_value = mappings.back().at(strings[i]);
                         y[current_index] = dummy_value;
                     } catch (const std::out_of_range& oor) {
                         // new label encountered, create mapping
                         mappings.back().insert({strings[i], mappings.back().size()});
-                        float dummy_value = mappings.back().at(strings[i]);
+                        double dummy_value = mappings.back().at(strings[i]);
                         y[current_index] = dummy_value;
                     }
                 }
                 continue;
             }
 
-            int current_col = 0;
+            
             // X
             if (std::find(num_idx.begin(), num_idx.end(), i) != num_idx.end()) {
                 // numerical feature
-                X[current_index * num_cols + current_col++] = std::stof(strings[i]);
-                // X_row.push_back(stof(strings[i]));
+                X[current_index * num_used_cols + current_used_col++] = std::stof(strings[i]);
             } else {
                 // categorical feature, do label-encoding
                 try {
-                    float dummy_value = mappings[i].at(strings[i]);
-                    // X_row.push_back(dummy_value);
-                    X[current_index * num_cols + current_col++] = dummy_value;
+                    double dummy_value = mappings[i].at(strings[i]);
+                    X[current_index * num_used_cols + current_used_col] = dummy_value;
                 } catch (const std::out_of_range& oor) {
                     // new label encountered, create mapping
                     mappings[i].insert({strings[i], mappings[i].size()});
-                    float dummy_value = mappings[i].at(strings[i]);
-                    // X_row.push_back(dummy_value);
-                    X[current_index * num_cols + current_col++] = dummy_value;
+                    double dummy_value = mappings[i].at(strings[i]);
+                    X[current_index * num_used_cols + current_used_col] = dummy_value;
                 }
+                current_used_col++;
             }
         }
-        // X.push_back(X_row);
         current_index++;
     }
     sgx_dataset dataset;
     dataset.X = X;
     dataset.y = y;
-    // dataset.name = dataset_name + "_size_" + itoa(num_samples);
+    dataset.num_rows = num_samples;
+    dataset.num_cols = num_used_cols;
+    dataset.name = new char[strlen(dataset_name)];
+    strcpy(dataset.name, dataset_name);
+    //  = (char *) (std::string(dataset_name) + std::string("_size_")); // + std::string(itoa(num_samples));// + (char *) itoa(num_samples);
     return dataset;
 }
 
@@ -318,51 +338,15 @@ sgx_dataset get_abalone(sgx_modelparams &parameters, size_t num_samples)
         cat_idx, target_idx, drop_idx, parameters);
 }
 
-
-// DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, 
-//         size_t num_samples, bool use_default_params)
-// {
-//     std::string file = "datasets/real/YearPredictionMSD.txt";
-//     std::string name = "yearMSD";
-//     int num_rows = 515345;
-//     int num_cols = 91;
-//     std::shared_ptr<Regression> task(new Regression());
-//     std::vector<int> num_idx(90);
-//     std::iota(std::begin(num_idx)++, std::end(num_idx), 1); // num_idx = {1,...,90}
-//     std::vector<int> cat_idx = {};
-//     std::vector<int> target_idx = {0};
-//     std::vector<int> drop_idx = {};
-
-//     return parse_file(file, name, num_rows, num_cols, num_samples, task, num_idx,
-//         cat_idx, target_idx, drop_idx, parameters, use_default_params);
-// }
-
-
-// DataSet Parser::get_adult(std::vector<ModelParams> &parameters,
-//         size_t num_samples, bool use_default_params)
-// {
-//     std::string file = "datasets/real/adult.data";
-//     std::string name = "adult";
-//     int num_rows = 48842;
-//     int num_cols = 90;
-//     std::shared_ptr<BinaryClassification> task(new BinaryClassification());
-//     std::vector<int> num_idx = {0,2,4,10,11,12};
-//     std::vector<int> cat_idx = {1,3,5,6,7,8,9,13};
-//     std::vector<int> target_idx = {14};
-//     std::vector<int> drop_idx = {};
-
-//     return parse_file(file, name, num_rows, num_cols, num_samples, task, num_idx,
-//         cat_idx, target_idx, drop_idx, parameters, use_default_params);
-// }
-
-
 /* ================================================ */
 
 
 
 sgx_modelparams create_some_params()
 {
-    // TODO
+    sgx_modelparams params;
+    params.use_dp = 1;
+    return params;
 }
 
 
@@ -386,10 +370,10 @@ int SGX_CDECL main(int argc, char *argv[])
     // for(int i=0; i<9; i++){ matrix[i] = 42;}
 
     sgx_modelparams modelparams = create_some_params();
-    sgx_dataset dataset = get_abalone(modelparams, 5000);
+    sgx_dataset dataset = get_abalone(modelparams, 300);
 
-    ecall_load_dataset_into_enclave(global_eid, dataset);
-    ecall_load_modelparams_into_enclave(global_eid, modelparams);
+    ecall_load_dataset_into_enclave(global_eid, &dataset);
+    ecall_load_modelparams_into_enclave(global_eid, &modelparams);
     
     ecall_start_gbdt(global_eid, 42);
     

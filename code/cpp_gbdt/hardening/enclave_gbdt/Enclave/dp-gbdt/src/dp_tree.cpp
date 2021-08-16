@@ -117,7 +117,7 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
     }
     // compute prediction
     leaf->prediction = (-1 * std::accumulate(gradients.begin(), gradients.end(), 0.0)
-                            / (gradients.size() + params->l2_lambda));
+                            / ((double) gradients.size() + params->l2_lambda));
     leaves.push_back(leaf);
     return(leaf);
 }
@@ -188,7 +188,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
             }
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
             candidate.lhs_size = lhs_size;
-            candidate.rhs_size = gradients_live.size() - lhs_size;
+            candidate.rhs_size = (int) gradients_live.size() - lhs_size;
             probabilities.push_back(candidate);
         }
     }
@@ -229,8 +229,8 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
     vector<int> lhs;
     samples_left_right_partition(lhs, samples, feature_index, feature_value, categorical);
 
-    int _lhs_size = std::count(lhs.begin(), lhs.end(), 1);
-    int _rhs_size = std::count(lhs.begin(), lhs.end(), 0);
+    int _lhs_size = (int) std::count(lhs.begin(), lhs.end(), 1);
+    int _rhs_size = (int) std::count(lhs.begin(), lhs.end(), 0);
 
     lhs_size = _lhs_size;
 
@@ -260,12 +260,12 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples,
     // if the feature is categorical
     if(categorical) {
         for (auto sample : samples[feature_index]) {
-            size_t value = sample == feature_value;
+            int value = sample == feature_value;
             lhs.push_back(value);
         }
     } else { // feature is numerical
         for (auto sample : samples[feature_index]) {
-            size_t value = sample < feature_value;
+            int value = sample < feature_value;
             lhs.push_back(value);
         }
     }
@@ -279,7 +279,7 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples,
 int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 {
     // if no split has a positive gain, return. Node will become a leaf
-    int count = std::count_if(probs.begin(), probs.end(),
+    int count = (int) std::count_if(probs.begin(), probs.end(),
         [](SplitCandidate c){ return c.gain > 0; });
     if (count == 0) {
         return -1;
@@ -303,7 +303,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
     if (!params->use_dp) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         // return index of the max_elem
-        return std::distance(probabilities.begin(), max_elem);
+        return (int) std::distance(probabilities.begin(), max_elem);
     }
 
     // create a cumulative distribution function from the probabilities.
@@ -314,7 +314,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
     for (int tries=0; tries<10; tries++) {
-        for (size_t index=0; index<partials.size(); index++) {
+        for (int index=0; index < (int) partials.size(); index++) {
             if (partials[index] >= rand01) {
                 return index;
             }

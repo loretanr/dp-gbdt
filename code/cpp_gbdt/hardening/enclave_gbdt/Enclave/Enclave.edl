@@ -36,12 +36,19 @@ enclave {
     struct sgx_dataset {
         double *X;
         double *y;
-        // char *name;
+        size_t num_rows;
+        size_t num_cols;
+        char *name;
     };
 
     struct sgx_modelparams {
         unsigned use_dp;
         char *task;
+        size_t task_len;
+        int *num_idx;
+        size_t num_idx_len;
+        int *cat_idx;
+        size_t cat_idx_len;
     };
 
     /* Import ECALL/OCALL from sub-directory EDLs.
@@ -60,16 +67,13 @@ enclave {
      */
     untrusted {
         void ocall_print_string([in, string] const char *str);
-
-        // gaggi ocall_get_abalone();
-        // ModelParams ocall_get_parameters();
     };
 
     trusted {
         public void ecall_start_gbdt(int testnumber);
 
-        public void ecall_load_dataset_into_enclave(struct sgx_dataset dataset);
-        public void ecall_load_modelparams_into_enclave(struct sgx_modelparams modelparams);
+        public void ecall_load_dataset_into_enclave([in] struct sgx_dataset *dset);
+        public void ecall_load_modelparams_into_enclave([in] struct sgx_modelparams *mparams);
     };
 
 };
