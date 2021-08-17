@@ -113,16 +113,16 @@ TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio, boo
 // "reverse engineered" the python sklearn.model_selection.cross_val_score
 // Returns a std::vector of the train-test-splits. Will by default shuffle 
 // the dataset rows, unless we're in verification mode.
-std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds)
+std::vector<TrainTestSplit *> create_cross_validation_inputs(DataSet *dataset, int folds)
 {
     bool shuffle = true;
     if(shuffle) {
-        dataset.shuffle_dataset();
+        dataset->shuffle_dataset();
     }
 
-    int fold_size = dataset.length / folds;
+    int fold_size = dataset->length / folds;
     std::vector<int> fold_sizes(folds, fold_size);
-    int remainder = dataset.length % folds;
+    int remainder = dataset->length % folds;
     int index = 0;
     while (remainder != 0) {
         fold_sizes[index++]++;
@@ -134,11 +134,11 @@ std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int
     indices.push_front(0); 
     indices.pop_back();
 
-    std::vector<TrainTestSplit> splits;
+    std::vector<TrainTestSplit *> splits;
 
     for(int i=0; i<folds; i++) {
-        VVD X_copy = dataset.X;
-        std::vector<double> y_copy = dataset.y;
+        VVD X_copy = dataset->X;
+        std::vector<double> y_copy = dataset->y;
 
         VVD::iterator x_iterator = X_copy.begin() + indices[i];
         std::vector<double>::iterator y_iterator = y_copy.begin() + indices[i];
@@ -155,7 +155,7 @@ std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int
         DataSet train(x_train,y_train);
         DataSet test(x_test, y_test);
 
-        splits.push_back(TrainTestSplit(train,test));
+        splits.push_back(new TrainTestSplit(train,test));
     }
     return splits;
 }

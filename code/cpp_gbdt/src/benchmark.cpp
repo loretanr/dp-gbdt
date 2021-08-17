@@ -61,7 +61,7 @@ int Benchmark::main(int argc, char *argv[])
         // prepare the ressources for each thread
         std::vector<std::thread> threads(cv_inputs.size());
         std::vector<DPEnsemble> ensembles;
-        for (auto &split : cv_inputs) {
+        for (auto split : cv_inputs) {
             if(param.scale_y){
                 split->train.scale(param, -1, 1);
             }
@@ -92,6 +92,7 @@ int Benchmark::main(int argc, char *argv[])
             // compute score            
             double score = param.task->compute_score(split->test.y, y_pred);
             std::cout << std::setprecision(9) << score << " " << std::flush;
+            delete split;
         } 
 
         // print elapsed time (for 5 fold cv)

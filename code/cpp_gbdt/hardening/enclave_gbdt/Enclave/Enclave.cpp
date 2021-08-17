@@ -48,7 +48,7 @@
 // global variables, the following methods store to them:
 //  - ecall_load_dataset_into_enclave
 //  - ecall_load_modelparams_into_enclave
-DataSet dataset;
+DataSet *dataset;
 ModelParams modelparams; 
 
 
@@ -83,8 +83,8 @@ void ecall_load_dataset_into_enclave(sgx_dataset *dset)
         X.push_back(X_row);
         y.push_back(dset->y[row]);
     }
-    dataset = DataSet(X, y);
-    dataset.name = dset->name;
+    dataset = new DataSet(X, y);
+    dataset->name = dset->name;
 }
 
 
@@ -124,10 +124,11 @@ void ecall_start_gbdt()
 {
     sgx_printf("Hello from the other side\n");
 
-    sgx_printf("%s_size_%i\n", dataset.name.c_str(), dataset.length);
+    sgx_printf("%s_size_%i\n", dataset->name.c_str(), dataset->length);
 
     // create cross validation inputs
-    std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
+    std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
+    delete dataset;
 
     // do cross validation
     std::vector<double> scores;
