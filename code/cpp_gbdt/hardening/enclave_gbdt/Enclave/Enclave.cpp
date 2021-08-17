@@ -135,25 +135,26 @@ void ecall_start_gbdt()
     for (auto split : cv_inputs) {
 
         if(modelparams.scale_y){
-            split.train.scale(modelparams, -1, 1);
+            split->train.scale(modelparams, -1, 1);
         }
 
         // train ensemble
         DPEnsemble ensemble = DPEnsemble(&modelparams);
-        ensemble.train(&split.train);
+        ensemble.train(&split->train);
         
         // predict with the test set
-        std::vector<double> y_pred = ensemble.predict(split.test.X);
+        std::vector<double> y_pred = ensemble.predict(split->test.X);
 
         if(modelparams.scale_y) {
-            inverse_scale(modelparams, split.train.scaler, y_pred);
+            inverse_scale(modelparams, split->train.scaler, y_pred);
         }
 
         // compute score
-        double score = modelparams.task->compute_score(split.test.y, y_pred);
+        double score = modelparams.task->compute_score(split->test.y, y_pred);
 
         scores.push_back(score);
         sgx_printf("%f\n", score);
+        delete split;
     }
     for(auto elem : scores){
         sgx_printf("%f ", elem);

@@ -214,7 +214,7 @@ int SGX_CDECL main(int argc, char *argv[])
  
     // load dataset and model parameters into enclave
     sgx_modelparams modelparams = create_some_modelparams();
-    sgx_dataset dataset = SGX_Parser::get_abalone(modelparams, 3500);
+    sgx_dataset dataset = SGX_Parser::get_abalone(modelparams, 5000);
     ecall_load_modelparams_into_enclave(global_eid, &modelparams);
     free(modelparams.num_idx);
     free(modelparams.cat_idx);
