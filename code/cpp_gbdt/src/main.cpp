@@ -56,7 +56,7 @@ int main(int argc, char** argv)
     // change model params here if required:
     current_params.privacy_budget = 10;
     current_params.nb_trees = 5;
-    current_params.use_dp = false;
+    current_params.use_dp = true;
     current_params.gradient_filtering = true;
     current_params.balance_partition = true;
     current_params.leaf_clipping = true;
@@ -64,12 +64,13 @@ int main(int argc, char** argv)
     parameters.push_back(current_params);
 
     // Choose your dataset
-    DataSet dataset = Parser::get_abalone(parameters, 1000, false);
+    DataSet *dataset = Parser::get_abalone(parameters, 5000, false);
 
-    std::cout << dataset.name << std::endl;
+    std::cout << dataset->name << std::endl;
 
     // create cross validation inputs
-    std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
+    std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
+    delete dataset;
 
     // do cross validation
     std::vector<double> rmses;
@@ -77,22 +78,23 @@ int main(int argc, char** argv)
         ModelParams params = parameters[0];
 
         if(params.scale_y){
-            split.train.scale(params, -1, 1);
+            split->train.scale(params, -1, 1);
         }
 
         DPEnsemble ensemble = DPEnsemble(&params);
-        ensemble.train(&split.train);
+        ensemble.train(&split->train);
         
         // predict with the test set
-        std::vector<double> y_pred = ensemble.predict(split.test.X);
+        std::vector<double> y_pred = ensemble.predict(split->test.X);
 
         if(params.scale_y) {
-            inverse_scale(params, split.train.scaler, y_pred);
+            inverse_scale(params, split->train.scaler, y_pred);
         }
 
         // compute score
-        double score = params.task->compute_score(split.test.y, y_pred);
+        double score = params.task->compute_score(split->test.y, y_pred);
 
         std::cout << score << " " << std::flush;
+        delete split;
     } std::cout << std::endl;
 }

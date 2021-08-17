@@ -28,7 +28,7 @@ int Benchmark::main(int argc, char *argv[])
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     // store datasets and their corresponding parameters here
-    std::vector<DataSet> datasets;
+    std::vector<DataSet *> datasets;
     std::vector<ModelParams> parameters;
 
     // --------------------------------------
@@ -47,14 +47,15 @@ int Benchmark::main(int argc, char *argv[])
     // --------------------------------------
 
     for(size_t i=0; i<datasets.size(); i++) {
-        DataSet &dataset = datasets[i];
+        DataSet *dataset = datasets[i];
         ModelParams &param = parameters[i];
-        std::cout << dataset.name << std::endl;
+        std::cout << dataset->name << std::endl;
 
         /* threaded cross validation */
 
         // split the data for each fold
-        std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
+        std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
+        delete dataset;
         std::chrono::steady_clock::time_point time_begin = std::chrono::steady_clock::now();
         
         // prepare the ressources for each thread
@@ -62,14 +63,14 @@ int Benchmark::main(int argc, char *argv[])
         std::vector<DPEnsemble> ensembles;
         for (auto &split : cv_inputs) {
             if(param.scale_y){
-                split.train.scale(param, -1, 1);
+                split->train.scale(param, -1, 1);
             }
             ensembles.push_back(DPEnsemble(&param) );
         }
 
         // threads start training on ther respective folds
         for(size_t thread_id=0; thread_id<threads.size(); thread_id++){
-            threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id], &(cv_inputs[thread_id].train));
+            threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id], &(cv_inputs[thread_id]->train));
         }
         for (auto &thread : threads) {
             thread.join(); // join once done
@@ -79,7 +80,7 @@ int Benchmark::main(int argc, char *argv[])
 
         for (size_t ensemble_id = 0; ensemble_id < ensembles.size(); ensemble_id++) {
             DPEnsemble *ensemble = &ensembles[ensemble_id];
-            TrainTestSplit *split = &cv_inputs[ensemble_id];
+            TrainTestSplit *split = cv_inputs[ensemble_id];
             
             // predict with the test set
             std::vector<double> y_pred = ensemble->predict(split->test.X);

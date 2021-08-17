@@ -19,7 +19,7 @@
 */
 
 
-DataSet Parser::get_abalone(std::vector<ModelParams> &parameters,
+DataSet *Parser::get_abalone(std::vector<ModelParams> &parameters,
         size_t num_samples, bool use_default_params)
 {
     std::string file = "datasets/real/abalone.data";
@@ -37,7 +37,7 @@ DataSet Parser::get_abalone(std::vector<ModelParams> &parameters,
 }
 
 
-DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, 
+DataSet *Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, 
         size_t num_samples, bool use_default_params)
 {
     std::string file = "datasets/real/YearPredictionMSD.txt";
@@ -56,7 +56,7 @@ DataSet Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters,
 }
 
 
-DataSet Parser::get_adult(std::vector<ModelParams> &parameters,
+DataSet *Parser::get_adult(std::vector<ModelParams> &parameters,
         size_t num_samples, bool use_default_params)
 {
     std::string file = "datasets/real/adult.data";
@@ -89,7 +89,7 @@ std::vector<std::string> Parser::split_string(const std::string &s, char delim)
 }
 
 
-DataSet Parser::parse_file(std::string dataset_file, std::string dataset_name, int num_rows,
+DataSet *Parser::parse_file(std::string dataset_file, std::string dataset_name, int num_rows,
         int num_cols, int num_samples, std::shared_ptr<Task> task, std::vector<int> num_idx,
         std::vector<int> cat_idx, std::vector<int> target_idx, std::vector<int> drop_idx,
         std::vector<ModelParams> &parameters, bool use_default_params)
@@ -178,7 +178,7 @@ DataSet Parser::parse_file(std::string dataset_file, std::string dataset_name, i
         current_index++;
     }
 
-    DataSet dataset = DataSet(X,y);
-    dataset.name = std::string(dataset_name) + std::string("_size_") + std::to_string(num_samples);
+    DataSet *dataset = new DataSet(X,y);
+    dataset->name = std::string(dataset_name) + std::string("_size_") + std::to_string(num_samples);
     return dataset;
 }

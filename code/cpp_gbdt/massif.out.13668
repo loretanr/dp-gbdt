@@ -1,0 +1,1181 @@
+desc: (none)
+cmd: ./run
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=306383820
+mem_heap_B=4038899
+mem_heap_extra_B=328781
+mem_stacks_B=0
+heap_tree=peak
+n4: 4038899 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2954000 0x11A70C: __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 2954000 0x119F49: std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) (alloc_traits.h:436)
+   n2: 2954000 0x118F78: std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 2920584 0x11710B: std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n1: 2920584 0x115651: std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) (stl_vector.h:260)
+      n5: 2920584 0x1142A6: std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) (stl_vector.h:460)
+       n1: 2352512 0x119EE0: void std::_Construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (stl_construct.h:75)
+        n1: 2352512 0x118EA5: std::vector<double, std::allocator<double> >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:83)
+         n1: 2352512 0x11701A: std::vector<double, std::allocator<double> >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:134)
+          n1: 2352512 0x115557: std::vector<double, std::allocator<double> >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::allocator<std::vector<double, std::allocator<double> > >&) (stl_uninitialized.h:289)
+           n4: 2352512 0x1141BE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:463)
+            n5: 1603968 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+             n1: 1069312 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 1069312 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 1069312 0x1593E4: main (main.cpp:72)
+             n1: 267328 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 267328 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 267328 0x1593E4: main (main.cpp:72)
+             n1: 213888 0x16118D: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+              n0: 213888 0x1593E4: main (main.cpp:72)
+             n1: 53440 0x161174: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+              n0: 53440 0x1593E4: main (main.cpp:72)
+             n0: 0 in 1 place, below massif's threshold (1.00%)
+            n3: 534656 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+             n1: 267328 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+              n1: 267328 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+               n0: 267328 0x159395: main (main.cpp:67)
+             n1: 213888 0x1610CD: create_cross_validation_inputs(DataSet&, int) (data.cpp:160)
+              n0: 213888 0x1593E4: main (main.cpp:72)
+             n1: 53440 0x16113D: create_cross_validation_inputs(DataSet&, int) (data.cpp:161)
+              n0: 53440 0x1593E4: main (main.cpp:72)
+            n1: 213888 0x160D14: create_cross_validation_inputs(DataSet&, int) (data.cpp:145)
+             n0: 213888 0x1593E4: main (main.cpp:72)
+            n0: 0 in 3 places, all below massif's threshold (1.00%)
+       n1: 267328 0x16504A: void std::_Construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> >&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> >&) (stl_construct.h:75)
+        n1: 267328 0x164CDD: std::vector<double, std::allocator<double> >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:83)
+         n1: 267328 0x1647FA: std::vector<double, std::allocator<double> >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:134)
+          n1: 267328 0x163F2F: std::vector<double, std::allocator<double> >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::allocator<std::vector<double, std::allocator<double> > >&) (stl_uninitialized.h:289)
+           n1: 267328 0x163134: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_range_initialize<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::forward_iterator_tag) (stl_vector.h:1469)
+            n1: 267328 0x162619: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_initialize_dispatch<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::__false_type) (stl_vector.h:1437)
+             n2: 267328 0x161C0D: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, void>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:546)
+              n1: 213888 0x16100E: create_cross_validation_inputs(DataSet&, int) (data.cpp:157)
+               n0: 213888 0x1593E4: main (main.cpp:72)
+              n1: 53440 0x160E2D: create_cross_validation_inputs(DataSet&, int) (data.cpp:151)
+               n0: 53440 0x1593E4: main (main.cpp:72)
+       n2: 200496 0x11C6AF: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 133664 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 133664 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 133664 0x1593E4: main (main.cpp:72)
+        n0: 66832 in 4 places, all below massif's threshold (1.00%)
+       n1: 66832 0x15FC13: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n0: 66832 in 3 places, all below massif's threshold (1.00%)
+       n0: 33416 in 5 places, all below massif's threshold (1.00%)
+    n0: 33416 in 2 places, all below massif's threshold (1.00%)
+ n1: 1002480 0x11A66F: __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 1002480 0x119D94: std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::allocate(std::allocator<std::vector<double, std::allocator<double> > >&, unsigned long) (alloc_traits.h:436)
+   n3: 1002480 0x118D7C: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 902232 0x116F57: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n1: 902232 0x115437: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_Vector_base(unsigned long, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:260)
+      n4: 902232 0x114170: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:460)
+       n4: 601488 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 400992 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 400992 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 400992 0x1593E4: main (main.cpp:72)
+        n1: 100248 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 100248 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 100248 0x1593E4: main (main.cpp:72)
+        n1: 80208 0x16118D: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+         n0: 80208 0x1593E4: main (main.cpp:72)
+        n0: 20040 in 2 places, all below massif's threshold (1.00%)
+       n3: 200496 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 100248 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 100248 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 100248 0x159395: main (main.cpp:67)
+        n1: 80208 0x1610CD: create_cross_validation_inputs(DataSet&, int) (data.cpp:160)
+         n0: 80208 0x1593E4: main (main.cpp:72)
+        n0: 20040 in 1 place, below massif's threshold (1.00%)
+       n1: 100248 0x160D14: create_cross_validation_inputs(DataSet&, int) (data.cpp:145)
+        n0: 100248 0x1593E4: main (main.cpp:72)
+       n0: 0 in 3 places, all below massif's threshold (1.00%)
+    n1: 100248 0x1630E0: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_range_initialize<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::forward_iterator_tag) (stl_vector.h:1466)
+     n1: 100248 0x162619: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_initialize_dispatch<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::__false_type) (stl_vector.h:1437)
+      n2: 100248 0x161C0D: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, void>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:546)
+       n1: 80208 0x16100E: create_cross_validation_inputs(DataSet&, int) (data.cpp:157)
+        n0: 80208 0x1593E4: main (main.cpp:72)
+       n0: 20040 in 1 place, below massif's threshold (1.00%)
+    n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 72704 0x490B454: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+  n1: 72704 0x400F378: call_init.part.0 (dl-init.c:72)
+   n1: 72704 0x400F474: _dl_init (dl-init.c:118)
+    n0: 72704 0x40010C8: ??? (in /lib/x86_64-linux-gnu/ld-2.28.so)
+ n0: 9715 in 37 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=2
+#-----------
+time=2884677224
+mem_heap_B=3133647
+mem_heap_extra_B=241233
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=5016118462
+mem_heap_B=3073695
+mem_heap_extra_B=237281
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=6697940872
+mem_heap_B=3113699
+mem_heap_extra_B=237477
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=9114882998
+mem_heap_B=3133499
+mem_heap_extra_B=239573
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=11406984886
+mem_heap_B=3099443
+mem_heap_extra_B=234181
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=12775563119
+mem_heap_B=3057051
+mem_heap_extra_B=235397
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=14752766800
+mem_heap_B=3024031
+mem_heap_extra_B=230673
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=16273590576
+mem_heap_B=3044207
+mem_heap_extra_B=231257
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=18497949269
+mem_heap_B=2950807
+mem_heap_extra_B=227809
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=19734350739
+mem_heap_B=2878547
+mem_heap_extra_B=228213
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=22206619590
+mem_heap_B=3188967
+mem_heap_extra_B=240561
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=24431820374
+mem_heap_B=3234455
+mem_heap_extra_B=241641
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=26162401777
+mem_heap_B=3073695
+mem_heap_extra_B=237281
+mem_stacks_B=0
+heap_tree=detailed
+n4: 3073695 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2199960 0x11A70C: __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 2199960 0x119F49: std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) (alloc_traits.h:436)
+   n3: 2199960 0x118F78: std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 2142616 0x11710B: std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n2: 2142616 0x115651: std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) (stl_vector.h:260)
+      n5: 2121232 0x1142A6: std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) (stl_vector.h:460)
+       n1: 1657472 0x119EE0: void std::_Construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (stl_construct.h:75)
+        n1: 1657472 0x118EA5: std::vector<double, std::allocator<double> >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:83)
+         n1: 1657472 0x11701A: std::vector<double, std::allocator<double> >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:134)
+          n1: 1657472 0x115557: std::vector<double, std::allocator<double> >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::allocator<std::vector<double, std::allocator<double> > >&) (stl_uninitialized.h:289)
+           n3: 1657472 0x1141BE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:463)
+            n4: 1390144 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+             n1: 1069312 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 1069312 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 1069312 0x1593E4: main (main.cpp:72)
+             n1: 267328 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 267328 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 267328 0x1593E4: main (main.cpp:72)
+             n1: 53504 0x123F60: TrainTestSplit::TrainTestSplit(TrainTestSplit const&) (data.h:47)
+              n0: 53504 0x159469: main (main.cpp:76)
+             n0: 0 in 4 places, all below massif's threshold (1.00%)
+            n2: 267328 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+             n1: 267328 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+              n1: 267328 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+               n0: 267328 0x159395: main (main.cpp:67)
+             n0: 0 in 2 places, all below massif's threshold (1.00%)
+            n0: 0 in 4 places, all below massif's threshold (1.00%)
+       n1: 256576 0x118BCD: void __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (new_allocator.h:136)
+        n2: 256576 0x116BF7: void std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::allocator<std::vector<double, std::allocator<double> > >&, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (alloc_traits.h:475)
+         n3: 233664 0x115296: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1079)
+          n1: 170240 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+           n1: 170240 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+            n0: 170240 0x1594F5: main (main.cpp:84)
+          n1: 42048 0x16179D: DataSet::get_subset(std::vector<int, std::allocator<int> >&) (data.cpp:190)
+           n1: 42048 0x15AA1A: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:142)
+            n0: 42048 0x1594F5: main (main.cpp:84)
+          n0: 21376 in 2 places, all below massif's threshold (1.00%)
+         n0: 22912 in 1 place, below massif's threshold (1.00%)
+       n3: 173768 0x11C6AF: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 133664 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 133664 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 133664 0x1593E4: main (main.cpp:72)
+        n1: 33416 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 33416 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 33416 0x1593E4: main (main.cpp:72)
+        n0: 6688 in 5 places, all below massif's threshold (1.00%)
+       n2: 33416 0x15FC13: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 33416 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 33416 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 33416 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 7 places, all below massif's threshold (1.00%)
+      n0: 21384 in 2 places, all below massif's threshold (1.00%)
+    n1: 57344 0x1556BA: void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&) (vector.tcc:427)
+     n1: 57344 0x154C2E: std::vector<double, std::allocator<double> >::push_back(double const&) (stl_vector.h:1085)
+      n0: 57344 in 10 places, all below massif's threshold (1.00%)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 744624 0x11A66F: __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 744624 0x119D94: std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::allocate(std::allocator<std::vector<double, std::allocator<double> > >&, unsigned long) (alloc_traits.h:436)
+   n3: 744624 0x118D7C: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 621552 0x116F57: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n1: 621552 0x115437: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_Vector_base(unsigned long, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:260)
+      n3: 621552 0x114170: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:460)
+       n3: 521304 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 400992 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 400992 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 400992 0x1593E4: main (main.cpp:72)
+        n1: 100248 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 100248 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 100248 0x1593E4: main (main.cpp:72)
+        n0: 20064 in 5 places, all below massif's threshold (1.00%)
+       n2: 100248 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 100248 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 100248 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 100248 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 4 places, all below massif's threshold (1.00%)
+    n1: 123072 0x116CA6: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_realloc_insert<std::vector<double, std::allocator<double> > const&>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> > const&) (vector.tcc:427)
+     n2: 123072 0x1152CE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1085)
+      n1: 98304 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+       n1: 98304 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+        n0: 98304 0x1594F5: main (main.cpp:84)
+      n0: 24768 in 3 places, all below massif's threshold (1.00%)
+    n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 72704 0x490B454: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+  n1: 72704 0x400F378: call_init.part.0 (dl-init.c:72)
+   n1: 72704 0x400F474: _dl_init (dl-init.c:118)
+    n0: 72704 0x40010C8: ??? (in /lib/x86_64-linux-gnu/ld-2.28.so)
+ n0: 56407 in 42 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=15
+#-----------
+time=27398755006
+mem_heap_B=3303071
+mem_heap_extra_B=237281
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=29376334338
+mem_heap_B=3207347
+mem_heap_extra_B=238557
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=31981280124
+mem_heap_B=3065095
+mem_heap_extra_B=233961
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=33806252551
+mem_heap_B=2977659
+mem_heap_extra_B=235021
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=35174833974
+mem_heap_B=2907175
+mem_heap_extra_B=230601
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=36999982779
+mem_heap_B=2963779
+mem_heap_extra_B=230789
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=39737478479
+mem_heap_B=2953519
+mem_heap_extra_B=227401
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=41562376720
+mem_heap_B=2882831
+mem_heap_extra_B=228137
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=44299625401
+mem_heap_B=3188975
+mem_heap_extra_B=240553
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=46124564828
+mem_heap_B=3247751
+mem_heap_extra_B=240681
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=47949562992
+mem_heap_B=3332659
+mem_heap_extra_B=241277
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=49318126474
+mem_heap_B=3160735
+mem_heap_extra_B=251009
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=51143168409
+mem_heap_B=3301727
+mem_heap_extra_B=236801
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=53424285524
+mem_heap_B=3207519
+mem_heap_extra_B=238689
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=54907594772
+mem_heap_B=3069535
+mem_heap_extra_B=233425
+mem_stacks_B=0
+heap_tree=detailed
+n5: 3069535 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2135480 0x11A70C: __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 2135480 0x119F49: std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) (alloc_traits.h:436)
+   n3: 2135480 0x118F78: std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 2094520 0x11710B: std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n2: 2094520 0x115651: std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) (stl_vector.h:260)
+      n5: 2078472 0x1142A6: std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) (stl_vector.h:460)
+       n1: 1657408 0x119EE0: void std::_Construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (stl_construct.h:75)
+        n1: 1657408 0x118EA5: std::vector<double, std::allocator<double> >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:83)
+         n1: 1657408 0x11701A: std::vector<double, std::allocator<double> >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:134)
+          n1: 1657408 0x115557: std::vector<double, std::allocator<double> >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::allocator<std::vector<double, std::allocator<double> > >&) (stl_uninitialized.h:289)
+           n3: 1657408 0x1141BE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:463)
+            n4: 1390080 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+             n1: 1069312 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 1069312 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 1069312 0x1593E4: main (main.cpp:72)
+             n1: 267328 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 267328 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 267328 0x1593E4: main (main.cpp:72)
+             n1: 53440 0x123F60: TrainTestSplit::TrainTestSplit(TrainTestSplit const&) (data.h:47)
+              n0: 53440 0x159469: main (main.cpp:76)
+             n0: 0 in 4 places, all below massif's threshold (1.00%)
+            n2: 267328 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+             n1: 267328 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+              n1: 267328 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+               n0: 267328 0x159395: main (main.cpp:67)
+             n0: 0 in 2 places, all below massif's threshold (1.00%)
+            n0: 0 in 4 places, all below massif's threshold (1.00%)
+       n1: 213888 0x118BCD: void __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (new_allocator.h:136)
+        n2: 213888 0x116BF7: void std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::allocator<std::vector<double, std::allocator<double> > >&, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (alloc_traits.h:475)
+         n3: 191040 0x115296: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1079)
+          n1: 127616 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+           n1: 127616 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+            n0: 127616 0x1594F5: main (main.cpp:84)
+          n1: 42048 0x16179D: DataSet::get_subset(std::vector<int, std::allocator<int> >&) (data.cpp:190)
+           n1: 42048 0x15AA1A: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:142)
+            n0: 42048 0x1594F5: main (main.cpp:84)
+          n0: 21376 in 2 places, all below massif's threshold (1.00%)
+         n0: 22848 in 1 place, below massif's threshold (1.00%)
+       n3: 173760 0x11C6AF: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 133664 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 133664 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 133664 0x1593E4: main (main.cpp:72)
+        n1: 33416 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 33416 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 33416 0x1593E4: main (main.cpp:72)
+        n0: 6680 in 5 places, all below massif's threshold (1.00%)
+       n2: 33416 0x15FC13: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 33416 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 33416 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 33416 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 7 places, all below massif's threshold (1.00%)
+      n0: 16048 in 2 places, all below massif's threshold (1.00%)
+    n1: 40960 0x1556BA: void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&) (vector.tcc:427)
+     n1: 40960 0x154C2E: std::vector<double, std::allocator<double> >::push_back(double const&) (stl_vector.h:1085)
+      n0: 40960 in 10 places, all below massif's threshold (1.00%)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 695448 0x11A66F: __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 695448 0x119D94: std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::allocate(std::allocator<std::vector<double, std::allocator<double> > >&, unsigned long) (alloc_traits.h:436)
+   n3: 695448 0x118D7C: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 621528 0x116F57: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n1: 621528 0x115437: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_Vector_base(unsigned long, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:260)
+      n3: 621528 0x114170: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:460)
+       n3: 521280 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 400992 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 400992 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 400992 0x1593E4: main (main.cpp:72)
+        n1: 100248 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 100248 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 100248 0x1593E4: main (main.cpp:72)
+        n0: 20040 in 5 places, all below massif's threshold (1.00%)
+       n2: 100248 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 100248 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 100248 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 100248 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 4 places, all below massif's threshold (1.00%)
+    n1: 73920 0x116CA6: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_realloc_insert<std::vector<double, std::allocator<double> > const&>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> > const&) (vector.tcc:427)
+     n2: 73920 0x1152CE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1085)
+      n1: 49152 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+       n1: 49152 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+        n0: 49152 0x1594F5: main (main.cpp:84)
+      n0: 24768 in 3 places, all below massif's threshold (1.00%)
+    n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 131072 0x16FAAA: __gnu_cxx::new_allocator<SplitCandidate>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 131072 0x16EEB6: std::allocator_traits<std::allocator<SplitCandidate> >::allocate(std::allocator<SplitCandidate>&, unsigned long) (alloc_traits.h:436)
+   n1: 131072 0x16DF2E: std::_Vector_base<SplitCandidate, std::allocator<SplitCandidate> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 131072 0x16D4E8: void std::vector<SplitCandidate, std::allocator<SplitCandidate> >::_M_realloc_insert<SplitCandidate const&>(__gnu_cxx::__normal_iterator<SplitCandidate*, std::vector<SplitCandidate, std::allocator<SplitCandidate> > >, SplitCandidate const&) (vector.tcc:427)
+     n1: 131072 0x16CA60: std::vector<SplitCandidate, std::allocator<SplitCandidate> >::push_back(SplitCandidate const&) (stl_vector.h:1085)
+      n1: 131072 0x16AC06: DPTree::find_best_split(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >&, std::vector<double, std::allocator<double> >&, int) (dp_tree.cpp:208)
+       n2: 131072 0x169D8F: DPTree::make_tree_DFS(int, std::vector<int, std::allocator<int> >) (dp_tree.cpp:88)
+        n1: 131072 0x1697AC: DPTree::fit() (dp_tree.cpp:37)
+         n1: 131072 0x15ACBB: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:151)
+          n0: 131072 0x1594F5: main (main.cpp:84)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 72704 0x490B454: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+  n1: 72704 0x400F378: call_init.part.0 (dl-init.c:72)
+   n1: 72704 0x400F474: _dl_init (dl-init.c:118)
+    n0: 72704 0x40010C8: ??? (in /lib/x86_64-linux-gnu/ld-2.28.so)
+ n0: 34831 in 41 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=30
+#-----------
+time=57132657250
+mem_heap_B=3042159
+mem_heap_extra_B=234585
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=59357738523
+mem_heap_B=3022823
+mem_heap_extra_B=230369
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=60841024710
+mem_heap_B=3014375
+mem_heap_extra_B=231217
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=62324282653
+mem_heap_B=2970075
+mem_heap_extra_B=232349
+mem_stacks_B=0
+heap_tree=detailed
+n4: 2970075 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2138136 0x11A70C: __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 2138136 0x119F49: std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) (alloc_traits.h:436)
+   n3: 2138136 0x118F78: std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 2089752 0x11710B: std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n2: 2089752 0x115651: std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) (stl_vector.h:260)
+      n5: 2079048 0x1142A6: std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) (stl_vector.h:460)
+       n1: 1657408 0x119EE0: void std::_Construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (stl_construct.h:75)
+        n1: 1657408 0x118EA5: std::vector<double, std::allocator<double> >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:83)
+         n1: 1657408 0x11701A: std::vector<double, std::allocator<double> >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:134)
+          n1: 1657408 0x115557: std::vector<double, std::allocator<double> >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::allocator<std::vector<double, std::allocator<double> > >&) (stl_uninitialized.h:289)
+           n3: 1657408 0x1141BE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:463)
+            n4: 1390080 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+             n1: 1069312 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 1069312 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 1069312 0x1593E4: main (main.cpp:72)
+             n1: 267328 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 267328 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 267328 0x1593E4: main (main.cpp:72)
+             n1: 53440 0x123F60: TrainTestSplit::TrainTestSplit(TrainTestSplit const&) (data.h:47)
+              n0: 53440 0x159469: main (main.cpp:76)
+             n0: 0 in 4 places, all below massif's threshold (1.00%)
+            n2: 267328 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+             n1: 267328 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+              n1: 267328 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+               n0: 267328 0x159395: main (main.cpp:67)
+             n0: 0 in 2 places, all below massif's threshold (1.00%)
+            n0: 0 in 4 places, all below massif's threshold (1.00%)
+       n1: 214464 0x118BCD: void __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (new_allocator.h:136)
+        n2: 214464 0x116BF7: void std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::allocator<std::vector<double, std::allocator<double> > >&, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (alloc_traits.h:475)
+         n4: 169984 0x115296: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1079)
+          n1: 84864 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+           n1: 84864 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+            n0: 84864 0x1594F5: main (main.cpp:84)
+          n1: 43008 0x169CAD: DPTree::make_tree_DFS(int, std::vector<int, std::allocator<int> >) (dp_tree.cpp:81)
+           n0: 43008 in 3 places, all below massif's threshold (1.00%)
+          n1: 42112 0x16179D: DataSet::get_subset(std::vector<int, std::allocator<int> >&) (data.cpp:190)
+           n1: 42112 0x15AA1A: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:142)
+            n0: 42112 0x1594F5: main (main.cpp:84)
+          n0: 0 in 1 place, below massif's threshold (1.00%)
+         n1: 44480 0x116CEF: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_realloc_insert<std::vector<double, std::allocator<double> > const&>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> > const&) (vector.tcc:436)
+          n2: 44480 0x1152CE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1085)
+           n1: 43008 0x169CAD: DPTree::make_tree_DFS(int, std::vector<int, std::allocator<int> >) (dp_tree.cpp:81)
+            n0: 43008 in 3 places, all below massif's threshold (1.00%)
+           n0: 1472 in 3 places, all below massif's threshold (1.00%)
+       n3: 173760 0x11C6AF: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 133664 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 133664 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 133664 0x1593E4: main (main.cpp:72)
+        n1: 33416 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 33416 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 33416 0x1593E4: main (main.cpp:72)
+        n0: 6680 in 5 places, all below massif's threshold (1.00%)
+       n2: 33416 0x15FC13: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 33416 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 33416 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 33416 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 7 places, all below massif's threshold (1.00%)
+      n0: 10704 in 2 places, all below massif's threshold (1.00%)
+    n1: 48384 0x1556BA: void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&) (vector.tcc:427)
+     n1: 48384 0x154C2E: std::vector<double, std::allocator<double> >::push_back(double const&) (stl_vector.h:1085)
+      n0: 48384 in 10 places, all below massif's threshold (1.00%)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 696408 0x11A66F: __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 696408 0x119D94: std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::allocate(std::allocator<std::vector<double, std::allocator<double> > >&, unsigned long) (alloc_traits.h:436)
+   n3: 696408 0x118D7C: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 621528 0x116F57: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n1: 621528 0x115437: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_Vector_base(unsigned long, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:260)
+      n3: 621528 0x114170: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:460)
+       n3: 521280 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 400992 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 400992 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 400992 0x1593E4: main (main.cpp:72)
+        n1: 100248 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 100248 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 100248 0x1593E4: main (main.cpp:72)
+        n0: 20040 in 5 places, all below massif's threshold (1.00%)
+       n2: 100248 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 100248 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 100248 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 100248 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 4 places, all below massif's threshold (1.00%)
+    n1: 74880 0x116CA6: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_realloc_insert<std::vector<double, std::allocator<double> > const&>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> > const&) (vector.tcc:427)
+     n2: 74880 0x1152CE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1085)
+      n1: 49152 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+       n1: 49152 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+        n0: 49152 0x1594F5: main (main.cpp:84)
+      n0: 25728 in 3 places, all below massif's threshold (1.00%)
+    n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 72704 0x490B454: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+  n1: 72704 0x400F378: call_init.part.0 (dl-init.c:72)
+   n1: 72704 0x400F474: _dl_init (dl-init.c:118)
+    n0: 72704 0x40010C8: ??? (in /lib/x86_64-linux-gnu/ld-2.28.so)
+ n0: 62827 in 42 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=34
+#-----------
+time=63807811038
+mem_heap_B=2947111
+mem_heap_extra_B=226665
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=65291081233
+mem_heap_B=2885435
+mem_heap_extra_B=228349
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=66774507229
+mem_heap_B=3090671
+mem_heap_extra_B=240553
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=68257881949
+mem_heap_B=3326191
+mem_heap_extra_B=240569
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=69741145167
+mem_heap_B=3162175
+mem_heap_extra_B=241777
+mem_stacks_B=0
+heap_tree=detailed
+n5: 3162175 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2266856 0x11A70C: __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 2266856 0x119F49: std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) (alloc_traits.h:436)
+   n2: 2266856 0x118F78: std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 2238184 0x11710B: std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n2: 2238184 0x115651: std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) (stl_vector.h:260)
+      n4: 2211448 0x1142A6: std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) (stl_vector.h:460)
+       n1: 1871296 0x119EE0: void std::_Construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (stl_construct.h:75)
+        n1: 1871296 0x118EA5: std::vector<double, std::allocator<double> >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:83)
+         n1: 1871296 0x11701A: std::vector<double, std::allocator<double> >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:134)
+          n1: 1871296 0x115557: std::vector<double, std::allocator<double> >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::allocator<std::vector<double, std::allocator<double> > >&) (stl_uninitialized.h:289)
+           n3: 1871296 0x1141BE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:463)
+            n5: 1603968 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+             n1: 1069312 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 1069312 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 1069312 0x1593E4: main (main.cpp:72)
+             n1: 267328 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 267328 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 267328 0x1593E4: main (main.cpp:72)
+             n1: 213888 0x123F40: TrainTestSplit::TrainTestSplit(TrainTestSplit const&) (data.h:47)
+              n0: 213888 0x159469: main (main.cpp:76)
+             n1: 53440 0x123F60: TrainTestSplit::TrainTestSplit(TrainTestSplit const&) (data.h:47)
+              n0: 53440 0x159469: main (main.cpp:76)
+             n0: 0 in 3 places, all below massif's threshold (1.00%)
+            n2: 267328 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+             n1: 267328 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+              n1: 267328 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+               n0: 267328 0x159395: main (main.cpp:67)
+             n0: 0 in 2 places, all below massif's threshold (1.00%)
+            n0: 0 in 4 places, all below massif's threshold (1.00%)
+       n2: 200496 0x11C6AF: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 133664 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 133664 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 133664 0x1593E4: main (main.cpp:72)
+        n0: 66832 in 6 places, all below massif's threshold (1.00%)
+       n1: 106240 0x118BCD: void __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (new_allocator.h:136)
+        n2: 106240 0x116BF7: void std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::allocator<std::vector<double, std::allocator<double> > >&, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (alloc_traits.h:475)
+         n2: 73792 0x115296: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1079)
+          n1: 42048 0x16179D: DataSet::get_subset(std::vector<int, std::allocator<int> >&) (data.cpp:190)
+           n1: 42048 0x15AA1A: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:142)
+            n0: 42048 0x1594F5: main (main.cpp:84)
+          n0: 31744 in 3 places, all below massif's threshold (1.00%)
+         n0: 32448 in 1 place, below massif's threshold (1.00%)
+       n0: 33416 in 8 places, all below massif's threshold (1.00%)
+      n0: 26736 in 2 places, all below massif's threshold (1.00%)
+    n0: 28672 in 3 places, all below massif's threshold (1.00%)
+ n1: 726696 0x11A66F: __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 726696 0x119D94: std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::allocate(std::allocator<std::vector<double, std::allocator<double> > >&, unsigned long) (alloc_traits.h:436)
+   n2: 726696 0x118D7C: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 701736 0x116F57: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n1: 701736 0x115437: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_Vector_base(unsigned long, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:260)
+      n3: 701736 0x114170: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:460)
+       n4: 601488 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 400992 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 400992 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 400992 0x1593E4: main (main.cpp:72)
+        n1: 100248 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 100248 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 100248 0x1593E4: main (main.cpp:72)
+        n1: 80208 0x123F40: TrainTestSplit::TrainTestSplit(TrainTestSplit const&) (data.h:47)
+         n0: 80208 0x159469: main (main.cpp:76)
+        n0: 20040 in 4 places, all below massif's threshold (1.00%)
+       n2: 100248 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 100248 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 100248 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 100248 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 4 places, all below massif's threshold (1.00%)
+    n0: 24960 in 2 places, all below massif's threshold (1.00%)
+ n1: 72704 0x490B454: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+  n1: 72704 0x400F378: call_init.part.0 (dl-init.c:72)
+   n1: 72704 0x400F474: _dl_init (dl-init.c:118)
+    n0: 72704 0x40010C8: ??? (in /lib/x86_64-linux-gnu/ld-2.28.so)
+ n1: 65536 0x16FAAA: __gnu_cxx::new_allocator<SplitCandidate>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 65536 0x16EEB6: std::allocator_traits<std::allocator<SplitCandidate> >::allocate(std::allocator<SplitCandidate>&, unsigned long) (alloc_traits.h:436)
+   n1: 65536 0x16DF2E: std::_Vector_base<SplitCandidate, std::allocator<SplitCandidate> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 65536 0x16D4E8: void std::vector<SplitCandidate, std::allocator<SplitCandidate> >::_M_realloc_insert<SplitCandidate const&>(__gnu_cxx::__normal_iterator<SplitCandidate*, std::vector<SplitCandidate, std::allocator<SplitCandidate> > >, SplitCandidate const&) (vector.tcc:427)
+     n1: 65536 0x16CA60: std::vector<SplitCandidate, std::allocator<SplitCandidate> >::push_back(SplitCandidate const&) (stl_vector.h:1085)
+      n1: 65536 0x16AC06: DPTree::find_best_split(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >&, std::vector<double, std::allocator<double> >&, int) (dp_tree.cpp:208)
+       n2: 65536 0x169D8F: DPTree::make_tree_DFS(int, std::vector<int, std::allocator<int> >) (dp_tree.cpp:88)
+        n2: 65536 0x16A1F3: DPTree::make_tree_DFS(int, std::vector<int, std::allocator<int> >) (dp_tree.cpp:115)
+         n1: 65536 0x1697AC: DPTree::fit() (dp_tree.cpp:37)
+          n1: 65536 0x15ACBB: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:151)
+           n0: 65536 0x1594F5: main (main.cpp:84)
+         n0: 0 in 2 places, all below massif's threshold (1.00%)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n0: 30383 in 41 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=39
+#-----------
+time=71224638974
+mem_heap_B=3107039
+mem_heap_extra_B=237473
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=72707905784
+mem_heap_B=3150999
+mem_heap_extra_B=237617
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=74932815197
+mem_heap_B=3158215
+mem_heap_extra_B=239753
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=76416199810
+mem_heap_B=3071935
+mem_heap_extra_B=234177
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=77899482867
+mem_heap_B=2993739
+mem_heap_extra_B=235693
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=80124440649
+mem_heap_B=2959087
+mem_heap_extra_B=230873
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=81607775726
+mem_heap_B=2993315
+mem_heap_extra_B=231069
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=83832846667
+mem_heap_B=2852527
+mem_heap_extra_B=227713
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=86799369078
+mem_heap_B=2993323
+mem_heap_extra_B=229021
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=88283071039
+mem_heap_B=3188975
+mem_heap_extra_B=240553
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=90507958375
+mem_heap_B=3158487
+mem_heap_extra_B=241625
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=91744311654
+mem_heap_B=3218095
+mem_heap_extra_B=248321
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=92980824218
+mem_heap_B=3172335
+mem_heap_extra_B=237425
+mem_stacks_B=0
+heap_tree=detailed
+n5: 3172335 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2199960 0x11A70C: __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 2199960 0x119F49: std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) (alloc_traits.h:436)
+   n3: 2199960 0x118F78: std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 2142616 0x11710B: std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n2: 2142616 0x115651: std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) (stl_vector.h:260)
+      n4: 2121224 0x1142A6: std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) (stl_vector.h:460)
+       n1: 1657408 0x119EE0: void std::_Construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (stl_construct.h:75)
+        n1: 1657408 0x118EA5: std::vector<double, std::allocator<double> >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:83)
+         n1: 1657408 0x11701A: std::vector<double, std::allocator<double> >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:134)
+          n1: 1657408 0x115557: std::vector<double, std::allocator<double> >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::allocator<std::vector<double, std::allocator<double> > >&) (stl_uninitialized.h:289)
+           n3: 1657408 0x1141BE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:463)
+            n4: 1390080 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+             n1: 1069312 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 1069312 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 1069312 0x1593E4: main (main.cpp:72)
+             n1: 267328 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 267328 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 267328 0x1593E4: main (main.cpp:72)
+             n1: 53440 0x123F60: TrainTestSplit::TrainTestSplit(TrainTestSplit const&) (data.h:47)
+              n0: 53440 0x159469: main (main.cpp:76)
+             n0: 0 in 4 places, all below massif's threshold (1.00%)
+            n2: 267328 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+             n1: 267328 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+              n1: 267328 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+               n0: 267328 0x159395: main (main.cpp:67)
+             n0: 0 in 2 places, all below massif's threshold (1.00%)
+            n0: 0 in 4 places, all below massif's threshold (1.00%)
+       n1: 256640 0x118BCD: void __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (new_allocator.h:136)
+        n2: 256640 0x116BF7: void std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::allocator<std::vector<double, std::allocator<double> > >&, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (alloc_traits.h:475)
+         n3: 233728 0x115296: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1079)
+          n1: 170304 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+           n1: 170304 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+            n0: 170304 0x1594F5: main (main.cpp:84)
+          n1: 42048 0x16179D: DataSet::get_subset(std::vector<int, std::allocator<int> >&) (data.cpp:190)
+           n1: 42048 0x15AA1A: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:142)
+            n0: 42048 0x1594F5: main (main.cpp:84)
+          n0: 21376 in 2 places, all below massif's threshold (1.00%)
+         n0: 22912 in 1 place, below massif's threshold (1.00%)
+       n2: 173760 0x11C6AF: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 133664 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 133664 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 133664 0x1593E4: main (main.cpp:72)
+        n0: 40096 in 6 places, all below massif's threshold (1.00%)
+       n0: 33416 in 8 places, all below massif's threshold (1.00%)
+      n0: 21392 in 2 places, all below massif's threshold (1.00%)
+    n1: 57344 0x1556BA: void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&) (vector.tcc:427)
+     n1: 57344 0x154C2E: std::vector<double, std::allocator<double> >::push_back(double const&) (stl_vector.h:1085)
+      n0: 57344 in 10 places, all below massif's threshold (1.00%)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 744600 0x11A66F: __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 744600 0x119D94: std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::allocate(std::allocator<std::vector<double, std::allocator<double> > >&, unsigned long) (alloc_traits.h:436)
+   n3: 744600 0x118D7C: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 621528 0x116F57: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n1: 621528 0x115437: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_Vector_base(unsigned long, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:260)
+      n3: 621528 0x114170: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:460)
+       n3: 521280 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 400992 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 400992 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 400992 0x1593E4: main (main.cpp:72)
+        n1: 100248 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 100248 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 100248 0x1593E4: main (main.cpp:72)
+        n0: 20040 in 5 places, all below massif's threshold (1.00%)
+       n2: 100248 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 100248 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 100248 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 100248 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 4 places, all below massif's threshold (1.00%)
+    n1: 123072 0x116CA6: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_realloc_insert<std::vector<double, std::allocator<double> > const&>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> > const&) (vector.tcc:427)
+     n2: 123072 0x1152CE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1085)
+      n1: 98304 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+       n1: 98304 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+        n0: 98304 0x1594F5: main (main.cpp:84)
+      n0: 24768 in 3 places, all below massif's threshold (1.00%)
+    n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 131072 0x16FAAA: __gnu_cxx::new_allocator<SplitCandidate>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 131072 0x16EEB6: std::allocator_traits<std::allocator<SplitCandidate> >::allocate(std::allocator<SplitCandidate>&, unsigned long) (alloc_traits.h:436)
+   n1: 131072 0x16DF2E: std::_Vector_base<SplitCandidate, std::allocator<SplitCandidate> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 131072 0x16D4E8: void std::vector<SplitCandidate, std::allocator<SplitCandidate> >::_M_realloc_insert<SplitCandidate const&>(__gnu_cxx::__normal_iterator<SplitCandidate*, std::vector<SplitCandidate, std::allocator<SplitCandidate> > >, SplitCandidate const&) (vector.tcc:427)
+     n1: 131072 0x16CA60: std::vector<SplitCandidate, std::allocator<SplitCandidate> >::push_back(SplitCandidate const&) (stl_vector.h:1085)
+      n1: 131072 0x16AC06: DPTree::find_best_split(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >&, std::vector<double, std::allocator<double> >&, int) (dp_tree.cpp:208)
+       n2: 131072 0x169D8F: DPTree::make_tree_DFS(int, std::vector<int, std::allocator<int> >) (dp_tree.cpp:88)
+        n1: 131072 0x1697AC: DPTree::fit() (dp_tree.cpp:37)
+         n1: 131072 0x15ACBB: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:151)
+          n0: 131072 0x1594F5: main (main.cpp:84)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 72704 0x490B454: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+  n1: 72704 0x400F378: call_init.part.0 (dl-init.c:72)
+   n1: 72704 0x400F474: _dl_init (dl-init.c:118)
+    n0: 72704 0x40010C8: ??? (in /lib/x86_64-linux-gnu/ld-2.28.so)
+ n0: 23999 in 41 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=52
+#-----------
+time=94217344585
+mem_heap_B=3217643
+mem_heap_extra_B=237629
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=95453783937
+mem_heap_B=3167371
+mem_heap_extra_B=238677
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=96690137470
+mem_heap_B=3103031
+mem_heap_extra_B=240001
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=97926603969
+mem_heap_B=3065551
+mem_heap_extra_B=234129
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=99163003599
+mem_heap_B=3052499
+mem_heap_extra_B=234477
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=100399395842
+mem_heap_B=3055283
+mem_heap_extra_B=235989
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=101635767084
+mem_heap_B=3025103
+mem_heap_extra_B=230969
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=102872139308
+mem_heap_B=2993943
+mem_heap_extra_B=231113
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=104108506477
+mem_heap_B=3067699
+mem_heap_extra_B=232189
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=105344865044
+mem_heap_B=2887191
+mem_heap_extra_B=227833
+mem_stacks_B=0
+heap_tree=detailed
+n5: 2887191 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2031152 0x11A70C: __gnu_cxx::new_allocator<double>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 2031152 0x119F49: std::allocator_traits<std::allocator<double> >::allocate(std::allocator<double>&, unsigned long) (alloc_traits.h:436)
+   n3: 2031152 0x118F78: std::_Vector_base<double, std::allocator<double> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 1998384 0x11710B: std::_Vector_base<double, std::allocator<double> >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n2: 1998384 0x115651: std::_Vector_base<double, std::allocator<double> >::_Vector_base(unsigned long, std::allocator<double> const&) (stl_vector.h:260)
+      n5: 1993032 0x1142A6: std::vector<double, std::allocator<double> >::vector(std::vector<double, std::allocator<double> > const&) (stl_vector.h:460)
+       n1: 1657408 0x119EE0: void std::_Construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (stl_construct.h:75)
+        n1: 1657408 0x118EA5: std::vector<double, std::allocator<double> >* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:83)
+         n1: 1657408 0x11701A: std::vector<double, std::allocator<double> >* std::uninitialized_copy<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*) (stl_uninitialized.h:134)
+          n1: 1657408 0x115557: std::vector<double, std::allocator<double> >* std::__uninitialized_copy_a<__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > >(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, __gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> > const*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> >*, std::allocator<std::vector<double, std::allocator<double> > >&) (stl_uninitialized.h:289)
+           n3: 1657408 0x1141BE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:463)
+            n4: 1390080 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+             n1: 1069312 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 1069312 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 1069312 0x1593E4: main (main.cpp:72)
+             n1: 267328 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+              n1: 267328 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+               n0: 267328 0x1593E4: main (main.cpp:72)
+             n1: 53440 0x123F60: TrainTestSplit::TrainTestSplit(TrainTestSplit const&) (data.h:47)
+              n0: 53440 0x159469: main (main.cpp:76)
+             n0: 0 in 4 places, all below massif's threshold (1.00%)
+            n2: 267328 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+             n1: 267328 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+              n1: 267328 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+               n0: 267328 0x159395: main (main.cpp:67)
+             n0: 0 in 2 places, all below massif's threshold (1.00%)
+            n0: 0 in 4 places, all below massif's threshold (1.00%)
+       n3: 173760 0x11C6AF: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 133664 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 133664 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 133664 0x1593E4: main (main.cpp:72)
+        n1: 33416 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 33416 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 33416 0x1593E4: main (main.cpp:72)
+        n0: 6680 in 5 places, all below massif's threshold (1.00%)
+       n1: 128448 0x118BCD: void __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (new_allocator.h:136)
+        n2: 128448 0x116BF7: void std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::construct<std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&>(std::allocator<std::vector<double, std::allocator<double> > >&, std::vector<double, std::allocator<double> >*, std::vector<double, std::allocator<double> > const&) (alloc_traits.h:475)
+         n3: 105632 0x115296: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1079)
+          n1: 42112 0x16179D: DataSet::get_subset(std::vector<int, std::allocator<int> >&) (data.cpp:190)
+           n1: 42112 0x15AA1A: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:142)
+            n0: 42112 0x1594F5: main (main.cpp:84)
+          n1: 42112 0x161925: DataSet::remove_rows(std::vector<int, std::allocator<int> >&) (data.cpp:207)
+           n1: 42112 0x15ACF4: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:155)
+            n0: 42112 0x1594F5: main (main.cpp:84)
+          n0: 21408 in 2 places, all below massif's threshold (1.00%)
+         n0: 22816 in 1 place, below massif's threshold (1.00%)
+       n2: 33416 0x15FC13: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 33416 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 33416 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 33416 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 7 places, all below massif's threshold (1.00%)
+      n0: 5352 in 2 places, all below massif's threshold (1.00%)
+    n1: 32768 0x1556BA: void std::vector<double, std::allocator<double> >::_M_realloc_insert<double const&>(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, double const&) (vector.tcc:427)
+     n1: 32768 0x154C2E: std::vector<double, std::allocator<double> >::push_back(double const&) (stl_vector.h:1085)
+      n0: 32768 in 10 places, all below massif's threshold (1.00%)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 670872 0x11A66F: __gnu_cxx::new_allocator<std::vector<double, std::allocator<double> > >::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 670872 0x119D94: std::allocator_traits<std::allocator<std::vector<double, std::allocator<double> > > >::allocate(std::allocator<std::vector<double, std::allocator<double> > >&, unsigned long) (alloc_traits.h:436)
+   n3: 670872 0x118D7C: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 621528 0x116F57: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_create_storage(unsigned long) (stl_vector.h:311)
+     n1: 621528 0x115437: std::_Vector_base<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_Vector_base(unsigned long, std::allocator<std::vector<double, std::allocator<double> > > const&) (stl_vector.h:260)
+      n3: 621528 0x114170: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::vector(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&) (stl_vector.h:460)
+       n3: 521280 0x11C694: DataSet::DataSet(DataSet const&) (data.h:24)
+        n1: 400992 0x161AA6: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 400992 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 400992 0x1593E4: main (main.cpp:72)
+        n1: 100248 0x161AC0: TrainTestSplit::TrainTestSplit(DataSet, DataSet) (data.h:50)
+         n1: 100248 0x1611AD: create_cross_validation_inputs(DataSet&, int) (data.cpp:163)
+          n0: 100248 0x1593E4: main (main.cpp:72)
+        n0: 20040 in 5 places, all below massif's threshold (1.00%)
+       n2: 100248 0x15FBF6: DataSet::DataSet(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >, std::vector<double, std::allocator<double> >) (data.cpp:29)
+        n1: 100248 0x113279: Parser::parse_file(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int, int, int, std::shared_ptr<Task>, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<int, std::allocator<int> >, std::vector<ModelParams, std::allocator<ModelParams> >&, bool) (dataset_parser.cpp:181)
+         n1: 100248 0x111D10: Parser::get_abalone(std::vector<ModelParams, std::allocator<ModelParams> >&, unsigned long, bool) (dataset_parser.cpp:36)
+          n0: 100248 0x159395: main (main.cpp:67)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+       n0: 0 in 4 places, all below massif's threshold (1.00%)
+    n1: 49344 0x116CA6: void std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::_M_realloc_insert<std::vector<double, std::allocator<double> > const&>(__gnu_cxx::__normal_iterator<std::vector<double, std::allocator<double> >*, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > >, std::vector<double, std::allocator<double> > const&) (vector.tcc:427)
+     n1: 49344 0x1152CE: std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >::push_back(std::vector<double, std::allocator<double> > const&) (stl_vector.h:1085)
+      n0: 49344 in 4 places, all below massif's threshold (1.00%)
+    n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 72704 0x490B454: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25)
+  n1: 72704 0x400F378: call_init.part.0 (dl-init.c:72)
+   n1: 72704 0x400F474: _dl_init (dl-init.c:118)
+    n0: 72704 0x40010C8: ??? (in /lib/x86_64-linux-gnu/ld-2.28.so)
+ n1: 65536 0x16FAAA: __gnu_cxx::new_allocator<SplitCandidate>::allocate(unsigned long, void const*) (new_allocator.h:111)
+  n1: 65536 0x16EEB6: std::allocator_traits<std::allocator<SplitCandidate> >::allocate(std::allocator<SplitCandidate>&, unsigned long) (alloc_traits.h:436)
+   n1: 65536 0x16DF2E: std::_Vector_base<SplitCandidate, std::allocator<SplitCandidate> >::_M_allocate(unsigned long) (stl_vector.h:296)
+    n1: 65536 0x16D4E8: void std::vector<SplitCandidate, std::allocator<SplitCandidate> >::_M_realloc_insert<SplitCandidate const&>(__gnu_cxx::__normal_iterator<SplitCandidate*, std::vector<SplitCandidate, std::allocator<SplitCandidate> > >, SplitCandidate const&) (vector.tcc:427)
+     n1: 65536 0x16CA60: std::vector<SplitCandidate, std::allocator<SplitCandidate> >::push_back(SplitCandidate const&) (stl_vector.h:1085)
+      n1: 65536 0x16AC06: DPTree::find_best_split(std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > >&, std::vector<double, std::allocator<double> >&, int) (dp_tree.cpp:208)
+       n2: 65536 0x169D8F: DPTree::make_tree_DFS(int, std::vector<int, std::allocator<int> >) (dp_tree.cpp:88)
+        n1: 65536 0x1697AC: DPTree::fit() (dp_tree.cpp:37)
+         n1: 65536 0x15ACBB: DPEnsemble::train(DataSet*) (dp_ensemble.cpp:151)
+          n0: 65536 0x1594F5: main (main.cpp:84)
+        n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n0: 46927 in 41 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=62
+#-----------
+time=106581260171
+mem_heap_B=3088407
+mem_heap_extra_B=227833
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=107817640083
+mem_heap_B=2878763
+mem_heap_extra_B=228877
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=109053999998
+mem_heap_B=2927459
+mem_heap_extra_B=229861
+mem_stacks_B=0
+heap_tree=empty

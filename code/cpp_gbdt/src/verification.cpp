@@ -27,7 +27,7 @@ int Verification::main(int argc, char *argv[])
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     // store datasets and their corresponding parameters here
-    std::vector<DataSet> datasets;
+    std::vector<DataSet *> datasets;
     std::vector<ModelParams> parameters;
 
     // --------------------------------------
@@ -56,39 +56,41 @@ int Verification::main(int argc, char *argv[])
 
     // do verification on all added datasets
     for(size_t i=0; i<datasets.size(); i++) {
-        DataSet &dataset = datasets[i];
+        DataSet *dataset = datasets[i];
         ModelParams &param = parameters[i];
 
         // Set up logging for verification
-        verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset.name));
-        std::cout << dataset.name << std::endl;
+        verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset->name));
+        std::cout << dataset->name << std::endl;
 
         // do cross validation, always 5 fold for now
-        std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
+        std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
+        delete dataset;
         cv_fold_index = 0;
 
         for (auto split : cv_inputs) {
 
             if(params.scale_y){
-                split.train.scale(param, -1, 1);
+                split->train.scale(param, -1, 1);
             }
 
             // train the model
             DPEnsemble ensemble = DPEnsemble(&param);
-            ensemble.train(&split.train);
+            ensemble.train(&split->train);
             
             // predict with the test set
-            std::vector<double> y_pred = ensemble.predict(split.test.X);
+            std::vector<double> y_pred = ensemble.predict(split->test.X);
 
             if(params.scale_y){
-                inverse_scale(param, split.train.scaler, y_pred);
+                inverse_scale(param, split->train.scaler, y_pred);
             }
             
             // compute score
-            double score = param.task->compute_score(split.test.y, y_pred);
+            double score = param.task->compute_score(split->test.y, y_pred);
 
             std::cout << std::setprecision(9) << score << " " << std::flush;
             cv_fold_index++;
+            delete split;
         } std::cout << std::endl;
     
         verification_logfile.close();

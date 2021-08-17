@@ -40,7 +40,7 @@ int Evaluation::main(int argc, char *argv[])
     parameters.push_back(current_params);
     // --------------------------------------
     // select 1 dataset here
-    DataSet dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
     // DataSet dataset = Parser::get_YearPredictionMSD(parameters, 10000, false);
     // --------------------------------------
     // select privacy budgets
@@ -50,25 +50,24 @@ int Evaluation::main(int argc, char *argv[])
 
     // output file
     std::string time_string = get_time_string();
-    std::string outfile_name = fmt::format("results/{}_{}.csv", dataset.name, time_string);
+    std::string dataset_name = dataset->name;
+    int dataset_length = dataset->length;
+    std::string outfile_name = fmt::format("results/{}_{}.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
     output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std" << std::endl;
 
+    // currently we use the same folds for all budgets. Not sure whether that's good or bad.
+    std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
+    delete dataset;
+
     // run the evaluations
     for(auto budget : budgets) {
         ModelParams param = parameters[0];
         param.privacy_budget = budget;
-        std::cout << dataset.name << " pb=" << budget << std::endl;
+        std::cout << dataset_name << " pb=" << budget << std::endl;
 
-        // toggle use_dp if budget is 0
-        param.use_dp = budget != 0;
-
-        /* cross validation */
-
-        // split the data for each fold
-        std::vector<TrainTestSplit> cv_inputs = create_cross_validation_inputs(dataset, 5);
         Timer time_begin = std::chrono::steady_clock::now();
         
         // prepare the ressources for each thread
@@ -76,7 +75,7 @@ int Evaluation::main(int argc, char *argv[])
         std::vector<DPEnsemble> ensembles;
         for (auto &split : cv_inputs) {
             if(param.scale_y){
-                split.train.scale(param, -1, 1);
+                split->train.scale(param, -1, 1);
             }
             ensembles.push_back(DPEnsemble(&param) );
         }
@@ -84,7 +83,7 @@ int Evaluation::main(int argc, char *argv[])
         // threads start training on ther respective folds
         for(size_t thread_id=0; thread_id<threads.size(); thread_id++){
             threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id],
-                &(cv_inputs[thread_id].train));
+                &(cv_inputs[thread_id]->train));
         }
         for (auto &thread : threads) {
             thread.join(); // join once done
@@ -95,7 +94,7 @@ int Evaluation::main(int argc, char *argv[])
         std::vector<double> scores;
         for (size_t ensemble_id = 0; ensemble_id < ensembles.size(); ensemble_id++) {
             DPEnsemble *ensemble = &ensembles[ensemble_id];
-            TrainTestSplit *split = &cv_inputs[ensemble_id];
+            TrainTestSplit *split = cv_inputs[ensemble_id];
             
             // predict with the test set
             std::vector<double> y_pred = ensemble->predict(split->test.X);
@@ -118,7 +117,7 @@ int Evaluation::main(int argc, char *argv[])
         // write mean score to file
         double mean = compute_mean(scores);
         double stdev = compute_stdev(scores, mean);
-        output << fmt::format("{},{},{},{},{},{},{}", dataset.name, dataset.length, param.nb_trees, param.use_dp,
+        output << fmt::format("{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
             param.privacy_budget, mean, stdev) << std::endl;
     }
 
