@@ -122,7 +122,7 @@ void ecall_load_modelparams_into_enclave(sgx_modelparams *mparams)
 
 void ecall_start_gbdt()
 {
-    sgx_printf("Hello from the other side\n");
+    sgx_printf("\033[0;40;33mHello from the other side\033[0m\n");
 
     sgx_printf("%s_size_%i\n", dataset->name.c_str(), dataset->length);
 

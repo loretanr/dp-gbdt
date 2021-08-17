@@ -128,7 +128,11 @@ std::vector<TrainTestSplit *> create_cross_validation_inputs(DataSet *dataset, i
         fold_sizes[index++]++;
         remainder--;
     }
-    // each entry marks the first element of a fold (to be used as test set at some point)
+    // each entry in "indices" marks a start of the test set
+    // ->     [ test |        train          ]
+    //                      ...
+    //        [   train..   | test |  ..train ]
+    //                      ...
     std::deque<int> indices(folds);
     std::partial_sum(fold_sizes.begin(), fold_sizes.end(), indices.begin());
     indices.push_front(0); 
@@ -137,25 +141,41 @@ std::vector<TrainTestSplit *> create_cross_validation_inputs(DataSet *dataset, i
     std::vector<TrainTestSplit *> splits;
 
     for(int i=0; i<folds; i++) {
-        VVD X_copy = dataset->X;
-        std::vector<double> y_copy = dataset->y;
 
-        VVD::iterator x_iterator = X_copy.begin() + indices[i];
-        std::vector<double>::iterator y_iterator = y_copy.begin() + indices[i];
+        // don't waste memory by using local copies of the vectors.
+        // work directly on what will be used.
+        TrainTestSplit *split = new TrainTestSplit();
+        DataSet *train = &split->train;
+        DataSet *test = &split->test;
 
-        VVD x_test(x_iterator, x_iterator + fold_sizes[i]);
-        std::vector<double> y_test(y_iterator, y_iterator + fold_sizes[i]);
+        VVD::iterator x_iterator = (dataset->X).begin() + indices[i];
+        std::vector<double>::iterator y_iterator = (dataset->y).begin() + indices[i];
 
-        X_copy.erase(x_iterator, x_iterator + fold_sizes[i]);
-        y_copy.erase(y_iterator, y_iterator + fold_sizes[i]);
+        // extracting the test slice is easy
+        test->X = VVD(x_iterator, x_iterator + fold_sizes[i]);
+        test->y = std::vector<double>(y_iterator, y_iterator + fold_sizes[i]);
 
-        VVD x_train(X_copy.begin(), X_copy.end());
-        std::vector<double> y_train(y_copy.begin(), y_copy.end());
+        // building the train set from the remaining rows is slightly more tricky
+        // (if you don't want to waste memory)
+        if(i != 0){     // part before the test slice
+            train->X = VVD((dataset->X).begin(), (dataset->X).begin() + indices[i]);
+            train->y = std::vector<double>((dataset->y).begin(), (dataset->y).begin() + indices[i]);
+        }
+        if(i < folds-1){    //part after the test slice
+            for(int cur_row = indices[i+1]; cur_row < dataset->length; cur_row++){
+                train->X.push_back(dataset->X[cur_row]);
+                train->y.push_back(dataset->y[cur_row]);
+            }
+        }
+        // don't forget to add the meta information
+        train->length = (int) train->X.size();
+        train->num_x_cols = (int) train->X[0].size();
+        train->empty = false;
+        test->length = (int) test->X.size();
+        test->num_x_cols = (int) test->X[0].size();
+        test->empty = false;
 
-        DataSet train(x_train,y_train);
-        DataSet test(x_test, y_test);
-
-        splits.push_back(new TrainTestSplit(train,test));
+        splits.push_back(split);
     }
     return splits;
 }

@@ -1730,7 +1730,7 @@ for tree in n_trees:
 
 </rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1629190927.71" unique_id="32">
+	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1629194368.05" unique_id="32">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">Where to put stuff</rich_text>
 		<rich_text>
 </rich_text>
@@ -1782,6 +1782,12 @@ for tree in n_trees:
     </rich_text>
 		<rich_text foreground="#ffffa5a50000">failed, don't try again</rich_text>
 		<rich_text>
+
+• can maybe decrease memory usage of algorithm?
+      ▪ [Peak stack used]: 20 KB
+        [Peak heap used]:  4520 KB
+            somehow must be wrong. is this maybe just the outside? or is it just the inside?
+      •  I suspect cpp is not counted properly. maybe only the C?
 
 --------------------------------------------------------------------------------------------------
 Enclave examples:
