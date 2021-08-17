@@ -1,26 +1,3 @@
------------------------
-Purpose of Cxx11SGXDemo
------------------------
-
-The project demonstrates serveral C++11 features inside the Enclave:
-- lambda expressions;
-- rvalue references and move semantics;
-- automatic type deduction with auto and decltype;
-- nullptr type;
-- strongly typed enum classes;
-- Range-based for statements;
-- static_assert keyword for compile-time assertion;
-- initializer lists and uniform initialization syntax;
-- New virtual function controls: override, final, default, and delete;
-- delegating constructors;
-- new container classes (unordered_set, unordered_map, unordered_multiset, and unordered_multimap);
-- tuple class;
-- function object wrapper;
-- atomic, mutexes, condition_variables;
-- new smart pointer classes: shared_ptr, unique_ptr;
-- new c++ algorithms: all_of, any_of, none_of;
-- variadic templates;
-- SFINAE;
 
 ---------------------------------------------
 How to Build/Execute the C++11 sample program
@@ -44,11 +21,3 @@ How to Build/Execute the C++11 sample program
 4. Execute the binary directly:
     $ ./app
 5. Remember to "make clean" before switching build mode
-
--------------------------------------------------
-Launch token initialization
--------------------------------------------------
-If using libsgx-enclave-common or sgxpsw under version 2.4, an initialized variable launch_token needs to be passed as the 3rd parameter of API sgx_create_enclave. For example,
-
-sgx_launch_token_t launch_token = {0};
-sgx_create_enclave(ENCLAVE_FILENAME, SGX_DEBUG_FLAG, launch_token, NULL, &global_eid, NULL);
