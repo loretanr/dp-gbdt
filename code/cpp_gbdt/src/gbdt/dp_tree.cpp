@@ -45,7 +45,7 @@ void DPTree::fit()
         if (params->leaf_clipping) {
             double threshold = params->l2_threshold * std::pow((1 - params->learning_rate), tree_index);
             for (auto &leaf : this->leaves) {
-                leaf->prediction = clamp(leaf->prediction, -1 * threshold, threshold);
+                leaf->prediction = clamp(leaf->prediction, -threshold, threshold);
             }
         }
 
@@ -176,10 +176,13 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, int current_depth)
 {
     double privacy_budget_for_node;
-    if ((current_depth != 0) and params->use_decay) {
-        privacy_budget_for_node = (tree_params->tree_privacy_budget) / 2 / pow(2, current_depth);
+    if (params->use_decay) {
+        privacy_budget_for_node = (tree_params->tree_privacy_budget) / (2 * pow(2, current_depth + 1));
+        if (current_depth == 0) {
+            privacy_budget_for_node += (tree_params->tree_privacy_budget) / (2 * pow(2, params->max_depth + 1));
+        }
     } else {
-        privacy_budget_for_node = (tree_params->tree_privacy_budget) / 2 / params->max_depth;
+        privacy_budget_for_node = (tree_params->tree_privacy_budget) / (2 * params->max_depth );
     }
 
     vector<SplitCandidate> probabilities;
@@ -188,7 +191,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
-        for (double feature_value : X_live[feature_index]) {
+        for (double feature_value : X_live[feature_index]) {  // TODO unique
             // compute gain
             double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size, categorical);
             // feature cannot be chosen, skipping
@@ -313,7 +316,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
         if (prob.gain <= 0) {
             probabilities.push_back(0);   
         } else {
-            probabilities.push_back( exp(prob.gain - lse) );        // TODO why the softmax here???
+            probabilities.push_back( exp(prob.gain - lse) );
         }
     }
 
@@ -328,7 +331,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
     // all values will be in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
-    double rand01 = ((double) std::rand() / (RAND_MAX));
+    double rand01 = ((double) std::rand() / (RAND_MAX)); // [0,1] sollte nicht schiefgehen können TODO TODO
 
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
     for (int tries=0; tries<10; tries++) {

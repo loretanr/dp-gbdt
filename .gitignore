@@ -21,6 +21,8 @@ code/stuff/github_gbdts/DPBoost/
 **/run
 **/objs/
 *~
+*.o
+*.so
 
 # datasets
 **/YearPredictionMSD.txt*

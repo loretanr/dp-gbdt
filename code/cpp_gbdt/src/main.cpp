@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     }
 
     // Set up logging
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     // Define model parameters
@@ -54,8 +54,8 @@ int main(int argc, char** argv)
     ModelParams current_params = create_default_params();
 
     // change model params here if required:
-    current_params.privacy_budget = 5;
-    current_params.nb_trees = 10;
+    current_params.privacy_budget = 10;
+    current_params.nb_trees = 5;
     current_params.use_dp = false;
     current_params.gradient_filtering = true;
     current_params.balance_partition = true;
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
     parameters.push_back(current_params);
 
     // Choose your dataset
-    DataSet dataset = Parser::get_abalone(parameters, 5000, false);
+    DataSet dataset = Parser::get_abalone(parameters, 1000, false);
 
     std::cout << dataset.name << std::endl;
 

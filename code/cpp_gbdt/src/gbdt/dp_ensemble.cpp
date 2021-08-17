@@ -61,10 +61,16 @@ void DPEnsemble::train(DataSet *dataset)
         update_gradients(dataset->gradients, tree_index);
 
         if(params->use_dp){   // build a dp-tree
-            
+
+            // no leaf clipping formula    
+            // (double) (params->l2_threshold / (1 + params->l2_lambda)
+            // multiclass muss immer clippen und wenn leaf_clip deaaktiviert
+
+            // wenn man gdf ausschaltet muss man clippen!
+
             // compute sensitivity
-            tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
-            tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
+            tree_params.delta_g = 3 * pow(params->l2_threshold, 2);     // for splitting
+            tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),   // for leaves
                                 2 * params->l2_threshold *
                                 pow(1-params->learning_rate, tree_index));
 
@@ -86,7 +92,7 @@ void DPEnsemble::train(DataSet *dataset)
             vector<int> tree_indices;
 
             // gradient-based data filtering
-            if(params->gradient_filtering && tree_index > 0) {
+            if(params->gradient_filtering) {
                 std::vector<int> reject_indices;
                 std::vector<int> remaining_indices;
                 for (int i=0; i<dataset->length; i++) {
@@ -128,6 +134,9 @@ void DPEnsemble::train(DataSet *dataset)
                     std::random_shuffle(tree_indices.begin(), tree_indices.end());
                 }
                 tree_indices = std::vector<int>(tree_indices.begin(), tree_indices.begin() + number_of_rows);
+
+                // TODO clip here!
+
             }
 
             DataSet tree_dataset = dataset->get_subset(tree_indices);
