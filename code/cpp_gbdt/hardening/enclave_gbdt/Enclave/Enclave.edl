@@ -33,6 +33,7 @@
 
 enclave {
 
+    // my own types for passing X,y to the enclave
     include "../App/dp-gbdt/user_types.h"
 
     /* Import ECALL/OCALL from sub-directory EDLs.

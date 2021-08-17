@@ -1716,10 +1716,26 @@ for tree in n_trees:
    5) delete these rows from X_remain</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1629184786.32" unique_id="25">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1629190859.91" unique_id="25">
+		<rich_text>
+
+• Google if another compiler is better at not reordering, maybe ask ivan
+
+• parallel enclaves for our CV folds, might be interesting?
+   ◇ seems possible. Does it make sense to implement though?
+   ◇ </rich_text>
+		<rich_text link="webs https://stackoverflow.com/questions/56758193/how-can-we-run-two-functions-in-different-enclaves-in-parallel">https://stackoverflow.com/questions/56758193/how-can-we-run-two-functions-in-different-enclaves-in-parallel</rich_text>
+		<rich_text>
+
+
+</rich_text>
+	</node>
+	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1629190927.71" unique_id="32">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">Where to put stuff</rich_text>
 		<rich_text>
-• parse outside, bring in with ecall, assemble the DataSet inside enclave
+</rich_text>
+		<rich_text foreground="#9090eeee9090">• parse outside, bring in with ecall, assemble the DataSet inside enclave</rich_text>
+		<rich_text>
 
 • The pro approach would be</rich_text>
 		<rich_text foreground="#ffffffffffff">
@@ -1753,30 +1769,19 @@ for tree in n_trees:
 		<rich_text foreground="#a0a02020f0f0" scale="h2">General</rich_text>
 		<rich_text>
 • do I need edger8r
-      ▪ yeah, specify the .edl file, then let edger8tr to its thing
+      ▪</rich_text>
+		<rich_text foreground="#9090eeee9090"> yeah, specify the .edl file, then let edger8tr to its thing</rich_text>
+		<rich_text>
 
-• In the end I would like to seal the result “way to get secrets out of your enclave”
-   ◇ However we can postpone this
+</rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">• In the end I would like to seal the result “way to get secrets out of your enclave”
+   ◇ However we can postpone this</rich_text>
+		<rich_text>
 --------------------------------------------------------------------------------------------------
 • Makefile should put objs in objs/ instead of src/
     </rich_text>
 		<rich_text foreground="#ffffa5a50000">failed, don't try again</rich_text>
 		<rich_text>
-
-• remove all std:Lib cxx test enclave stuff
-
-• remove some warnings
---------------------------------------------------------------------------------------------------
-
-
-• Google if another compiler is better at not reordering, maybe ask ivan
-
-• parallel enclaves for our CV folds, might be interesting?
-   ◇ seems possible. Does it make sense to implement though?
-   ◇ </rich_text>
-		<rich_text link="webs https://stackoverflow.com/questions/56758193/how-can-we-run-two-functions-in-different-enclaves-in-parallel">https://stackoverflow.com/questions/56758193/how-can-we-run-two-functions-in-different-enclaves-in-parallel</rich_text>
-		<rich_text>
-
 
 --------------------------------------------------------------------------------------------------
 Enclave examples:
