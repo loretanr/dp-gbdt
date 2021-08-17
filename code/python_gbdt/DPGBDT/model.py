@@ -308,15 +308,13 @@ class GradientBoostingEnsemble:
           # a row has to be used on neither of all K trees to be of effect
           # which is very unlikely in practice.
           if self.gradient_filtering and not self.loss_.is_multi_class:
-            if tree_index > 0:
-              norm_1_gradient = np.abs(gradients_tree)
-              rows_gbf = norm_1_gradient <= self.l2_threshold
-              X_tree = X_tree[rows_gbf, :]
-              y_tree = y_tree[rows_gbf]
-              gradients_tree = gradients_tree[rows_gbf]
-
+            norm_1_gradient = np.abs(gradients_tree)
+            rows_gbf = norm_1_gradient <= self.l2_threshold
+            X_tree = X_tree[rows_gbf, :]
+            y_tree = y_tree[rows_gbf]
+            gradients_tree = gradients_tree[rows_gbf]
             # Get back the original row index from the first filtering
-            selected_rows = rows[rows_gbf] if tree_index > 0 else rows
+            selected_rows = rows[rows_gbf]
           else:
             selected_rows = rows
           
@@ -1061,7 +1059,9 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
 
     if self.use_dp:
       if current_depth and self.use_decay:
-        privacy_budget_for_node = np.divide(self.privacy_budget/2, np.power(2, current_depth))
+        privacy_budget_for_node = np.divide(self.privacy_budget, 2 * np.power(2, current_depth+1))
+        if(current_depth == 0):
+          privacy_budget_for_node += np.divide(self.privacy_budget, 2 * np.power(2, self.max_depth+1))
       else:
         privacy_budget_for_node = np.divide(self.privacy_budget/2, self.max_depth)
 
