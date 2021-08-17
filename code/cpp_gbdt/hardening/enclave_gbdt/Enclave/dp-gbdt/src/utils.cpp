@@ -9,11 +9,11 @@
 
 /** Methods */
 
-int sgx_random_int()
+int sgx_random_pos_int()
 {
-    uint16_t rval; 
-    sgx_read_rand((unsigned char *) &rval, sizeof(uint16_t));
-    return (int) rval;
+    int32_t rval;
+    sgx_read_rand((unsigned char *) &rval, sizeof(int32_t));
+    return std::abs(rval);  // [0 .. 2'147'483'647]
 }
 
 // create some default parameters for quick testing
@@ -36,8 +36,13 @@ double clamp(double n, double lower, double upper)
   return std::max(lower, std::min(n, upper));
 }
 
+bool double_equality(double d1, double d2)
+{
+    double epsilon = std::numeric_limits<double>::epsilon();
+    double maxd1d2One = std::max( { 1.0, std::fabs(d1) , std::fabs(d2) } ) ;
+    return std::fabs(d1 - d2) <= epsilon * maxd1d2One ;
+}
 
-// TODO formula
 double log_sum_exp(std::vector<double> vec)
 {
     size_t count = vec.size();
@@ -56,11 +61,11 @@ double log_sum_exp(std::vector<double> vec)
 double compute_mean(std::vector<double> &vec)
 {
     double sum = std::accumulate(vec.begin(), vec.end(), 0.0);
-    return sum / vec.size();
+    return sum / (double) vec.size();
 }
 
 double compute_stdev(std::vector<double> &vec, double mean)
 {
     double sq_sum = std::inner_product(vec.begin(), vec.end(), vec.begin(), 0.0);
-    return std::sqrt(sq_sum / vec.size() - mean * mean);
+    return std::sqrt(sq_sum / (double) vec.size() - mean * mean);
 }

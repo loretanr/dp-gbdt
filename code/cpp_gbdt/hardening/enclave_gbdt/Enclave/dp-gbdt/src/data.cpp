@@ -7,14 +7,11 @@
 #include "utils.h"
 
 
-extern bool VERIFICATION_MODE;
-
-
-Scaler::Scaler(double min_val, double max_val, double fmin, double fmax, bool scaling_required) : data_min(min_val), data_max(max_val),
-        feature_min(fmin), feature_max(fmax), scaling_required(scaling_required)
+Scaler::Scaler(double min_val, double max_val, double fmin, double fmax, bool _scaling_required) : data_min(min_val), data_max(max_val),
+        feature_min(fmin), feature_max(fmax), scaling_required(_scaling_required)
 {
     double data_range = data_max - data_min;
-    data_range = data_range == 0 ? 1 : data_range;
+    data_range = double_equality(data_range, 0.0) ? 1 : data_range;
     this->scale = (feature_max - feature_min) / data_range;
     this->min_ = feature_min - data_min * scale;
 }
@@ -26,13 +23,13 @@ DataSet::DataSet()
 }
 
 
-DataSet::DataSet(VVD X, std::vector<double> y) : X(X), y(y)
+DataSet::DataSet(VVD _X, std::vector<double> _y) : X(_X), y(_y)
 {
     if(X.size() != y.size()){
         throw std::runtime_error("dataset creation failed. X,y need equal amount of rows!");
     }
-    length = X.size();
-    num_x_cols = X[0].size();
+    length = (int) X.size();
+    num_x_cols = (int) X[0].size();
     empty = false;
 }
 
@@ -93,7 +90,7 @@ TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio, boo
     }
 
     // [ test |      train      ]
-    int border = ceil((1-train_ratio) * dataset.y.size());
+    int border = (int) ceil((1-train_ratio) * (double) dataset.y.size());
 
     VVD x_test(dataset.X.begin(), dataset.X.begin() + border);
     std::vector<double> y_test(dataset.y.begin(), dataset.y.begin() + border);
@@ -190,8 +187,8 @@ DataSet DataSet::get_subset(std::vector<int> &indices)
             dataset.gradients.push_back(gradients[i]);
         }
     }
-    dataset.length = dataset.y.size();
-    dataset.num_x_cols = dataset.X[0].size();
+    dataset.length = (int) dataset.y.size();
+    dataset.num_x_cols = (int) dataset.X[0].size();
     dataset.empty = false;
     return dataset;
 }
@@ -207,8 +204,8 @@ DataSet DataSet::remove_rows(std::vector<int> &indices)
             dataset.gradients.push_back(gradients[i]);
         }
     }
-    dataset.length = dataset.y.size();
-    dataset.num_x_cols = X[0].size();
+    dataset.length = (int) dataset.y.size();
+    dataset.num_x_cols = (int) X[0].size();
     dataset.empty = dataset.length == 0;
     dataset.scaler = scaler;
     return dataset;

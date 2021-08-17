@@ -42,11 +42,10 @@
 #include <cmath>
 #include "parameters.h"
 #include "dp-gbdt/include/dp_ensemble.h"
-#include "dp-gbdt/include/dataset_parser.h"
 #include "dp-gbdt/include/data.h"
 
 
-// global variables, will be populated with
+// global variables, the following methods store to them:
 //  - ecall_load_dataset_into_enclave
 //  - ecall_load_modelparams_into_enclave
 DataSet dataset;
@@ -54,8 +53,9 @@ ModelParams modelparams;
 
 
 /* 
- * printf: 
+ * sgx_printf: 
  *   Invokes OCALL to display the enclave buffer to the terminal.
+ *   At the moment our only way to get output out of the enclave.
  */
 void sgx_printf(const char *fmt, ...)
 {
@@ -68,9 +68,10 @@ void sgx_printf(const char *fmt, ...)
 }
 
 
+// creates a C++ matrix/vector from the received C-style X and y.
+// saves it to global variable "dataset" inside the enclave.
 void ecall_load_dataset_into_enclave(sgx_dataset *dset)
 {
-    // translate the C-arrays back to convenient C++ vectors
     VVD X;
     std::vector<double> y;
     for(size_t row=0; row<dset->num_rows; row++){
@@ -82,34 +83,35 @@ void ecall_load_dataset_into_enclave(sgx_dataset *dset)
         X.push_back(X_row);
         y.push_back(dset->y[row]);
     }
-    // X = {{1,2,3},{4,5,6}};
-    // y = {7,8};
     dataset = DataSet(X, y);
     dataset.name = dset->name;
 }
 
 
+// creates C++ ModelParams from the received C-style sgx_modelparams.
+// saves it to global variable "modelparams" inside the enclave.
 void ecall_load_modelparams_into_enclave(sgx_modelparams *mparams)
 {
-    // create ModelParams from the sgx_modelparams
     modelparams.nb_trees = mparams->nb_trees;
     modelparams.privacy_budget = mparams->privacy_budget;
+    // 1 means true/enable
     modelparams.use_dp = mparams->use_dp == 1;
     modelparams.gradient_filtering = mparams->gradient_filtering == 1;
     modelparams.balance_partition = mparams->balance_partition == 1;
     modelparams.leaf_clipping = mparams->leaf_clipping == 1;
     modelparams.scale_y = mparams->scale_y == 1;
+    // fill num_idx and cat_idx
     std::vector<int> m_idx;
-    for(int i=0; i<mparams->num_idx_len; i++){
+    for(unsigned i=0; i<mparams->num_idx_len; i++){
         m_idx.push_back(mparams->num_idx[i]);
     }
     modelparams.num_idx = m_idx;
     m_idx = {};
-    for(int i=0; i<mparams->cat_idx_len; i++){
+    for(unsigned i=0; i<mparams->cat_idx_len; i++){
         m_idx.push_back(mparams->cat_idx[i]);
     }
     modelparams.cat_idx = m_idx;
-
+    // regression or calssification
     if(std::string(mparams->task).compare(std::string("regression")) == 0){
         modelparams.task = std::shared_ptr<Regression>(new Regression());
     } else {
@@ -150,6 +152,7 @@ void ecall_start_gbdt()
         double score = modelparams.task->compute_score(split.test.y, y_pred);
 
         scores.push_back(score);
+        sgx_printf("%f\n", score);
     }
     for(auto elem : scores){
         sgx_printf("%f ", elem);

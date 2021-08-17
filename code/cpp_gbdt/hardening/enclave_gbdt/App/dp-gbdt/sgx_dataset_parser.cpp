@@ -71,27 +71,21 @@ sgx_dataset SGX_Parser::parse_file(const char *dataset_file, const char *dataset
     std::string line;
     num_samples = std::min(num_samples, num_rows);
 
-    int fill_index = 0;
-    int *num_idx_arr = (int *) malloc(num_idx.size() * sizeof(int));
-    for(auto elem : num_idx){
-        num_idx_arr[fill_index++] = elem;
+    modelparams.num_idx = (int *) malloc(num_idx.size() * sizeof(int));
+    for(size_t i=0; i<num_idx.size(); i++){
+        modelparams.num_idx[i] = num_idx[i];
     }
-    int *cat_idx_arr = (int *) malloc(cat_idx.size() * sizeof(int));
-    fill_index = 0;
-    for(auto elem : cat_idx){
-        cat_idx_arr[fill_index++] = elem;
+    modelparams.cat_idx = (int *) malloc(cat_idx.size() * sizeof(int));
+    for(size_t i=0; i<cat_idx.size(); i++){
+        modelparams.cat_idx[i] = cat_idx[i];
     }
-    char *task_arr = (char *) malloc(std::strlen(task) * sizeof(char));
+    modelparams.task = (char *) malloc(std::strlen(task) * sizeof(char));
     for(size_t i=0; i< strlen(task); i++){
-        task_arr[i] = task[i];
+        modelparams.task[i] = task[i];
     }
-
-    modelparams.num_idx = num_idx_arr;
-    modelparams.num_idx_len = num_idx.size();
-    modelparams.cat_idx = cat_idx_arr;
-    modelparams.cat_idx_len = cat_idx.size();
-    modelparams.task = task_arr;
-    modelparams.task_len = std::strlen(task);
+    modelparams.num_idx_len = (unsigned) num_idx.size();
+    modelparams.cat_idx_len = (unsigned) cat_idx.size();
+    modelparams.task_len = (unsigned) std::strlen(task);
 
     int num_used_cols = num_cols - (int) drop_idx.size() - 1;
     double *X = (double *) malloc(num_used_cols * num_samples * sizeof(double));

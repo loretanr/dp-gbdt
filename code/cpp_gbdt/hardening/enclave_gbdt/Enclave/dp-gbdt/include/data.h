@@ -13,7 +13,7 @@ struct Scaler {
     double scale, min_;
     bool scaling_required;
     Scaler() {};
-    Scaler(double min_val, double max_val, double fmin, double fmax, bool scaling_required);
+    Scaler(double min_val, double max_val, double fmin, double fmax, bool _scaling_required);
 };
 
 // basic wrapper around our data:
@@ -55,8 +55,6 @@ struct TrainTestSplit {
 void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec);
 TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio = 0.70, bool shuffle = false);
 std::vector<TrainTestSplit> create_cross_validation_inputs(DataSet &dataset, int folds);
-
-
 
 
 #endif /* DATA_H */

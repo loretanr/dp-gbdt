@@ -187,7 +187,8 @@ sgx_modelparams create_some_modelparams()
 {
     sgx_modelparams params;
     params.nb_trees = 5;
-    params.privacy_budget = 1;
+    params.privacy_budget = 10;
+    // 1 means true/enable
     params.use_dp = 1;
     params.gradient_filtering = 1;
     params.balance_partition = 1;
@@ -206,29 +207,26 @@ int SGX_CDECL main(int argc, char *argv[])
     (void)(argc);
     (void)(argv);
 
-    /* Initialize the enclave */
+    // initialize the enclave
     if(initialize_enclave() < 0){
-        printf("Enter a character before exit ...\n");
-        getchar();
         return -1; 
     }
  
-    /* Utilize trusted libraries */ 
-    // ecall_libcxx_functions();
-    // double *matrix = (double *) malloc(3 * 3 * sizeof(double));
-    // for(int i=0; i<9; i++){ matrix[i] = 42;}
-
-
     // load dataset and model parameters into enclave
     sgx_modelparams modelparams = create_some_modelparams();
-    sgx_dataset dataset = SGX_Parser::get_abalone(modelparams, 300);
+    sgx_dataset dataset = SGX_Parser::get_abalone(modelparams, 5000);
     ecall_load_modelparams_into_enclave(global_eid, &modelparams);
+    free(modelparams.num_idx);
+    free(modelparams.cat_idx);
+    free(modelparams.task);
     ecall_load_dataset_into_enclave(global_eid, &dataset);
-    
+    free(dataset.X);
+    free(dataset.y);
+
     // start gbdt
     ecall_start_gbdt(global_eid);
     
-    // Destroy the enclave
+    // destroy the enclave
     sgx_destroy_enclave(global_eid);
     
     printf("Info: Enclave successfully returned.\n");

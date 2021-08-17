@@ -13,10 +13,10 @@ using namespace std;
 
 DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
 {
-    // only output this once, in case we're running with multiple threads
-    if (parameters->privacy_budget == 0 or !parameters->use_dp){
+    if (double_equality(parameters->privacy_budget, 0.0) or !parameters->use_dp){
         params->use_dp = false;
         params->privacy_budget = 0;
+        sgx_printf("!!! DP disabled !!! (slower than dp!)\n");
     }
 }
     
@@ -29,9 +29,9 @@ DPEnsemble::~DPEnsemble() {
 
 /** Methods */
 
-void DPEnsemble::train(DataSet *dataset)
+void DPEnsemble::train(DataSet *_dataset)
 {   
-    this->dataset = dataset;
+    this->dataset = _dataset;
     int original_length = dataset->length;
 
     // compute initial prediction
@@ -87,7 +87,7 @@ void DPEnsemble::train(DataSet *dataset)
                 }
                 // sgx_printf("GDF: %i of %i rows fulfill gradient criterion\n", remaining_indices.size(), dataset->length);
 
-                if (number_of_rows <= remaining_indices.size()) {
+                if (number_of_rows <= (int) remaining_indices.size()) {
                     // we have enough samples that were not filtered out
                     sgx_vector_shuffle(remaining_indices);
                     for(int i=0; i<number_of_rows; i++){

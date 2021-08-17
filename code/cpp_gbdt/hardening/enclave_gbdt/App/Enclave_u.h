@@ -45,32 +45,6 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (cons
 sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid);
 sgx_status_t ecall_load_dataset_into_enclave(sgx_enclave_id_t eid, struct sgx_dataset* dset);
 sgx_status_t ecall_load_modelparams_into_enclave(sgx_enclave_id_t eid, struct sgx_modelparams* mparams);
-sgx_status_t ecall_lambdas_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_auto_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_decltype_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_strongly_typed_enum_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_range_based_for_loops_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_static_assert_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_virtual_function_control_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_delegating_constructors_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_std_function_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_cxx11_algorithms_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_variadic_templates_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_SFINAE_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_initializer_list_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_rvalue_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_nullptr_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_enum_class_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_new_container_classes_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_tuple_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_shared_ptr_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_atomic_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_mutex_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_print_final_value_mutex_demo(sgx_enclave_id_t eid);
-sgx_status_t ecall_mutex_demo_no_protection(sgx_enclave_id_t eid);
-sgx_status_t ecall_print_final_value_no_protection(sgx_enclave_id_t eid);
-sgx_status_t ecall_condition_variable_run(sgx_enclave_id_t eid);
-sgx_status_t ecall_condition_variable_load(sgx_enclave_id_t eid);
 
 #ifdef __cplusplus
 }

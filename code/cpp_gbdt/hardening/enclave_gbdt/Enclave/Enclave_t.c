@@ -157,264 +157,30 @@ err:
 	return status;
 }
 
-static sgx_status_t SGX_CDECL sgx_ecall_lambdas_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_lambdas_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_auto_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_auto_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_decltype_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_decltype_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_strongly_typed_enum_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_strongly_typed_enum_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_range_based_for_loops_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_range_based_for_loops_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_static_assert_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_static_assert_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_virtual_function_control_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_virtual_function_control_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_delegating_constructors_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_delegating_constructors_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_std_function_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_std_function_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_cxx11_algorithms_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_cxx11_algorithms_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_variadic_templates_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_variadic_templates_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_SFINAE_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_SFINAE_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_initializer_list_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_initializer_list_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_rvalue_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_rvalue_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_nullptr_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_nullptr_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_enum_class_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_enum_class_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_new_container_classes_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_new_container_classes_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_tuple_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_tuple_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_shared_ptr_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_shared_ptr_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_atomic_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_atomic_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_mutex_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_mutex_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_print_final_value_mutex_demo(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_print_final_value_mutex_demo();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_mutex_demo_no_protection(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_mutex_demo_no_protection();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_print_final_value_no_protection(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_print_final_value_no_protection();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_condition_variable_run(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_condition_variable_run();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_ecall_condition_variable_load(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_condition_variable_load();
-	return status;
-}
-
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
-	struct {void* ecall_addr; uint8_t is_priv; uint8_t is_switchless;} ecall_table[29];
+	struct {void* ecall_addr; uint8_t is_priv; uint8_t is_switchless;} ecall_table[3];
 } g_ecall_table = {
-	29,
+	3,
 	{
 		{(void*)(uintptr_t)sgx_ecall_start_gbdt, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_load_dataset_into_enclave, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_load_modelparams_into_enclave, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_lambdas_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_auto_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_decltype_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_strongly_typed_enum_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_range_based_for_loops_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_static_assert_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_virtual_function_control_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_delegating_constructors_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_std_function_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_cxx11_algorithms_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_variadic_templates_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_SFINAE_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_initializer_list_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_rvalue_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_nullptr_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_enum_class_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_new_container_classes_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_tuple_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_shared_ptr_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_atomic_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_mutex_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_print_final_value_mutex_demo, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_mutex_demo_no_protection, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_print_final_value_no_protection, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_condition_variable_run, 0, 0},
-		{(void*)(uintptr_t)sgx_ecall_condition_variable_load, 0, 0},
 	}
 };
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[6][29];
+	uint8_t entry_table[6][3];
 } g_dyn_entry_table = {
 	6,
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, },
+		{0, 0, 0, },
+		{0, 0, 0, },
+		{0, 0, 0, },
+		{0, 0, 0, },
+		{0, 0, 0, },
 	}
 };
 

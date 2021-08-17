@@ -41,7 +41,6 @@ enclave {
      *  [*]: implies to import all functions.
      */
       
-    from "TrustedLibrary/Libcxx.edl" import *;
     from "sgx_tstdc.edl" import *;
 
     /* 

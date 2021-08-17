@@ -4,8 +4,8 @@
 #include <cmath>
 #include <numeric>
 #include <algorithm>
+#include "utils.h"
 
-extern bool VERIFICATION_MODE;
 
 /* ---------- Regression ---------- */
 
@@ -90,7 +90,7 @@ double BinaryClassification::compute_score(std::vector<double> &y, std::vector<d
     // accuracy
     std::vector<bool> correct_preds(y.size());
     for(size_t i=0; i<y.size();i++) {
-        correct_preds[i] = (y[i] == y_pred[i]);
+        correct_preds[i] = (double_equality(y[i], y_pred[i]));
     }
     double true_preds = (double) std::count(correct_preds.begin(), correct_preds.end(), true);
     return true_preds / (double) y.size();

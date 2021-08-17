@@ -19,7 +19,7 @@ public:
     std::vector<DPTree> trees;
 
     // methods
-    void train(DataSet *dataset);
+    void train(DataSet *_dataset);
     std::vector<double> predict(VVD &X);
 
 private:

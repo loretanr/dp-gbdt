@@ -10,6 +10,7 @@ public:
     virtual std::vector<double> compute_gradients(std::vector<double> &y, std::vector<double> &y_pred) = 0;
     virtual double compute_init_score(std::vector<double> &y) = 0;
     virtual double compute_score(std::vector<double> &y, std::vector<double> &y_pred) = 0;
+    virtual ~Task() = default;
 };
 
 

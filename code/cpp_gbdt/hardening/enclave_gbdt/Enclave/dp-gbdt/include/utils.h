@@ -11,13 +11,14 @@ typedef std::vector<std::vector<double>> VVD;
 // method declarations
 ModelParams create_default_params();
 double clamp(double n, double lower, double upper);
+bool double_equality(double d1, double d2);
 double log_sum_exp(std::vector<double> arr);
 void string_pad(std::string &str, const size_t num, const char paddingChar = ' ');
 double compute_mean(std::vector<double> &vec);
 double compute_stdev(std::vector<double> &vec, double mean);
 
-// sgx methods
-int sgx_random_int();
+// "new" sgx methods
+int sgx_random_pos_int();
 
 template <typename T, typename A>
 void sgx_vector_shuffle(std::vector<T,A> &vec)
@@ -26,10 +27,10 @@ void sgx_vector_shuffle(std::vector<T,A> &vec)
     // for i from 0 to n−2 do
     //      j ← random integer such that i ≤ j < n
     //      exchange a[i] and a[j]
-    int n = vec.size();
-    for (int i = 0; i < n - 1; i++)
+    size_t n = vec.size();
+    for (size_t i = 0; i < n - 1; i++)
     {
-        int j = i + sgx_random_int() % (n - i);
+        size_t j = i + (size_t) sgx_random_pos_int() % (n - i);
         std::swap(vec[i], vec[j]);
     }
 }

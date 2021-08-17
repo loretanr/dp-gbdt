@@ -146,7 +146,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 
     if (std::find((params->cat_idx).begin(), (params->cat_idx).end(), node->split_attr) != (params->cat_idx).end()) {
         // categorical feature
-        if (row_val == node->split_value){
+        if (double_equality(row_val, node->split_value)){
             return _predict(row, node->left);
         }
     } else { // numerical feature
@@ -179,7 +179,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
             // compute gain
             double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size, categorical);
             // feature cannot be chosen, skipping
-            if (gain == -1) {
+            if (double_equality(gain, -1.0)) {
                 continue;
             }
             // Gi = epsilon_nleaf * Gi / (2 * delta_G)
@@ -260,7 +260,7 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples,
     // if the feature is categorical
     if(categorical) {
         for (auto sample : samples[feature_index]) {
-            int value = sample == feature_value;
+            int value = double_equality(sample, feature_value);
             lhs.push_back(value);
         }
     } else { // feature is numerical
@@ -310,7 +310,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
     // all values will be in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
-    double rand01 = ((double) sgx_random_int() / (RAND_MAX));
+    double rand01 = ((double) sgx_random_pos_int() / (RAND_MAX));
 
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
     for (int tries=0; tries<10; tries++) {
@@ -319,7 +319,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
                 return index;
             }
         }
-        rand01 = ((double) sgx_random_int() / (RAND_MAX));
+        rand01 = ((double) sgx_random_pos_int() / (RAND_MAX));
     }
     return -1;
 }
@@ -327,7 +327,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 
 void DPTree::add_laplacian_noise(double laplace_scale)
 {
-    Laplace lap(laplace_scale, sgx_random_int());
+    Laplace lap(laplace_scale, sgx_random_pos_int());
 
     // add noise from laplace distribution to leaves
     for (auto &leaf : leaves) {

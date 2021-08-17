@@ -81,7 +81,7 @@ else
 	Urts_Library_Name := sgx_urts
 endif
 
-App_Cpp_Files := App/App.cpp $(wildcard App/TrustedLibrary/*.cpp) App/dp-gbdt/sgx_dataset_parser.cpp
+App_Cpp_Files := App/App.cpp App/dp-gbdt/sgx_dataset_parser.cpp #$(wildcard App/TrustedLibrary/*.cpp)
 App_Include_Paths := -IApp -I$(SGX_SDK)/include -IApp/dp-gbdt/
 
 App_C_Flags := -fPIC -Wno-attributes $(App_Include_Paths)
@@ -101,7 +101,7 @@ endif
 App_Cpp_Flags := $(App_C_Flags)
 App_Link_Flags := -L$(SGX_LIBRARY_PATH) -l$(Urts_Library_Name) -lpthread 
 
-App_Cpp_Objects := $(App_Cpp_Files:.cpp=.o)
+App_Cpp_Objects := $(App_Cpp_Files:%.cpp=%.o)
 
 App_Name := app
 
@@ -126,7 +126,7 @@ else
 endif
 Crypto_Library_Name := sgx_tcrypto
 
-Enclave_Cpp_Files := Enclave/Enclave.cpp $(wildcard Enclave/TrustedLibrary/*.cpp) $(wildcard Enclave/dp-gbdt/src/*.cpp)
+Enclave_Cpp_Files := Enclave/Enclave.cpp $(wildcard Enclave/dp-gbdt/src/*.cpp) #$(wildcard Enclave/TrustedLibrary/*.cpp)
 Enclave_Include_Paths := -IEnclave -I$(SGX_SDK)/include -I$(SGX_SDK)/include/libcxx -I$(SGX_SDK)/include/tlibc -IEnclave/dp-gbdt/include
 
 Enclave_C_Flags := -nostdinc -fvisibility=hidden -fpie -fstack-protector $(Enclave_Include_Paths)
