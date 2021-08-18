@@ -59,7 +59,7 @@ int main(int argc, char** argv)
     current_params.use_dp = true;
     current_params.gradient_filtering = true;
     current_params.balance_partition = true;
-    current_params.leaf_clipping = true;
+    current_params.leaf_clipping = false;
     current_params.scale_y = false;
     parameters.push_back(current_params);
 

@@ -17,7 +17,6 @@ struct ModelParams {
     bool gradient_filtering = true;
     bool leaf_clipping = true;
     bool use_dp = true;
-    bool use_dfs = true;
     bool scale_y = false;
     bool use_decay = false;
     double l2_threshold = 1.0;

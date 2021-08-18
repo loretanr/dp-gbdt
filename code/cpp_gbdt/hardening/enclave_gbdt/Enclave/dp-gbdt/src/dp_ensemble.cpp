@@ -51,11 +51,17 @@ void DPEnsemble::train(DataSet *_dataset)
 
         if(params->use_dp){   // build a dp-tree
             
-            // compute sensitivity
+            // sensitivity for internal nodes
             tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
-            tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
-                                2 * params->l2_threshold *
-                                pow(1-params->learning_rate, tree_index));
+
+            // sensitivity for leaves
+            if (params->gradient_filtering && !params->leaf_clipping) {
+                // you can only "turn off" leaf clipping if GDF is enabled!
+                tree_params.delta_v = params->l2_threshold / (1 + params->l2_lambda);
+            } else {
+                tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
+                        2 * params->l2_threshold * pow(1-params->learning_rate, tree_index));
+            }
 
             // determine number of rows
             int number_of_rows = 0;

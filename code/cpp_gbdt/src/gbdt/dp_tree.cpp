@@ -29,20 +29,16 @@ DPTree::~DPTree() {}
 // Fit the tree to the data
 void DPTree::fit()
 {
-    if (params->use_dfs) {
-        // keep track which samples will be available in a node for spliting
-        vector<int> live_samples(dataset->length);
-        std::iota(std::begin(live_samples), std::end(live_samples), 0);
+    // keep track which samples will be available in a node for spliting
+    vector<int> live_samples(dataset->length);
+    std::iota(std::begin(live_samples), std::end(live_samples), 0);
 
-        this->root_node = make_tree_DFS(0, live_samples);
-    } else {
-        throw runtime_error("non-DFS not yet implemented.");
-    }
+    this->root_node = make_tree_DFS(0, live_samples);
 
     if(params->use_dp) {
 
-        // leaf clipping
-        if (params->leaf_clipping) {
+        // leaf clipping. Note, it can only be disabled if GDF is enabled.
+        if (params->leaf_clipping or !params->gradient_filtering) {
             double threshold = params->l2_threshold * std::pow((1 - params->learning_rate), tree_index);
             for (auto &leaf : this->leaves) {
                 leaf->prediction = clamp(leaf->prediction, -threshold, threshold);

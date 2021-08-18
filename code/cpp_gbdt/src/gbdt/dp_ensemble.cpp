@@ -62,17 +62,17 @@ void DPEnsemble::train(DataSet *dataset)
 
         if(params->use_dp){   // build a dp-tree
 
-            // no leaf clipping formula    
-            // (double) (params->l2_threshold / (1 + params->l2_lambda)
-            // multiclass muss immer clippen und wenn leaf_clip deaaktiviert
+            // sensitivity for internal nodes
+            tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
 
-            // wenn man gdf ausschaltet muss man clippen!
-
-            // compute sensitivity
-            tree_params.delta_g = 3 * pow(params->l2_threshold, 2);     // for splitting
-            tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),   // for leaves
-                                2 * params->l2_threshold *
-                                pow(1-params->learning_rate, tree_index));
+            // sensitivity for leaves
+            if (params->gradient_filtering && !params->leaf_clipping) {
+                // you can only "turn off" leaf clipping if GDF is enabled!
+                tree_params.delta_v = params->l2_threshold / (1 + params->l2_lambda);
+            } else {
+                tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
+                        2 * params->l2_threshold * pow(1-params->learning_rate, tree_index));
+            }
 
             // determine number of rows
             int number_of_rows = 0;
@@ -103,7 +103,8 @@ void DPEnsemble::train(DataSet *dataset)
                         remaining_indices.push_back(i);
                     }
                 }
-                LOG_INFO("GDF: {1} of {2} rows fulfill gradient criterion", remaining_indices.size(), dataset->length);
+                LOG_INFO("GDF: {1} of {2} rows fulfill gradient criterion",
+                    remaining_indices.size(), dataset->length);
 
                 if ((size_t) number_of_rows <= remaining_indices.size()) {
                     // we have enough samples that were not filtered out
@@ -112,17 +113,20 @@ void DPEnsemble::train(DataSet *dataset)
                         tree_indices.push_back(remaining_indices[i]);
                     }
                 } else {
-                    // we don't have enough -> take all samples that were not filtered out, and fill up with (clipped) filtered ones
+                    // we don't have enough -> take all samples that were not filtered out
+                    // and fill up with (clipped) filtered ones
                     for(auto filtered : remaining_indices){
                         tree_indices.push_back(filtered);
                     }
                     // fill up with clipped "rejected" ones
-                    LOG_INFO("GDF: filling up with {1} rows (clipping those gradients)", number_of_rows - tree_indices.size());
+                    LOG_INFO("GDF: filling up with {1} rows (clipping those gradients)",
+                        number_of_rows - tree_indices.size());
                     std::random_shuffle(reject_indices.begin(), reject_indices.end());
                     int reject_index = 0;
                     for(int i=tree_indices.size(); i<number_of_rows; i++){
                         int curr_index = reject_indices[reject_index++];
-                        dataset->gradients[curr_index] = clamp(dataset->gradients[curr_index], -params->l2_threshold, params->l2_threshold);
+                        dataset->gradients[curr_index] = clamp(dataset->gradients[curr_index],
+                            -params->l2_threshold, params->l2_threshold);
                         tree_indices.push_back(curr_index);
                     }
                 }

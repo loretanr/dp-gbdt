@@ -11,7 +11,6 @@
 
 std::vector<double> Regression::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
     {
-        // TODO negative or positive gradient? what is this?
         std::vector<double> gradients(y.size());
         for (size_t i=0; i<y.size(); i++) {
             gradients[i] = y_pred[i] - y[i];
@@ -41,8 +40,6 @@ double Regression::compute_score(std::vector<double> &y, std::vector<double> &y_
 
 /* ---------- Binary Classification ---------- */
 
-// TODO, link between theory (expit/logit) and code
-
 std::vector<double> BinaryClassification::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
     {
         // positive gradient: expit(y_pred) - y
@@ -67,7 +64,7 @@ double BinaryClassification::compute_init_score(std::vector<double> &y)
             occurrences.insert({elem, 1});
         }
     }
-    // just need the smaller value   ????? TODO why
+    // just need the smaller value
     std::set<double, std::greater<double>> occs;
     for(auto &elem : occurrences){
         occs.insert( (double) elem.second / (double) y.size());

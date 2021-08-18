@@ -18,7 +18,6 @@ class Regression : public Task
 {
 public:
 
-    // TODO name?
     virtual std::vector<double> compute_gradients(std::vector<double> &y, std::vector<double> &y_pred);
     
     // mean
