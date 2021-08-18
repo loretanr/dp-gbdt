@@ -24,7 +24,7 @@ typedef std::chrono::steady_clock::time_point Timer;
 int Evaluation::main(int argc, char *argv[])
 {
     // Set up logging for debugging
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::err);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     std::vector<ModelParams> parameters;
@@ -59,8 +59,6 @@ int Evaluation::main(int argc, char *argv[])
     output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std" << std::endl;
 
     // currently we use the same folds for all budgets. Not sure whether that's good or bad.
-    std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
-    delete dataset;
 
     // run the evaluations
     for(auto budget : budgets) {
@@ -68,12 +66,14 @@ int Evaluation::main(int argc, char *argv[])
         param.privacy_budget = budget;
         std::cout << dataset_name << " pb=" << budget << std::endl;
 
+        std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
+
         Timer time_begin = std::chrono::steady_clock::now();
         
         // prepare the ressources for each thread
         std::vector<std::thread> threads(cv_inputs.size());
         std::vector<DPEnsemble> ensembles;
-        for (auto &split : cv_inputs) {
+        for (auto split : cv_inputs) {
             if(param.scale_y){
                 split->train.scale(param, -1, 1);
             }
@@ -107,6 +107,7 @@ int Evaluation::main(int argc, char *argv[])
             double score = param.task->compute_score(split->test.y, y_pred);
             std::cout << std::setprecision(9) << score << " " << std::flush;
             scores.push_back(score);
+            delete split;
         } 
 
         // print elapsed time
@@ -120,6 +121,8 @@ int Evaluation::main(int argc, char *argv[])
         output << fmt::format("{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
             param.privacy_budget, mean, stdev) << std::endl;
     }
+
+    delete dataset;
 
     output.close();
     return 0;

@@ -159,10 +159,13 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, int current_depth)
 {
     double privacy_budget_for_node;
-    if ((current_depth != 0) and params->use_decay) {
-        privacy_budget_for_node = (tree_params->tree_privacy_budget) / 2 / pow(2, current_depth);
+    if (params->use_decay) {
+        privacy_budget_for_node = (tree_params->tree_privacy_budget) / (2 * pow(2, current_depth + 1));
+        if (current_depth == 0) {
+            privacy_budget_for_node += (tree_params->tree_privacy_budget) / (2 * pow(2, params->max_depth + 1));
+        }
     } else {
-        privacy_budget_for_node = (tree_params->tree_privacy_budget) / 2 / params->max_depth;
+        privacy_budget_for_node = (tree_params->tree_privacy_budget) / (2 * params->max_depth );
     }
 
     vector<SplitCandidate> probabilities;
