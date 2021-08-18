@@ -81,8 +81,7 @@ void DPEnsemble::train(DataSet *_dataset)
 
             // gradient-based data filtering
             if(params->gradient_filtering) {
-                std::vector<int> reject_indices;
-                std::vector<int> remaining_indices;
+                std::vector<int> reject_indices, remaining_indices;
                 for (int i=0; i<dataset->length; i++) {
                     double curr_grad = dataset->gradients[i];
                     if (curr_grad < -params->l2_threshold or curr_grad > params->l2_threshold) {

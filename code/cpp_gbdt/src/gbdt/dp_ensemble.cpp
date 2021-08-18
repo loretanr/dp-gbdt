@@ -93,8 +93,7 @@ void DPEnsemble::train(DataSet *dataset)
 
             // gradient-based data filtering
             if(params->gradient_filtering) {
-                std::vector<int> reject_indices;
-                std::vector<int> remaining_indices;
+                std::vector<int> reject_indices, remaining_indices;
                 for (int i=0; i<dataset->length; i++) {
                     double curr_grad = dataset->gradients[i];
                     if (curr_grad < -params->l2_threshold or curr_grad > params->l2_threshold) {
@@ -114,11 +113,10 @@ void DPEnsemble::train(DataSet *dataset)
                     }
                 } else {
                     // we don't have enough -> take all samples that were not filtered out
-                    // and fill up with (clipped) filtered ones
+                    // and fill up with randomly chosen and clipped filtered ones
                     for(auto filtered : remaining_indices){
                         tree_indices.push_back(filtered);
                     }
-                    // fill up with clipped "rejected" ones
                     LOG_INFO("GDF: filling up with {1} rows (clipping those gradients)",
                         number_of_rows - tree_indices.size());
                     std::random_shuffle(reject_indices.begin(), reject_indices.end());
@@ -131,16 +129,14 @@ void DPEnsemble::train(DataSet *dataset)
                     }
                 }
             } else {
-                // no GDF, just randomly select <number_of_rows> rows
+                // no GDF, just randomly select <number_of_rows> rows.
+                // Note, this causes the leaves to be clipped after building the tree.
                 tree_indices = vector<int>(dataset->length);
                 std::iota(std::begin(tree_indices), std::end(tree_indices), 0);
                 if (!VERIFICATION_MODE) {
                     std::random_shuffle(tree_indices.begin(), tree_indices.end());
                 }
                 tree_indices = std::vector<int>(tree_indices.begin(), tree_indices.begin() + number_of_rows);
-
-                // TODO clip here!
-
             }
 
             DataSet tree_dataset = dataset->get_subset(tree_indices);
