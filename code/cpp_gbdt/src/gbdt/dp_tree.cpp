@@ -188,7 +188,12 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
+        std::set<double> unique;
         for (double feature_value : X_live[feature_index]) {  // TODO unique
+            if (std::get<1>(unique.insert(feature_value)) == false){
+                // already had that value
+                continue;
+            }
             // compute gain
             double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size, categorical);
             // feature cannot be chosen, skipping

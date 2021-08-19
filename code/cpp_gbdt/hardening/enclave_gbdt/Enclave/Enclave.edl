@@ -54,10 +54,9 @@ enclave {
     };
 
     trusted {
-        public void ecall_start_gbdt();
-
         public void ecall_load_dataset_into_enclave([in] struct sgx_dataset *dset);
         public void ecall_load_modelparams_into_enclave([in] struct sgx_modelparams *mparams);
+        public void ecall_start_gbdt();
     };
 
 };
