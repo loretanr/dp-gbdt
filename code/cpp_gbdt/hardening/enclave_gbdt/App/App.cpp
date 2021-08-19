@@ -186,7 +186,7 @@ void ocall_print_string(const char *str)
 sgx_modelparams create_some_modelparams()
 {
     sgx_modelparams params;
-    params.nb_trees = 10;
+    params.nb_trees = 5;
     params.privacy_budget = 10;
     // 1 means true/enable
     params.use_dp = 1;
