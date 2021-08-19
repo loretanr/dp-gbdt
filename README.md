@@ -5,6 +5,8 @@ WIP: repo for sharing and backup
 
 ## Limitations
 as of right now:
+- The python implementation is lacking some bugfixes that we did in the C++ code.
+  - Will apply these changes soon though
 - C++ algorithm can do **regression** and **binary classification**.
   - **regression** can be performed on abalone & yearMSD
   - **classification** can be performed on the adult dataset
