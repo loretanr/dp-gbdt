@@ -8,7 +8,7 @@ $(shell mkdir -p objs)
 $(shell mkdir -p objs/gbdt)
 
 run: $(SOURCES:src/%.cpp=objs/%.o)
-	$(COMPILER) -pthread $^ -o $@
+	$(COMPILER) -pthread $^ -o $@ 
 
 clean:
 	rm -r objs
