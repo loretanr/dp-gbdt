@@ -9,10 +9,6 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript" src="navtreedata.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -49,23 +45,6 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
-</div><!-- top -->
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-      <div id="nav-sync" class="sync"></div>
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
-  </div>
-</div>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('loss_8h.html',''); initResizable(); });
-/* @license-end */
-</script>
-<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -80,6 +59,11 @@ $(document).ready(function(){initNavTree('loss_8h.html',''); initResizable(); })
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_e914ee4d4a44400f1fdb170cb4ead18a.html">base</a></li><li class="navelem"><a class="el" href="dir_86751c6d8ae9997ab6788777e7f7ee73.html">include</a></li><li class="navelem"><a class="el" href="dir_5415e3b0fe8d4dc97d731d1c01bcb0c1.html">gbdt</a></li>  </ul>
+</div>
+</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a>  </div>
@@ -91,30 +75,14 @@ $(document).ready(function(){initNavTree('loss_8h.html',''); initResizable(); })
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for loss.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="loss_8h__incl.png" border="0" usemap="#base_2include_2gbdt_2loss_8h" alt=""/></div>
-<map name="base_2include_2gbdt_2loss_8h" id="base_2include_2gbdt_2loss_8h">
-<area shape="rect" title=" " alt="" coords="5,5,184,32"/>
-<area shape="rect" title=" " alt="" coords="63,80,126,107"/>
-</map>
+<div class="center"><iframe scrolling="no" frameborder="0" src="loss_8h__incl.svg" width="190" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="loss_8h__dep__incl.png" border="0" usemap="#base_2include_2gbdt_2loss_8hdep" alt=""/></div>
-<map name="base_2include_2gbdt_2loss_8hdep" id="base_2include_2gbdt_2loss_8hdep">
-<area shape="rect" title=" " alt="" coords="227,5,405,32"/>
-<area shape="rect" href="parameters_8h.html" title=" " alt="" coords="116,80,311,107"/>
-<area shape="rect" href="loss_8cpp.html" title=" " alt="" coords="335,80,502,107"/>
-<area shape="rect" href="dp__tree_8h.html" title=" " alt="" coords="103,304,260,345"/>
-<area shape="rect" href="dp__ensemble_8h.html" title=" " alt="" coords="219,393,376,435"/>
-<area shape="rect" href="main_8cpp.html" title=" " alt="" coords="473,483,613,509"/>
-<area shape="rect" href="utils_8h.html" title=" " alt="" coords="204,155,385,181"/>
-<area shape="rect" href="dp__tree_8cpp.html" title=" " alt="" coords="5,401,195,427"/>
-<area shape="rect" href="dp__ensemble_8cpp.html" title=" " alt="" coords="184,483,411,509"/>
-<area shape="rect" href="data_8h.html" title=" " alt="" coords="220,229,369,256"/>
-<area shape="rect" href="utils_8cpp.html" title=" " alt="" coords="393,229,561,256"/>
-<area shape="rect" href="data_8cpp.html" title=" " alt="" coords="335,311,505,338"/>
-</map>
+<div class="center"><iframe scrolling="no" frameborder="0" src="loss_8h__dep__incl.svg" width="619" height="515"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 </div>
 <p><a href="loss_8h_source.html">Go to the source code of this file.</a></p>
@@ -129,15 +97,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
-</div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><a class="el" href="dir_e914ee4d4a44400f1fdb170cb4ead18a.html">base</a></li><li class="navelem"><a class="el" href="dir_86751c6d8ae9997ab6788777e7f7ee73.html">include</a></li><li class="navelem"><a class="el" href="dir_5415e3b0fe8d4dc97d731d1c01bcb0c1.html">gbdt</a></li><li class="navelem"><a class="el" href="loss_8h.html">loss.h</a></li>
-    <li class="footer">Generated by
-    <a href="http://www.doxygen.org/index.html">
-    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
-  </ul>
-</div>
+<hr class="footer"/><address class="footer"><small>
+Generated by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
 </body>
 </html>

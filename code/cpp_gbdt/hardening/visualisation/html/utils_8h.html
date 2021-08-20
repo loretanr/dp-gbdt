@@ -9,10 +9,6 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript" src="navtreedata.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -49,23 +45,6 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
-</div><!-- top -->
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-      <div id="nav-sync" class="sync"></div>
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
-  </div>
-</div>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('utils_8h.html',''); initResizable(); });
-/* @license-end */
-</script>
-<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -80,6 +59,11 @@ $(document).ready(function(){initNavTree('utils_8h.html',''); initResizable(); }
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_e914ee4d4a44400f1fdb170cb4ead18a.html">base</a></li><li class="navelem"><a class="el" href="dir_86751c6d8ae9997ab6788777e7f7ee73.html">include</a></li><li class="navelem"><a class="el" href="dir_5415e3b0fe8d4dc97d731d1c01bcb0c1.html">gbdt</a></li>  </ul>
+</div>
+</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#typedef-members">Typedefs</a> &#124;
@@ -95,33 +79,14 @@ $(document).ready(function(){initNavTree('utils_8h.html',''); initResizable(); }
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for utils.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="utils_8h__incl.png" border="0" usemap="#base_2include_2gbdt_2utils_8h" alt=""/></div>
-<map name="base_2include_2gbdt_2utils_8h" id="base_2include_2gbdt_2utils_8h">
-<area shape="rect" title=" " alt="" coords="74,5,255,32"/>
-<area shape="rect" title=" " alt="" coords="92,229,154,256"/>
-<area shape="rect" title=" " alt="" coords="27,80,86,107"/>
-<area shape="rect" href="parameters_8h.html" title=" " alt="" coords="110,80,219,107"/>
-<area shape="rect" href="data_8h.html" title=" " alt="" coords="244,80,306,107"/>
-<area shape="rect" title=" " alt="" coords="76,155,154,181"/>
-<area shape="rect" href="loss_8h.html" title=" " alt="" coords="178,155,238,181"/>
-<area shape="rect" title=" " alt="" coords="314,155,356,181"/>
-</map>
+<div class="center"><iframe scrolling="no" frameborder="0" src="utils_8h__incl.svg" width="362" height="262"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="utils_8h__dep__incl.png" border="0" usemap="#base_2include_2gbdt_2utils_8hdep" alt=""/></div>
-<map name="base_2include_2gbdt_2utils_8hdep" id="base_2include_2gbdt_2utils_8hdep">
-<area shape="rect" title=" " alt="" coords="272,5,453,32"/>
-<area shape="rect" href="data_8h.html" title=" " alt="" coords="288,80,437,107"/>
-<area shape="rect" href="dp__tree_8h.html" title=" " alt="" coords="168,155,325,196"/>
-<area shape="rect" href="utils_8cpp.html" title=" " alt="" coords="461,80,629,107"/>
-<area shape="rect" href="dp__ensemble_8h.html" title=" " alt="" coords="219,244,376,285"/>
-<area shape="rect" href="main_8cpp.html" title=" " alt="" coords="343,333,483,360"/>
-<area shape="rect" href="data_8cpp.html" title=" " alt="" coords="451,162,621,189"/>
-<area shape="rect" href="dp__tree_8cpp.html" title=" " alt="" coords="5,251,195,278"/>
-<area shape="rect" href="dp__ensemble_8cpp.html" title=" " alt="" coords="92,333,319,360"/>
-</map>
+<div class="center"><iframe scrolling="no" frameborder="0" src="utils_8h__dep__incl.svg" width="635" height="366"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 </div>
 <p><a href="utils_8h_source.html">Go to the source code of this file.</a></p>
@@ -202,13 +167,8 @@ Functions</h2></td></tr>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="utils_8h_aeeffe725a130b4421d7fc165a4fa2ee3_icgraph.png" border="0" usemap="#utils_8h_aeeffe725a130b4421d7fc165a4fa2ee3_icgraph" alt=""/></div>
-<map name="utils_8h_aeeffe725a130b4421d7fc165a4fa2ee3_icgraph" id="utils_8h_aeeffe725a130b4421d7fc165a4fa2ee3_icgraph">
-<area shape="rect" title=" " alt="" coords="435,31,497,57"/>
-<area shape="rect" href="class_d_p_tree.html#a82b9507f4f5d056b98f40871b304f943" title=" " alt="" coords="299,5,387,32"/>
-<area shape="rect" href="class_d_p_ensemble.html#a1652b5fde834bfb18416ebf438d3e10a" title=" " alt="" coords="108,31,251,57"/>
-<area shape="rect" href="main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,31,60,57"/>
-</map>
+<div class="center"><iframe scrolling="no" frameborder="0" src="utils_8h_aeeffe725a130b4421d7fc165a4fa2ee3_icgraph.svg" width="503" height="63"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -283,11 +243,8 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="utils_8h_a419f1790b861ecbd3e190092eadec7ff_icgraph.png" border="0" usemap="#utils_8h_a419f1790b861ecbd3e190092eadec7ff_icgraph" alt=""/></div>
-<map name="utils_8h_a419f1790b861ecbd3e190092eadec7ff_icgraph" id="utils_8h_a419f1790b861ecbd3e190092eadec7ff_icgraph">
-<area shape="rect" title=" " alt="" coords="108,5,280,32"/>
-<area shape="rect" href="main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,5,60,32"/>
-</map>
+<div class="center"><iframe scrolling="no" frameborder="0" src="utils_8h_a419f1790b861ecbd3e190092eadec7ff_icgraph.svg" width="286" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -331,16 +288,8 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="utils_8h_a35953abcfd9e2310fa2c6d440233fad5_icgraph.png" border="0" usemap="#utils_8h_a35953abcfd9e2310fa2c6d440233fad5_icgraph" alt=""/></div>
-<map name="utils_8h_a35953abcfd9e2310fa2c6d440233fad5_icgraph" id="utils_8h_a35953abcfd9e2310fa2c6d440233fad5_icgraph">
-<area shape="rect" title=" " alt="" coords="1076,13,1184,39"/>
-<area shape="rect" href="class_d_p_tree.html#a7ce368c3888736d660dcf09587df4512" title=" " alt="" coords="876,5,1028,47"/>
-<area shape="rect" href="class_d_p_tree.html#ad7f8755be37ad10cf104fba2076dce5e" title=" " alt="" coords="659,13,828,39"/>
-<area shape="rect" href="class_d_p_tree.html#a07314c44bb7b7ca37c735b70de3ccb9e" title=" " alt="" coords="435,13,611,39"/>
-<area shape="rect" href="class_d_p_tree.html#a82b9507f4f5d056b98f40871b304f943" title=" " alt="" coords="299,13,387,39"/>
-<area shape="rect" href="class_d_p_ensemble.html#a1652b5fde834bfb18416ebf438d3e10a" title=" " alt="" coords="108,13,251,39"/>
-<area shape="rect" href="main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,13,60,39"/>
-</map>
+<div class="center"><iframe scrolling="no" frameborder="0" src="utils_8h_a35953abcfd9e2310fa2c6d440233fad5_icgraph.svg" width="1190" height="52"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 
 </div>
@@ -380,15 +329,11 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 </div><!-- contents -->
-</div><!-- doc-content -->
 <!-- start footer part -->
-<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
-  <ul>
-    <li class="navelem"><a class="el" href="dir_e914ee4d4a44400f1fdb170cb4ead18a.html">base</a></li><li class="navelem"><a class="el" href="dir_86751c6d8ae9997ab6788777e7f7ee73.html">include</a></li><li class="navelem"><a class="el" href="dir_5415e3b0fe8d4dc97d731d1c01bcb0c1.html">gbdt</a></li><li class="navelem"><a class="el" href="utils_8h.html">utils.h</a></li>
-    <li class="footer">Generated by
-    <a href="http://www.doxygen.org/index.html">
-    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
-  </ul>
-</div>
+<hr class="footer"/><address class="footer"><small>
+Generated by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
 </body>
 </html>
