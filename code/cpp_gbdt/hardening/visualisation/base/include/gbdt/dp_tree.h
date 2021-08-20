@@ -45,7 +45,6 @@ private:
 public:
     // constructors
     DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index);
-    ~DPTree();
 
     // fields
     TreeNode *root_node;
@@ -53,7 +52,6 @@ public:
     // methods
     std::vector<double> predict(VVD &X);
     void fit();
-    void recursive_print_tree(TreeNode* node);
     void delete_tree(TreeNode *node);
 };
 

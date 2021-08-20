@@ -58,6 +58,4 @@ TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio = 0.
 std::vector<TrainTestSplit *> create_cross_validation_inputs(DataSet *dataset, int folds);
 
 
-
-
 #endif /* DATA_H */

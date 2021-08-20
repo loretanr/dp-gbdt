@@ -7,9 +7,6 @@
 #include "data.h"
 
 
-extern bool VERIFICATION_MODE;
-
-
 Scaler::Scaler(double min_val, double max_val, double fmin, double fmax, bool scaling_required) : data_min(min_val), data_max(max_val),
         feature_min(fmin), feature_max(fmax), scaling_required(scaling_required)
 {
@@ -43,7 +40,7 @@ DataSet::DataSet(VVD X, std::vector<double> y) : X(X), y(y)
 void DataSet::scale(ModelParams &params, double lower, double upper)
 {
     // only scale in dp mode
-    if(params.use_dp or VERIFICATION_MODE){
+    if(params.use_dp){
         
         // return if no scaling required (y already in [-1,1])
         bool scaling_required = false;
@@ -74,7 +71,7 @@ void DataSet::scale(ModelParams &params, double lower, double upper)
 
 void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec)
 {
-    if(params.use_dp or VERIFICATION_MODE){
+    if(params.use_dp){
         // return if no scaling required
         if(not scaler.scaling_required){
             return;
@@ -120,7 +117,7 @@ TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio, boo
 // the dataset rows, unless we're in verification mode.
 std::vector<TrainTestSplit *> create_cross_validation_inputs(DataSet *dataset, int folds)
 {
-    bool shuffle = !VERIFICATION_MODE;
+    bool shuffle = true;
     if(shuffle) {
         dataset->shuffle_dataset();
     }

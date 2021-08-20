@@ -1,13 +1,10 @@
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include <mutex>
 #include "utils.h"
 
 
 /** Global Variables */
-
-bool VERIFICATION_MODE;
 size_t cv_fold_index;
 std::once_flag flag1;
 

@@ -1,14 +1,10 @@
 #include <numeric>
 #include <iostream>
+#include <algorithm>
 #include <iomanip>
 #include <cmath>
 #include "dp_tree.h"
 #include "laplace.h"
-#include "logging.h"
-#include "spdlog/spdlog.h"
-
-extern std::ofstream verification_logfile;
-extern bool VERIFICATION_MODE;
 
 using namespace std;
 
@@ -20,9 +16,6 @@ DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, s
     tree_params(tree_params), 
     dataset(dataset),
     tree_index(tree_index) {}
-
-DPTree::~DPTree() {}
-
 
 /** Methods */
 
@@ -60,8 +53,6 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     if ( (current_depth == params->max_depth) or 
             live_samples.size() < (size_t) params->min_samples_split) {
         TreeNode *leaf = make_leaf_node(current_depth, live_samples);
-        LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
-            current_depth, live_samples.size(), leaf->prediction);
         return leaf;
     }
 
@@ -85,13 +76,8 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 
     // no split found
     if (node->is_leaf()) {
-        LOG_DEBUG("no split found -> leaf");
         return node;
     }
-
-    LOG_DEBUG("best split @ {1}, val {2:.2f}, gain {3:.5f}, curr_depth {4}, samples {5} ->({6},{7})", 
-        node->split_attr, node->split_value, node->split_gain, current_depth, 
-        node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
 
     // prepare the new live samples to continue recursion
     vector<int> lhs;
@@ -267,11 +253,6 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
 
     double total_gain = lhs_gain + rhs_gain;
 
-    if(VERIFICATION_MODE){
-        // round to 10 decimals to avoid numeric issues in verification
-        total_gain = std::floor(total_gain * 1e10) / 1e10;
-    }
-
     return std::max(total_gain, 0.0);
 }
 
@@ -323,7 +304,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
     }
 
     // non-dp: deterministically choose the best split
-    if (!params->use_dp or VERIFICATION_MODE) {
+    if (!params->use_dp) {
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         // return index of the max_elem
         return std::distance(probabilities.begin(), max_elem);
@@ -350,82 +331,13 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 
 void DPTree::add_laplacian_noise(double laplace_scale)
 {
-    if(VERIFICATION_MODE){
-        double sum = 0;
-        for (auto leaf : leaves) {
-            sum += leaf->prediction;
-        }
-        LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", leaves.size(), sum);
-        VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
-        return;
-    }
-
-    LOG_DEBUG("Adding Laplace noise to leaves (Scale {1:.2f})", laplace_scale);
-
     Laplace lap(laplace_scale, rand());
 
     // add noise from laplace distribution to leaves
     for (auto &leaf : leaves) {
         double noise = lap.return_a_random_variable(laplace_scale);
         leaf->prediction += noise;
-        LOG_DEBUG("({1:.3f} -> {2:.8f})", leaf->prediction, leaf->prediction+noise);
     }
-}
-
-
-// active in debug mode, prints the tree to console
-void DPTree::recursive_print_tree(TreeNode* node) {
-
-    if (node->is_leaf()) {
-        return;
-    }
-    // check if split uses categorical attr
-    bool categorical = std::find( ((*params).cat_idx).begin(),
-        ((*params).cat_idx).end(), node->split_attr) != ((*params).cat_idx).end();
-    
-    if (categorical) {
-        std::cout << std::defaultfloat;
-    } else {
-        std::cout << std::fixed;
-    }
-
-    for (int i = 0; i < node->depth; ++i) { cout << ":  "; }
-
-    if (!categorical) {
-        cout << "Attr" << std::setprecision(3) << node->split_attr << 
-            " < " << std::setprecision(3) << node->split_value;
-    } else {
-        double split_value = (node->split_value); // categorical, hacked
-        cout << "Attr" << node->split_attr << " = " << split_value;
-    }
-    if (node->left->is_leaf()) {
-        cout << " (" << "L-leaf" << ")" << endl;
-    } else {
-        cout << endl;
-    }
-
-    recursive_print_tree(node->left);
-
-    if (categorical) {
-        std::cout << std::defaultfloat;
-    } else {
-        std::cout << std::fixed;
-    }
-
-    for (int i = 0; i < node->depth; ++i) { cout << ":  "; }
-    if (!categorical) {
-        cout << "Attr" << std::setprecision(3) << node->split_attr <<
-            " >= " << std::setprecision(3) << node->split_value;
-    } else {
-        double split_value = node->split_value;
-        cout << "Attr" << node->split_attr << " != " << split_value;
-    }
-    if (node->right->is_leaf()) {
-        cout << " (" << "R-leaf" << ")" << endl;
-    } else {
-        cout << endl;
-    }
-    recursive_print_tree(node->right);
 }
 
 
