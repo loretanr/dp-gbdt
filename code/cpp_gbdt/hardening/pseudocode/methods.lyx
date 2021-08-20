@@ -1,0 +1,822 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+%% use full paper
+\usepackage[margin=2cm]{geometry}
+
+%% multicols
+\usepackage{multicol}
+
+%% no automated date after title 
+\date{}
+
+%% compact spacing
+\usepackage[compact]{titlesec}
+\usepackage{enumitem}
+\setlist{nolistsep}
+
+%% table formatting
+\usepackage{graphicx} 
+
+%% colors
+\usepackage{xcolor, amsmath}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\definecolor{amaranth}{rgb}{0.9, 0.17, 0.31}
+\DontPrintSemicolon
+% Define pseudocode formatting
+\renewcommand{\KwSty}[1]{\textnormal{\textcolor{amaranth!90!black}{\bfseries #1}}\unskip}
+\renewcommand{\ArgSty}[1]{\textnormal{\ttfamily #1}\unskip}
+\SetKwComment{Comment}{\color{green!50!black}// }{}
+\renewcommand{\CommentSty}[1]{\textnormal{\ttfamily\color{green!50!black}#1}\unskip}
+\newcommand{\assign}{\leftarrow}
+\newcommand{\var}{\texttt}
+\newcommand{\FuncCall}[2]{\texttt{\bfseries #1(#2)}}
+\SetKwProg{Function}{Function}{}{}
+\renewcommand{\ProgSty}[1]{\texttt{\bfseries #1}}
+
+
+% highlight
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+\newcommand{\hilightt}[1]{\colorbox{orange}{#1}}
+
+% titlespace
+\usepackage{titling}
+
+% no ugly indent
+\setlength\parindent{0pt}
+
+
+%\usepackage{algorithm,algpseudocode}
+%\usepackage{algorithm2e}
+\end_preamble
+\use_default_options true
+\begin_modules
+algolyx
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "frame=trbl,backgroundcolor={\color{lightgray}},flexiblecolumns=true,basicstyle={\small\ttfamily},breaklines=true,keywordstyle={\color{blue}\bfseries},language=Java,sensitive=true,emph={[1]{critical_section}},emphstyle={[1]\color{red}},emph={[2]{atomic,Condition}},emphstyle={[2]\color{blue}},rulesepcolor={\color{gray}},emph={[3]{acquire(mutex),release(mutex),signal(mutex)}},emphstyle={[3]\color{magenta}},showstringspaces=false,stringstyle={\color{purple}},commentstyle={\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small},morecomment={[l][\color{Blue}]{...}},tabsize=4,lineskip={-1.5pt}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Building a single tree
+\end_layout
+
+\begin_layout Subsection
+make_tree_DFS
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+% beautiful algorithm
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{Dynamic PCA}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Comment{$
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$ is globally given, and initially set to $
+\backslash
+infty$.}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{ExpandBasisIfInteresting($B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+If{$
+\backslash
+var{loss} > 
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$}{
+\end_layout
+
+\begin_layout Plain Layout
+
+      $
+\backslash
+var{loss} 
+\backslash
+assign 
+\backslash
+sqrt{
+\backslash
+lVert 
+\backslash
+vec{x} 
+\backslash
+rVert^2 - 
+\backslash
+lVert 
+\backslash
+vec{x}^T B 
+\backslash
+rVert^2}$
+\end_layout
+
+\begin_layout Plain Layout
+
+        
+\backslash
+Comment{By Pythagoras}
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{Append}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B 
+\backslash
+assign 
+\backslash
+FuncCall{GramSchmidt}{$B$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    $
+\backslash
+theta_{
+\backslash
+mathrm{exp}} 
+\backslash
+assign 
+\backslash
+FuncCall{UpdateLoss}{$
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$, 
+\backslash
+var{loss}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B$, $
+\backslash
+Sigma$}
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{PeriodicDecompose($B$, $
+\backslash
+Sigma$)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+If{
+\backslash
+FuncCall{IsOneMinutePassed}{}}{
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{PCA}{$B$, $
+\backslash
+Sigma$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B$, $
+\backslash
+Sigma$}
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Comment{The main function}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{DynPCA($B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$, $s$)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{ExpandBasisIfInteresting}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    $
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{UpdateCovMatrix}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$, $s$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    $B', 
+\backslash
+Sigma' 
+\backslash
+assign 
+\backslash
+FuncCall{PeriodicDecompose}{$B$, $
+\backslash
+Sigma$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B'$, $
+\backslash
+Sigma'$}
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+find_best_split()
+\end_layout
+
+\begin_layout Paragraph
+Caller graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/cpp_gbdt/hardening/visualisation/graphs/find_best_split/caller.svg
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Call graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/cpp_gbdt/hardening/visualisation/graphs/find_best_split/call.svg
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Arguments
+\end_layout
+
+\begin_layout Paragraph
+Other used variables
+\end_layout
+
+\begin_layout Paragraph
+Pseudocode
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{find
+\backslash
+_best
+\backslash
+_split()}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Comment{$
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$ is globally given, and initially set to $
+\backslash
+infty$.}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{find
+\backslash
+_best
+\backslash
+_split($X$, gradients, curr
+\backslash
+_depth)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+If{$
+\backslash
+var{loss} > 
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$}{
+\end_layout
+
+\begin_layout Plain Layout
+
+      $
+\backslash
+var{loss} 
+\backslash
+assign 
+\backslash
+sqrt{
+\backslash
+lVert 
+\backslash
+vec{x} 
+\backslash
+rVert^2 - 
+\backslash
+lVert 
+\backslash
+vec{x}^T B 
+\backslash
+rVert^2}$
+\end_layout
+
+\begin_layout Plain Layout
+
+        
+\backslash
+Comment{By Pythagoras}
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{Append}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B 
+\backslash
+assign 
+\backslash
+FuncCall{GramSchmidt}{$B$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    $
+\backslash
+theta_{
+\backslash
+mathrm{exp}} 
+\backslash
+assign 
+\backslash
+FuncCall{UpdateLoss}{$
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$, 
+\backslash
+var{loss}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B$, $
+\backslash
+Sigma$}
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{PeriodicDecompose($B$, $
+\backslash
+Sigma$)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+If{
+\backslash
+FuncCall{IsOneMinutePassed}{}}{
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{PCA}{$B$, $
+\backslash
+Sigma$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B$, $
+\backslash
+Sigma$}
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Comment{The main function}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{DynPCA($B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$, $s$)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{ExpandBasisIfInteresting}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    $
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{UpdateCovMatrix}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$, $s$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    $B', 
+\backslash
+Sigma' 
+\backslash
+assign 
+\backslash
+FuncCall{PeriodicDecompose}{$B$, $
+\backslash
+Sigma$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B'$, $
+\backslash
+Sigma'$}
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+parameter leakage
+\end_layout
+
+\begin_layout Itemize
+Whether we use decaying privacy budget for internal nodes
+\end_layout
+
+\begin_layout Itemize
+Whether we use 2-nodes algorithm for splitting
+\end_layout
+
+\end_body
+\end_document

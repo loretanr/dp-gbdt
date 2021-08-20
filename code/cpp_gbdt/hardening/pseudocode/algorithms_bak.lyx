@@ -118,8 +118,17 @@ algolyx
 
 \begin_body
 
+\begin_layout Section
+Building a single tree
+\end_layout
+
+\begin_layout Subsection
+make_tree_DFS
+\end_layout
+
 \begin_layout Standard
 \begin_inset Float algorithm
+placement H
 wide false
 sideways false
 status open
@@ -128,7 +137,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Build_Tree_DFS (current_depth, samples)
+make_tree_DFS (current_depth, samples)
 \end_layout
 
 \end_inset
@@ -202,7 +211,369 @@ split = find_best_split(samples)
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+find_best_split()
+\end_layout
+
+\begin_layout Paragraph
+Caller graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/cpp_gbdt/hardening/visualisation/graphs/find_best_split/caller.svg
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Call graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/cpp_gbdt/hardening/visualisation/graphs/find_best_split/call.svg
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Arguments
+\end_layout
+
+\begin_layout Paragraph
+Other used variables
+\end_layout
+
+\begin_layout Paragraph
+Pseudocode
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+% beautiful algorithm
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{Dynamic PCA}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Comment{$
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$ is globally given, and initially set to $
+\backslash
+infty$.}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{ExpandBasisIfInteresting($B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+If{$
+\backslash
+var{loss} > 
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$}{
+\end_layout
+
+\begin_layout Plain Layout
+
+      $
+\backslash
+var{loss} 
+\backslash
+assign 
+\backslash
+sqrt{
+\backslash
+lVert 
+\backslash
+vec{x} 
+\backslash
+rVert^2 - 
+\backslash
+lVert 
+\backslash
+vec{x}^T B 
+\backslash
+rVert^2}$
+\end_layout
+
+\begin_layout Plain Layout
+
+        
+\backslash
+Comment{By Pythagoras}
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{Append}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B 
+\backslash
+assign 
+\backslash
+FuncCall{GramSchmidt}{$B$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    $
+\backslash
+theta_{
+\backslash
+mathrm{exp}} 
+\backslash
+assign 
+\backslash
+FuncCall{UpdateLoss}{$
+\backslash
+theta_{
+\backslash
+mathrm{exp}}$, 
+\backslash
+var{loss}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B$, $
+\backslash
+Sigma$}
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{PeriodicDecompose($B$, $
+\backslash
+Sigma$)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+If{
+\backslash
+FuncCall{IsOneMinutePassed}{}}{
+\end_layout
+
+\begin_layout Plain Layout
+
+      $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{PCA}{$B$, $
+\backslash
+Sigma$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B$, $
+\backslash
+Sigma$}
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Comment{The main function}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function{DynPCA($B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$, $s$)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+    $B, 
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{ExpandBasisIfInteresting}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    $
+\backslash
+Sigma 
+\backslash
+assign 
+\backslash
+FuncCall{UpdateCovMatrix}{$B$, $
+\backslash
+Sigma$, $
+\backslash
+vec{x}$, $s$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    $B', 
+\backslash
+Sigma' 
+\backslash
+assign 
+\backslash
+FuncCall{PeriodicDecompose}{$B$, $
+\backslash
+Sigma$}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+Return{$B'$, $
+\backslash
+Sigma'$}
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float algorithm
+placement H
 wide false
 sideways false
 status open
@@ -211,7 +582,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Find_Best_Split (samples)
+find_best_split()
 \end_layout
 
 \end_inset
