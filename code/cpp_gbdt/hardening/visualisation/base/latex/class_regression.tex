@@ -1,0 +1,93 @@
+\hypertarget{class_regression}{}\doxysection{Regression Class Reference}
+\label{class_regression}\index{Regression@{Regression}}
+
+
+{\ttfamily \#include $<$loss.\+h$>$}
+
+
+
+Inheritance diagram for Regression\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=151pt]{class_regression__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Regression\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=151pt]{class_regression__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::vector$<$ double $>$ \mbox{\hyperlink{class_regression_abae135125516264bbe6f9a72ecbec358}{compute\+\_\+gradients}} (std\+::vector$<$ double $>$ \&y, std\+::vector$<$ double $>$ \&y\+\_\+pred)
+\item 
+virtual double \mbox{\hyperlink{class_regression_ae8bd5da47d3abc17bfb6656ae90ff82e}{compute\+\_\+init\+\_\+score}} (std\+::vector$<$ double $>$ \&y)
+\item 
+virtual double \mbox{\hyperlink{class_regression_ad36902249b820588cd0ae64153181330}{compute\+\_\+score}} (std\+::vector$<$ double $>$ \&y, std\+::vector$<$ double $>$ \&y\+\_\+pred)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 17 of file loss.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_regression_abae135125516264bbe6f9a72ecbec358}\label{class_regression_abae135125516264bbe6f9a72ecbec358}} 
+\index{Regression@{Regression}!compute\_gradients@{compute\_gradients}}
+\index{compute\_gradients@{compute\_gradients}!Regression@{Regression}}
+\doxysubsubsection{\texorpdfstring{compute\_gradients()}{compute\_gradients()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ Regression\+::compute\+\_\+gradients (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y,  }\item[{std\+::vector$<$ double $>$ \&}]{y\+\_\+pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_task_abced77ffaa57bfa7d5f77df2d8bff2c8}{Task}}.
+
+
+
+Definition at line 20 of file loss.\+cpp.
+
+\mbox{\Hypertarget{class_regression_ae8bd5da47d3abc17bfb6656ae90ff82e}\label{class_regression_ae8bd5da47d3abc17bfb6656ae90ff82e}} 
+\index{Regression@{Regression}!compute\_init\_score@{compute\_init\_score}}
+\index{compute\_init\_score@{compute\_init\_score}!Regression@{Regression}}
+\doxysubsubsection{\texorpdfstring{compute\_init\_score()}{compute\_init\_score()}}
+{\footnotesize\ttfamily double Regression\+::compute\+\_\+init\+\_\+score (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_task_ae3a7e2f5eceab3e3cb6599474675fd8b}{Task}}.
+
+
+
+Definition at line 13 of file loss.\+cpp.
+
+\mbox{\Hypertarget{class_regression_ad36902249b820588cd0ae64153181330}\label{class_regression_ad36902249b820588cd0ae64153181330}} 
+\index{Regression@{Regression}!compute\_score@{compute\_score}}
+\index{compute\_score@{compute\_score}!Regression@{Regression}}
+\doxysubsubsection{\texorpdfstring{compute\_score()}{compute\_score()}}
+{\footnotesize\ttfamily double Regression\+::compute\+\_\+score (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y,  }\item[{std\+::vector$<$ double $>$ \&}]{y\+\_\+pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_task_a5a1a78be7ad912a1f15608d03ae4d5cb}{Task}}.
+
+
+
+Definition at line 30 of file loss.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+base/include/gbdt/\mbox{\hyperlink{loss_8h}{loss.\+h}}\item 
+base/src/gbdt/\mbox{\hyperlink{loss_8cpp}{loss.\+cpp}}\end{DoxyCompactItemize}

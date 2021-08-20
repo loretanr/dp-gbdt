@@ -1,0 +1,104 @@
+\hypertarget{data_8h}{}\doxysection{base/include/data.h File Reference}
+\label{data_8h}\index{base/include/data.h@{base/include/data.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$set$>$}\newline
+{\ttfamily \#include \char`\"{}utils.\+h\char`\"{}}\newline
+Include dependency graph for data.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=302pt]{data_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{data_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_scaler}{Scaler}}
+\item 
+struct \mbox{\hyperlink{struct_data_set}{Data\+Set}}
+\item 
+struct \mbox{\hyperlink{struct_train_test_split}{Train\+Test\+Split}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{data_8h_a9ec50d1b8d56e00da65c2e8aa6b3ea5a}{inverse\+\_\+scale}} (\mbox{\hyperlink{struct_model_params}{Model\+Params}} \&params, \mbox{\hyperlink{struct_scaler}{Scaler}} \&scaler, std\+::vector$<$ double $>$ \&vec)
+\item 
+\mbox{\hyperlink{struct_train_test_split}{Train\+Test\+Split}} \mbox{\hyperlink{data_8h_a9585abadfe9dcc0de806f043a945c4aa}{train\+\_\+test\+\_\+split\+\_\+random}} (\mbox{\hyperlink{struct_data_set}{Data\+Set}} \&dataset, double train\+\_\+ratio=0.\+70, bool shuffle=false)
+\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_train_test_split}{Train\+Test\+Split}} $\ast$ $>$ \mbox{\hyperlink{data_8h_ac589716071ac7ced3174606af5f79d78}{create\+\_\+cross\+\_\+validation\+\_\+inputs}} (\mbox{\hyperlink{struct_data_set}{Data\+Set}} $\ast$dataset, int folds)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{data_8h_ac589716071ac7ced3174606af5f79d78}\label{data_8h_ac589716071ac7ced3174606af5f79d78}} 
+\index{data.h@{data.h}!create\_cross\_validation\_inputs@{create\_cross\_validation\_inputs}}
+\index{create\_cross\_validation\_inputs@{create\_cross\_validation\_inputs}!data.h@{data.h}}
+\doxysubsubsection{\texorpdfstring{create\_cross\_validation\_inputs()}{create\_cross\_validation\_inputs()}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{struct_train_test_split}{Train\+Test\+Split}} $\ast$$>$ create\+\_\+cross\+\_\+validation\+\_\+inputs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_data_set}{Data\+Set}} $\ast$}]{dataset,  }\item[{int}]{folds }\end{DoxyParamCaption})}
+
+
+
+Definition at line 118 of file data.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{data_8h_ac589716071ac7ced3174606af5f79d78_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=289pt]{data_8h_ac589716071ac7ced3174606af5f79d78_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{data_8h_a9ec50d1b8d56e00da65c2e8aa6b3ea5a}\label{data_8h_a9ec50d1b8d56e00da65c2e8aa6b3ea5a}} 
+\index{data.h@{data.h}!inverse\_scale@{inverse\_scale}}
+\index{inverse\_scale@{inverse\_scale}!data.h@{data.h}}
+\doxysubsubsection{\texorpdfstring{inverse\_scale()}{inverse\_scale()}}
+{\footnotesize\ttfamily void inverse\+\_\+scale (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_model_params}{Model\+Params}} \&}]{params,  }\item[{\mbox{\hyperlink{struct_scaler}{Scaler}} \&}]{scaler,  }\item[{std\+::vector$<$ double $>$ \&}]{vec }\end{DoxyParamCaption})}
+
+
+
+Definition at line 72 of file data.\+cpp.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=240pt]{data_8h_a9ec50d1b8d56e00da65c2e8aa6b3ea5a_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{data_8h_a9585abadfe9dcc0de806f043a945c4aa}\label{data_8h_a9585abadfe9dcc0de806f043a945c4aa}} 
+\index{data.h@{data.h}!train\_test\_split\_random@{train\_test\_split\_random}}
+\index{train\_test\_split\_random@{train\_test\_split\_random}!data.h@{data.h}}
+\doxysubsubsection{\texorpdfstring{train\_test\_split\_random()}{train\_test\_split\_random()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_train_test_split}{Train\+Test\+Split}} train\+\_\+test\+\_\+split\+\_\+random (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_data_set}{Data\+Set}} \&}]{dataset,  }\item[{double}]{train\+\_\+ratio = {\ttfamily 0.70},  }\item[{bool}]{shuffle = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 88 of file data.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{data_8h_a9585abadfe9dcc0de806f043a945c4aa_cgraph}
+\end{center}
+\end{figure}

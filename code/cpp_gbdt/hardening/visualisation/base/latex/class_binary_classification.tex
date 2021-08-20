@@ -1,0 +1,93 @@
+\hypertarget{class_binary_classification}{}\doxysection{Binary\+Classification Class Reference}
+\label{class_binary_classification}\index{BinaryClassification@{BinaryClassification}}
+
+
+{\ttfamily \#include $<$loss.\+h$>$}
+
+
+
+Inheritance diagram for Binary\+Classification\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=193pt]{class_binary_classification__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Binary\+Classification\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=193pt]{class_binary_classification__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::vector$<$ double $>$ \mbox{\hyperlink{class_binary_classification_a0a1be2a997c1804386ec11b875ca5266}{compute\+\_\+gradients}} (std\+::vector$<$ double $>$ \&y, std\+::vector$<$ double $>$ \&y\+\_\+pred)
+\item 
+virtual double \mbox{\hyperlink{class_binary_classification_a3ea69927eedac43d018416aacbf1c7e2}{compute\+\_\+init\+\_\+score}} (std\+::vector$<$ double $>$ \&y)
+\item 
+virtual double \mbox{\hyperlink{class_binary_classification_acb0c76a0dd64c1d22dff15c460719b5d}{compute\+\_\+score}} (std\+::vector$<$ double $>$ \&y, std\+::vector$<$ double $>$ \&y\+\_\+pred)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 31 of file loss.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_binary_classification_a0a1be2a997c1804386ec11b875ca5266}\label{class_binary_classification_a0a1be2a997c1804386ec11b875ca5266}} 
+\index{BinaryClassification@{BinaryClassification}!compute\_gradients@{compute\_gradients}}
+\index{compute\_gradients@{compute\_gradients}!BinaryClassification@{BinaryClassification}}
+\doxysubsubsection{\texorpdfstring{compute\_gradients()}{compute\_gradients()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ Binary\+Classification\+::compute\+\_\+gradients (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y,  }\item[{std\+::vector$<$ double $>$ \&}]{y\+\_\+pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_task_abced77ffaa57bfa7d5f77df2d8bff2c8}{Task}}.
+
+
+
+Definition at line 70 of file loss.\+cpp.
+
+\mbox{\Hypertarget{class_binary_classification_a3ea69927eedac43d018416aacbf1c7e2}\label{class_binary_classification_a3ea69927eedac43d018416aacbf1c7e2}} 
+\index{BinaryClassification@{BinaryClassification}!compute\_init\_score@{compute\_init\_score}}
+\index{compute\_init\_score@{compute\_init\_score}!BinaryClassification@{BinaryClassification}}
+\doxysubsubsection{\texorpdfstring{compute\_init\_score()}{compute\_init\_score()}}
+{\footnotesize\ttfamily double Binary\+Classification\+::compute\+\_\+init\+\_\+score (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_task_ae3a7e2f5eceab3e3cb6599474675fd8b}{Task}}.
+
+
+
+Definition at line 47 of file loss.\+cpp.
+
+\mbox{\Hypertarget{class_binary_classification_acb0c76a0dd64c1d22dff15c460719b5d}\label{class_binary_classification_acb0c76a0dd64c1d22dff15c460719b5d}} 
+\index{BinaryClassification@{BinaryClassification}!compute\_score@{compute\_score}}
+\index{compute\_score@{compute\_score}!BinaryClassification@{BinaryClassification}}
+\doxysubsubsection{\texorpdfstring{compute\_score()}{compute\_score()}}
+{\footnotesize\ttfamily double Binary\+Classification\+::compute\+\_\+score (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y,  }\item[{std\+::vector$<$ double $>$ \&}]{y\+\_\+pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_task_a5a1a78be7ad912a1f15608d03ae4d5cb}{Task}}.
+
+
+
+Definition at line 81 of file loss.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+base/include/gbdt/\mbox{\hyperlink{loss_8h}{loss.\+h}}\item 
+base/src/gbdt/\mbox{\hyperlink{loss_8cpp}{loss.\+cpp}}\end{DoxyCompactItemize}

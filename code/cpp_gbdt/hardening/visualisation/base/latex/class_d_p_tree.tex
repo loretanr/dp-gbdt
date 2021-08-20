@@ -1,0 +1,410 @@
+\hypertarget{class_d_p_tree}{}\doxysection{D\+P\+Tree Class Reference}
+\label{class_d_p_tree}\index{DPTree@{DPTree}}
+
+
+{\ttfamily \#include $<$dp\+\_\+tree.\+h$>$}
+
+
+
+Collaboration diagram for D\+P\+Tree\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_d_p_tree_ad1055e7dd72f1b712b3a5278b7e4f829}{D\+P\+Tree}} (\mbox{\hyperlink{struct_model_params}{Model\+Params}} $\ast$\mbox{\hyperlink{class_d_p_tree_aa2bad02855bb9fe453f701456fbf7473}{params}}, \mbox{\hyperlink{struct_tree_params}{Tree\+Params}} $\ast$\mbox{\hyperlink{class_d_p_tree_ad759eebea32ad7b454a9d61ccdd5d242}{tree\+\_\+params}}, \mbox{\hyperlink{struct_data_set}{Data\+Set}} $\ast$\mbox{\hyperlink{class_d_p_tree_ac7f6163e262c0978b452858547067668}{dataset}}, size\+\_\+t \mbox{\hyperlink{class_d_p_tree_a4f2786e96e01335a112324b230359a33}{tree\+\_\+index}})
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{class_d_p_tree_a39f0f669f0e72d17e6177e2a7d6d7abd}{predict}} (\mbox{\hyperlink{utils_8h_ab97cc6996c4bcd1d4766ac2063615417}{V\+VD}} \&X)
+\item 
+void \mbox{\hyperlink{class_d_p_tree_a82b9507f4f5d056b98f40871b304f943}{fit}} ()
+\item 
+void \mbox{\hyperlink{class_d_p_tree_afc4d6d427b66508a5133c3db40dde9e8}{delete\+\_\+tree}} (\mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$node)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$ \mbox{\hyperlink{class_d_p_tree_afdc1cee617e0fcad1089c76b455e46ef}{root\+\_\+node}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$ \mbox{\hyperlink{class_d_p_tree_a07314c44bb7b7ca37c735b70de3ccb9e}{make\+\_\+tree\+\_\+\+D\+FS}} (int current\+\_\+depth, std\+::vector$<$ int $>$ live\+\_\+samples)
+\item 
+\mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$ \mbox{\hyperlink{class_d_p_tree_a3a716a075edfae470e0fe7511634e922}{make\+\_\+leaf\+\_\+node}} (int current\+\_\+depth, std\+::vector$<$ int $>$ \&live\+\_\+samples)
+\item 
+double \mbox{\hyperlink{class_d_p_tree_ad8ad2f100c65b9961bd6b2c4af46636c}{\+\_\+predict}} (std\+::vector$<$ double $>$ $\ast$row, \mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$node)
+\item 
+\mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$ \mbox{\hyperlink{class_d_p_tree_ad7f8755be37ad10cf104fba2076dce5e}{find\+\_\+best\+\_\+split}} (\mbox{\hyperlink{utils_8h_ab97cc6996c4bcd1d4766ac2063615417}{V\+VD}} \&X\+\_\+live, std\+::vector$<$ double $>$ \&gradients\+\_\+live, int current\+\_\+depth)
+\item 
+void \mbox{\hyperlink{class_d_p_tree_af16f3e0373e606fe42b2104890b2d036}{samples\+\_\+left\+\_\+right\+\_\+partition}} (std\+::vector$<$ int $>$ \&lhs, \mbox{\hyperlink{utils_8h_ab97cc6996c4bcd1d4766ac2063615417}{V\+VD}} \&samples, int feature\+\_\+index, double feature\+\_\+value, bool categorical)
+\item 
+double \mbox{\hyperlink{class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050}{compute\+\_\+gain}} (\mbox{\hyperlink{utils_8h_ab97cc6996c4bcd1d4766ac2063615417}{V\+VD}} \&samples, std\+::vector$<$ double $>$ \&gradients\+\_\+live, int feature\+\_\+index, double feature\+\_\+value, int \&lhs\+\_\+size, bool categorical)
+\item 
+int \mbox{\hyperlink{class_d_p_tree_a7ce368c3888736d660dcf09587df4512}{exponential\+\_\+mechanism}} (std\+::vector$<$ \mbox{\hyperlink{struct_split_candidate}{Split\+Candidate}} $>$ \&probs)
+\item 
+void \mbox{\hyperlink{class_d_p_tree_a468d249a3e55f1527e50daf13e550c79}{add\+\_\+laplacian\+\_\+noise}} (double laplace\+\_\+scale)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_model_params}{Model\+Params}} $\ast$ \mbox{\hyperlink{class_d_p_tree_aa2bad02855bb9fe453f701456fbf7473}{params}}
+\item 
+\mbox{\hyperlink{struct_tree_params}{Tree\+Params}} $\ast$ \mbox{\hyperlink{class_d_p_tree_ad759eebea32ad7b454a9d61ccdd5d242}{tree\+\_\+params}}
+\item 
+\mbox{\hyperlink{struct_data_set}{Data\+Set}} $\ast$ \mbox{\hyperlink{class_d_p_tree_ac7f6163e262c0978b452858547067668}{dataset}}
+\item 
+size\+\_\+t \mbox{\hyperlink{class_d_p_tree_a4f2786e96e01335a112324b230359a33}{tree\+\_\+index}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$ $>$ \mbox{\hyperlink{class_d_p_tree_a3e34ae9e8cc018ce1a333c1b26ca8231}{leaves}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 23 of file dp\+\_\+tree.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_d_p_tree_ad1055e7dd72f1b712b3a5278b7e4f829}\label{class_d_p_tree_ad1055e7dd72f1b712b3a5278b7e4f829}} 
+\index{DPTree@{DPTree}!DPTree@{DPTree}}
+\index{DPTree@{DPTree}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{DPTree()}{DPTree()}}
+{\footnotesize\ttfamily D\+P\+Tree\+::\+D\+P\+Tree (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_model_params}{Model\+Params}} $\ast$}]{params,  }\item[{\mbox{\hyperlink{struct_tree_params}{Tree\+Params}} $\ast$}]{tree\+\_\+params,  }\item[{\mbox{\hyperlink{struct_data_set}{Data\+Set}} $\ast$}]{dataset,  }\item[{size\+\_\+t}]{tree\+\_\+index }\end{DoxyParamCaption})}
+
+Constructors 
+
+Definition at line 14 of file dp\+\_\+tree.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_d_p_tree_ad8ad2f100c65b9961bd6b2c4af46636c}\label{class_d_p_tree_ad8ad2f100c65b9961bd6b2c4af46636c}} 
+\index{DPTree@{DPTree}!\_predict@{\_predict}}
+\index{\_predict@{\_predict}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{\_predict()}{\_predict()}}
+{\footnotesize\ttfamily double D\+P\+Tree\+::\+\_\+predict (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ $\ast$}]{row,  }\item[{\mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$}]{node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 135 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=312pt]{class_d_p_tree_ad8ad2f100c65b9961bd6b2c4af46636c_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=301pt]{class_d_p_tree_ad8ad2f100c65b9961bd6b2c4af46636c_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_a468d249a3e55f1527e50daf13e550c79}\label{class_d_p_tree_a468d249a3e55f1527e50daf13e550c79}} 
+\index{DPTree@{DPTree}!add\_laplacian\_noise@{add\_laplacian\_noise}}
+\index{add\_laplacian\_noise@{add\_laplacian\_noise}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{add\_laplacian\_noise()}{add\_laplacian\_noise()}}
+{\footnotesize\ttfamily void D\+P\+Tree\+::add\+\_\+laplacian\+\_\+noise (\begin{DoxyParamCaption}\item[{double}]{laplace\+\_\+scale }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 332 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a468d249a3e55f1527e50daf13e550c79_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a468d249a3e55f1527e50daf13e550c79_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050}\label{class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050}} 
+\index{DPTree@{DPTree}!compute\_gain@{compute\_gain}}
+\index{compute\_gain@{compute\_gain}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{compute\_gain()}{compute\_gain()}}
+{\footnotesize\ttfamily double D\+P\+Tree\+::compute\+\_\+gain (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utils_8h_ab97cc6996c4bcd1d4766ac2063615417}{V\+VD}} \&}]{samples,  }\item[{std\+::vector$<$ double $>$ \&}]{gradients\+\_\+live,  }\item[{int}]{feature\+\_\+index,  }\item[{double}]{feature\+\_\+value,  }\item[{int \&}]{lhs\+\_\+size,  }\item[{bool}]{categorical }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 229 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_afc4d6d427b66508a5133c3db40dde9e8}\label{class_d_p_tree_afc4d6d427b66508a5133c3db40dde9e8}} 
+\index{DPTree@{DPTree}!delete\_tree@{delete\_tree}}
+\index{delete\_tree@{delete\_tree}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{delete\_tree()}{delete\_tree()}}
+{\footnotesize\ttfamily void D\+P\+Tree\+::delete\+\_\+tree (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$}]{node }\end{DoxyParamCaption})}
+
+
+
+Definition at line 345 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=329pt]{class_d_p_tree_afc4d6d427b66508a5133c3db40dde9e8_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_a7ce368c3888736d660dcf09587df4512}\label{class_d_p_tree_a7ce368c3888736d660dcf09587df4512}} 
+\index{DPTree@{DPTree}!exponential\_mechanism@{exponential\_mechanism}}
+\index{exponential\_mechanism@{exponential\_mechanism}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{exponential\_mechanism()}{exponential\_mechanism()}}
+{\footnotesize\ttfamily int D\+P\+Tree\+::exponential\+\_\+mechanism (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_split_candidate}{Split\+Candidate}} $>$ \&}]{probs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 283 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=311pt]{class_d_p_tree_a7ce368c3888736d660dcf09587df4512_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a7ce368c3888736d660dcf09587df4512_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_ad7f8755be37ad10cf104fba2076dce5e}\label{class_d_p_tree_ad7f8755be37ad10cf104fba2076dce5e}} 
+\index{DPTree@{DPTree}!find\_best\_split@{find\_best\_split}}
+\index{find\_best\_split@{find\_best\_split}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{find\_best\_split()}{find\_best\_split()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$ D\+P\+Tree\+::find\+\_\+best\+\_\+split (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utils_8h_ab97cc6996c4bcd1d4766ac2063615417}{V\+VD}} \&}]{X\+\_\+live,  }\item[{std\+::vector$<$ double $>$ \&}]{gradients\+\_\+live,  }\item[{int}]{current\+\_\+depth }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 158 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_ad7f8755be37ad10cf104fba2076dce5e_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_ad7f8755be37ad10cf104fba2076dce5e_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_a82b9507f4f5d056b98f40871b304f943}\label{class_d_p_tree_a82b9507f4f5d056b98f40871b304f943}} 
+\index{DPTree@{DPTree}!fit@{fit}}
+\index{fit@{fit}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{fit()}{fit()}}
+{\footnotesize\ttfamily void D\+P\+Tree\+::fit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Methods 
+
+Definition at line 23 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a82b9507f4f5d056b98f40871b304f943_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a82b9507f4f5d056b98f40871b304f943_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_a3a716a075edfae470e0fe7511634e922}\label{class_d_p_tree_a3a716a075edfae470e0fe7511634e922}} 
+\index{DPTree@{DPTree}!make\_leaf\_node@{make\_leaf\_node}}
+\index{make\_leaf\_node@{make\_leaf\_node}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{make\_leaf\_node()}{make\_leaf\_node()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$ D\+P\+Tree\+::make\+\_\+leaf\+\_\+node (\begin{DoxyParamCaption}\item[{int}]{current\+\_\+depth,  }\item[{std\+::vector$<$ int $>$ \&}]{live\+\_\+samples }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 103 of file dp\+\_\+tree.\+cpp.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a3a716a075edfae470e0fe7511634e922_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_a07314c44bb7b7ca37c735b70de3ccb9e}\label{class_d_p_tree_a07314c44bb7b7ca37c735b70de3ccb9e}} 
+\index{DPTree@{DPTree}!make\_tree\_DFS@{make\_tree\_DFS}}
+\index{make\_tree\_DFS@{make\_tree\_DFS}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{make\_tree\_DFS()}{make\_tree\_DFS()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$ D\+P\+Tree\+::make\+\_\+tree\+\_\+\+D\+FS (\begin{DoxyParamCaption}\item[{int}]{current\+\_\+depth,  }\item[{std\+::vector$<$ int $>$}]{live\+\_\+samples }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 50 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a07314c44bb7b7ca37c735b70de3ccb9e_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a07314c44bb7b7ca37c735b70de3ccb9e_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_a39f0f669f0e72d17e6177e2a7d6d7abd}\label{class_d_p_tree_a39f0f669f0e72d17e6177e2a7d6d7abd}} 
+\index{DPTree@{DPTree}!predict@{predict}}
+\index{predict@{predict}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{predict()}{predict()}}
+{\footnotesize\ttfamily vector$<$ double $>$ D\+P\+Tree\+::predict (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utils_8h_ab97cc6996c4bcd1d4766ac2063615417}{V\+VD}} \&}]{X }\end{DoxyParamCaption})}
+
+
+
+Definition at line 121 of file dp\+\_\+tree.\+cpp.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_a39f0f669f0e72d17e6177e2a7d6d7abd_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_d_p_tree_af16f3e0373e606fe42b2104890b2d036}\label{class_d_p_tree_af16f3e0373e606fe42b2104890b2d036}} 
+\index{DPTree@{DPTree}!samples\_left\_right\_partition@{samples\_left\_right\_partition}}
+\index{samples\_left\_right\_partition@{samples\_left\_right\_partition}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{samples\_left\_right\_partition()}{samples\_left\_right\_partition()}}
+{\footnotesize\ttfamily void D\+P\+Tree\+::samples\+\_\+left\+\_\+right\+\_\+partition (\begin{DoxyParamCaption}\item[{std\+::vector$<$ int $>$ \&}]{lhs,  }\item[{\mbox{\hyperlink{utils_8h_ab97cc6996c4bcd1d4766ac2063615417}{V\+VD}} \&}]{samples,  }\item[{int}]{feature\+\_\+index,  }\item[{double}]{feature\+\_\+value,  }\item[{bool}]{categorical }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 261 of file dp\+\_\+tree.\+cpp.
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_d_p_tree_af16f3e0373e606fe42b2104890b2d036_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_d_p_tree_ac7f6163e262c0978b452858547067668}\label{class_d_p_tree_ac7f6163e262c0978b452858547067668}} 
+\index{DPTree@{DPTree}!dataset@{dataset}}
+\index{dataset@{dataset}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{dataset}{dataset}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_data_set}{Data\+Set}}$\ast$ D\+P\+Tree\+::dataset\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 29 of file dp\+\_\+tree.\+h.
+
+\mbox{\Hypertarget{class_d_p_tree_a3e34ae9e8cc018ce1a333c1b26ca8231}\label{class_d_p_tree_a3e34ae9e8cc018ce1a333c1b26ca8231}} 
+\index{DPTree@{DPTree}!leaves@{leaves}}
+\index{leaves@{leaves}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{leaves}{leaves}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{class_tree_node}{Tree\+Node}} $\ast$$>$ D\+P\+Tree\+::leaves\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 31 of file dp\+\_\+tree.\+h.
+
+\mbox{\Hypertarget{class_d_p_tree_aa2bad02855bb9fe453f701456fbf7473}\label{class_d_p_tree_aa2bad02855bb9fe453f701456fbf7473}} 
+\index{DPTree@{DPTree}!params@{params}}
+\index{params@{params}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{params}{params}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_model_params}{Model\+Params}}$\ast$ D\+P\+Tree\+::params\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 27 of file dp\+\_\+tree.\+h.
+
+\mbox{\Hypertarget{class_d_p_tree_afdc1cee617e0fcad1089c76b455e46ef}\label{class_d_p_tree_afdc1cee617e0fcad1089c76b455e46ef}} 
+\index{DPTree@{DPTree}!root\_node@{root\_node}}
+\index{root\_node@{root\_node}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{root\_node}{root\_node}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_tree_node}{Tree\+Node}}$\ast$ D\+P\+Tree\+::root\+\_\+node}
+
+
+
+Definition at line 50 of file dp\+\_\+tree.\+h.
+
+\mbox{\Hypertarget{class_d_p_tree_a4f2786e96e01335a112324b230359a33}\label{class_d_p_tree_a4f2786e96e01335a112324b230359a33}} 
+\index{DPTree@{DPTree}!tree\_index@{tree\_index}}
+\index{tree\_index@{tree\_index}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{tree\_index}{tree\_index}}
+{\footnotesize\ttfamily size\+\_\+t D\+P\+Tree\+::tree\+\_\+index\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 30 of file dp\+\_\+tree.\+h.
+
+\mbox{\Hypertarget{class_d_p_tree_ad759eebea32ad7b454a9d61ccdd5d242}\label{class_d_p_tree_ad759eebea32ad7b454a9d61ccdd5d242}} 
+\index{DPTree@{DPTree}!tree\_params@{tree\_params}}
+\index{tree\_params@{tree\_params}!DPTree@{DPTree}}
+\doxysubsubsection{\texorpdfstring{tree\_params}{tree\_params}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_tree_params}{Tree\+Params}}$\ast$ D\+P\+Tree\+::tree\+\_\+params\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 28 of file dp\+\_\+tree.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+base/include/gbdt/\mbox{\hyperlink{dp__tree_8h}{dp\+\_\+tree.\+h}}\item 
+base/src/gbdt/\mbox{\hyperlink{dp__tree_8cpp}{dp\+\_\+tree.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,70 @@
+\hypertarget{class_task}{}\doxysection{Task Class Reference}
+\label{class_task}\index{Task@{Task}}
+
+
+{\ttfamily \#include $<$loss.\+h$>$}
+
+
+
+Inheritance diagram for Task\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{class_task__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::vector$<$ double $>$ \mbox{\hyperlink{class_task_abced77ffaa57bfa7d5f77df2d8bff2c8}{compute\+\_\+gradients}} (std\+::vector$<$ double $>$ \&y, std\+::vector$<$ double $>$ \&y\+\_\+pred)=0
+\item 
+virtual double \mbox{\hyperlink{class_task_ae3a7e2f5eceab3e3cb6599474675fd8b}{compute\+\_\+init\+\_\+score}} (std\+::vector$<$ double $>$ \&y)=0
+\item 
+virtual double \mbox{\hyperlink{class_task_a5a1a78be7ad912a1f15608d03ae4d5cb}{compute\+\_\+score}} (std\+::vector$<$ double $>$ \&y, std\+::vector$<$ double $>$ \&y\+\_\+pred)=0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 7 of file loss.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_task_abced77ffaa57bfa7d5f77df2d8bff2c8}\label{class_task_abced77ffaa57bfa7d5f77df2d8bff2c8}} 
+\index{Task@{Task}!compute\_gradients@{compute\_gradients}}
+\index{compute\_gradients@{compute\_gradients}!Task@{Task}}
+\doxysubsubsection{\texorpdfstring{compute\_gradients()}{compute\_gradients()}}
+{\footnotesize\ttfamily virtual std\+::vector$<$double$>$ Task\+::compute\+\_\+gradients (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y,  }\item[{std\+::vector$<$ double $>$ \&}]{y\+\_\+pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_binary_classification_a0a1be2a997c1804386ec11b875ca5266}{Binary\+Classification}}, and \mbox{\hyperlink{class_regression_abae135125516264bbe6f9a72ecbec358}{Regression}}.
+
+\mbox{\Hypertarget{class_task_ae3a7e2f5eceab3e3cb6599474675fd8b}\label{class_task_ae3a7e2f5eceab3e3cb6599474675fd8b}} 
+\index{Task@{Task}!compute\_init\_score@{compute\_init\_score}}
+\index{compute\_init\_score@{compute\_init\_score}!Task@{Task}}
+\doxysubsubsection{\texorpdfstring{compute\_init\_score()}{compute\_init\_score()}}
+{\footnotesize\ttfamily virtual double Task\+::compute\+\_\+init\+\_\+score (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_binary_classification_a3ea69927eedac43d018416aacbf1c7e2}{Binary\+Classification}}, and \mbox{\hyperlink{class_regression_ae8bd5da47d3abc17bfb6656ae90ff82e}{Regression}}.
+
+\mbox{\Hypertarget{class_task_a5a1a78be7ad912a1f15608d03ae4d5cb}\label{class_task_a5a1a78be7ad912a1f15608d03ae4d5cb}} 
+\index{Task@{Task}!compute\_score@{compute\_score}}
+\index{compute\_score@{compute\_score}!Task@{Task}}
+\doxysubsubsection{\texorpdfstring{compute\_score()}{compute\_score()}}
+{\footnotesize\ttfamily virtual double Task\+::compute\+\_\+score (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{y,  }\item[{std\+::vector$<$ double $>$ \&}]{y\+\_\+pred }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_binary_classification_acb0c76a0dd64c1d22dff15c460719b5d}{Binary\+Classification}}, and \mbox{\hyperlink{class_regression_ad36902249b820588cd0ae64153181330}{Regression}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+base/include/gbdt/\mbox{\hyperlink{loss_8h}{loss.\+h}}\end{DoxyCompactItemize}
