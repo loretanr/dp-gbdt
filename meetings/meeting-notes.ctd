@@ -1737,14 +1737,14 @@ for tree in n_trees:
 
 
 </rich_text>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629463518.33" unique_id="33">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629472302.72" unique_id="33">
 			<rich_text scale="h3">TODOs</rich_text>
 			<rich_text>
 • quick research good way to present args/used vars
    ◇ hardening papers
       ▪ nothing concrete in mine, BITE only one in that direction
    ◇ google search
-      ▪ 
+      ▪ some work of 2017, not real research but not unusable 201708_Riscure_Whitepaper_Side_Channel_Patterns.pdf
 
 • write down args/vars of find_best split
 
@@ -1755,7 +1755,10 @@ Bigger TODOs
 
 • start “global list/ranking” of what is considered important
 
-• setup verify.sh for comparison of cpp and hardened_cpp</rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">• setup verify.sh for comparison of cpp and hardened_cpp</rich_text>
+			<rich_text>
+   ◇ hardened_cpp remove use_dp</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1629211472.17" unique_id="32">
