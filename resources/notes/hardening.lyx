@@ -1,0 +1,224 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+%% use full paper
+\usepackage[margin=0.5cm]{geometry}
+
+%% multicols
+\usepackage{multicol}
+
+%% no automated date after title 
+\date{}
+
+%% compact spacing
+\usepackage[compact]{titlesec}
+\usepackage{enumitem}
+\setlist{nolistsep}
+
+%% table formatting
+\usepackage{graphicx} 
+
+%% colors
+\usepackage{xcolor}
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0}
+
+% highlight
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+\newcommand{\hilightt}[1]{\colorbox{orange}{#1}}
+
+% titlespace
+\usepackage{titling}
+
+% no ugly indent
+\setlength\parindent{0pt}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation landscape
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "frame=trbl,backgroundcolor={\color{lightgray}},flexiblecolumns=true,basicstyle={\small\ttfamily},breaklines=true,keywordstyle={\color{blue}\bfseries},language=Java,sensitive=true,emph={[1]{critical_section}},emphstyle={[1]\color{red}},emph={[2]{atomic,Condition}},emphstyle={[2]\color{blue}},rulesepcolor={\color{gray}},emph={[3]{acquire(mutex),release(mutex),signal(mutex)}},emphstyle={[3]\color{magenta}},showstringspaces=false,stringstyle={\color{purple}},commentstyle={\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small},morecomment={[l][\color{Blue}]{...}},tabsize=4,lineskip={-1.5pt}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Subsubsection
+2017 Anti side channel programming patterns 
+\begin_inset Quotes eld
+\end_inset
+
+paper
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+https://www.riscure.com/uploads/2018/11/201708_Riscure_Whitepaper_Side_Channel_Pat
+terns.pdf
+\end_layout
+
+\begin_layout Subsubsection
+Plundervolt
+\end_layout
+
+\begin_layout LyX-Code
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9152636
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+fault injection attack
+\begin_inset Quotes erd
+\end_inset
+
+.
+ E.g.
+ using a power glitch to set a bit
+\end_layout
+
+\begin_layout Itemize
+published, CVE, intel published a bios patch.
+ However, is probably not the last such attack.
+\end_layout
+
+\begin_layout Paragraph
+Is this relevant for SGX?
+\end_layout
+
+\begin_layout Itemize
+Yes, it's a software based CPU attack that manages to change things within
+ the processor.
+ So memory encryption / authentication will not prevent it.
+\end_layout
+
+\begin_layout Itemize
+Assuming we can stop at every location we want with SGX-step.
+\end_layout
+
+\begin_layout Itemize
+Then do a calculated glitch.
+\end_layout
+
+\begin_layout Itemize
+Would be a big problem if they changed use_dp to false!!!
+\end_layout
+
+\begin_layout Paragraph
+The attack solution (according to the paper):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+Do not use trivial constants for sensitive data.
+ These constants should use non-trivial values that are unlikely to be set
+ through fault injection.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Effect on my MA
+\end_layout
+
+\begin_layout Itemize
+Probably should get rid of use_dp and similar
+\end_layout
+
+\begin_layout Itemize
+Or use values with bigger hamming distance for binary decisions
+\end_layout
+
+\begin_layout Paragraph
+Questions
+\end_layout
+
+\begin_layout Itemize
+Does this work for CPU registers?
+\end_layout
+
+\begin_layout Itemize
+However wouldn't we need to look at every branch condition in that way?
+ An attacker could stop anywhere and change a loop/branch condition in his
+ favor.
+ Holy shit?
+\end_layout
+
+\end_body
+\end_document
