@@ -463,7 +463,7 @@ Caller graph
 
 
 \begin_inset Graphics
-	filename /home/loretanr/ma/code/cpp_gbdt/hardening/visualisation/graphs/find_best_split/caller.svg
+	filename ../visualisation/graphs/find_best_split/caller.svg
 	scale 60
 
 \end_inset
@@ -478,7 +478,7 @@ Call graph
 
 
 \begin_inset Graphics
-	filename /home/loretanr/ma/code/cpp_gbdt/hardening/visualisation/graphs/find_best_split/call.svg
+	filename ../visualisation/graphs/find_best_split/call.svg
 	scale 60
 
 \end_inset
@@ -514,19 +514,6 @@ caption{find
 _best
 \backslash
 _split()}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-Comment{$
-\backslash
-theta_{
-\backslash
-mathrm{exp}}$ is globally given, and initially set to $
-\backslash
-infty$.}
 \end_layout
 
 \begin_layout Plain Layout

@@ -111,7 +111,23 @@
 
 \begin_body
 
-\begin_layout Subsubsection
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{multicols}{2}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 2017 Anti side channel programming patterns 
 \begin_inset Quotes eld
 \end_inset
@@ -124,11 +140,112 @@ paper
 \end_layout
 
 \begin_layout LyX-Code
-https://www.riscure.com/uploads/2018/11/201708_Riscure_Whitepaper_Side_Channel_Pat
-terns.pdf
+201708_Riscure_Whitepaper_Side_Channel_Patterns.pdf
 \end_layout
 
-\begin_layout Subsubsection
+\begin_layout Paragraph
+Some Principles
+\end_layout
+
+\begin_layout Itemize
+Verify sensitive data.
+ Sensitive data can for instance be protected by a checksum.
+ However, that's what enclave is already doing.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+OK
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Avoid using branches for confidential decisions.
+ Confidential program alternatives should be coded in a time-constant manner,
+ preferably in identical instruction sequence.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+OK, gonna do that
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Accessing (i.e.
+ r/w) confidential array values may expose confidential data through differentia
+l side channel analysis.
+ But don't understand their example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/lyx_images/2021-08-23-103307_873x253_scrot.png
+	scale 35
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilightt{
+\end_layout
+
+\end_inset
+
+However, we don't use memcopy, right?
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+still affects us when using vectors in our algorithm?
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
 Plundervolt
 \end_layout
 
@@ -145,13 +262,31 @@ fault injection attack
 \end_inset
 
 .
- E.g.
- using a power glitch to set a bit
+ using a power glitch to set bit(s).
 \end_layout
 
 \begin_layout Itemize
-published, CVE, intel published a bios patch.
- However, is probably not the last such attack.
+published, CVE, intel published a bios patch 
+\begin_inset Quotes eld
+\end_inset
+
+disable that software voltage changing interface
+\begin_inset Quotes erd
+\end_inset
+
+.
+ However, this does not address the root cause.
+\end_layout
+
+\begin_layout Itemize
+They attack multiplication.
+ Multiplication is everywhere.
+ E.g.
+ in calloc() when they calculate the memory size.
+ injecting faults there can lead to memory leak, or even code execution
+ if function pointers / vtables get overwritten.
+ They also leak RSA keys: if you glitch at certain exponentiation operations.
+ Then resulting numbers can be factored and keys can be inferred.
 \end_layout
 
 \begin_layout Paragraph
@@ -159,28 +294,34 @@ Is this relevant for SGX?
 \end_layout
 
 \begin_layout Itemize
-Yes, it's a software based CPU attack that manages to change things within
- the processor.
+YES! The attacks and tests are carried out specifically inside enclaves.
+\end_layout
+
+\begin_layout Itemize
+They suggest use of SGX-step to get at the right point to glitch.
+\end_layout
+
+\begin_layout Itemize
+it's a software based CPU attack that manages to change things within the
+ processor.
  So memory encryption / authentication will not prevent it.
 \end_layout
 
 \begin_layout Itemize
-Assuming we can stop at every location we want with SGX-step.
-\end_layout
-
-\begin_layout Itemize
-Then do a calculated glitch.
-\end_layout
-
-\begin_layout Itemize
-Would be a big problem if they changed use_dp to false!!!
+Also, turning off GLC / GDF would be illegal!
 \end_layout
 
 \begin_layout Paragraph
 The attack solution (according to the paper):
 \end_layout
 
-\begin_layout Standard
+\begin_layout Itemize
+Redundancy, very hard to glitch twice the same way.
+ Either e.g.
+ 2 parallel enclaves or like same code twice.
+\end_layout
+
+\begin_layout Itemize
 \begin_inset Quotes eld
 \end_inset
 
@@ -198,11 +339,100 @@ Effect on my MA
 \end_layout
 
 \begin_layout Itemize
-Probably should get rid of use_dp and similar
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilight{
+\end_layout
+
+\end_inset
+
+Probably should get rid of use_dp.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
-Or use values with bigger hamming distance for binary decisions
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hilightt{
+\end_layout
+
+\end_inset
+
+diabling of GLC / GDF would also be a problem.
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+Do not use trivial constants for sensitive data.
+\begin_inset Quotes erd
+\end_inset
+
+ Use values with bigger hamming distance for binary decisions
+\end_layout
+
+\begin_layout Itemize
+maybe #define true=0xa234085 and false=0x0 ?
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+However, hardening 
+\series bold
+every
+\series default
+ multiplication is probably not feasible? And is also not fixing the root
+ cause.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+maybe we can argue somehow that changing multiplications inside the algorithm
+ is not that dangerous?
+\end_layout
+
+\begin_layout Itemize
+What about all other arithmetic operations? What about overflows.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Paper suggests redundancy, e.g.
+ running 2 enclaves and make sure results the same? However difficult in
+ our case because we have randomness.
 \end_layout
 
 \begin_layout Paragraph
@@ -213,11 +443,73 @@ Questions
 Does this work for CPU registers?
 \end_layout
 
+\begin_deeper
 \begin_layout Itemize
-However wouldn't we need to look at every branch condition in that way?
- An attacker could stop anywhere and change a loop/branch condition in his
- favor.
+I think no it's not that easy.
+\end_layout
+
+\begin_layout Itemize
+I think they don't really know why the multiplication ALU cirquit is vulnerable.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Wouldn't we need to look at every branch condition in that way? An attacker
+ could stop anywhere and change a loop/branch condition in his favor.
  Holy shit?
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+No, you can't specifically change CPU registers / CPU FLAGS.
+ That would be horrific.
+\end_layout
+
+\begin_layout Itemize
+But still, if the branch condition directly depends on a multiplication
+ (for this specific attack).
+ Then yeah.
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+VoltPillager
+\end_layout
+
+\begin_layout LyX-Code
+https://www.usenix.org/system/files/sec21-chen-zitai.pdf
+\end_layout
+
+\begin_layout Itemize
+Follow up on Plundervolt, circumvents intel's fix.
+ But it's a hardware attack.
+ (30$ cheap, but none the less out of my MA scope)
+\end_layout
+
+\begin_layout Subsection
+Microarch.
+ Side-Channel Attacks for Priv.
+ Software Adversaries
+\end_layout
+
+\begin_layout Itemize
+PHD thesis, 2020, seems n1 for writing
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{multicols}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body

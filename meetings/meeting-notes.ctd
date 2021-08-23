@@ -1726,7 +1726,7 @@ for tree in n_trees:
    5) delete these rows from X_remain</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1629460932.83" unique_id="25">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1629706169.8" unique_id="25">
 		<rich_text>• Google if another compiler is better at not reordering, maybe ask ivan
 
 • parallel enclaves for our CV folds, might be interesting?
@@ -1737,16 +1737,20 @@ for tree in n_trees:
 
 
 </rich_text>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629472302.72" unique_id="33">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629706246.17" unique_id="33">
 			<rich_text scale="h3">TODOs</rich_text>
 			<rich_text>
-• quick research good way to present args/used vars
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">• quick research good way to present args/used vars</rich_text>
+			<rich_text>
    ◇ hardening papers
       ▪ nothing concrete in mine, BITE only one in that direction
    ◇ google search
       ▪ some work of 2017, not real research but not unusable 201708_Riscure_Whitepaper_Side_Channel_Patterns.pdf
 
-• write down args/vars of find_best split
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">• write down args/vars of find_best split</rich_text>
+			<rich_text>
 
 
 
@@ -1758,7 +1762,14 @@ Bigger TODOs
 </rich_text>
 			<rich_text foreground="#9090eeee9090">• setup verify.sh for comparison of cpp and hardened_cpp</rich_text>
 			<rich_text>
-   ◇ hardened_cpp remove use_dp</rich_text>
+   </rich_text>
+			<rich_text foreground="#9090eeee9090">◇ hardened_cpp remove use_dp</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="Paper findings" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629706169.8" ts_lastsave="1629706182.85" unique_id="34">
+			<rich_text scale="h3">Plundervolt</rich_text>
+			<rich_text>
+• fault injection attack, (check notes for details)
+• hints on arithmetic overflow checked op's</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1629211472.17" unique_id="32">
@@ -1830,14 +1841,24 @@ Enclave examples:
 • </rich_text>
 		<rich_text link="webs https://github.com/Liaojinghui/awesome-sgx">https://github.com/Liaojinghui/awesome-sgx</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="kari questions" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629116521.58" ts_lastsave="1629116628.7" unique_id="31">
-		<rich_text>thesis template?
+	<node custom_icon_id="0" foreground="" is_bold="False" name="kari questions" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629116521.58" ts_lastsave="1629708803.0" unique_id="31">
+		<rich_text scale="h2">Thesis</rich_text>
+		<rich_text>
+• thesis template?
 
 thesis expectations?
    •  length
    •  depth
    •  probably would send a table of contents for kari and esfandiar to verify
    •  how about “identical” passages from theo
-   •  big fat appendix with hardenting details I guess</rich_text>
+   •  big fat appendix with hardenting details I guess
+
+
+</rich_text>
+		<rich_text scale="h2">Hardening</rich_text>
+		<rich_text>
+
+• individual floating-point operations can also have variable runtime, even if they are just adds, multiplies, and FMAs.
+   ◇ Only in secret dependanet situations, but still</rich_text>
 	</node>
 </cherrytree>
