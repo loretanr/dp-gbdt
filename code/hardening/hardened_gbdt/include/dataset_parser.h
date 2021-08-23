@@ -1,9 +1,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "utils.h"
 #include "parameters.h"
 #include "data.h"
-#include "utils.h"
 
 
 class Parser

@@ -1466,7 +1466,7 @@ expected results (randomness off):
 
 • seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1629126464.78" unique_id="21">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1629730516.96" unique_id="21">
 		<rich_text>Suddenly python problem (after apt update/upgrade I believe).
       </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">File &quot;/home/loretanr/.local/lib/python3.7/site-packages/matplotlib/__init__.py&quot;, line 107, in &lt;module&gt;
@@ -1528,7 +1528,10 @@ then could see such errors in the debug console
             1. run sgx-gdb
             2. enable sgx_emmt
             3. run the app
-</rich_text>
+
+
+----------------------------------------------------------------
+global macro in utils.h had to be on top of the #include lists in every file. really stupid. maybe a global &amp; extern is better suited</rich_text>
 	</node>
 	<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="Moritz's blutbad" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1628002202.81" ts_lastsave="1628669829.76" unique_id="27">
 		<rich_text foreground="#ffffa5a50000">Notice, all these plots have scaling turned off, so that's why no-2nd-split impact is compensated
@@ -1737,7 +1740,7 @@ for tree in n_trees:
 
 
 </rich_text>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629706246.17" unique_id="33">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629721592.9" unique_id="33">
 			<rich_text scale="h3">TODOs</rich_text>
 			<rich_text>
 </rich_text>
@@ -1758,6 +1761,10 @@ for tree in n_trees:
 Bigger TODOs
 
 • start “global list/ranking” of what is considered important
+
+• hands on, concrete hardening stuff hard to find!
+   ◇ crypto libraries
+   ◇ but apart from that, nothing found. Especially on memory access patterns
 
 </rich_text>
 			<rich_text foreground="#9090eeee9090">• setup verify.sh for comparison of cpp and hardened_cpp</rich_text>

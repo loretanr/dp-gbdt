@@ -36,7 +36,7 @@ void DPTree::fit()
     this->root_node = make_tree_DFS(0, live_samples);
 
     // leaf clipping. Note, it can only be disabled if GDF is enabled.
-    if (params->leaf_clipping or !params->gradient_filtering) {
+    if (iss_true(params->leaf_clipping) or !iss_true(params->gradient_filtering)) {
         double threshold = params->l2_threshold * std::pow((1 - params->learning_rate), tree_index);
         for (auto &leaf : this->leaves) {
             leaf->prediction = clamp(leaf->prediction, -threshold, threshold);

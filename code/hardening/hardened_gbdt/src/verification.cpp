@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include "verification.h"
+#include "utils.h"
 #include "parameters.h"
 #include "data.h"
 #include "gbdt/dp_ensemble.h"
@@ -38,9 +39,9 @@ int Verification::main(int argc, char *argv[])
     ModelParams params = create_default_params();
     params.privacy_budget = 0.1;
     params.nb_trees = 5;
-    params.gradient_filtering = false;
-    params.balance_partition = true;
-    params.leaf_clipping = true;
+    params.gradient_filtering = FALSE;
+    params.balance_partition = TRUE;
+    params.leaf_clipping = TRUE;
     parameters.push_back(params);
     datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
     parameters.push_back(params);
@@ -65,7 +66,7 @@ int Verification::main(int argc, char *argv[])
 
         for (auto split : cv_inputs) {
 
-            if(params.scale_y){
+            if(iss_true(params.scale_y)){
                 split->train.scale(param, -1, 1);
             }
 
@@ -76,7 +77,7 @@ int Verification::main(int argc, char *argv[])
             // predict with the test set
             std::vector<double> y_pred = ensemble.predict(split->test.X);
 
-            if(params.scale_y){
+            if(iss_true(params.scale_y)){
                 inverse_scale(param, split->train.scaler, y_pred);
             }
             

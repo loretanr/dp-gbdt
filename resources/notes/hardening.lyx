@@ -493,9 +493,19 @@ Microarch.
 \end_layout
 
 \begin_layout Itemize
-PHD thesis, 2020, seems n1 for writing
+PHD thesis, 2020,
 \end_layout
 
+\begin_layout Itemize
+mainly n1 for intro/background writing
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+and also short summaries of side channel papers
+\end_layout
+
+\end_deeper
 \begin_layout Standard
 \begin_inset ERT
 status open

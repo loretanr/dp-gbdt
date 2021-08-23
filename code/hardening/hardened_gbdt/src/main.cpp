@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <cmath>
 #include "logging.h"
+#include "utils.h"
 #include "parameters.h"
 #include "gbdt/dp_ensemble.h"
 #include "dataset_parser.h"
@@ -46,10 +47,10 @@ int main(int argc, char** argv)
     // change model params here if required:
     current_params.privacy_budget = 10;
     current_params.nb_trees = 5;
-    current_params.gradient_filtering = true;
-    current_params.balance_partition = true;
-    current_params.leaf_clipping = false;
-    current_params.scale_y = false;
+    current_params.gradient_filtering = TRUE;
+    current_params.balance_partition = TRUE;
+    current_params.leaf_clipping = FALSE;
+    current_params.scale_y = FALSE;
     parameters.push_back(current_params);
 
     // Choose your dataset
@@ -66,7 +67,7 @@ int main(int argc, char** argv)
     for (auto split : cv_inputs) {
         ModelParams params = parameters[0];
 
-        if(params.scale_y){
+        if(iss_true(params.scale_y)){
             split->train.scale(params, -1, 1);
         }
 
@@ -76,7 +77,7 @@ int main(int argc, char** argv)
         // predict with the test set
         std::vector<double> y_pred = ensemble.predict(split->test.X);
 
-        if(params.scale_y) {
+        if(iss_true(params.scale_y)) {
             inverse_scale(params, split->train.scaler, y_pred);
         }
 

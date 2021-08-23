@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include "utils.h"
 #include "loss.h"
 
 
@@ -13,11 +14,11 @@ struct ModelParams {
     std::shared_ptr<Task> task;
     int max_depth = 6;
     int min_samples_split = 2;
-    bool balance_partition = true;
-    bool gradient_filtering = true;
-    bool leaf_clipping = true;
-    bool scale_y = false;
-    bool use_decay = false;
+    unsigned balance_partition = TRUE;
+    unsigned gradient_filtering = TRUE;
+    unsigned leaf_clipping = TRUE;
+    unsigned scale_y = FALSE;
+    unsigned use_decay = FALSE;
     double l2_threshold = 1.0;
     double l2_lambda = 0.1;
     int verbosity = -1;

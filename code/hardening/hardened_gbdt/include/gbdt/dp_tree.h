@@ -4,10 +4,10 @@
 #include <vector>
 #include <set>
 #include <fstream>
+#include "utils.h"
 #include "tree_node.h"
 #include "parameters.h"
 #include "data.h"
-#include "utils.h"
 
 
 // wrapper around attributes that represent one possible split

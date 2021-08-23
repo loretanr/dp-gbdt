@@ -19,9 +19,9 @@ ModelParams create_default_params()
     ModelParams params;
     params.nb_trees = 50;
     params.max_depth = 6;
-    params.gradient_filtering = true;
-    params.balance_partition = true;
-    params.leaf_clipping = true;
+    params.gradient_filtering = TRUE;
+    params.balance_partition = TRUE;
+    params.leaf_clipping = TRUE;
     params.privacy_budget = 0.1;
     return params;
 };
@@ -68,4 +68,12 @@ std::string get_time_string()
     char buffer [80];
     strftime(buffer,80,"%m.%d_%H:%M",now);
     return std::string(buffer);
+}
+
+bool iss_true(unsigned value)
+{
+    if(not (value == TRUE or value == FALSE)){
+        throw std::runtime_error("Fault injection attack?");
+    }
+    return value == TRUE;
 }
