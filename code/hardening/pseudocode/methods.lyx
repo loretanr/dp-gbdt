@@ -456,6 +456,16 @@ end{algorithm}
 find_best_split()
 \end_layout
 
+\begin_layout Standard
+\begin_inset Formula $\frac{a}{2*2^{a+1}}$
+\end_inset
+
+ 
+\family typewriter
+\emph on
+fdsfsd
+\end_layout
+
 \begin_layout Paragraph
 Caller graph
 \begin_inset Newline newline
@@ -531,99 +541,166 @@ _depth)}{
 
 \begin_layout Plain Layout
 
+
+\backslash
+Comment{determine node privacy budget}
+\end_layout
+
+\begin_layout Plain Layout
+
     
 \backslash
-If{$
+If{params.use
 \backslash
-var{loss} > 
-\backslash
-theta_{
-\backslash
-mathrm{exp}}$}{
+_decay}{
 \end_layout
 
 \begin_layout Plain Layout
 
-      $
+      	
 \backslash
-var{loss} 
+If{curr
 \backslash
-assign 
-\backslash
-sqrt{
-\backslash
-lVert 
-\backslash
-vec{x} 
-\backslash
-rVert^2 - 
-\backslash
-lVert 
-\backslash
-vec{x}^T B 
-\backslash
-rVert^2}$
+_depth == 0}{
 \end_layout
 
 \begin_layout Plain Layout
 
-        
+      		$
 \backslash
-Comment{By Pythagoras}
+var{node
+\backslash
+_budget} = 
+\backslash
+frac{
+\backslash
+var{tree
+\backslash
+_budget}}{2*({2^{
+\backslash
+var{max
+\backslash
+_depth}+1}} + 2^{
+\backslash
+var{curr
+\backslash
+_depth}+1})}$
 \end_layout
 
 \begin_layout Plain Layout
 
-      $B, 
+	    	} 
 \backslash
-Sigma 
-\backslash
-assign 
-\backslash
-FuncCall{Append}{$B$, $
-\backslash
-Sigma$, $
-\backslash
-vec{x}$}$
-\backslash
-;
+Else {
 \end_layout
 
 \begin_layout Plain Layout
 
-      $B 
+				$
 \backslash
-assign 
+var{node
 \backslash
-FuncCall{GramSchmidt}{$B$}$
+_budget} = 
 \backslash
-;
+frac{
+\backslash
+var{tree
+\backslash
+_budget}}{2*{2^{
+\backslash
+var{curr
+\backslash
+_depth}+1}}}$
 \end_layout
 
 \begin_layout Plain Layout
 
-    }
+		}
 \end_layout
 
 \begin_layout Plain Layout
 
-    $
+    } 
 \backslash
-theta_{
+Else {
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
 \backslash
-mathrm{exp}} 
+var{node
 \backslash
-assign 
+_budget} = 
 \backslash
-FuncCall{UpdateLoss}{$
+frac{
 \backslash
-theta_{
+var{tree
 \backslash
-mathrm{exp}}$, 
+_budget}}{2*
 \backslash
-var{loss}}$
+var{max
 \backslash
-;
+_depth}}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+Comment{iterate over all possible splits}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For{feature
+\backslash
+_index : features}{
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+For{feature
+\backslash
+_value : samples[feature
+\backslash
+_index]}{
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{gain} = 
+\backslash
+texttt{
+\backslash
+emph{compute
+\backslash
+_gain(feature
+\backslash
+_index, feature
+\backslash
+_value)}}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
 \end_layout
 
 \begin_layout Plain Layout
@@ -635,141 +712,6 @@ Return{$B$, $
 Sigma$}
 \backslash
 ;
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-Function{PeriodicDecompose($B$, $
-\backslash
-Sigma$)}{
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\backslash
-If{
-\backslash
-FuncCall{IsOneMinutePassed}{}}{
-\end_layout
-
-\begin_layout Plain Layout
-
-      $B, 
-\backslash
-Sigma 
-\backslash
-assign 
-\backslash
-FuncCall{PCA}{$B$, $
-\backslash
-Sigma$}$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-
-    }
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\backslash
-Return{$B$, $
-\backslash
-Sigma$}
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-
-  }
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-Comment{The main function}
-\end_layout
-
-\begin_layout Plain Layout
-
-  
-\backslash
-Function{DynPCA($B$, $
-\backslash
-Sigma$, $
-\backslash
-vec{x}$, $s$)}{
-\end_layout
-
-\begin_layout Plain Layout
-
-    $B, 
-\backslash
-Sigma 
-\backslash
-assign 
-\backslash
-FuncCall{ExpandBasisIfInteresting}{$B$, $
-\backslash
-Sigma$, $
-\backslash
-vec{x}$}$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-
-    $
-\backslash
-Sigma 
-\backslash
-assign 
-\backslash
-FuncCall{UpdateCovMatrix}{$B$, $
-\backslash
-Sigma$, $
-\backslash
-vec{x}$, $s$}$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-
-    $B', 
-\backslash
-Sigma' 
-\backslash
-assign 
-\backslash
-FuncCall{PeriodicDecompose}{$B$, $
-\backslash
-Sigma$}$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-
-    
-\backslash
-Return{$B'$, $
-\backslash
-Sigma'$}
 \end_layout
 
 \begin_layout Plain Layout
