@@ -212,18 +212,12 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
 
     // construct the node
     TreeNode *node;
-    if (index == -1) {
-        node = new TreeNode(true);
-        node->left = nullptr;
-        node->right = nullptr;
-    } else {
-        node = new TreeNode(false);
-        node->split_attr = probabilities[index].feature_index;
-        node->split_value = probabilities[index].split_value;
-        node->split_gain = probabilities[index].gain;
-        node->lhs_size = probabilities[index].lhs_size;
-        node->rhs_size = probabilities[index].rhs_size;
-    }
+    node = new TreeNode(false);
+    node->split_attr = probabilities[index].feature_index;
+    node->split_value = probabilities[index].split_value;
+    node->split_gain = probabilities[index].gain;
+    node->lhs_size = probabilities[index].lhs_size;
+    node->rhs_size = probabilities[index].rhs_size;
     node->depth = current_depth;
     return node;
 }

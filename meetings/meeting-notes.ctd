@@ -1740,7 +1740,7 @@ for tree in n_trees:
 
 
 </rich_text>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629721592.9" unique_id="33">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629879445.95" unique_id="33">
 			<rich_text scale="h3">TODOs</rich_text>
 			<rich_text>
 </rich_text>
@@ -1760,7 +1760,9 @@ for tree in n_trees:
 
 Bigger TODOs
 
-• start “global list/ranking” of what is considered important
+</rich_text>
+			<rich_text foreground="#9090eeee9090">• start “global list/ranking” of what is considered important</rich_text>
+			<rich_text>
 
 • hands on, concrete hardening stuff hard to find!
    ◇ crypto libraries
