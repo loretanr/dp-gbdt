@@ -1729,8 +1729,49 @@ for tree in n_trees:
    5) delete these rows from X_remain</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1629706169.8" unique_id="25">
-		<rich_text>• Google if another compiler is better at not reordering, maybe ask ivan
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1629886258.85" unique_id="25">
+		<rich_text scale="h2">TODOs</rich_text>
+		<rich_text>
+
+</rich_text>
+		<rich_text foreground="#9090eeee9090">• search hardening papers</rich_text>
+		<rich_text>
+      ▪ nothing concrete in printed ones, BITE only one in that direction
+   ◇ hands on, concrete hardening stuff hard to find!
+      ▪ crypto libraries
+      ▪ but apart from that, nothing found. Especially on memory access patterns
+      ▪ some work of 2017, not real research but not unusable 201708_Riscure_Whitepaper_Side_Channel_Patterns.pdf
+
+</rich_text>
+		<rich_text foreground="#9090eeee9090">• write down args/vars of find_best split</rich_text>
+		<rich_text>
+
+</rich_text>
+		<rich_text foreground="#9090eeee9090">• start “global list/ranking” of what is considered important</rich_text>
+		<rich_text>
+
+</rich_text>
+		<rich_text foreground="#9090eeee9090">• setup verify.sh for comparison of cpp and hardened_cpp</rich_text>
+		<rich_text>
+   </rich_text>
+		<rich_text foreground="#9090eeee9090">◇ hardened_cpp remove use_dp</rich_text>
+		<rich_text>
+
+</rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">• continue lyx with MakeTreeDFS and fit() ?</rich_text>
+		<rich_text>
+
+</rich_text>
+		<rich_text foreground="#ffffc0c0cbcb">• identify the really challenging parts (where some cmov or something will be necessary)</rich_text>
+		<rich_text>
+
+
+---------------------------------------------------------------------------------------
+</rich_text>
+		<rich_text scale="h3">Further TODOs</rich_text>
+		<rich_text>
+
+•  Google if another compiler is better at not reordering, maybe ask ivan
 
 • parallel enclaves for our CV folds, might be interesting?
    ◇ seems possible. Does it make sense to implement though?
@@ -1739,41 +1780,10 @@ for tree in n_trees:
 		<rich_text>
 
 
-</rich_text>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="find_best_split" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629460946.67" ts_lastsave="1629879445.95" unique_id="33">
-			<rich_text scale="h3">TODOs</rich_text>
-			<rich_text>
-</rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">• quick research good way to present args/used vars</rich_text>
-			<rich_text>
-   ◇ hardening papers
-      ▪ nothing concrete in mine, BITE only one in that direction
-   ◇ google search
-      ▪ some work of 2017, not real research but not unusable 201708_Riscure_Whitepaper_Side_Channel_Patterns.pdf
+
+
 
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">• write down args/vars of find_best split</rich_text>
-			<rich_text>
-
-
-
-
-Bigger TODOs
-
-</rich_text>
-			<rich_text foreground="#9090eeee9090">• start “global list/ranking” of what is considered important</rich_text>
-			<rich_text>
-
-• hands on, concrete hardening stuff hard to find!
-   ◇ crypto libraries
-   ◇ but apart from that, nothing found. Especially on memory access patterns
-
-</rich_text>
-			<rich_text foreground="#9090eeee9090">• setup verify.sh for comparison of cpp and hardened_cpp</rich_text>
-			<rich_text>
-   </rich_text>
-			<rich_text foreground="#9090eeee9090">◇ hardened_cpp remove use_dp</rich_text>
-		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="Paper findings" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629706169.8" ts_lastsave="1629706182.85" unique_id="34">
 			<rich_text scale="h3">Plundervolt</rich_text>
 			<rich_text>
