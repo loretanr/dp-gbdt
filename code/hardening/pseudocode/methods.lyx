@@ -29,6 +29,7 @@
 \definecolor{amaranth}{rgb}{0.9, 0.17, 0.31}
 \DontPrintSemicolon
 % Define pseudocode formatting
+\SetAlgoVlined
 \renewcommand{\KwSty}[1]{\textnormal{\textcolor{amaranth!90!black}{\bfseries #1}}\unskip}
 \renewcommand{\ArgSty}[1]{\textnormal{\ttfamily #1}\unskip}
 \SetKwComment{Comment}{\color{green!80!black!190}// }{}
@@ -36,13 +37,18 @@
 \newcommand{\assign}{\leftarrow}
 \newcommand{\var}{\texttt}
 \newcommand{\FuncCall}[2]{\texttt{\bfseries #1(#2)}}
-\SetKwProg{Function}{Function}{}{}
+\SetKwProg{Function}{function}{}{}
 \SetKw{Continue}{continue}
 \renewcommand{\ProgSty}[1]{\texttt{\bfseries #1}}
 %\usepackage{etoolbox}
 \usepackage{setspace}
 %\AtBeginEnvironment{algorithm}{\setstretch{0.75}}
 
+% Pseudocode title
+\SetAlgorithmName{Pseudocode}{algorithmautorefname}
+%\usepackage{algorithm}
+%\usepackage[noend]{algpseudocode}
+%\floatname{algorithm}{Pseudocode}
 
 % text highlight
 \newcommand{\hyellow}[1]{\colorbox{yellow!20}{#1}}
@@ -60,14 +66,18 @@
 \usepackage{tikz}
 \usetikzlibrary{fit,calc}
 %define a marking command
-\newcommand*{\tikzmk}[1]{\tikz[remember picture,overlay] \node (#1) {};\ignorespaces}
+\newcommand{\tikzmk}[1]{\tikz[remember picture,overlay] \node (#1) {};\ignorespaces}
 %define a boxing command, argument = colour of box
-\newcommand{\boxit}[1]{\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={(A)($(B)+(.5\linewidth,0.9\baselineskip)$)}] {};}\ignorespaces}
+\newcommand{\boxit}[1]{\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={(A)($(B)+(.9\linewidth,0.9\baselineskip)$)}] {};}\ignorespaces}
+
+\newcommand{\tikzmkk}[1]{\tikz[remember picture,overlay] \node (#1) {};\ignorespaces}
+%define a boxing command, argument = colour of box
+\newcommand{\boxitt}[1]{\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={(C)($(D)+(.5\linewidth,-0.2)$)}] {};}\ignorespaces}
 
 % define some colours according to algorithm parts (or any other method you like)
-\colorlet{green}{green!30}
-\colorlet{yellow}{yellow!20}
-\colorlet{red}{red!20}
+\colorlet{green}{green!20}
+\colorlet{yellow}{yellow!40}
+\colorlet{red}{red!30}
 
 % algorithm comments on the right side
 \usepackage{algpseudocode}
@@ -2440,7 +2450,7 @@ Function{find
 \backslash
 _best
 \backslash
-_split(X[][], gradients[], curr
+_split(X, gradients, curr
 \backslash
 _depth)}{
 \end_layout
@@ -2467,31 +2477,31 @@ tikzmk{A}
 
     
 \backslash
-If(
+eIf (
 \backslash
-algorithmiccomment{this is a comment}){params.use
+algorithmiccomment{params.use
 \backslash
-_decay}{  
+_decay}){params.use
+\backslash
+_decay} {  
 \end_layout
 
 \begin_layout Plain Layout
 
-			
+		
 \backslash
-tikzmk{B}
-\backslash
-boxit{green}
-\backslash
-tikzmk{A}
+tikzmkk{C}
 \end_layout
 
 \begin_layout Plain Layout
 
-      	
+		
 \backslash
-If(
+eIf(
 \backslash
-algorithmiccomment{this is another comment}){curr
+algorithmiccomment{curr
+\backslash
+_depth == 0}){curr
 \backslash
 _depth == 0}{
 \end_layout
@@ -2517,18 +2527,18 @@ _depth}+1}} + 2^{
 var{curr
 \backslash
 _depth}+1})}$
-\end_layout
-
-\begin_layout Plain Layout
-
-	    } 
 \backslash
-Else {
+;
 \end_layout
 
 \begin_layout Plain Layout
 
-				$
+	    } {
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
 \backslash
 var{node
 \backslash
@@ -2543,6 +2553,12 @@ _budget}}{2*{2^{
 var{curr
 \backslash
 _depth}+1}}}$
+\backslash
+tikzmkk{D}
+\backslash
+boxitt{yellow}
+\backslash
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -2556,15 +2572,7 @@ _depth}+1}}}$
 
 \begin_layout Plain Layout
 
-    }
-\backslash
-tikzmk{B}
-\backslash
-boxit{yellow}
-\backslash
-tikzmk{A} 
-\backslash
-Else {
+    } {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2584,6 +2592,8 @@ _budget}}{2*
 var{max
 \backslash
 _depth}}$
+\backslash
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -2597,10 +2607,6 @@ boxit{green}
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
 	
 \backslash
 tcp{iterate over all possible splits}
@@ -2610,7 +2616,16 @@ tcp{iterate over all possible splits}
 
 	
 \backslash
-For{feature
+tikzmk{A}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For(
+\backslash
+algorithmiccomment{number of cols in X}){feature
 \backslash
 _index : features} {
 \end_layout
@@ -2619,7 +2634,16 @@ _index : features} {
 
 		
 \backslash
-For{feature
+tikzmkk{C}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+For(
+\backslash
+algorithmiccomment{number of rows in X}){feature
 \backslash
 _value : X[feature
 \backslash
@@ -2727,6 +2751,12 @@ texttt{.insert(Candidate(feature
 _index, feature
 \backslash
 _value, gain))}$
+\backslash
+tikzmkk{D}
+\backslash
+boxitt{red}
+\backslash
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -2741,6 +2771,11 @@ _value, gain))}$
 
 \begin_layout Plain Layout
 
+	
+\backslash
+tikzmk{B}
+\backslash
+boxit{green}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3088,7 +3123,7 @@ Mitigations
 \end_layout
 
 \begin_layout Standard
-TODO
+TODOoo
 \end_layout
 
 \begin_layout Standard
