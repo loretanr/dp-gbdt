@@ -31,8 +31,8 @@
 % Define pseudocode formatting
 \renewcommand{\KwSty}[1]{\textnormal{\textcolor{amaranth!90!black}{\bfseries #1}}\unskip}
 \renewcommand{\ArgSty}[1]{\textnormal{\ttfamily #1}\unskip}
-\SetKwComment{Comment}{\color{green!50!black}// }{}
-\renewcommand{\CommentSty}[1]{\textnormal{\ttfamily\color{green!50!black}#1}\unskip}
+\SetKwComment{Comment}{\color{green!80!black!190}// }{}
+\renewcommand{\CommentSty}[1]{\textnormal{\ttfamily\color{green!80!black!190}#1}\unskip}
 \newcommand{\assign}{\leftarrow}
 \newcommand{\var}{\texttt}
 \newcommand{\FuncCall}[2]{\texttt{\bfseries #1(#2)}}
@@ -44,14 +44,11 @@
 %\AtBeginEnvironment{algorithm}{\setstretch{0.75}}
 
 
-% highlight
+% text highlight
 \newcommand{\hyellow}[1]{\colorbox{yellow!20}{#1}}
 \newcommand{\horange}[1]{\colorbox{orange!20}{#1}}
-
-
 \newcommand{\hgreen}[1]{\colorbox{green!20}{#1}}
 \newcommand{\hred}[1]{\colorbox{red!20}{#1}}
-
 
 % titlespace
 \usepackage{titling}
@@ -59,9 +56,21 @@
 % no ugly indent
 \setlength\parindent{0pt}
 
+% algorithm highlight
+\usepackage{tikz}
+\usetikzlibrary{fit,calc}
+%define a marking command
+\newcommand*{\tikzmk}[1]{\tikz[remember picture,overlay] \node (#1) {};\ignorespaces}
+%define a boxing command, argument = colour of box
+\newcommand{\boxit}[1]{\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={(A)($(B)+(.5\linewidth,0.9\baselineskip)$)}] {};}\ignorespaces}
 
-%\usepackage{algorithm,algpseudocode}
-%\usepackage{algorithm2e}
+% define some colours according to algorithm parts (or any other method you like)
+\colorlet{green}{green!30}
+\colorlet{yellow}{yellow!20}
+\colorlet{red}{red!20}
+
+% algorithm comments on the right side
+\usepackage{algpseudocode}
 \end_preamble
 \use_default_options true
 \begin_modules
@@ -2409,7 +2418,7 @@ status open
 \backslash
 begin{algorithm}
 \backslash
-setstretch{0.875}
+setstretch{0.9}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2438,25 +2447,51 @@ _depth)}{
 
 \begin_layout Plain Layout
 
+\end_layout
 
+\begin_layout Plain Layout
+
+	
 \backslash
-Comment{determine node privacy budget}
+tcp{determine node privacy budget}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tikzmk{A}
 \end_layout
 
 \begin_layout Plain Layout
 
     
 \backslash
-If{params.use
+If(
 \backslash
-_decay}{
+algorithmiccomment{this is a comment}){params.use
+\backslash
+_decay}{  
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+tikzmk{B}
+\backslash
+boxit{green}
+\backslash
+tikzmk{A}
 \end_layout
 
 \begin_layout Plain Layout
 
       	
 \backslash
-If{curr
+If(
+\backslash
+algorithmiccomment{this is another comment}){curr
 \backslash
 _depth == 0}{
 \end_layout
@@ -2486,7 +2521,7 @@ _depth}+1})}$
 
 \begin_layout Plain Layout
 
-	    	} 
+	    } 
 \backslash
 Else {
 \end_layout
@@ -2517,7 +2552,17 @@ _depth}+1}}}$
 
 \begin_layout Plain Layout
 
-    } 
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\backslash
+tikzmk{B}
+\backslash
+boxit{yellow}
+\backslash
+tikzmk{A} 
 \backslash
 Else {
 \end_layout
@@ -2544,13 +2589,21 @@ _depth}}$
 \begin_layout Plain Layout
 
 	}
+\backslash
+tikzmk{B}
+\backslash
+boxit{green}
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
 
 	
 \backslash
-Comment{iterate over all possible splits}
+tcp{iterate over all possible splits}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2688,9 +2741,13 @@ _value, gain))}$
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\begin_layout Plain Layout
+
 	
 \backslash
-Comment{choose a split using the exponential mechanism}
+tcp{choose a split using the exponential mechanism}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2714,7 +2771,7 @@ _mechanism(candidates)}}$
 
 	
 \backslash
-Comment{construct the node}
+tcp{construct the node}
 \end_layout
 
 \begin_layout Plain Layout
