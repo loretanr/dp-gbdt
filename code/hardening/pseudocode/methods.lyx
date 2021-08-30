@@ -1133,7 +1133,7 @@ fit
 \begin_layout Subsubsection
 
 \family typewriter
-make_tree_DFS
+make_tree_dfs
 \end_layout
 
 \begin_layout Paragraph
@@ -1213,7 +1213,7 @@ caption{make
 \backslash
 _tree
 \backslash
-_DFS}
+_dfs}
 \end_layout
 
 \begin_layout Plain Layout
@@ -1242,7 +1242,7 @@ _samples}}) {make
 \backslash
 _tree
 \backslash
-_DFS(live
+_dfs(live
 \backslash
 _samples, curr
 \backslash

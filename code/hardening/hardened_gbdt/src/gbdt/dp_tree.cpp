@@ -29,11 +29,10 @@ DPTree::~DPTree() {}
 // Fit the tree to the data
 void DPTree::fit()
 {
-    // keep track which samples will be available in a node for spliting
-    vector<int> live_samples(dataset->length);
-    std::iota(std::begin(live_samples), std::end(live_samples), 0);
+    // keep track which samples will be available in a node for spliting (1=live)
+    vector<int> live_samples(dataset->length, 1);
 
-    this->root_node = make_tree_DFS(0, live_samples);
+    this->root_node = make_tree_dfs(0, live_samples);
 
     // leaf clipping. Note, it can only be disabled if GDF is enabled.
     if (iss_true(params->leaf_clipping) or !iss_true(params->gradient_filtering)) {
@@ -51,14 +50,19 @@ void DPTree::fit()
 
 
 // Recursively build tree, DFS approach, first instance returns root node
-TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
+TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples)
 {
+    int live_size = 0;
+    for(auto elem : live_samples){
+        live_size += elem;
+    }
+
     // max depth reached or not enough samples -> leaf node
     if ( (current_depth == params->max_depth) or 
-            live_samples.size() < (size_t) params->min_samples_split) {
+            live_size < (size_t) params->min_samples_split) {
         TreeNode *leaf = make_leaf_node(current_depth, live_samples);
         LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
-            current_depth, live_samples.size(), leaf->prediction);
+            current_depth, live_size, leaf->prediction);
         return leaf;
     }
 
@@ -92,9 +96,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 
     // prepare the new live samples to continue recursion
     vector<int> lhs;
-    bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(),
-            node->split_attr) != (params->cat_idx).end();
-    samples_left_right_partition(lhs, X_live, node->split_attr, node->split_value, categorical);
+    samples_left_right_partition(lhs, X_live, node->split_attr, node->split_value);
     vector<int> left_live_samples, right_live_samples;
     for (size_t i=0; i<live_samples.size(); i++) {
         if (lhs[i]) {
@@ -104,8 +106,8 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         }
     }
 
-    node->left = make_tree_DFS(current_depth + 1, left_live_samples);
-    node->right = make_tree_DFS(current_depth + 1, right_live_samples);
+    node->left = make_tree_dfs(current_depth + 1, left_live_samples);
+    node->right = make_tree_dfs(current_depth + 1, right_live_samples);
 
     return node;
 }
@@ -117,6 +119,9 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
     leaf->depth = current_depth;
 
     vector<double> y, gradients;
+    for(int index=0; i<live_samples.size(); i++){
+        
+    }
     for (auto index : live_samples) {
         y.push_back((dataset->y)[index]);
         gradients.push_back(dataset->gradients[index]);
@@ -184,7 +189,6 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
-        bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
         std::set<double> unique;
         for (double feature_value : X_live[feature_index]) {
             if (std::get<1>(unique.insert(feature_value)) == false){
@@ -192,7 +196,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
                 continue;
             }
             // compute gain
-            double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size, categorical);
+            double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size);
             // feature cannot be chosen, skipping
             if (gain == -1) {
                 continue;
@@ -231,11 +235,11 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
                 |IL| + lambda        |IR| + lambda
 */
 double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
-    int feature_index, double feature_value, int &lhs_size, bool categorical)
+    int feature_index, double feature_value, int &lhs_size)
 {
     // partition into lhs / rhs
     vector<int> lhs;
-    samples_left_right_partition(lhs, samples, feature_index, feature_value, categorical);
+    samples_left_right_partition(lhs, samples, feature_index, feature_value);
 
     int _lhs_size = std::count(lhs.begin(), lhs.end(), 1);
     int _rhs_size = std::count(lhs.begin(), lhs.end(), 0);
@@ -268,9 +272,10 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
 
 // the result is am int array that will indicate left/right resp. 0/1
 void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples,
-            int feature_index, double feature_value, bool categorical)
+            int feature_index, double feature_value)
 {
     // if the feature is categorical
+    bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
     if(categorical) {
         for (auto sample : samples[feature_index]) {
             size_t value = sample == feature_value;

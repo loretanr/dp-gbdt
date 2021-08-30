@@ -119,9 +119,8 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
     TreeNode *leaf = new TreeNode(true);
     leaf->depth = current_depth;
 
-    vector<double> y, gradients;
+    vector<double> gradients;
     for (auto index : live_samples) {
-        y.push_back((dataset->y)[index]);
         gradients.push_back(dataset->gradients[index]);
     }
     // compute prediction
