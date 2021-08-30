@@ -66,6 +66,10 @@
 % algorithm highlight
 \usepackage{tikz}
 \usetikzlibrary{fit,calc}
+\newcommand{\boxi}[2]{
+	\tikz[remember picture,overlay] \node (A) {};\ignorespaces
+	\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={($(A)+(0,0.15\baselineskip)$)($(A)+(.946\linewidth,-{#2}\baselineskip - 0.25\baselineskip)$)}] {};}\ignorespaces
+}
 \newcommand{\boxit}[2]{
 	\tikz[remember picture,overlay] \node (A) {};\ignorespaces
 	\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={($(A)+(0,0.15\baselineskip)$)($(A)+(.915\linewidth,-{#2}\baselineskip - 0.25\baselineskip)$)}] {};}\ignorespaces
@@ -1163,221 +1167,29 @@ Call graph
 \end_layout
 
 \begin_layout Paragraph
-Arguments / used variables
-\begin_inset Newline newline
-\end_inset
+Arguments / variables
+\end_layout
 
-
+\begin_layout Itemize
+must not leak:
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status open
 
-\begin_layout Plain Layout
-
-
-\backslash
-begin{multicols}{3}
+\family typewriter
+dataset, live_samples, gradients, curr_depth
+\family default
+ (?)
 \end_layout
 
-\end_inset
-
-
-\begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="2">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-variable
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-secret
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-dataset
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\checkmark$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-gradients
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\checkmark$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-curr_depth
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-?
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-live_samples
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\checkmark$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
+\begin_layout Itemize
+can leak:
 \end_layout
 
 \begin_layout Standard
-\begin_inset Tabular
-<lyxtabular version="3" rows="2" columns="2">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-params.min_samples_split
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-params.max_depth
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{multicols}
-\end_layout
-
-\end_inset
-
-
+\family typewriter
+params.min_samples_split, params.max_depth
 \end_layout
 
 \begin_layout Standard
@@ -1406,19 +1218,33 @@ _DFS}
 
 \begin_layout Plain Layout
 
+	
 \end_layout
 
 \begin_layout Plain Layout
 
   
 \backslash
-Function{make
+boxi{red}{0}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function (
+\backslash
+Comment{size of 
+\backslash
+texttt{live
+\backslash
+_samples}}) {make
 \backslash
 _tree
 \backslash
 _DFS(live
 \backslash
-_samples[], curr
+_samples, curr
 \backslash
 _depth)}{
 \end_layout
@@ -1431,7 +1257,9 @@ _depth)}{
 
 	
 \backslash
-Comment{max depth reached or not enough samples -> leaf node}
+tcp{max depth reached or not enough samples -> leaf node} 
+\backslash
+boxit{yellow}{2}
 \end_layout
 
 \begin_layout Plain Layout
@@ -1453,7 +1281,7 @@ _split}{
 
 \begin_layout Plain Layout
 
-      	$
+			$
 \backslash
 texttt{TreeNode *leaf = 
 \backslash
@@ -1467,9 +1295,12 @@ _depth, live
 \backslash
 _samples)}}$ 
 \backslash
+Comment{both branch conditions}
+\end_layout
 
-\backslash
+\begin_layout Plain Layout
 
+			
 \end_layout
 
 \begin_layout Plain Layout
@@ -1496,10 +1327,11 @@ texttt{leaf}$}
 
 	
 \backslash
-Comment{get actual sample rows and respective gradients from indices in
- live
+tcp{get actual sample rows and respective gradients from indices in live
 \backslash
-_samples}
+_samples} 
+\backslash
+boxit{red}{1}
 \end_layout
 
 \begin_layout Plain Layout
@@ -1516,9 +1348,9 @@ rightarrow}X[live
 \backslash
 _samples]}$ 
 \backslash
-
+Comment{sizes, memory access patterns in 
 \backslash
-
+texttt{X}}
 \end_layout
 
 \begin_layout Plain Layout
@@ -1533,11 +1365,9 @@ ensuremath{
 \backslash
 rightarrow}gradients[live
 \backslash
-_samples]}$ 
+_samples]}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -1549,7 +1379,7 @@ _samples]}$
 
 	
 \backslash
-Comment{find best split}
+tcp{find best split}
 \end_layout
 
 \begin_layout Plain Layout
@@ -1568,11 +1398,9 @@ _live, gradients
 \backslash
 _live, curr
 \backslash
-_depth)}}$ 
+_depth)}}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -1584,14 +1412,18 @@ _depth)}}$
 
 	
 \backslash
-Comment{no split found}
+tcp{no split found} 
+\backslash
+boxit{red}{1}
 \end_layout
 
 \begin_layout Plain Layout
 
     
 \backslash
-If{node.is
+If (
+\backslash
+Comment{number of leaves}) {node.is
 \backslash
 _leaf }{
 \end_layout
@@ -1620,7 +1452,9 @@ texttt{node}$}
 
 	
 \backslash
-Comment{prepare the new live samples to continue recursion}
+tcp{prepare the new live samples to continue recursion} 
+\backslash
+boxit{yellow}{0}
 \end_layout
 
 \begin_layout Plain Layout
@@ -1645,16 +1479,27 @@ _index, node.feature
 \backslash
 _value)}}$ 
 \backslash
-
-\backslash
-
+Comment{lhs size}
 \end_layout
 
 \begin_layout Plain Layout
 
 	
 \backslash
-For{sample : live
+boxit{red}{4.5}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For (
+\backslash
+Comment{size of 
+\backslash
+texttt{live
+\backslash
+_samples}}) {sample : live
 \backslash
 _samples} {
 \end_layout
@@ -1663,7 +1508,16 @@ _samples} {
 
 		
 \backslash
-If {lhs.contains(sample)} {
+boxitt{red}{3}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+eIf (
+\backslash
+Comment{which samples go left/right}) {lhs.contains(sample)} {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1675,13 +1529,13 @@ texttt{lhs
 _live
 \backslash
 _samples.insert(sample)}$
+\backslash
+;
 \end_layout
 
 \begin_layout Plain Layout
 
-		} 
-\backslash
-Else {
+		} {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1693,6 +1547,8 @@ texttt{rhs
 _live
 \backslash
 _samples.insert(sample)}$
+\backslash
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -1709,7 +1565,7 @@ _samples.insert(sample)}$
 
 	
 \backslash
-Comment{recurse}
+tcp{recurse}
 \end_layout
 
 \begin_layout Plain Layout
@@ -1730,11 +1586,9 @@ _live
 \backslash
 _samples, curr
 \backslash
-_depth+1)}$ 
+_depth+1)}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -1755,11 +1609,9 @@ _live
 \backslash
 _samples, curr
 \backslash
-_depth+1)}$ 
+_depth+1)}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -1790,32 +1642,8 @@ end{algorithm}
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{multicols}{2}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Paragraph
-Side channel leakage
-\end_layout
-
-\begin_layout Itemize
-leakage in called methods
-\end_layout
-
-\begin_layout Standard
-From branches/loops:
+Recursion leakage
 \end_layout
 
 \begin_layout Itemize
@@ -1826,93 +1654,12 @@ status open
 
 
 \backslash
-hgreen{
+hred{
 \end_layout
 
 \end_inset
 
-params.max_depth
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hgreen{
-\end_layout
-
-\end_inset
-
-params.min_samples_split
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hyellow{
-\end_layout
-
-\end_inset
-
-curr_depth == max_depth
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hgreen{
-\end_layout
-
-\end_inset
-
-number of features (columns of X)
+number of splits in the tree
 \begin_inset ERT
 status open
 
@@ -1939,170 +1686,13 @@ hred{
 
 \end_inset
 
-number of live samples resp.
- rows in X_live
+number of splits/leaves observable by watching memory allocations
 \begin_inset ERT
 status open
 
 \begin_layout Plain Layout
 
 }
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-whether node becomes a leaf / #leaves
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-whether split is done on a categorical feature
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-split details (how many samples go left/right)
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Recursion leakage: ?
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-e.g.
- #splits in the tree by measuring time
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-#nodes observable by watching memory allocations for nodes
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{multicols}
 \end_layout
 
 \end_inset
@@ -2179,248 +1769,33 @@ Call graph
 \end_layout
 
 \begin_layout Paragraph
-Arguments / used variables
-\begin_inset Newline newline
-\end_inset
+Arguments / variables
+\end_layout
 
-
+\begin_layout Itemize
+must not leak:
 \end_layout
 
 \begin_layout Standard
-\begin_inset ERT
-status open
 
-\begin_layout Plain Layout
-
-
-\backslash
-begin{multicols}{3}
+\family typewriter
+X, gradients, curr_depth
+\family default
+ (?)
 \end_layout
 
-\end_inset
-
-
-\begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="2">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-variable
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-secret
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-X
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\checkmark$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-gradients
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\checkmark$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-curr_depth
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-?
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-tree_budget
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
+\begin_layout Itemize
+can leak:
 \end_layout
 
 \begin_layout Standard
-\begin_inset Tabular
-<lyxtabular version="3" rows="3" columns="2">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-params.use_decay
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
+\family typewriter
+params.use_decay, params.
+\begin_inset Formula $\Delta$
 \end_inset
 
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-params.
-\begin_inset Formula $\Delta g$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-params.max_depth
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{multicols}
-\end_layout
-
-\end_inset
-
-
+g, params.max_depth, tree_budget
 \end_layout
 
 \begin_layout Standard
@@ -2449,9 +1824,20 @@ _split}
 
 \begin_layout Plain Layout
 
+	
+\backslash
+boxi{red}{0}
+\end_layout
+
+\begin_layout Plain Layout
+
   
 \backslash
-Function{find
+Function (
+\backslash
+Comment{size of 
+\backslash
+texttt{X, gradients}}) {find
 \backslash
 _best
 \backslash
@@ -2484,9 +1870,11 @@ boxit{green}{7.5}
 \backslash
 eIf (
 \backslash
-Comment{params.use
+Comment{
 \backslash
-_decay}){params.use
+texttt{params.use
+\backslash
+_decay}}){params.use
 \backslash
 _decay} {  
 \end_layout
@@ -2504,9 +1892,11 @@ boxitt{yellow}{3.7}
 \backslash
 eIf(
 \backslash
-Comment{curr
+Comment{
 \backslash
-_depth == 0}){curr
+texttt{curr
+\backslash
+_depth == 0}}){curr
 \backslash
 _depth == 0} {
 \end_layout
@@ -2618,7 +2008,9 @@ boxit{green}{9.8}
 \backslash
 For(
 \backslash
-Comment{number of cols in X}){feature
+Comment{number of cols in 
+\backslash
+texttt{X}}){feature
 \backslash
 _index : features} {
 \end_layout
@@ -2636,7 +2028,9 @@ boxitt{red}{8.5}
 \backslash
 For(
 \backslash
-Comment{number of rows in X}){feature
+Comment{number of rows in 
+\backslash
+texttt{X}}){feature
 \backslash
 _value : X[feature
 \backslash
@@ -2849,10 +2243,6 @@ end{algorithm}
 
 \end_layout
 
-\begin_layout Standard
-
-\end_layout
-
 \begin_layout Paragraph
 Mitigations
 \end_layout
@@ -2905,214 +2295,27 @@ Call graph
 \end_layout
 
 \begin_layout Paragraph
-Arguments / used variables
-\begin_inset Newline newline
-\end_inset
+Arguments / variables
+\end_layout
 
-
+\begin_layout Itemize
+must not leak:
 \end_layout
 
 \begin_layout Standard
-\begin_inset Tabular
-<lyxtabular version="3" rows="6" columns="3">
-<features tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
 
-\begin_layout Plain Layout
-variable
+\family typewriter
+X, gradients
 \end_layout
 
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-secret
+\begin_layout Itemize
+can leak:
 \end_layout
 
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
+\begin_layout Standard
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-X
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\checkmark$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-gradients
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\checkmark$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-feature_index
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-feature_value
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-params.l2_lambda
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\times$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
+\family typewriter
+params.l2_lambda, feature_index, feature_value
 \end_layout
 
 \begin_layout Standard
@@ -3141,9 +2344,20 @@ _gain}
 
   
 \backslash
-Function{compute
+boxi{red}{0}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
 \backslash
-_gain(X[][], gradients[], feature
+Function (
+\backslash
+Comment{size of 
+\backslash
+texttt{X, gradients}}) {compute
+\backslash
+_gain(X, gradients, feature
 \backslash
 _index, feature
 \backslash
@@ -3159,7 +2373,14 @@ _value)}{
 
 	
 \backslash
-Comment{// partition into lhs/rhs}
+tcp{partition into lhs/rhs}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+boxit{red}{2}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3184,9 +2405,7 @@ _index, feature
 \backslash
 _value)}}$ 
 \backslash
-
-\backslash
-
+Comment{lhs/rhs size}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3197,11 +2416,9 @@ var{lhs
 \backslash
 _size} = 
 \backslash
-texttt{lhs.size()}$ 
+texttt{lhs.size()}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -3213,6 +2430,8 @@ var{rhs
 _size} = 
 \backslash
 texttt{rhs.size()}$
+\backslash
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -3223,14 +2442,18 @@ texttt{rhs.size()}$
 
 	
 \backslash
-Comment{return on useless split}
+tcp{return on useless split} 
+\backslash
+boxit{yellow}{1}
 \end_layout
 
 \begin_layout Plain Layout
 
 	
 \backslash
-If{lhs
+If (
+\backslash
+Comment{useless split}) {lhs
 \backslash
 _size == 0 || rhs
 \backslash
@@ -3255,7 +2478,9 @@ texttt{-1}$}
 
 	
 \backslash
-Comment{sums of lhs/rhs gains}
+tcp{sums of lhs/rhs gains}  
+\backslash
+boxit{red}{1}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3268,9 +2493,7 @@ _gain} =
 \backslash
 texttt{sum(gradients[lhs])}$ 
 \backslash
-
-\backslash
-
+Comment{memory access pattern of left/right gradients}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3281,11 +2504,9 @@ var{rhs
 \backslash
 _gain} = 
 \backslash
-texttt{sum(gradients[rhs])}$ 
+texttt{sum(gradients[rhs])}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -3308,11 +2529,9 @@ _size} +
 \backslash
 var{params.l2
 \backslash
-_lambda}}$ 
+_lambda}}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -3335,11 +2554,9 @@ _size} +
 \backslash
 var{params.l2
 \backslash
-_lambda}}$ 
+_lambda}}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
@@ -3356,11 +2573,16 @@ _gain} +
 \backslash
 var{rhs
 \backslash
-_gain}$ 
+_gain}$
 \backslash
+;
+\end_layout
 
+\begin_layout Plain Layout
+
+	
 \backslash
-
+boxit{yellow}{0}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3375,26 +2597,29 @@ texttt{max(total
 \backslash
 _gain, 0)}$ 
 \backslash
-
+Comment{
 \backslash
-
-\end_layout
-
-\begin_layout Plain Layout
-
+texttt{max} might leak whether 
+\backslash
+texttt{total
+\backslash
+_gain < 0}}
 \end_layout
 
 \begin_layout Plain Layout
 
     
+\end_layout
+
+\begin_layout Plain Layout
+
+	
 \backslash
 Return{$
 \backslash
 texttt{total
 \backslash
 _gain}$}
-\backslash
-;
 \end_layout
 
 \begin_layout Plain Layout
@@ -3407,211 +2632,6 @@ _gain}$}
 
 \backslash
 end{algorithm}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Paragraph
-Side channel leakage
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{multicols}{2}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-leakage in 
-\family typewriter
-samples_left_right_partition
-\end_layout
-
-\begin_layout Standard
-From branches/loops/function calls:
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-size (#rows) of X/gradients
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-lhs/rhs size
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hyellow{
-\end_layout
-
-\end_inset
-
-whether it's a useless split
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-memory access pattern of left/right gradients
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hyellow{
-\end_layout
-
-\end_inset
-
-max function might leak whether 
-\family typewriter
-total_gain
-\family default
- < 0
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Potential arithmetic leakage: ?
-\end_layout
-
-\begin_layout Itemize
-edge cases of variables appearing in formulas 
-\begin_inset Formula $\rightarrow$
-\end_inset
-
- 
-\family typewriter
-lhs_gain
-\family default
- and 
-\family typewriter
-lhs_size
-\family default
-, rhs respectively.
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{multicols}
 \end_layout
 
 \end_inset

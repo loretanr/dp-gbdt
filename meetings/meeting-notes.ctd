@@ -497,7 +497,7 @@ remove duplicates. (loop over X_unique)
       ▪ ein datenpunkt kann exakt 2 bäume beeinflussen, und wir rechnen momentan nur mit einem
       ▪ </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="08_26" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629982682.21" ts_lastsave="1629994386.33" unique_id="35">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="08_26" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629982682.21" ts_lastsave="1630336931.5" unique_id="35">
 			<rich_text>Meeting with Kari
 
 Kari will get back to me with whether &quot;arithmetic leakage&quot; is a thing. on hold for now
@@ -521,10 +521,12 @@ make recursion in a way that it always goes down
 
 create a lyx of the “known flaws” that Moritz an I talked about!
 
-hilight the leaks in the pseudocode
-    </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">ask stackoverflow</rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">hilight the leaks in the pseudocode
+    ask stackoverflow</rich_text>
 			<rich_text>
+    
+move categorical feature back into innermose function
 </rich_text>
 		</node>
 	</node>
