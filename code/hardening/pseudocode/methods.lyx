@@ -28,6 +28,7 @@
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \definecolor{amaranth}{rgb}{0.9, 0.17, 0.31}
 \DontPrintSemicolon
+
 % Define pseudocode formatting
 \SetAlgoVlined
 \renewcommand{\KwSty}[1]{\textnormal{\textcolor{amaranth!90!black}{\bfseries #1}}\unskip}
@@ -40,7 +41,7 @@
 \SetKwProg{Function}{function}{}{}
 \SetKw{Continue}{continue}
 \renewcommand{\ProgSty}[1]{\texttt{\bfseries #1}}
-%\usepackage{etoolbox}
+\SetAlFnt{\small}
 \usepackage{setspace}
 %\AtBeginEnvironment{algorithm}{\setstretch{0.75}}
 
@@ -65,22 +66,26 @@
 % algorithm highlight
 \usepackage{tikz}
 \usetikzlibrary{fit,calc}
-%define a marking command
-\newcommand{\tikzmk}[1]{\tikz[remember picture,overlay] \node (#1) {};\ignorespaces}
-%define a boxing command, argument = colour of box
-\newcommand{\boxit}[1]{\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={(A)($(B)+(.9\linewidth,0.9\baselineskip)$)}] {};}\ignorespaces}
+\newcommand{\boxit}[2]{
+	\tikz[remember picture,overlay] \node (A) {};\ignorespaces
+	\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={($(A)+(0,0.15\baselineskip)$)($(A)+(.915\linewidth,-{#2}\baselineskip - 0.25\baselineskip)$)}] {};}\ignorespaces
+}
+\newcommand{\boxitt}[2]{
+	\tikz[remember picture,overlay] \node (A) {};\ignorespaces
+	\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={($(A)+(0,0.15\baselineskip)$)($(A)+(.876\linewidth,-{#2}\baselineskip - 0.25\baselineskip)$)}] {};}\ignorespaces
+}
+\newcommand{\boxittt}[2]{
+	\tikz[remember picture,overlay] \node (A) {};\ignorespaces
+	\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={($(A)+(0,0.15\baselineskip)$)($(A)+(.837\linewidth,-{#2}\baselineskip - 0.25\baselineskip)$)}] {};}\ignorespaces
+}
 
-\newcommand{\tikzmkk}[1]{\tikz[remember picture,overlay] \node (#1) {};\ignorespaces}
-%define a boxing command, argument = colour of box
-\newcommand{\boxitt}[1]{\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={(C)($(D)+(.5\linewidth,-0.2)$)}] {};}\ignorespaces}
-
-% define some colours according to algorithm parts (or any other method you like)
 \colorlet{green}{green!20}
 \colorlet{yellow}{yellow!40}
 \colorlet{red}{red!30}
 
 % algorithm comments on the right side
 \usepackage{algpseudocode}
+%\renewcommand{\algorithmiccomment}[1]{\bgroup\hfill\tiny//~#1\egroup}
 \end_preamble
 \use_default_options true
 \begin_modules
@@ -2470,7 +2475,7 @@ tcp{determine node privacy budget}
 
 	
 \backslash
-tikzmk{A}
+boxit{green}{7.5}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2479,7 +2484,7 @@ tikzmk{A}
 \backslash
 eIf (
 \backslash
-algorithmiccomment{params.use
+Comment{params.use
 \backslash
 _decay}){params.use
 \backslash
@@ -2490,7 +2495,7 @@ _decay} {
 
 		
 \backslash
-tikzmkk{C}
+boxitt{yellow}{3.7}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2499,16 +2504,16 @@ tikzmkk{C}
 \backslash
 eIf(
 \backslash
-algorithmiccomment{curr
+Comment{curr
 \backslash
 _depth == 0}){curr
 \backslash
-_depth == 0}{
+_depth == 0} {
 \end_layout
 
 \begin_layout Plain Layout
 
-      		$
+			$
 \backslash
 var{node
 \backslash
@@ -2554,20 +2559,12 @@ var{curr
 \backslash
 _depth}+1}}}$
 \backslash
-tikzmkk{D}
-\backslash
-boxitt{yellow}
-\backslash
 ;
 \end_layout
 
 \begin_layout Plain Layout
 
 		}
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \begin_layout Plain Layout
@@ -2599,10 +2596,6 @@ _depth}}$
 \begin_layout Plain Layout
 
 	}
-\backslash
-tikzmk{B}
-\backslash
-boxit{green}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2616,7 +2609,7 @@ tcp{iterate over all possible splits}
 
 	
 \backslash
-tikzmk{A}
+boxit{green}{9.8}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2625,7 +2618,7 @@ tikzmk{A}
 \backslash
 For(
 \backslash
-algorithmiccomment{number of cols in X}){feature
+Comment{number of cols in X}){feature
 \backslash
 _index : features} {
 \end_layout
@@ -2634,7 +2627,7 @@ _index : features} {
 
 		
 \backslash
-tikzmkk{C}
+boxitt{red}{8.5}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2643,7 +2636,7 @@ tikzmkk{C}
 \backslash
 For(
 \backslash
-algorithmiccomment{number of rows in X}){feature
+Comment{number of rows in X}){feature
 \backslash
 _value : X[feature
 \backslash
@@ -2654,7 +2647,16 @@ _index]} {
 
 			
 \backslash
-If {
+boxittt{red}{1}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+If (
+\backslash
+Comment{number of unique feature values}) {
 \begin_inset Quotes eld
 \end_inset
 
@@ -2693,18 +2695,25 @@ _gain(X, gradients, feature
 \backslash
 _index, feature
 \backslash
-_value)}}$ 
+_value)}}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
 
 			
 \backslash
-If {gain < 0} {
+boxittt{yellow}{1}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+If (
+\backslash
+Comment{number of splits with no gain}){gain < 0} {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2733,11 +2742,16 @@ _budget} *
 \backslash
 var{gain}}{2 * 
 \backslash
-Delta g}$ 
+Delta g}$
 \backslash
+;
+\end_layout
 
+\begin_layout Plain Layout
+
+			
 \backslash
-
+boxittt{yellow}{0}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2750,13 +2764,9 @@ texttt{.insert(Candidate(feature
 \backslash
 _index, feature
 \backslash
-_value, gain))}$
+_value, gain))}$ 
 \backslash
-tikzmkk{D}
-\backslash
-boxitt{red}
-\backslash
-;
+Comment{number of candidates}	
 \end_layout
 
 \begin_layout Plain Layout
@@ -2767,15 +2777,6 @@ boxitt{red}
 \begin_layout Plain Layout
 
 	}
-\end_layout
-
-\begin_layout Plain Layout
-
-	
-\backslash
-tikzmk{B}
-\backslash
-boxit{green}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2848,273 +2849,7 @@ end{algorithm}
 
 \end_layout
 
-\begin_layout Paragraph
-Side channel leakage
-\end_layout
-
 \begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{multicols}{2}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-leakage in 
-\family typewriter
-compute_gain
-\family default
- and 
-\family typewriter
-exponential_mechanism
-\end_layout
-
-\begin_layout Standard
-From branches/loops:
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hgreen{
-\end_layout
-
-\end_inset
-
-params.use_decay
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hyellow{
-\end_layout
-
-\end_inset
-
-curr_depth == 0
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hgreen{
-\end_layout
-
-\end_inset
-
-number of features (columns of X)
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-number of rows in X resp.
- length of gradients
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hred{
-\end_layout
-
-\end_inset
-
-number of unique feature values of a feature
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hyellow{
-\end_layout
-
-\end_inset
-
-number of splits that don't give any gain
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-hyellow{
-\end_layout
-
-\end_inset
-
-number of split candidates
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Potential arithmetic leakage: ?
-\end_layout
-
-\begin_layout Itemize
-Not sure about this in SGX though
-\end_layout
-
-\begin_layout Itemize
-edge cases of variables appearing in formulas 
-\begin_inset Formula $\rightarrow$
-\end_inset
-
- 
-\family typewriter
-tree_budget
-\family default
- and 
-\family typewriter
-curr_depth
-\family default
- and 
-\begin_inset Formula $\Delta g$
-\end_inset
-
- and 
-\family typewriter
-gain
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{multicols}
-\end_layout
-
-\end_inset
-
 
 \end_layout
 
