@@ -61,7 +61,7 @@ void DPEnsemble::train(DataSet *dataset)
         tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
 
         // sensitivity for leaves
-        if (iss_true(params->gradient_filtering) && !iss_true(params->leaf_clipping)) {
+        if (is_true(params->gradient_filtering) && !is_true(params->leaf_clipping)) {
             // you can only "turn off" leaf clipping if GDF is enabled!
             tree_params.delta_v = params->l2_threshold / (1 + params->l2_lambda);
         } else {
@@ -71,7 +71,7 @@ void DPEnsemble::train(DataSet *dataset)
 
         // determine number of rows
         int number_of_rows = 0;
-        if (iss_true(params->balance_partition)) {
+        if (is_true(params->balance_partition)) {
             // num_unused_rows / num_remaining_trees
             number_of_rows = dataset->length / (params->nb_trees - tree_index);
         } else {
@@ -87,7 +87,7 @@ void DPEnsemble::train(DataSet *dataset)
         vector<int> tree_indices;
 
         // gradient-based data filtering
-        if(iss_true(params->gradient_filtering)) {
+        if(is_true(params->gradient_filtering)) {
             std::vector<int> reject_indices, remaining_indices;
             for (int i=0; i<dataset->length; i++) {
                 double curr_grad = dataset->gradients[i];

@@ -24,7 +24,7 @@ std::ofstream verification_logfile;
 int Verification::main(int argc, char *argv[])
 {
     // Set up logging for debugging
-    spdlog::set_level(spdlog::level::err);
+    spdlog::set_level(spdlog::level::debug);
     spdlog::set_pattern("[%H:%M:%S] [%^%5l%$] %v");
 
     // store datasets and their corresponding parameters here
@@ -44,10 +44,10 @@ int Verification::main(int argc, char *argv[])
     params.leaf_clipping = TRUE;
     parameters.push_back(params);
     datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 150, false)); // small yearMSD
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 150, false)); // small yearMSD
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
     // --------------------------------------
 
     // do verification on all added datasets
@@ -66,7 +66,7 @@ int Verification::main(int argc, char *argv[])
 
         for (auto split : cv_inputs) {
 
-            if(iss_true(params.scale_y)){
+            if(is_true(params.scale_y)){
                 split->train.scale(param, -1, 1);
             }
 
@@ -77,7 +77,7 @@ int Verification::main(int argc, char *argv[])
             // predict with the test set
             std::vector<double> y_pred = ensemble.predict(split->test.X);
 
-            if(iss_true(params.scale_y)){
+            if(is_true(params.scale_y)){
                 inverse_scale(param, split->train.scaler, y_pred);
             }
             

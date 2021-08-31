@@ -10,11 +10,7 @@ TreeNode::TreeNode(bool is_leaf): depth(0), split_attr(-1), split_value(-1), spl
     }
 }
 
-TreeNode::~TreeNode() {}
-
-bool TreeNode::is_leaf() {
-    return (left == nullptr && right == nullptr);
-}
+TreeNode::~TreeNode() {};
 
 
 

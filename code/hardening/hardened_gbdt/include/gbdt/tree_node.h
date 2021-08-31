@@ -15,10 +15,8 @@ public:
     double split_value;
     double split_gain;
     int lhs_size, rhs_size;
+    bool is_leaf;
     double prediction; // if it's a leaf
-
-    // methods
-    bool is_leaf();
 };
 
 

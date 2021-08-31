@@ -32,10 +32,10 @@ void DPTree::fit()
     // keep track which samples will be available in a node for spliting (1=live)
     vector<int> live_samples(dataset->length, 1);
 
-    this->root_node = make_tree_dfs(0, live_samples);
+    this->root_node = make_tree_dfs(0, live_samples, false);
 
     // leaf clipping. Note, it can only be disabled if GDF is enabled.
-    if (iss_true(params->leaf_clipping) or !iss_true(params->gradient_filtering)) {
+    if (is_true(params->leaf_clipping) or !is_true(params->gradient_filtering)) {
         double threshold = params->l2_threshold * std::pow((1 - params->learning_rate), tree_index);
         for (auto &leaf : this->leaves) {
             leaf->prediction = clamp(leaf->prediction, -threshold, threshold);
@@ -50,21 +50,15 @@ void DPTree::fit()
 
 
 // Recursively build tree, DFS approach, first instance returns root node
-TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples)
+TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, bool reached_leaf)
 {
-    int live_size = 0;
-    for(auto elem : live_samples){
-        live_size += elem;
-    }
+    int live_size = std::accumulate(live_samples.begin(), live_samples.end(), 0);
 
+    // "recursion base case"
     // max depth reached or not enough samples -> leaf node
-    if ( (current_depth == params->max_depth) or 
-            live_size < params->min_samples_split) {
-        TreeNode *leaf = make_leaf_node(current_depth, live_samples);
-        LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
-            current_depth, live_size, leaf->prediction);
-        return leaf;
-    }
+    bool create_leaf_node = (current_depth == params->max_depth);
+    create_leaf_node = create_leaf_node or live_size < params->min_samples_split;
+    TreeNode *leaf = make_leaf_node(current_depth, live_samples);
 
     // get the samples (and their gradients) that actually end up in this node
     // note that the cols of X are rows in X_live
@@ -82,34 +76,47 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples)
     }
 
     // find best split
-    TreeNode *node = find_best_split(X_live, gradients_live, live_samples, current_depth);    // todo leaks
+    TreeNode *node;
+    vector<int> left_live_samples(live_samples.size(),0);
+    vector<int> right_live_samples(live_samples.size(),0);
+    bool no_split_found = false;
+    // only do these things when we have enough samples
+    if(live_size >= params->min_samples_split) {
+        node = find_best_split(X_live, gradients_live, live_samples, current_depth);    // todo leaks
+        
+        // no split found
+        no_split_found = node->is_leaf;
 
-    // no split found
-    if (node->is_leaf()) {
-        LOG_DEBUG("no split found -> leaf");
-        return node;
-    }
+        LOG_DEBUG("best split @ {1}, val {2:.2f}, gain {3:.5f}, curr_depth {4}, samples {5} ->({6},{7})", 
+            node->split_attr, node->split_value, node->split_gain, current_depth, 
+            node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
 
-    LOG_DEBUG("best split @ {1}, val {2:.2f}, gain {3:.5f}, curr_depth {4}, samples {5} ->({6},{7})", 
-        node->split_attr, node->split_value, node->split_gain, current_depth, 
-        node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
-
-    // prepare the new live samples to continue recursion
-    vector<int> lhs(live_samples.size(),0);
-    samples_left_right_partition(lhs, X_live, live_samples, node->split_attr, node->split_value);
-    vector<int> left_live_samples(live_samples.size(),0), right_live_samples(live_samples.size(),0);  // TODO leaks
-    for (size_t i=0; i<live_samples.size(); i++) {
-        if(live_samples[i] == 1){
-            if (lhs[i]) {
-                left_live_samples[i] = 1;
-            } else {
-                right_live_samples[i] = 1;
+        // prepare the new live samples to continue recursion
+        vector<int> lhs(live_samples.size(),0);
+        vector<int> rhs(live_samples.size(),0);
+        samples_left_right_partition(lhs, rhs, X_live, live_samples, node->split_attr, node->split_value);
+        
+        for (size_t i=0; i<live_samples.size(); i++) {
+            if(live_samples[i] == 1){
+                if (lhs[i]) {
+                    left_live_samples[i] = 1;
+                } else {
+                    right_live_samples[i] = 1;
+                }
             }
         }
     }
 
-    node->left = make_tree_dfs(current_depth + 1, left_live_samples);
-    node->right = make_tree_dfs(current_depth + 1, right_live_samples);
+
+    if(current_depth < params->max_depth){
+        node->left = make_tree_dfs(current_depth + 1, left_live_samples, reached_leaf || create_leaf_node);
+        node->right = make_tree_dfs(current_depth + 1, right_live_samples, reached_leaf || create_leaf_node);
+        if(reached_leaf or no_split_found){
+            node->left = nullptr;      // TODO hide this branch
+            node->right = nullptr;
+            return leaf;
+        }
+    }
 
     return node;
 }
@@ -119,6 +126,7 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
 {
     TreeNode *leaf = new TreeNode(true);
     leaf->depth = current_depth;
+    leaf->is_leaf = true;
 
     double gradients_sum = 0;
     int live_size = 0;
@@ -150,7 +158,7 @@ vector<double> DPTree::predict(VVD &X)
 // recursively walk through decision tree
 double DPTree::_predict(vector<double> *row, TreeNode *node)
 {
-    if(node->is_leaf()){
+    if(node->is_leaf){
         return node->prediction;
     }
     double row_val = (*row)[node->split_attr];
@@ -239,12 +247,10 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, vector
     int feature_index, double feature_value, int &lhs_size)
 {
     // partition into lhs / rhs
-    vector<int> lhs(live_samples.size(),0), rhs(live_samples.size(),0);
-    samples_left_right_partition(lhs, samples, live_samples, feature_index, feature_value);
+    vector<int> lhs(live_samples.size(),0);
+    vector<int> rhs(live_samples.size(),0);
 
-    for(size_t row=0; row<live_samples.size(); row++){
-        rhs[row] = live_samples[row] && not lhs[row];
-    }
+    samples_left_right_partition(lhs, rhs, samples, live_samples, feature_index, feature_value);
 
     int _lhs_size = std::count(lhs.begin(), lhs.end(), 1);
     int _rhs_size = std::count(rhs.begin(), rhs.end(), 1);
@@ -276,7 +282,7 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, vector
 
 
 // the result is am int array that will indicate left/right resp. 0/1
-void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples, vector<int> &live_samples,
+void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VVD &samples, vector<int> &live_samples,
             int feature_index, double feature_value)
 {
     // if the feature is categorical
@@ -284,13 +290,21 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples, vector
     if(categorical) {
         for(size_t row=0; row<lhs.size(); row++){
             if(live_samples[row]){
-                lhs[row] = samples[feature_index][row] == feature_value;
+                if(samples[feature_index][row] == feature_value){
+                    lhs[row] = 1;
+                } else {
+                    rhs[row] = 1;
+                }
             }
         }
     } else { // feature is numerical
         for(size_t row=0; row<lhs.size(); row++){
             if(live_samples[row]){
-                lhs[row] = samples[feature_index][row] < feature_value;
+                if(samples[feature_index][row] < feature_value){
+                    lhs[row] = 1;
+                } else {
+                    rhs[row] = 1;
+                }
             }
         }
     }
@@ -378,7 +392,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
 // active in debug mode, prints the tree to console
 void DPTree::recursive_print_tree(TreeNode* node) {
 
-    if (node->is_leaf()) {
+    if (node->is_leaf) {
         return;
     }
     // check if split uses categorical attr
@@ -400,7 +414,7 @@ void DPTree::recursive_print_tree(TreeNode* node) {
         double split_value = (node->split_value); // categorical, hacked
         cout << "Attr" << node->split_attr << " = " << split_value;
     }
-    if (node->left->is_leaf()) {
+    if (node->left->is_leaf) {
         cout << " (" << "L-leaf" << ")" << endl;
     } else {
         cout << endl;
@@ -422,7 +436,7 @@ void DPTree::recursive_print_tree(TreeNode* node) {
         double split_value = node->split_value;
         cout << "Attr" << node->split_attr << " != " << split_value;
     }
-    if (node->right->is_leaf()) {
+    if (node->right->is_leaf) {
         cout << " (" << "R-leaf" << ")" << endl;
     } else {
         cout << endl;
@@ -432,12 +446,12 @@ void DPTree::recursive_print_tree(TreeNode* node) {
 
 
 // free allocated ressources
-void DPTree::delete_tree(TreeNode *node)
+void DPTree::delete_tree(TreeNode *node)    // TODO
 {
-    if (not node->is_leaf()) {
-        delete_tree(node->left);
-        delete_tree(node->right);
-    }
-    delete node;
+    // if (not node->is_leaf) {
+    //     delete_tree(node->left);
+    //     delete_tree(node->right);
+    // }
+    // delete node;
     return;
 }

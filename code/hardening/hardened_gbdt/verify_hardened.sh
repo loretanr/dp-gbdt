@@ -38,7 +38,7 @@ cd $CURR_DIR
 # compile and run hardened
 echo -e "${CYAN}Compiling hardened ...${NC}"
 cd $HARDENED_PATH
-make clean | eval "$SHIFT_RIGHT"
+# make clean | eval "$SHIFT_RIGHT"
 make | eval "$SHIFT_RIGHT"
 echo -e "${CYAN}Running hardened verification ...${NC}"
 rm verification/verification_logs/*.log 2> /dev/null

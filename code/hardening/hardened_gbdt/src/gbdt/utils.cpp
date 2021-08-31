@@ -70,7 +70,7 @@ std::string get_time_string()
     return std::string(buffer);
 }
 
-bool iss_true(unsigned value)
+bool is_true(unsigned value)
 {
     if(not (value == TRUE or value == FALSE)){
         throw std::runtime_error("Fault injection attack?");

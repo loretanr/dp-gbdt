@@ -31,11 +31,11 @@ private:
     std::vector<TreeNode *> leaves;
 
     // methods
-    TreeNode *make_tree_dfs(int current_depth, std::vector<int> live_samples);
+    TreeNode *make_tree_dfs(int current_depth, std::vector<int> live_samples, bool reached_leaf);
     TreeNode *make_leaf_node(int current_depth, std::vector<int> &live_samples);
     double _predict(std::vector<double> *row, TreeNode *node);
     TreeNode *find_best_split(VVD &X_live, std::vector<double> &gradients_live, std::vector<int> &live_samples, int current_depth);
-    void samples_left_right_partition(std::vector<int> &lhs, VVD &samples,  std::vector<int> &live_samples,
+    void samples_left_right_partition(std::vector<int> &lhs, std::vector<int> &rhs, VVD &samples,  std::vector<int> &live_samples,
                 int feature_index, double feature_value);
     double compute_gain(VVD &samples, std::vector<double> &gradients_live, std::vector<int> &live_samples, int feature_index,
                 double feature_value, int &lhs_size);
