@@ -59,7 +59,7 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples)
 
     // max depth reached or not enough samples -> leaf node
     if ( (current_depth == params->max_depth) or 
-            live_size < (size_t) params->min_samples_split) {
+            live_size < params->min_samples_split) {
         TreeNode *leaf = make_leaf_node(current_depth, live_samples);
         LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
             current_depth, live_size, leaf->prediction);
@@ -72,17 +72,17 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples)
     vector<double> gradients_live;
     for(int col=0; col < dataset->num_x_cols; col++) {
         vector<double> temp;    
-        for (auto elem : live_samples) {
-            temp.push_back((dataset->X)[elem][col]);
+        for (size_t row=0; row<live_samples.size(); row++) {
+            temp.push_back((dataset->X)[row][col]);
         }
         X_live.push_back(temp);
     }
-    for(auto elem : live_samples) {
-        gradients_live.push_back((dataset->gradients)[elem]);
+    for (size_t i=0; i<live_samples.size(); i++) {
+        gradients_live.push_back((dataset->gradients)[i]);
     }
 
     // find best split
-    TreeNode *node = find_best_split(X_live, gradients_live, current_depth);
+    TreeNode *node = find_best_split(X_live, gradients_live, live_samples, current_depth);    // todo leaks
 
     // no split found
     if (node->is_leaf()) {
@@ -95,14 +95,16 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples)
         node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
 
     // prepare the new live samples to continue recursion
-    vector<int> lhs;
-    samples_left_right_partition(lhs, X_live, node->split_attr, node->split_value);
-    vector<int> left_live_samples, right_live_samples;
+    vector<int> lhs(live_samples.size(),0);
+    samples_left_right_partition(lhs, X_live, live_samples, node->split_attr, node->split_value);
+    vector<int> left_live_samples(live_samples.size(),0), right_live_samples(live_samples.size(),0);  // TODO leaks
     for (size_t i=0; i<live_samples.size(); i++) {
-        if (lhs[i]) {
-            left_live_samples.push_back(live_samples[i]);
-        } else {
-            right_live_samples.push_back(live_samples[i]);
+        if(live_samples[i] == 1){
+            if (lhs[i]) {
+                left_live_samples[i] = 1;
+            } else {
+                right_live_samples[i] = 1;
+            }
         }
     }
 
@@ -112,23 +114,21 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples)
     return node;
 }
 
-
+// live done, untested
 TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
 {
     TreeNode *leaf = new TreeNode(true);
     leaf->depth = current_depth;
 
-    vector<double> y, gradients;
-    for(int index=0; i<live_samples.size(); i++){
-        
+    double gradients_sum = 0;
+    int live_size = 0;
+    for(size_t index=0; index<live_samples.size(); index++){
+        gradients_sum += dataset->gradients[index] * live_samples[index];
+        live_size += live_samples[index];
     }
-    for (auto index : live_samples) {
-        y.push_back((dataset->y)[index]);
-        gradients.push_back(dataset->gradients[index]);
-    }
+
     // compute prediction
-    leaf->prediction = (-1 * std::accumulate(gradients.begin(), gradients.end(), 0.0)
-                            / (gradients.size() + params->l2_lambda));
+    leaf->prediction = (-1 * gradients_sum / (live_size + params->l2_lambda));
     leaves.push_back(leaf);
     return(leaf);
 }
@@ -171,7 +171,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 
 
 // find best split of data using the exponential mechanism
-TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, int current_depth)
+TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, vector<int> &live_samples, int current_depth)
 {
     double privacy_budget_for_node;
     if (params->use_decay) {
@@ -190,13 +190,14 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         std::set<double> unique;
-        for (double feature_value : X_live[feature_index]) {
-            if (std::get<1>(unique.insert(feature_value)) == false){
-                // already had that value
+        for (size_t row=0; row<live_samples.size(); row++) {
+            double feature_value = X_live[feature_index][row];
+            if (!live_samples[row] || std::get<1>(unique.insert(feature_value)) == false){
+                // not live || already had that value
                 continue;
             }
             // compute gain
-            double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size);
+            double gain = compute_gain(X_live, gradients_live, live_samples, feature_index, feature_value, lhs_size);
             // feature cannot be chosen, skipping
             if (gain == -1) {
                 continue;
@@ -206,7 +207,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
 
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
             candidate.lhs_size = lhs_size;
-            candidate.rhs_size = gradients_live.size() - lhs_size;
+            candidate.rhs_size = std::count(live_samples.begin(), live_samples.end(), 1) - lhs_size;
             probabilities.push_back(candidate);
         }
     }
@@ -234,15 +235,19 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     G(IL,IR) = ----------------     ----------------
                 |IL| + lambda        |IR| + lambda
 */
-double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
+double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, vector<int> &live_samples,
     int feature_index, double feature_value, int &lhs_size)
 {
     // partition into lhs / rhs
-    vector<int> lhs;
-    samples_left_right_partition(lhs, samples, feature_index, feature_value);
+    vector<int> lhs(live_samples.size(),0), rhs(live_samples.size(),0);
+    samples_left_right_partition(lhs, samples, live_samples, feature_index, feature_value);
+
+    for(size_t row=0; row<live_samples.size(); row++){
+        rhs[row] = live_samples[row] && not lhs[row];
+    }
 
     int _lhs_size = std::count(lhs.begin(), lhs.end(), 1);
-    int _rhs_size = std::count(lhs.begin(), lhs.end(), 0);
+    int _rhs_size = std::count(rhs.begin(), rhs.end(), 1);
 
     lhs_size = _lhs_size;
 
@@ -252,9 +257,9 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
     }
 
     double lhs_gain = 0, rhs_gain = 0;
-    for (size_t index=0; index<lhs.size(); index++) {
+    for (size_t index=0; index<live_samples.size(); index++) {
         lhs_gain += lhs[index] * (gradients_live)[index];
-        rhs_gain += (not lhs[index]) * (gradients_live)[index];
+        rhs_gain += rhs[index] * (gradients_live)[index];
     }
     lhs_gain = std::pow(lhs_gain,2) / (_lhs_size + params->l2_lambda);
     rhs_gain = std::pow(rhs_gain,2) / (_rhs_size + params->l2_lambda);
@@ -271,20 +276,22 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live,
 
 
 // the result is am int array that will indicate left/right resp. 0/1
-void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples,
+void DPTree::samples_left_right_partition(vector<int> &lhs, VVD &samples, vector<int> &live_samples,
             int feature_index, double feature_value)
 {
     // if the feature is categorical
     bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
     if(categorical) {
-        for (auto sample : samples[feature_index]) {
-            size_t value = sample == feature_value;
-            lhs.push_back(value);
+        for(size_t row=0; row<lhs.size(); row++){
+            if(live_samples[row]){
+                lhs[row] = samples[feature_index][row] == feature_value;
+            }
         }
     } else { // feature is numerical
-        for (auto sample : samples[feature_index]) {
-            size_t value = sample < feature_value;
-            lhs.push_back(value);
+        for(size_t row=0; row<lhs.size(); row++){
+            if(live_samples[row]){
+                lhs[row] = samples[feature_index][row] < feature_value;
+            }
         }
     }
 }
