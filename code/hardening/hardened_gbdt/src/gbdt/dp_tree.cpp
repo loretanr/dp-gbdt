@@ -54,44 +54,47 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
 {
     int live_size = std::accumulate(live_samples.begin(), live_samples.end(), 0);
 
-    // "recursion base case"
-    // max depth reached or not enough samples -> leaf node
+    /* ------- "recursion base case" ------- */
+
+    // create_leaf_node is true when a leaf really should be created
     bool create_leaf_node = (current_depth == params->max_depth);
     create_leaf_node = create_leaf_node or live_size < params->min_samples_split;
+    // However, we always create a TreeNode *leaf, to hide the real ones
     TreeNode *leaf = make_leaf_node(current_depth, live_samples);
+    // leaf->is_dummy identifies the dummy ones though
     leaf->is_dummy = is_dummy || !create_leaf_node;
+
+    // only at the very end of make_tree_dfs the leaf will be used/ignored
     
     if(create_leaf_node && !is_dummy) {
         LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
             current_depth, live_size, leaf->prediction);
     }
 
+    /* ------- "recursion base case" ------- */
 
-    // get the samples (and their gradients) that actually end up in this node
-    // note that the cols of X are rows in X_live
-    VVD X_live;
-    vector<double> gradients_live;
-    for(int col=0; col < dataset->num_x_cols; col++) {
-        vector<double> temp;    
-        for (size_t row=0; row<live_samples.size(); row++) {
-            temp.push_back((dataset->X)[row][col]);
+    // create a transposed version of X (here in the hardened version we take all rows, 
+    // not just active/live ones!)
+    VVD X_live(dataset->num_x_cols, vector<double>(live_samples.size()));
+    for (size_t row=0; row<live_samples.size(); row++) {
+        for(int col=0; col < dataset->num_x_cols; col++) {
+            X_live[col][row] = (dataset->X)[row][col];
         }
-        X_live.push_back(temp);
-    }
-    for (size_t i=0; i<live_samples.size(); i++) {
-        gradients_live.push_back((dataset->gradients)[i]);
     }
 
     // find best split
-    TreeNode *node = find_best_split(X_live, gradients_live, live_samples, current_depth);
-    node->is_dummy = is_dummy;
+    TreeNode *node = find_best_split(X_live, dataset->gradients, live_samples, current_depth);
 
-    // no split found resp. dummy node -> still continue computation, but with dummy values
-    bool no_split_found = node->is_leaf or node->is_dummy;
-    node->split_attr = !no_split_found * node->split_attr;
-    node->split_value = !no_split_found * node->split_value;
+    // - if we didn't find a split we would normally create a leaf and return from the function. But to 
+    // hide this we still continue and fake a dummy split. For this we select a random feature and value.
+    // - if we found a split, the random values are multiplied by 0 and thus have no effect.
+    bool no_split_found = node->is_leaf or is_dummy;
+    int random_feature = std::rand() % dataset->num_x_cols ;
+    int random_feature_value = X_live[random_feature][ std::rand() % live_samples.size() ];
+    node->split_attr = no_split_found * random_feature + !no_split_found * node->split_attr;
+    node->split_value = no_split_found * random_feature_value + !no_split_found * node->split_value;
 
-    if(node->is_dummy) {
+    if(is_dummy) {
         LOG_DEBUG("noise recursion, curr_depth {1}", current_depth);
     } else if (current_depth == params->max_depth) {
     } else if(no_split_found) {
@@ -102,31 +105,21 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
             node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
     }
 
-    // prepare the new live samples to continue recursion
+    // prepare the new live samples to continue the recursion
     vector<int> lhs(live_samples.size(),0);
     vector<int> rhs(live_samples.size(),0);
     samples_left_right_partition(lhs, rhs, X_live, live_samples, node->split_attr, node->split_value);
     vector<int> left_live_samples(live_samples.size(),0);
     vector<int> right_live_samples(live_samples.size(),0);
     for (size_t i=0; i<live_samples.size(); i++) {
-        if(live_samples[i] == 1){
-            if (lhs[i]) {
-                left_live_samples[i] = 1;
-            } else {
-                right_live_samples[i] = 1;
-            }
-        }
+        left_live_samples[i] = lhs[i] * (live_samples[i] == 1);
+        right_live_samples[i] = !lhs[i] * (live_samples[i] == 1);
     }
 
+    // always recurse until we reach max_depth
     if(current_depth < params->max_depth){
         node->left = make_tree_dfs(current_depth + 1, left_live_samples, is_dummy || create_leaf_node);
         node->right = make_tree_dfs(current_depth + 1, right_live_samples, is_dummy || create_leaf_node);
-    }
-
-    if(is_dummy || create_leaf_node){
-        node->left = nullptr;      // TODO hide this branch
-        node->right = nullptr;
-        node->is_leaf = true;
     }
 
     if(create_leaf_node){
