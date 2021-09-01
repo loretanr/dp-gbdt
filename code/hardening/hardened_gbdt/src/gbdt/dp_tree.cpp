@@ -50,7 +50,7 @@ void DPTree::fit()
 
 
 // Recursively build tree, DFS approach, first instance returns root node
-TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, bool reached_leaf)
+TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, bool is_dummy)
 {
     int live_size = std::accumulate(live_samples.begin(), live_samples.end(), 0);
 
@@ -59,6 +59,13 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     bool create_leaf_node = (current_depth == params->max_depth);
     create_leaf_node = create_leaf_node or live_size < params->min_samples_split;
     TreeNode *leaf = make_leaf_node(current_depth, live_samples);
+    leaf->is_dummy = is_dummy || !create_leaf_node;
+    
+    if(create_leaf_node && !is_dummy) {
+        LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
+            current_depth, live_size, leaf->prediction);
+    }
+
 
     // get the samples (and their gradients) that actually end up in this node
     // note that the cols of X are rows in X_live
@@ -76,52 +83,60 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     }
 
     // find best split
-    TreeNode *node;
-    vector<int> left_live_samples(live_samples.size(),0);
-    vector<int> right_live_samples(live_samples.size(),0);
-    bool no_split_found = false;
-    // only do these things when we have enough samples
-    if(live_size >= params->min_samples_split) {
-        node = find_best_split(X_live, gradients_live, live_samples, current_depth);    // todo leaks
-        
-        // no split found
-        no_split_found = node->is_leaf;
+    TreeNode *node = find_best_split(X_live, gradients_live, live_samples, current_depth);
+    node->is_dummy = is_dummy;
 
-        LOG_DEBUG("best split @ {1}, val {2:.2f}, gain {3:.5f}, curr_depth {4}, samples {5} ->({6},{7})", 
+    // no split found resp. dummy node -> still continue computation, but with dummy values
+    bool no_split_found = node->is_leaf or node->is_dummy;
+    node->split_attr = !no_split_found * node->split_attr;
+    node->split_value = !no_split_found * node->split_value;
+
+    if(node->is_dummy) {
+        LOG_DEBUG("noise recursion, curr_depth {1}", current_depth);
+    } else if (current_depth == params->max_depth) {
+    } else if(no_split_found) {
+        LOG_DEBUG("no split found -> leaf");
+    } else {
+        LOG_DEBUG("best split @ {1}, val {2:.2f}, gain {3:.5f}, depth {4}, samples {5} ->({6},{7})", 
             node->split_attr, node->split_value, node->split_gain, current_depth, 
             node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
+    }
 
-        // prepare the new live samples to continue recursion
-        vector<int> lhs(live_samples.size(),0);
-        vector<int> rhs(live_samples.size(),0);
-        samples_left_right_partition(lhs, rhs, X_live, live_samples, node->split_attr, node->split_value);
-        
-        for (size_t i=0; i<live_samples.size(); i++) {
-            if(live_samples[i] == 1){
-                if (lhs[i]) {
-                    left_live_samples[i] = 1;
-                } else {
-                    right_live_samples[i] = 1;
-                }
+    // prepare the new live samples to continue recursion
+    vector<int> lhs(live_samples.size(),0);
+    vector<int> rhs(live_samples.size(),0);
+    samples_left_right_partition(lhs, rhs, X_live, live_samples, node->split_attr, node->split_value);
+    vector<int> left_live_samples(live_samples.size(),0);
+    vector<int> right_live_samples(live_samples.size(),0);
+    for (size_t i=0; i<live_samples.size(); i++) {
+        if(live_samples[i] == 1){
+            if (lhs[i]) {
+                left_live_samples[i] = 1;
+            } else {
+                right_live_samples[i] = 1;
             }
         }
     }
 
-
     if(current_depth < params->max_depth){
-        node->left = make_tree_dfs(current_depth + 1, left_live_samples, reached_leaf || create_leaf_node);
-        node->right = make_tree_dfs(current_depth + 1, right_live_samples, reached_leaf || create_leaf_node);
-        if(reached_leaf or no_split_found){
-            node->left = nullptr;      // TODO hide this branch
-            node->right = nullptr;
-            return leaf;
-        }
+        node->left = make_tree_dfs(current_depth + 1, left_live_samples, is_dummy || create_leaf_node);
+        node->right = make_tree_dfs(current_depth + 1, right_live_samples, is_dummy || create_leaf_node);
+    }
+
+    if(is_dummy || create_leaf_node){
+        node->left = nullptr;      // TODO hide this branch
+        node->right = nullptr;
+        node->is_leaf = true;
+    }
+
+    if(create_leaf_node){
+        return leaf;
     }
 
     return node;
 }
 
-// live done, untested
+
 TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
 {
     TreeNode *leaf = new TreeNode(true);
@@ -173,7 +188,6 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
             return _predict(row, node->left);
         }
     }
-    
     return _predict(row, node->right);
 }
 
@@ -182,7 +196,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, vector<int> &live_samples, int current_depth)
 {
     double privacy_budget_for_node;
-    if (params->use_decay) {
+    if (is_true(params->use_decay)) {
         if (current_depth == 0) {
             privacy_budget_for_node = tree_params->tree_privacy_budget / (2 * pow(2, params->max_depth + 1) + 2 * pow(2, current_depth + 1));
         } else {
@@ -225,12 +239,18 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, v
 
     // construct the node
     TreeNode *node;
-    node = new TreeNode(false);
-    node->split_attr = probabilities[index].feature_index;
-    node->split_value = probabilities[index].split_value;
-    node->split_gain = probabilities[index].gain;
-    node->lhs_size = probabilities[index].lhs_size;
-    node->rhs_size = probabilities[index].rhs_size;
+    if (index == -1) {
+        node = new TreeNode(true);
+        node->left = nullptr;
+        node->right = nullptr;
+    } else {
+        node = new TreeNode(false);
+        node->split_attr = probabilities[index].feature_index;
+        node->split_value = probabilities[index].split_value;
+        node->split_gain = probabilities[index].gain;
+        node->lhs_size = probabilities[index].lhs_size;
+        node->rhs_size = probabilities[index].rhs_size;
+    }
     node->depth = current_depth;
     return node;
 }
@@ -367,11 +387,16 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 void DPTree::add_laplacian_noise(double laplace_scale)
 {
     if(VERIFICATION_MODE){
+
+        int num_real_leaves = 0;
         double sum = 0;
         for (auto leaf : leaves) {
-            sum += leaf->prediction;
+            if(!leaf->is_dummy){
+                sum += leaf->prediction;
+                num_real_leaves++;
+            }
         }
-        LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", leaves.size(), sum);
+        LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", num_real_leaves, sum);
         VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
         return;
     }
@@ -391,6 +416,8 @@ void DPTree::add_laplacian_noise(double laplace_scale)
 
 // active in debug mode, prints the tree to console
 void DPTree::recursive_print_tree(TreeNode* node) {
+
+    return; // TODO
 
     if (node->is_leaf) {
         return;
