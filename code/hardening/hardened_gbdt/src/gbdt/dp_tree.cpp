@@ -52,26 +52,12 @@ void DPTree::fit()
 // Recursively build tree, DFS approach, first instance returns root node
 TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, bool is_dummy)
 {
+    // "create_leaf_node" marks whether we would be in the base case of a normal recurstion,
+    // i.e. whether a leaf should be created.
     int live_size = std::accumulate(live_samples.begin(), live_samples.end(), 0);
-
-    /* ------- "recursion base case" ------- */
-
-    // create_leaf_node is true when a leaf really should be created
-    bool create_leaf_node = (current_depth == params->max_depth);
-    create_leaf_node = create_leaf_node or live_size < params->min_samples_split;
-    // However, we always create a TreeNode *leaf, to hide the real ones
-    TreeNode *leaf = make_leaf_node(current_depth, live_samples);
-    // leaf->is_dummy identifies the dummy ones though
-    leaf->is_dummy = is_dummy || !create_leaf_node;
-
-    // only at the very end of make_tree_dfs the leaf will be used/ignored
-    
-    if(create_leaf_node && !is_dummy) {
-        LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
-            current_depth, live_size, leaf->prediction);
-    }
-
-    /* ------- "recursion base case" ------- */
+    bool reached_max_depth = (current_depth == params->max_depth);
+    bool not_enough_live_samples = (live_size < params->min_samples_split);
+    bool create_leaf_node = reached_max_depth + not_enough_live_samples;
 
     // create a transposed version of X (here in the hardened version we take all rows, 
     // not just active/live ones!)
@@ -83,21 +69,27 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     }
 
     // find best split
-    TreeNode *node = find_best_split(X_live, dataset->gradients, live_samples, current_depth);
+    TreeNode *node = find_best_split(X_live, dataset->gradients, live_samples, current_depth, is_dummy, create_leaf_node);
+    // "node" can be one of three things:
+    // (1) a legitimate leaf node (either we reached max_depth, or a useful split does not exist)
+    // (2) a legitimate internal node
+    // (3) a dummy node (if we already created a legitimate leaf node on this path)
 
-    // - if we didn't find a split we would normally create a leaf and return from the function. But to 
-    // hide this we still continue and fake a dummy split. For this we select a random feature and value.
-    // - if we found a split, the random values are multiplied by 0 and thus have no effect.
-    bool no_split_found = node->is_leaf or is_dummy;
+    bool fake_continuation = node->is_leaf or is_dummy;
+    // in case (1) and (3) we still need to ensure the continuation of the recursion. For this a random 
+    // feature and feature_value are selected.
     int random_feature = std::rand() % dataset->num_x_cols ;
     int random_feature_value = X_live[random_feature][ std::rand() % live_samples.size() ];
-    node->split_attr = no_split_found * random_feature + !no_split_found * node->split_attr;
-    node->split_value = no_split_found * random_feature_value + !no_split_found * node->split_value;
+    // the following statements carry out the assignment in constant time:
+    // case (1) or (3) -> use the random values
+    // case (2) -> use the real split that was found
+    node->split_attr = fake_continuation * random_feature + !fake_continuation * node->split_attr;
+    node->split_value = fake_continuation * random_feature_value + !fake_continuation * node->split_value;
 
     if(is_dummy) {
         LOG_DEBUG("noise recursion, curr_depth {1}", current_depth);
     } else if (current_depth == params->max_depth) {
-    } else if(no_split_found) {
+    } else if(fake_continuation) {
         LOG_DEBUG("no split found -> leaf");
     } else {
         LOG_DEBUG("best split @ {1}, val {2:.2f}, gain {3:.5f}, depth {4}, samples {5} ->({6},{7})", 
@@ -105,7 +97,7 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
             node->lhs_size + node->rhs_size, node->lhs_size, node->rhs_size);
     }
 
-    // prepare the new live samples to continue the recursion
+    // prepare the new R/L live_samples to continue the recursion, constant time
     vector<int> lhs(live_samples.size(),0);
     vector<int> rhs(live_samples.size(),0);
     samples_left_right_partition(lhs, rhs, X_live, live_samples, node->split_attr, node->split_value);
@@ -113,17 +105,13 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     vector<int> right_live_samples(live_samples.size(),0);
     for (size_t i=0; i<live_samples.size(); i++) {
         left_live_samples[i] = lhs[i] * (live_samples[i] == 1);
-        right_live_samples[i] = !lhs[i] * (live_samples[i] == 1);
+        right_live_samples[i] = rhs[i] * (live_samples[i] == 1);
     }
 
     // always recurse until we reach max_depth
     if(current_depth < params->max_depth){
         node->left = make_tree_dfs(current_depth + 1, left_live_samples, is_dummy || create_leaf_node);
         node->right = make_tree_dfs(current_depth + 1, right_live_samples, is_dummy || create_leaf_node);
-    }
-
-    if(create_leaf_node){
-        return leaf;
     }
 
     return node;
@@ -186,12 +174,14 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 
 
 // find best split of data using the exponential mechanism
-TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, vector<int> &live_samples, int current_depth)
+TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, vector<int> &live_samples,
+    int current_depth, bool is_dummy, bool create_leaf_node)
 {
     double privacy_budget_for_node;
     if (is_true(params->use_decay)) {
         if (current_depth == 0) {
-            privacy_budget_for_node = tree_params->tree_privacy_budget / (2 * pow(2, params->max_depth + 1) + 2 * pow(2, current_depth + 1));
+            privacy_budget_for_node = tree_params->tree_privacy_budget /
+                (2 * pow(2, params->max_depth + 1) + 2 * pow(2, current_depth + 1));
         } else {
             privacy_budget_for_node = tree_params->tree_privacy_budget / (2 * pow(2, current_depth + 1));
         }
@@ -232,10 +222,8 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, v
 
     // construct the node
     TreeNode *node;
-    if (index == -1) {
-        node = new TreeNode(true);
-        node->left = nullptr;
-        node->right = nullptr;
+    if (index == -1 or create_leaf_node) {
+        node = make_leaf_node(current_depth, live_samples);
     } else {
         node = new TreeNode(false);
         node->split_attr = probabilities[index].feature_index;
@@ -245,6 +233,14 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, v
         node->rhs_size = probabilities[index].rhs_size;
     }
     node->depth = current_depth;
+    node->is_dummy = is_dummy;
+
+    if(create_leaf_node && !is_dummy) {
+        int live_size = std::accumulate(live_samples.begin(), live_samples.end(), 0);
+        LOG_DEBUG("max_depth ({1}) or min_samples ({2})-> leaf (pred={3:.2f})",
+            current_depth, live_size, node->prediction);
+    }
+
     return node;
 }
 
