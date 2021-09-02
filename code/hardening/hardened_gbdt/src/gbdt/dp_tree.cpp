@@ -194,25 +194,25 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, v
     
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
-        std::set<double> unique;
+
         for (size_t row=0; row<live_samples.size(); row++) {
+
             double feature_value = X_live[feature_index][row];
-            if (!live_samples[row] || std::get<1>(unique.insert(feature_value)) == false){
-                // not live || already had that value
-                continue;
-            }
+
             // compute gain
             double gain = compute_gain(X_live, gradients_live, live_samples, feature_index, feature_value, lhs_size);
-            // feature cannot be chosen, skipping
-            if (gain == -1) {
-                continue;
-            }
+
+            // feature cannot be chosen, "skipping" aka make gain = 0
+            bool no_split_with_gain = (gain == -1);
+            bool row_not_live = !live_samples[row];
+            gain = gain * !no_split_with_gain * !row_not_live;
+
             // Gi = epsilon_nleaf * Gi / (2 * delta_G)
             gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
 
             SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
             candidate.lhs_size = lhs_size;
-            candidate.rhs_size = std::count(live_samples.begin(), live_samples.end(), 1) - lhs_size;
+            candidate.rhs_size = std::accumulate(live_samples.begin(), live_samples.end(), 0) - lhs_size;
             probabilities.push_back(candidate);
         }
     }
@@ -261,15 +261,13 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, vector
 
     samples_left_right_partition(lhs, rhs, samples, live_samples, feature_index, feature_value);
 
-    int _lhs_size = std::count(lhs.begin(), lhs.end(), 1);
-    int _rhs_size = std::count(rhs.begin(), rhs.end(), 1);
+    int _lhs_size = std::accumulate(lhs.begin(), lhs.end(), 0);
+    int _rhs_size = std::accumulate(rhs.begin(), rhs.end(), 0);
 
     lhs_size = _lhs_size;
 
     // if all samples go on the same side it's useless to split on this value
-    if ( _lhs_size == 0 or _rhs_size == 0 ) {
-        return -1;
-    }
+    bool useless_split = (_lhs_size == 0) + (_rhs_size == 0);
 
     double lhs_gain = 0, rhs_gain = 0;
     for (size_t index=0; index<live_samples.size(); index++) {
@@ -280,42 +278,35 @@ double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, vector
     rhs_gain = std::pow(rhs_gain,2) / (_rhs_size + params->l2_lambda);
 
     double total_gain = lhs_gain + rhs_gain;
+    total_gain = std::max(total_gain, 0.0);
 
     if(VERIFICATION_MODE){
         // round to 10 decimals to avoid numeric issues in verification
         total_gain = std::floor(total_gain * 1e10) / 1e10;
     }
 
-    return std::max(total_gain, 0.0);
+    // useless split -> return (-1) instead
+    total_gain = useless_split * (-1) + !useless_split * total_gain;
+
+    return total_gain;
 }
 
 
-// the result is am int array that will indicate left/right resp. 0/1
-void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VVD &samples, vector<int> &live_samples,
-            int feature_index, double feature_value)
+void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VVD &samples,
+    vector<int> &live_samples, int feature_index, double feature_value)
 {
     // if the feature is categorical
     bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
-    if(categorical) {
-        for(size_t row=0; row<lhs.size(); row++){
-            if(live_samples[row]){
-                if(samples[feature_index][row] == feature_value){
-                    lhs[row] = 1;
-                } else {
-                    rhs[row] = 1;
-                }
-            }
-        }
-    } else { // feature is numerical
-        for(size_t row=0; row<lhs.size(); row++){
-            if(live_samples[row]){
-                if(samples[feature_index][row] < feature_value){
-                    lhs[row] = 1;
-                } else {
-                    rhs[row] = 1;
-                }
-            }
-        }
+
+    // the resulting partition is stored in "lhs/rhs". 
+    // - lhs[row]=1 means the row is live and goes to the left child on this split index/value
+    // - rhs[row]=1 means the row is live and goes to the right child on this split index/value
+    for(size_t row=0; row<live_samples.size(); row++){
+        bool row_is_live = live_samples[row];
+        lhs[row] = row_is_live * ((categorical * (samples[feature_index][row] == feature_value)) 
+                                    + (!categorical * (samples[feature_index][row] < feature_value)));
+        rhs[row] = row_is_live * ((categorical * (samples[feature_index][row] != feature_value))
+                                    + (!categorical * (samples[feature_index][row] >= feature_value)));
     }
 }
 
