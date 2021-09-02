@@ -162,7 +162,6 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
             return _predict(row, node->left);
         }
     }
-    
     return _predict(row, node->right);
 }
 

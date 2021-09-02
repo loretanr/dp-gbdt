@@ -28,7 +28,7 @@ private:
     TreeParams *tree_params;
     DataSet *dataset;
     size_t tree_index;
-    std::vector<TreeNode *> leaves;
+    std::vector<TreeNode *> nodes;
 
     // methods
     TreeNode *make_tree_dfs(int current_depth, std::vector<int> live_samples, bool is_dummy);
@@ -53,8 +53,7 @@ public:
     // methods
     std::vector<double> predict(VVD &X);
     void fit();
-    void recursive_print_tree(TreeNode* node);
-    void delete_tree(TreeNode *node);
+    void delete_tree();
 };
 
 #endif // DIFFPRIVTREE_H

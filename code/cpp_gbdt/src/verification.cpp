@@ -46,8 +46,10 @@ int Verification::main(int argc, char *argv[])
     datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
     parameters.push_back(params);
     datasets.push_back(Parser::get_YearPredictionMSD(parameters, 150, false)); // small yearMSD
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_abalone(parameters, 4177, false)); // full abalone
     // --------------------------------------
 
     // use_dp (in combination with VERIFICATION_MODE, which disables dataset shuffling

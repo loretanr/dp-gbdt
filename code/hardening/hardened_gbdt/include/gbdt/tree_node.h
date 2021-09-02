@@ -5,8 +5,8 @@
 class TreeNode {
 public:
     // constructors
-    TreeNode(bool _is_leaf);
-    ~TreeNode();
+    TreeNode(bool _is_leaf): depth(0), split_attr(-1), split_value(-1), split_gain(-1), is_leaf(_is_leaf) {};
+    ~TreeNode() {};
 
     // fields
     TreeNode *left, *right;

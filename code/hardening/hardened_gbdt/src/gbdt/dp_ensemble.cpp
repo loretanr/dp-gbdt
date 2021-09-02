@@ -25,7 +25,7 @@ DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
     
 DPEnsemble::~DPEnsemble() {
     for (auto tree : trees) {
-        tree.delete_tree(tree.root_node);
+        tree.delete_tree();
     }
 }
 
@@ -148,10 +148,6 @@ void DPEnsemble::train(DataSet *dataset)
         // remove rows
         *dataset = dataset->remove_rows(tree_indices); 
 
-        // print the tree if we are in debug mode
-        if (spdlog::default_logger_raw()->level() <= spdlog::level::debug) {
-            trees.back().recursive_print_tree(trees.back().root_node);
-        }
         LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, dataset->length);
     }
 }

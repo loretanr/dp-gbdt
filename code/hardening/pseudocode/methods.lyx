@@ -2243,12 +2243,16 @@ end{algorithm}
 
 \end_layout
 
-\begin_layout Paragraph
-Mitigations
+\begin_layout Standard
+Mitigations:
 \end_layout
 
-\begin_layout Standard
-TODOoo
+\begin_layout Itemize
+done something
+\end_layout
+
+\begin_layout Itemize
+TODOOOOO
 \end_layout
 
 \begin_layout Standard
