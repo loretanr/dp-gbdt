@@ -202,10 +202,11 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, v
             // compute gain
             double gain = compute_gain(X_live, gradients_live, live_samples, feature_index, feature_value, lhs_size);
 
-            // feature cannot be chosen, "skipping" aka make gain = 0
-            bool no_split_with_gain = (gain == -1);
             bool row_not_live = !live_samples[row];
-            gain = gain * !no_split_with_gain * !row_not_live;
+            bool no_gain = (gain == -1);
+            // if either the row is not live, or the gain is -1 (aka the split guides all samples to the same child -> useless split)
+            // then the gain of this split is set to 0.
+            gain = gain * !no_gain * !row_not_live;
 
             // Gi = epsilon_nleaf * Gi / (2 * delta_G)
             gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
@@ -255,7 +256,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, v
 double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, vector<int> &live_samples,
     int feature_index, double feature_value, int &lhs_size)
 {
-    // partition into lhs / rhs
+    // partition sample rows into lhs / rhs
     vector<int> lhs(live_samples.size(),0);
     vector<int> rhs(live_samples.size(),0);
 
@@ -317,12 +318,12 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VV
 // The function returns the index of the chosen split.
 int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
 {
-    // if no split has a positive gain, return. Node will become a leaf
-    int count = std::count_if(probs.begin(), probs.end(),
-        [](SplitCandidate c){ return c.gain > 0; });
-    if (count == 0) {
-        return -1;
+    // if no split has a positive gain, return -1. Node will become a leaf
+    int num_viable_candidates = 0;
+    for(auto candidate : probs){
+        num_viable_candidates += (candidate.gain > 0);
     }
+    bool no_split_available = (num_viable_candidates == 0);
 
     // calculate the probabilities from the gains
     vector<double> gains, probabilities, partials(probs.size());
@@ -331,36 +332,31 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
     }
     double lse = log_sum_exp(gains);
     for (auto prob : probs) {
-        if (prob.gain <= 0) {
-            probabilities.push_back(0);   
-        } else {
-            probabilities.push_back( exp(prob.gain - lse) );
-        }
+        // let probability be 0 when gain is <= 0
+        double probability = !(prob.gain <= 0) * exp(prob.gain - lse);
+        probabilities.push_back(probability);   
     }
 
-    // non-dp: deterministically choose the best split
     if (VERIFICATION_MODE) {
+        // non-dp: deterministically choose the best split
         auto max_elem = std::max_element(probabilities.begin(), probabilities.end());
         // return index of the max_elem
-        return std::distance(probabilities.begin(), max_elem);
+        return no_split_available ? -1 : std::distance(probabilities.begin(), max_elem);
     }
 
     // create a cumulative distribution function from the probabilities.
     // all values will be in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
-    double rand01 = ((double) std::rand() / (RAND_MAX)); // [0,1] sollte nicht schiefgehen können TODO TODO
+    double rand01 = ((double) std::rand() / (RAND_MAX));
 
-    // try to find a candidate at least 10 times before giving up and making the node a leaf node
-    for (int tries=0; tries<10; tries++) {
-        for (size_t index=0; index<partials.size(); index++) {
-            if (partials[index] >= rand01) {
-                return index;
-            }
-        }
-        rand01 = ((double) rand() / (RAND_MAX));
+    size_t result_index;
+    bool found = false;
+    for (size_t index=0; index<partials.size(); index++) {
+        result_index = !found * index + found * result_index;
+        found = (partials[index] >= rand01);
     }
-    return -1;
+    return no_split_available * (-1) + !no_split_available * result_index;
 }
 
 
