@@ -19,7 +19,16 @@ DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, s
     params(params),
     tree_params(tree_params), 
     dataset(dataset),
-    tree_index(tree_index) {}
+    tree_index(tree_index)
+{
+    // only need to transpose X once
+    X_transposed= VVD(dataset->num_x_cols, vector<double>(dataset->length));
+    for (size_t row=0; row<dataset->length; row++) {
+        for(int col=0; col < dataset->num_x_cols; col++) {
+            X_transposed[col][row] = (dataset->X)[row][col];
+        }
+    }
+}
 
 DPTree::~DPTree() {}
 
@@ -59,17 +68,8 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     // i.e. whether a leaf should be created.
     bool create_leaf_node = reached_max_depth + not_enough_live_samples;
 
-    // create a transposed version of X (here in the hardened version we take all rows, 
-    // not just active/live ones!)
-    VVD X_live(dataset->num_x_cols, vector<double>(live_samples.size()));
-    for (size_t row=0; row<live_samples.size(); row++) {
-        for(int col=0; col < dataset->num_x_cols; col++) {
-            X_live[col][row] = (dataset->X)[row][col];
-        }
-    }
-
     // find best split
-    TreeNode *node = find_best_split(X_live, dataset->gradients, live_samples, current_depth, is_dummy, create_leaf_node);
+    TreeNode *node = find_best_split(X_transposed, dataset->gradients, live_samples, current_depth, is_dummy, create_leaf_node);
     // "node" can be one of three things:
     // (1) a legitimate leaf node (either we reached max_depth, or a useful split does not exist)
     // (2) a legitimate internal node
@@ -79,7 +79,7 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     // in case (1) and (3) we still need to ensure the continuation of the recursion. For this a random 
     // feature and feature_value are selected.
     int random_feature = std::rand() % dataset->num_x_cols ;
-    int random_feature_value = X_live[random_feature][ std::rand() % live_samples.size() ];
+    int random_feature_value = X_transposed[random_feature][ std::rand() % live_samples.size() ];
     // the following statements carry out the assignment in constant time:
     // case (1) or (3) -> use the random values
     // case (2) -> use the real split that was found
@@ -100,7 +100,9 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     // prepare the new R/L live_samples to continue the recursion, constant time
     vector<int> lhs(live_samples.size(),0);
     vector<int> rhs(live_samples.size(),0);
-    samples_left_right_partition(lhs, rhs, X_live, live_samples, node->split_attr, node->split_value);
+
+    samples_left_right_partition(lhs, rhs, X_transposed, live_samples, node->split_attr, node->split_value);
+
     vector<int> left_live_samples(live_samples.size(),0);
     vector<int> right_live_samples(live_samples.size(),0);
     for (size_t i=0; i<live_samples.size(); i++) {
@@ -173,7 +175,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 
 
 // find best split of data using the exponential mechanism
-TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, vector<int> &live_samples,
+TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_live, vector<int> &live_samples,
     int current_depth, bool is_dummy, bool create_leaf_node)
 {
     double privacy_budget_for_node;
@@ -196,10 +198,10 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, v
 
         for (size_t row=0; row<live_samples.size(); row++) {
 
-            double feature_value = X_live[feature_index][row];
+            double feature_value = X_transposed[feature_index][row];
 
             // compute gain
-            double gain = compute_gain(X_live, gradients_live, live_samples, feature_index, feature_value, lhs_size);
+            double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
 
             bool row_not_live = !live_samples[row];
             bool no_gain = (gain == -1);
@@ -251,14 +253,14 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, v
     G(IL,IR) = ----------------     ----------------
                 |IL| + lambda        |IR| + lambda
 */
-double DPTree::compute_gain(VVD &samples, vector<double> &gradients_live, vector<int> &live_samples,
+double DPTree::compute_gain(VVD &X_transposed, vector<double> &gradients_live, vector<int> &live_samples,
     int feature_index, double feature_value, int &lhs_size)
 {
     // partition sample rows into lhs / rhs
     vector<int> lhs(live_samples.size(),0);
     vector<int> rhs(live_samples.size(),0);
 
-    samples_left_right_partition(lhs, rhs, samples, live_samples, feature_index, feature_value);
+    samples_left_right_partition(lhs, rhs, X_transposed, live_samples, feature_index, feature_value);
 
     int _lhs_size = std::accumulate(lhs.begin(), lhs.end(), 0);
     int _rhs_size = std::accumulate(rhs.begin(), rhs.end(), 0);
@@ -314,22 +316,22 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VV
 // be chosen for split). Then a cumulative distribution function is created from
 // these probabilities. Then we can sample from it using a RNG.
 // The function returns the index of the chosen split.
-int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
+int DPTree::exponential_mechanism(vector<SplitCandidate> &candidates)
 {
     // if no split has a positive gain -> return -1. Node will become a leaf
     int num_viable_candidates = 0;
-    for(auto candidate : probs){
+    for(auto candidate : candidates){
         num_viable_candidates += (candidate.gain > 0);
     }
     bool no_split_available = (num_viable_candidates == 0);
 
     // calculate the probabilities from the gains
-    vector<double> gains, probabilities, partials(probs.size());
-    for (auto p : probs) {
+    vector<double> gains, probabilities, partials(candidates.size());
+    for (auto p : candidates) {
         gains.push_back(p.gain);
     }
     double lse = log_sum_exp(gains);
-    for (auto prob : probs) {
+    for (auto prob : candidates) {
         // let probability be 0 when gain is <= 0
         double probability = !(prob.gain <= 0) * exp(prob.gain - lse);
         probabilities.push_back(probability);   

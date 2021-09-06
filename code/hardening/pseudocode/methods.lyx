@@ -55,7 +55,7 @@
 \newcommand{\hyellow}[1]{\colorbox{yellow!20}{#1}}
 \newcommand{\horange}[1]{\colorbox{orange!20}{#1}}
 \newcommand{\hgreen}[1]{\colorbox{green!20}{#1}}
-\newcommand{\hred}[1]{\colorbox{red!20}{#1}}
+\newcommand{\hred}[1]{\colorbox{red!30}{#1}}
 
 % titlespace
 \usepackage{titling}
@@ -231,7 +231,7 @@ entity
 \begin_inset Text
 
 \begin_layout Plain Layout
-secrecy
+secret
 \end_layout
 
 \end_inset
@@ -242,7 +242,7 @@ secrecy
 \begin_inset Text
 
 \begin_layout Plain Layout
-X
+content of X
 \end_layout
 
 \end_inset
@@ -311,7 +311,7 @@ X_rows_size
 \begin_inset Text
 
 \begin_layout Plain Layout
-y
+content of y
 \end_layout
 
 \end_inset
@@ -1099,6 +1099,232 @@ gradients_size
 main
 \end_layout
 
+\begin_layout Standard
+No data dependent steps are taken, therefore no side channel leakage.
+ Securely getting the model parameters and dataset into and the resulting
+ model out of the enclave is not among the challenges of this thesis.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\backslash
+setstretch{0.9}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{main}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function {main()}{
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{get parameters and dataset}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{parameters} = 
+\backslash
+texttt{get
+\backslash
+_params()}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{dataset} = 
+\backslash
+texttt{get
+\backslash
+_dataset()}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{create 5 cross validation partitions}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{cv
+\backslash
+_inputs} = 
+\backslash
+texttt{create
+\backslash
+_cross
+\backslash
+_val
+\backslash
+_inputs(dataset, 5)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{do cross validation}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For {split : cv
+\backslash
+_inputs} {
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{ensemble} = 
+\backslash
+texttt{DPEnsemble(parameters)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+emph{
+\backslash
+var{ensemble.train(split.train)}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+tcp{predict using the test set}
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{y
+\backslash
+_pred} = 
+\backslash
+emph{
+\backslash
+var{ensemble.predict(split.test.X)}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+tcp{compute score}
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{score} = 
+\backslash
+var{compute
+\backslash
+_score(split.test.y, y
+\backslash
+_pred)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 
 \family typewriter
@@ -1109,8 +1335,8 @@ class DPTree
 Creation / destruction / global variables
 \end_layout
 
-\begin_layout Paragraph
-Side channel leakage
+\begin_layout Standard
+TODO
 \end_layout
 
 \begin_layout Subsection
@@ -1121,6 +1347,344 @@ Methods
 
 \family typewriter
 fit
+\end_layout
+
+\begin_layout Paragraph
+Caller graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/fit/class_d_p_tree_a82b9507f4f5d056b98f40871b304f943_icgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Call graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/fit/class_d_p_tree_a82b9507f4f5d056b98f40871b304f943_cgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Variables
+\end_layout
+
+\begin_layout Itemize
+must not leak:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+dataset, leaves
+\end_layout
+
+\begin_layout Itemize
+can leak:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+params.*
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\backslash
+setstretch{0.9}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{DPTree::fit}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function {fit()}{
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{all samples are live at the start}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{live
+\backslash
+_samples} = 
+\backslash
+texttt{vector(this
+\backslash
+ensuremath{
+\backslash
+rightarrow}dataset.length, 1)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{build tree}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{this
+\backslash
+ensuremath{
+\backslash
+rightarrow}root
+\backslash
+_node} = 
+\backslash
+emph{
+\backslash
+texttt{make
+\backslash
+_tree
+\backslash
+_dfs(live
+\backslash
+_samples, 0)}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{leaf
+\backslash
+_clipping} 
+\backslash
+boxit{green}{3.7}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+If (
+\backslash
+Comment{params}) {params.leaf
+\backslash
+_clipping || !params.gradient
+\backslash
+_filtering} {
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{threshold} = 
+\backslash
+texttt{params.l2}
+\backslash
+ensuremath{*(1-
+\backslash
+eta)^{
+\backslash
+texttt{tree
+\backslash
+_index}}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+boxitt{red}{1.2}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+For(
+\backslash
+Comment{number of leaves, which nodes are leaves}){leaf : this
+\backslash
+ensuremath{
+\backslash
+rightarrow}leaves} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{leaf.prediction} = 
+\backslash
+texttt{clamp(leaf.prediction, -threshold, threshold)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{add laplace noise to leaf values}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{privacy
+\backslash
+_budget
+\backslash
+_for
+\backslash
+_leaf
+\backslash
+_nodes} = 
+\backslash
+frac{
+\backslash
+texttt{tree
+\backslash
+_privacy
+\backslash
+_budget}} {2}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{laplace
+\backslash
+_scale} = 
+\backslash
+frac{
+\backslash
+var{params.
+\backslash
+ensuremath{
+\backslash
+Delta}v}}{
+\backslash
+texttt{privacy
+\backslash
+_budget
+\backslash
+_for
+\backslash
+_leaf
+\backslash
+_nodes}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+emph{
+\backslash
+var{add
+\backslash
+_laplacian
+\backslash
+_noise(laplace
+\backslash
+_scale)}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1144,7 +1708,7 @@ Caller graph
 
 \begin_inset Graphics
 	filename /home/loretanr/ma/code/hardening/visualisation/graphs/make_tree_DFS/class_d_p_tree_a07314c44bb7b7ca37c735b70de3ccb9e_icgraph.svg
-	scale 60
+	scale 55
 
 \end_inset
 
@@ -1159,7 +1723,7 @@ Call graph
 
 \begin_inset Graphics
 	filename /home/loretanr/ma/code/hardening/visualisation/graphs/make_tree_DFS/class_d_p_tree_a07314c44bb7b7ca37c735b70de3ccb9e_cgraph.svg
-	scale 60
+	scale 55
 
 \end_inset
 
@@ -1177,9 +1741,7 @@ must not leak:
 \begin_layout Standard
 
 \family typewriter
-dataset, live_samples, gradients, curr_depth
-\family default
- (?)
+dataset, X_transposed, live_samples, gradients
 \end_layout
 
 \begin_layout Itemize
@@ -1189,7 +1751,7 @@ can leak:
 \begin_layout Standard
 
 \family typewriter
-params.min_samples_split, params.max_depth
+params.min_samples_split, params.max_depth, curr_depth
 \end_layout
 
 \begin_layout Standard
@@ -1209,7 +1771,7 @@ setstretch{0.9}
 
   
 \backslash
-caption{make
+caption{DPTree::make
 \backslash
 _tree
 \backslash
@@ -1321,57 +1883,6 @@ texttt{leaf}$}
 
 \begin_layout Plain Layout
 
-\end_layout
-
-\begin_layout Plain Layout
-
-	
-\backslash
-tcp{get actual sample rows and respective gradients from indices in live
-\backslash
-_samples} 
-\backslash
-boxit{red}{1}
-\end_layout
-
-\begin_layout Plain Layout
-
-	$
-\backslash
-texttt{X
-\backslash
-_live = dataset
-\backslash
-ensuremath{
-\backslash
-rightarrow}X[live
-\backslash
-_samples]}$ 
-\backslash
-Comment{sizes, memory access patterns in 
-\backslash
-texttt{X}}
-\end_layout
-
-\begin_layout Plain Layout
-
-	$
-\backslash
-texttt{gradients
-\backslash
-_live = dataset
-\backslash
-ensuremath{
-\backslash
-rightarrow}gradients[live
-\backslash
-_samples]}$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-
 	
 \end_layout
 
@@ -1392,11 +1903,9 @@ emph{find
 \backslash
 _best
 \backslash
-_split(X
+_split(X, gradients, live
 \backslash
-_live, gradients
-\backslash
-_live, curr
+_samples, curr
 \backslash
 _depth)}}$
 \backslash
@@ -1459,9 +1968,9 @@ boxit{yellow}{0}
 
 \begin_layout Plain Layout
 
-		$
+	$
 \backslash
-var{lhs} = 
+var{lhs,rhs} = 
 \backslash
 texttt{
 \backslash
@@ -1471,15 +1980,17 @@ _left
 \backslash
 _right
 \backslash
-_partition(X
-\backslash
-_live, node.feature
+_partition(X, node.feature
 \backslash
 _index, node.feature
 \backslash
 _value)}}$ 
 \backslash
-Comment{lhs size}
+Comment{sizes}
+\end_layout
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \begin_layout Plain Layout
@@ -1580,7 +2091,7 @@ rightarrow}left = make
 \backslash
 _tree
 \backslash
-_DFS(lhs
+_dfs(lhs
 \backslash
 _live
 \backslash
@@ -1603,7 +2114,7 @@ rightarrow}right = make
 \backslash
 _tree
 \backslash
-_DFS(rhs
+_dfs(rhs
 \backslash
 _live
 \backslash
@@ -1700,14 +2211,6 @@ status open
 
 \end_layout
 
-\begin_layout Paragraph
-Mitigations
-\end_layout
-
-\begin_layout Standard
-TODO
-\end_layout
-
 \begin_layout Standard
 \begin_inset Newpage newpage
 \end_inset
@@ -1721,8 +2224,380 @@ TODO
 exponential_mechanism
 \end_layout
 
+\begin_layout Paragraph
+Caller graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/exponential_mechanism/class_d_p_tree_a7ce368c3888736d660dcf09587df4512_icgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Call graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/exponential_mechanism/class_d_p_tree_a7ce368c3888736d660dcf09587df4512_cgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Arguments / variables
+\end_layout
+
+\begin_layout Itemize
+must not leak:
+\end_layout
+
 \begin_layout Standard
-TODO
+
+\family typewriter
+candidates
+\end_layout
+
+\begin_layout Itemize
+can leak:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+-
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\backslash
+setstretch{0.9}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+caption{DPTree::exponential
+\backslash
+_mechanism}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+boxi{red}{0}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+Function (
+\backslash
+Comment{number of candidates}) {exponential
+\backslash
+_mechanism(candidates)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{if no split with positive gain, return, node will become a leaf}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+boxit{red}{1.2}
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+If (
+\backslash
+Comment{no good split exists, leaf creation}){cand.gain <= 0 for all cand
+ : candidates} {  
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+Return 
+\backslash
+var{-1}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{calculate probabilities from the gains}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+boxit{red}{6.8}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For(
+\backslash
+Comment{number of candidates}){candidate : candidates} {
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{gains.append(candidate.gain)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+boxitt{red}{4.5}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+eIf (
+\backslash
+Comment{number of candidates with viable splits}) {candidate.gain <= 0} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{probabilities.append(0)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{lse} = 
+\backslash
+texttt{
+\backslash
+emph{log
+\backslash
+_sum
+\backslash
+_exp(gains)}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{probabilities.append(
+\backslash
+ensuremath{e^{(
+\backslash
+texttt{candidate.gain} - 
+\backslash
+var{lse})}})}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{create a cumulative distribution from the probabilities, its values
+ add up to 1}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{partials} = 
+\backslash
+texttt{std::partial
+\backslash
+_sum(probabilities)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{choose random value in [0,1]}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{rand
+\backslash
+_val} = 
+\backslash
+texttt{std::rand()}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{return the corresponding split}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For {int i=0; i<partials.size(); i++} {
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+If {partials[i] >= rand
+\backslash
+_val} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+Return $
+\backslash
+var{i}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+Return $
+\backslash
+var{-1}$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1746,7 +2621,7 @@ Caller graph
 
 \begin_inset Graphics
 	filename ../visualisation/graphs/find_best_split/caller.svg
-	scale 60
+	scale 55
 
 \end_inset
 
@@ -1761,7 +2636,7 @@ Call graph
 
 \begin_inset Graphics
 	filename ../visualisation/graphs/find_best_split/call.svg
-	scale 60
+	scale 55
 
 \end_inset
 
@@ -1779,9 +2654,7 @@ must not leak:
 \begin_layout Standard
 
 \family typewriter
-X, gradients, curr_depth
-\family default
- (?)
+X, gradients, live_samples
 \end_layout
 
 \begin_layout Itemize
@@ -1791,11 +2664,7 @@ can leak:
 \begin_layout Standard
 
 \family typewriter
-params.use_decay, params.
-\begin_inset Formula $\Delta$
-\end_inset
-
-g, params.max_depth, tree_budget
+params.*, tree_budget, curr_depth
 \end_layout
 
 \begin_layout Standard
@@ -1815,7 +2684,7 @@ setstretch{0.9}
 
   
 \backslash
-caption{find
+caption{DPTree::find
 \backslash
 _best
 \backslash
@@ -1841,7 +2710,9 @@ texttt{X, gradients}}) {find
 \backslash
 _best
 \backslash
-_split(X, gradients, curr
+_split(X, gradients, live
+\backslash
+_samples, curr
 \backslash
 _depth)}{
 \end_layout
@@ -1883,7 +2754,7 @@ _decay} {
 
 		
 \backslash
-boxitt{yellow}{3.7}
+boxitt{green}{3.7}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2085,7 +2956,9 @@ texttt{
 \backslash
 emph{compute
 \backslash
-_gain(X, gradients, feature
+_gain(X, gradients, live
+\backslash
+_samples, feature
 \backslash
 _index, feature
 \backslash
@@ -2098,7 +2971,7 @@ _value)}}$
 
 			
 \backslash
-boxittt{yellow}{1}
+boxittt{red}{1}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2145,7 +3018,7 @@ Delta g}$
 
 			
 \backslash
-boxittt{yellow}{0}
+boxittt{red}{0}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2244,18 +3117,6 @@ end{algorithm}
 \end_layout
 
 \begin_layout Standard
-Mitigations:
-\end_layout
-
-\begin_layout Itemize
-done something
-\end_layout
-
-\begin_layout Itemize
-TODOOOOO
-\end_layout
-
-\begin_layout Standard
 \begin_inset Newpage pagebreak
 \end_inset
 
@@ -2276,7 +3137,7 @@ Caller graph
 
 \begin_inset Graphics
 	filename /home/loretanr/ma/code/hardening/visualisation/graphs/compute_gain/class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050_icgraph.svg
-	scale 60
+	scale 55
 
 \end_inset
 
@@ -2291,7 +3152,7 @@ Call graph
 
 \begin_inset Graphics
 	filename /home/loretanr/ma/code/hardening/visualisation/graphs/compute_gain/class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050_cgraph.svg
-	scale 60
+	scale 55
 
 \end_inset
 
@@ -2309,7 +3170,7 @@ must not leak:
 \begin_layout Standard
 
 \family typewriter
-X, gradients
+X, gradients, live_samples
 \end_layout
 
 \begin_layout Itemize
@@ -2339,7 +3200,7 @@ setstretch{0.9}
 
   
 \backslash
-caption{compute
+caption{DPTree::compute
 \backslash
 _gain}
 \end_layout
@@ -2357,11 +3218,13 @@ boxi{red}{0}
 \backslash
 Function (
 \backslash
-Comment{size of 
+Comment{
 \backslash
 texttt{X, gradients}}) {compute
 \backslash
-_gain(X, gradients, feature
+_gain(X, gradients, live
+\backslash
+_samples, feature
 \backslash
 _index, feature
 \backslash
@@ -2399,11 +3262,13 @@ texttt{
 \backslash
 emph{samples
 \backslash
-_left
+_l
 \backslash
-_right
+_r
 \backslash
-_partition(X, feature
+_partition(X, live
+\backslash
+_samples, feature
 \backslash
 _index, feature
 \backslash
@@ -2414,7 +3279,12 @@ Comment{lhs/rhs size}
 
 \begin_layout Plain Layout
 
-		$
+		
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
 \backslash
 var{lhs
 \backslash
@@ -2427,7 +3297,7 @@ texttt{lhs.size()}$
 
 \begin_layout Plain Layout
 
-		$
+	$
 \backslash
 var{rhs
 \backslash
@@ -2448,7 +3318,7 @@ texttt{rhs.size()}$
 \backslash
 tcp{return on useless split} 
 \backslash
-boxit{yellow}{1}
+boxit{red}{1}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2565,25 +3435,6 @@ _lambda}}$
 
 \begin_layout Plain Layout
 
-	$
-\backslash
-var{total
-\backslash
-_gain} = 
-\backslash
-var{lhs
-\backslash
-_gain} + 
-\backslash
-var{rhs
-\backslash
-_gain}$
-\backslash
-;
-\end_layout
-
-\begin_layout Plain Layout
-
 	
 \backslash
 boxit{yellow}{0}
@@ -2597,9 +3448,15 @@ var{total
 \backslash
 _gain} = 
 \backslash
-texttt{max(total
+texttt{max(
 \backslash
-_gain, 0)}$ 
+var{lhs
+\backslash
+_gain} + 
+\backslash
+var{rhs
+\backslash
+_gain}, 0)}$ 
 \backslash
 Comment{
 \backslash
@@ -2641,14 +3498,6 @@ end{algorithm}
 \end_inset
 
 
-\end_layout
-
-\begin_layout Paragraph
-Mitigations
-\end_layout
-
-\begin_layout Standard
-TODO
 \end_layout
 
 \begin_layout Standard
