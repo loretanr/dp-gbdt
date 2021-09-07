@@ -40,6 +40,11 @@
 \newcommand{\FuncCall}[2]{\texttt{\bfseries #1(#2)}}
 \SetKwProg{Function}{function}{}{}
 \SetKw{Continue}{continue}
+\SetKw{KwTo}{to}
+\SetKw{KwInn}{in}
+\SetKw{KwAnd}{and}
+\SetKw{KwOr}{or}
+\SetKw{KwForall}{forall}
 \renewcommand{\ProgSty}[1]{\texttt{\bfseries #1}}
 \SetAlFnt{\small}
 \usepackage{setspace}
@@ -1211,7 +1216,7 @@ _dataset()}$
 
 	
 \backslash
-tcp{create 5 cross validation partitions}
+tcp{create 5 train/test splits for cross validation}
 \end_layout
 
 \begin_layout Plain Layout
@@ -1220,7 +1225,7 @@ tcp{create 5 cross validation partitions}
 \backslash
 var{cv
 \backslash
-_inputs} = 
+_splits} = 
 \backslash
 texttt{create
 \backslash
@@ -1249,9 +1254,11 @@ tcp{do cross validation}
 
 	
 \backslash
-For {split : cv
+For {split 
 \backslash
-_inputs} {
+KwInn cv
+\backslash
+_splits} {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1474,11 +1481,7 @@ var{live
 \backslash
 _samples} = 
 \backslash
-texttt{vector(this
-\backslash
-ensuremath{
-\backslash
-rightarrow}dataset.length, 1)}$
+texttt{[1,2,3,...,dataset.length]}$
 \backslash
 ;
 \end_layout
@@ -1538,7 +1541,9 @@ If (
 \backslash
 Comment{params}) {params.leaf
 \backslash
-_clipping || !params.gradient
+_clipping 
+\backslash
+KwOr !params.gradient
 \backslash
 _filtering} {
 \end_layout
@@ -1575,7 +1580,9 @@ boxitt{red}{1.2}
 \backslash
 For(
 \backslash
-Comment{number of leaves, which nodes are leaves}){leaf : this
+Comment{number of leaves, which nodes are leaves}){leaf 
+\backslash
+KwInn this
 \backslash
 ensuremath{
 \backslash
@@ -1856,7 +1863,9 @@ If{curr
 \backslash
 _depth == params.max
 \backslash
-_depth || len(live
+_depth 
+\backslash
+KwOr len(live
 \backslash
 _samples) < params.min
 \backslash
@@ -2034,7 +2043,9 @@ Comment{size of
 \backslash
 texttt{live
 \backslash
-_samples}}) {sample : live
+_samples}}) {sample 
+\backslash
+KwInn live
 \backslash
 _samples} {
 \end_layout
@@ -2351,8 +2362,11 @@ boxit{red}{1.2}
 \backslash
 If (
 \backslash
-Comment{no good split exists, leaf creation}){cand.gain <= 0 forall cand
- : candidates} {  
+Comment{no good split exists, leaf creation}){cand.gain <= 0 
+\backslash
+KwForall cand 
+\backslash
+KwInn candidates} {  
 \end_layout
 
 \begin_layout Plain Layout
@@ -2395,7 +2409,9 @@ boxit{red}{6.8}
 \backslash
 For(
 \backslash
-Comment{number of candidates}){candidate : candidates} {
+Comment{number of candidates}){candidate 
+\backslash
+KwInn candidates} {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2462,11 +2478,13 @@ texttt{gains}_{i})}$
 \backslash
 var{probabilities.append(
 \backslash
-ensuremath{e^{(
+ensuremath{
+\backslash
+exp ({
 \backslash
 texttt{candidate.gain} - 
 \backslash
-var{lse})}})}$
+var{lse}})})}$
 \backslash
 ;
 \end_layout
@@ -2545,7 +2563,9 @@ tcp{return the corresponding split}
 
 	
 \backslash
-For {int i=0; i<partials.size(); i++} {
+For {i = 0 
+\backslash
+KwTo i = partials.size() - 1} {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2894,7 +2914,9 @@ Comment{number of cols in
 \backslash
 texttt{X}}){feature
 \backslash
-_index : features} {
+_index 
+\backslash
+KwInn features} {
 \end_layout
 
 \begin_layout Plain Layout
@@ -2914,7 +2936,9 @@ Comment{number of rows in
 \backslash
 texttt{X}}){feature
 \backslash
-_value : X[feature
+_value 
+\backslash
+KwInn X[feature
 \backslash
 _index]} {
 \end_layout
@@ -3074,18 +3098,18 @@ texttt{
 \backslash
 emph{exponential
 \backslash
-_mechanism(candidates)}}$ 
+_mechanism(candidates)}}$
 \backslash
-
-\backslash
-
+;
 \end_layout
 
 \begin_layout Plain Layout
 
 	
 \backslash
-tcp{construct the node}
+tcp{construct the node} 
+\backslash
+boxit{yellow}{0}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3094,8 +3118,11 @@ tcp{construct the node}
 \backslash
 texttt{TreeNode *node = new TreeNode(candidates[index])}$ 
 \backslash
+Comment{internal node vs.
+ leaf}
+\end_layout
 
-\backslash
+\begin_layout Plain Layout
 
 \end_layout
 
@@ -3340,7 +3367,9 @@ If (
 \backslash
 Comment{useless split}) {lhs
 \backslash
-_size == 0 || rhs
+_size == 0 
+\backslash
+KwOr rhs
 \backslash
 _size == 0} {
 \end_layout
@@ -3542,10 +3571,6 @@ predict
 class DPEnsemble
 \end_layout
 
-\begin_layout Paragraph
-Side channel leakage
-\end_layout
-
 \begin_layout Subsection
 Methods
 \end_layout
@@ -3554,6 +3579,451 @@ Methods
 
 \family typewriter
 train
+\end_layout
+
+\begin_layout Paragraph
+Caller graph
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO
+\end_layout
+
+\begin_layout Paragraph
+Call graph
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO
+\end_layout
+
+\begin_layout Paragraph
+Variables
+\end_layout
+
+\begin_layout Itemize
+must not leak:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+TODO
+\end_layout
+
+\begin_layout Itemize
+can leak:
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+params.*, tree_params.*
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\backslash
+setstretch{0.9}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{DPEnsemble::train}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function {train(dataset)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{compute initial prediction}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{init
+\backslash
+_score} = 
+\backslash
+emph{
+\backslash
+var{compute
+\backslash
+_init
+\backslash
+_score(dataset.y)}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{each tree gets the full budget since they train on distinct data}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{tree
+\backslash
+_privacy
+\backslash
+_budget} = 
+\backslash
+texttt{params.privacy
+\backslash
+_budget}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{train all trees}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For (
+\backslash
+Comment{bla}) {tree
+\backslash
+_index = 0 
+\backslash
+KwTo tree
+\backslash
+_index = nb
+\backslash
+_trees - 1} {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+tcp{init/update gradients}
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+emph{
+\backslash
+var{update
+\backslash
+_gradients(dataset.gradients, tree
+\backslash
+_index)}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+tcp{sensitivity for internal nodes}
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{tree
+\backslash
+_params.
+\backslash
+ensuremath{
+\backslash
+Delta g}} = 
+\backslash
+ensuremath{3*(
+\backslash
+texttt{params.l2
+\backslash
+_threshold})^2}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+tcp{sensitivity for leaf nodes}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+eIf {params.gradient
+\backslash
+_filtering 
+\backslash
+KwOr  !params.leaf
+\backslash
+_clipping} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{tree
+\backslash
+_params.
+\backslash
+ensuremath{
+\backslash
+Delta v}} = 
+\backslash
+frac{
+\backslash
+texttt{params.l2
+\backslash
+_threshold}}{1+
+\backslash
+texttt{params.l2
+\backslash
+_lambda}} $
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		}{
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{tree
+\backslash
+_params.
+\backslash
+ensuremath{
+\backslash
+Delta v}} = 
+\backslash
+ensuremath{
+\backslash
+min (
+\backslash
+frac{
+\backslash
+texttt{params.l2
+\backslash
+_threshold}}{1 + 
+\backslash
+texttt{params.l2
+\backslash
+_lambda}}, 2* 
+\backslash
+texttt{params.l2
+\backslash
+_threshold} * 
+\backslash
+ensuremath{(1-
+\backslash
+eta)^{
+\backslash
+texttt{tree
+\backslash
+_index}}})}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+tcp{determine number of rows}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+eIf {params.balance
+\backslash
+_partition} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{number
+\backslash
+_of
+\backslash
+_rows} = 
+\backslash
+frac{|D|}{
+\backslash
+texttt{nb
+\backslash
+_trees}- 
+\backslash
+texttt{tree
+\backslash
+_index}} $
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{number
+\backslash
+_of
+\backslash
+_rows} = 
+\backslash
+frac{|D| 
+\backslash
+eta (1- 
+\backslash
+eta)^{
+\backslash
+texttt{tree
+\backslash
+_index}} } { 1 - (1-
+\backslash
+eta)^{
+\backslash
+texttt{nb
+\backslash
+_trees}} } $
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection

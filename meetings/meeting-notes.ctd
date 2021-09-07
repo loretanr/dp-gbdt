@@ -497,7 +497,7 @@ remove duplicates. (loop over X_unique)
       ▪ ein datenpunkt kann exakt 2 bäume beeinflussen, und wir rechnen momentan nur mit einem
       ▪ </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="08_26" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629982682.21" ts_lastsave="1630434497.91" unique_id="35">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="08_26" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629982682.21" ts_lastsave="1631027929.65" unique_id="35">
 			<rich_text>Meeting with Kari
 
 Kari will get back to me with whether &quot;arithmetic leakage&quot; is a thing. on hold for now
@@ -524,6 +524,67 @@ create a lyx of the “known flaws” that Moritz an I talked about!
 </rich_text>
 			<rich_text foreground="#9090eeee9090">hilight the leaks in the pseudocode
     ask stackoverflow</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631029438.87" unique_id="36">
+			<rich_text scale="h2">Discussion Points</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">Recursion hardening feedback</rich_text>
+			<rich_text>:
+   •  the “are we creating leaf vs internal” disguising </rich_text>
+			<rich_text foreground="#9090eeee9090">was not necessary</rich_text>
+			<rich_text>
+      ◇ &quot;because in the end we give the tree to the attacker anyways&quot;
+         ▪ the proof gives it to him step by step, so there's also not really a point in hiding the order of how we're building it.
+      ◇ So it's basically a voluntary extra protection. It's good because it hides stuff from the attacker that he shouldn't know basically. It protects us against a weaker attacker.
+   • However, hardening which samples go to which side, </rich_text>
+			<rich_text foreground="#9090eeee9090">was good and necessary</rich_text>
+			<rich_text>.
+      ◇ “DP means attacker knows all samples except one which could be 1a or 1b”
+      ◇ hardening the predict falls into the same category
+
+------------------------
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">arithmetic OP's cycles, either  TODO or note as weakness</rich_text>
+			<rich_text>
+      •   can be solved with masking
+      •   C++ has operator overloading, so should be easy to add.
+   
+------------------------
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">Research about CMOV</rich_text>
+			<rich_text>
+   •   why they are using it, and whether we should be find on our sorce code level here.
+    
+------------------------
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">ask Moritz about X init size 4177 vs. 5000</rich_text>
+			<rich_text>    
+   •  keywords (from Esfandiar): bounded vs unbounded diff privacy
+        
+------------------------
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">we want the grid for compute_gain resp. find_split</rich_text>
+			<rich_text>
+   •  sounds doable. easy for categorical, just try out all “animals” even if our dataset only has cats and dogs. -&gt; need to save that somewhere.
+   •  for numerical we can have it as a hyperparameter. &quot; try splits on equal distance fixed values, params.gridsize
+   •  then obviously adapt the “list of non dp things in the algorithm”
+        
+
+------------------------ what Kari will think about
+
+do an timing evaluation outside the enclave
+
+rollback
+
+more directions
+
+ask what ivan thinks of our current approach</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1628587224.68" unique_id="5">
