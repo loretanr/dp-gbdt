@@ -32,4 +32,4 @@ private:
     void update_gradients(std::vector<double> &gradients, int tree_index);
 };
 
-#endif // DPTREEENSEMBLE_H
+#endif // DPENSEMBLE_H

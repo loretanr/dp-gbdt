@@ -280,7 +280,8 @@ double DPTree::compute_gain(VVD &X_transposed, vector<double> &gradients_live, v
     rhs_gain = std::pow(rhs_gain,2) / (_rhs_size + params->l2_lambda);
 
     double total_gain = lhs_gain + rhs_gain;
-    total_gain = std::max(total_gain, 0.0);
+    // total_gain = max(total_gain, 0.0);
+    total_gain = (total_gain < 0.0) * 0.0 + !(total_gain < 0.0) * total_gain;
 
     if(VERIFICATION_MODE){
         // round to 10 decimals to avoid numeric issues in verification

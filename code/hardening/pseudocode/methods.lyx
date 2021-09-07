@@ -83,7 +83,7 @@
 	\tikz[remember picture,overlay]{\node[yshift=3pt,fill=#1,opacity=.25,fit={($(A)+(0,0.15\baselineskip)$)($(A)+(.837\linewidth,-{#2}\baselineskip - 0.25\baselineskip)$)}] {};}\ignorespaces
 }
 
-\colorlet{green}{green!20}
+\colorlet{green}{green!30}
 \colorlet{yellow}{yellow!40}
 \colorlet{red}{red!30}
 
@@ -200,25 +200,21 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Section
-Severity List
+Secrecy
 \end_layout
 
-\begin_layout Paragraph
-General
-\begin_inset Newline newline
-\end_inset
-
-
+\begin_layout Subsection
+Dataset and parameters
 \end_layout
 
 \begin_layout Standard
 \begin_inset Tabular
 <lyxtabular version="3" rows="6" columns="2">
 <features tabularvalignment="middle">
-<column alignment="center" valignment="top">
+<column alignment="left" valignment="top">
 <column alignment="center" valignment="top">
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -238,7 +234,7 @@ secret
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -261,7 +257,7 @@ content of X
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -284,7 +280,7 @@ X_cols_size
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -307,7 +303,7 @@ X_rows_size
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -330,7 +326,7 @@ content of y
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -372,10 +368,10 @@ y_rows_size
 \begin_inset Tabular
 <lyxtabular version="3" rows="16" columns="2">
 <features tabularvalignment="middle">
-<column alignment="center" valignment="top">
+<column alignment="left" valignment="top">
 <column alignment="center" valignment="top">
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -395,7 +391,7 @@ secret
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -418,7 +414,7 @@ nb_trees
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -441,7 +437,7 @@ learning_rate
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -464,7 +460,7 @@ privacy_budget
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -487,7 +483,7 @@ task
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -510,7 +506,7 @@ max_depth
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -533,7 +529,7 @@ min_samples_split
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -556,7 +552,7 @@ balance_partition
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -579,7 +575,7 @@ gradient_filtering
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -602,7 +598,7 @@ leaf_clipping
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -625,7 +621,7 @@ scale_y
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -648,7 +644,7 @@ use_decay
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -671,7 +667,7 @@ l2_threshold
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -694,7 +690,7 @@ l2_lambda
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -717,7 +713,7 @@ cat_idx
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -759,10 +755,10 @@ num_idx
 \begin_inset Tabular
 <lyxtabular version="3" rows="2" columns="2">
 <features tabularvalignment="middle">
-<column alignment="center" valignment="top">
+<column alignment="left" valignment="top">
 <column alignment="center" valignment="top">
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -782,7 +778,7 @@ secret
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -840,7 +836,7 @@ entity
 \begin_inset Text
 
 \begin_layout Plain Layout
-secrecy
+secret
 \end_layout
 
 \end_inset
@@ -1087,6 +1083,42 @@ gradients_size
 \end_layout
 
 \begin_layout Standard
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+DP imperfections of the algorithm
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+init_score
+\family default
+, (=mean in regression, =most common feature in classification) leaks informatio
+n about which feature values are in the dataset.
+ Would need to add noise.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+compute_gain
+\family default
+ is done on the real data points.
+ This was not adressed by the DPBoost paper.
+ Would also need to add noise there.
+\end_layout
+
+\begin_layout Itemize
+GDF is also problematic.
+ changing one data point could have an impact on 2 trees.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Newpage pagebreak
 \end_inset
 
@@ -1100,7 +1132,7 @@ main
 \end_layout
 
 \begin_layout Standard
-No data dependent steps are taken, therefore no side channel leakage.
+No data dependent operations are done, therefore no side channel leakage.
  Securely getting the model parameters and dataset into and the resulting
  model out of the enclave is not among the challenges of this thesis.
 \end_layout
@@ -1329,14 +1361,6 @@ end{algorithm}
 
 \family typewriter
 class DPTree
-\end_layout
-
-\begin_layout Subsection
-Creation / destruction / global variables
-\end_layout
-
-\begin_layout Standard
-TODO
 \end_layout
 
 \begin_layout Subsection
@@ -1821,7 +1845,7 @@ _depth)}{
 \backslash
 tcp{max depth reached or not enough samples -> leaf node} 
 \backslash
-boxit{yellow}{2}
+boxit{red}{2}
 \end_layout
 
 \begin_layout Plain Layout
@@ -2240,21 +2264,6 @@ Caller graph
 \end_layout
 
 \begin_layout Paragraph
-Call graph
-\begin_inset Newline newline
-\end_inset
-
-
-\begin_inset Graphics
-	filename /home/loretanr/ma/code/hardening/visualisation/graphs/exponential_mechanism/class_d_p_tree_a7ce368c3888736d660dcf09587df4512_cgraph.svg
-	scale 55
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Paragraph
 Arguments / variables
 \end_layout
 
@@ -2342,7 +2351,7 @@ boxit{red}{1.2}
 \backslash
 If (
 \backslash
-Comment{no good split exists, leaf creation}){cand.gain <= 0 for all cand
+Comment{no good split exists, leaf creation}){cand.gain <= 0 forall cand
  : candidates} {  
 \end_layout
 
@@ -2434,13 +2443,15 @@ var{probabilities.append(0)}$
 \backslash
 var{lse} = 
 \backslash
-texttt{
+ensuremath{
 \backslash
-emph{log
+log
 \backslash
-_sum
+sum_{i}
 \backslash
-_exp(gains)}}$
+exp(
+\backslash
+texttt{gains}_{i})}$
 \backslash
 ;
 \end_layout
@@ -2620,7 +2631,7 @@ Caller graph
 
 
 \begin_inset Graphics
-	filename ../visualisation/graphs/find_best_split/caller.svg
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/find_best_split/class_d_p_tree_ad7f8755be37ad10cf104fba2076dce5e_icgraph.svg
 	scale 55
 
 \end_inset
@@ -3136,7 +3147,7 @@ Caller graph
 
 
 \begin_inset Graphics
-	filename /home/loretanr/ma/code/hardening/visualisation/graphs/compute_gain/class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050_icgraph.svg
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/compute_gain/class_d_p_tree_ad7f8755be37ad10cf104fba2076dce5e_icgraph.svg
 	scale 55
 
 \end_inset
@@ -3516,12 +3527,6 @@ make_leaf_node
 \begin_layout Subsubsection
 
 \family typewriter
-predict
-\end_layout
-
-\begin_layout Subsubsection
-
-\family typewriter
 samples_left_right_partition
 \end_layout
 
@@ -3535,10 +3540,6 @@ predict
 
 \family typewriter
 class DPEnsemble
-\end_layout
-
-\begin_layout Subsection
-Creation / destruction / global variables
 \end_layout
 
 \begin_layout Paragraph

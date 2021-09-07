@@ -26,6 +26,7 @@ ModelParams create_default_params()
 };
 
 // put a value between two bounds, not in std::algorithm in c++11
+/// @private
 double clamp(double n, double lower, double upper)
 {
   return std::max(lower, std::min(n, upper));
@@ -33,6 +34,7 @@ double clamp(double n, double lower, double upper)
 
 
 // TODO formula
+/// @private
 double log_sum_exp(std::vector<double> vec)
 {
     size_t count = vec.size();
@@ -48,18 +50,21 @@ double log_sum_exp(std::vector<double> vec)
     }
 }
 
+/// @private
 double compute_mean(std::vector<double> &vec)
 {
     double sum = std::accumulate(vec.begin(), vec.end(), 0.0);
     return sum / vec.size();
 }
 
+/// @private
 double compute_stdev(std::vector<double> &vec, double mean)
 {
     double sq_sum = std::inner_product(vec.begin(), vec.end(), vec.begin(), 0.0);
     return std::sqrt(sq_sum / vec.size() - mean * mean);
 }
 
+/// @private
 std::string get_time_string()
 {
     time_t t = time(0);

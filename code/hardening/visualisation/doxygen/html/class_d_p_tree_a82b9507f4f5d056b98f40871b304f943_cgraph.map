@@ -1,0 +1,11 @@
+<map id="DPTree::fit" name="DPTree::fit">
+<area shape="rect" id="node2" href="$class_d_p_tree.html#a07314c44bb7b7ca37c735b70de3ccb9e" title="DPTree::make_tree_DFS" alt="" coords="140,123,311,149"/>
+<area shape="rect" id="node9" href="$class_d_p_tree.html#a468d249a3e55f1527e50daf13e550c79" title="DPTree::add_laplacian\l_noise" alt="" coords="148,199,303,241"/>
+<area shape="rect" id="node3" href="$class_d_p_tree.html#a3a716a075edfae470e0fe7511634e922" title="DPTree::make_leaf_node" alt="" coords="359,17,530,44"/>
+<area shape="rect" id="node4" href="$class_d_p_tree.html#ad7f8755be37ad10cf104fba2076dce5e" title="DPTree::find_best_split" alt="" coords="365,68,524,95"/>
+<area shape="rect" id="node6" href="$class_d_p_tree.html#af16f3e0373e606fe42b2104890b2d036" title="DPTree::samples_left\l_right_partition" alt="" coords="783,57,932,98"/>
+<area shape="rect" id="node8" href="$class_tree_node.html#ae671fa006ebb36f632b46b5aa1ec2899" title="TreeNode::is_leaf" alt="" coords="382,173,507,200"/>
+<area shape="rect" id="node5" href="$class_d_p_tree.html#ab9426a6ac2e5122e29ecbb6e9c4cd050" title="DPTree::compute_gain" alt="" coords="579,5,735,32"/>
+<area shape="rect" id="node7" href="$class_d_p_tree.html#a7ce368c3888736d660dcf09587df4512" title="DPTree::exponential\l_mechanism" alt="" coords="586,57,727,98"/>
+<area shape="rect" id="node10" href="$class_laplace.html#a357965a9024cbdb3866973b5ef22500c" title="Laplace::return_a_random\l_variable" alt="" coords="359,225,531,266"/>
+</map>

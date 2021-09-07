@@ -17,7 +17,6 @@ using namespace std;
 
 DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
 {
-    // only output this once, in case we're running with multiple threads
     if (parameters->privacy_budget == 0){
         throw std::runtime_error("hardened gbdt cannot be run with pb=0");
     }
