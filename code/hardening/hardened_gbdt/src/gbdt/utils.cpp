@@ -33,7 +33,6 @@ double clamp(double n, double lower, double upper)
 }
 
 
-// TODO formula
 double log_sum_exp(std::vector<double> vec)
 {
     size_t count = vec.size();

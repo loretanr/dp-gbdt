@@ -46,7 +46,7 @@ private:
 public:
     // constructors
     DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index);
-    ~DPTree();
+    ~DPTree() {};
 
     // fields
     TreeNode *root_node;

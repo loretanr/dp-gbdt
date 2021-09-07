@@ -22,15 +22,13 @@ DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, s
     tree_index(tree_index)
 {
     // only need to transpose X once
-    X_transposed= VVD(dataset->num_x_cols, vector<double>(dataset->length));
-    for (size_t row=0; row<dataset->length; row++) {
+    X_transposed = VVD(dataset->num_x_cols, vector<double>(dataset->length));
+    for (int row=0; row<dataset->length; row++) {
         for(int col=0; col < dataset->num_x_cols; col++) {
             X_transposed[col][row] = (dataset->X)[row][col];
         }
     }
 }
-
-DPTree::~DPTree() {}
 
 
 /** Methods */
@@ -155,7 +153,10 @@ vector<double> DPTree::predict(VVD &X)
 // recursively walk through decision tree
 double DPTree::_predict(vector<double> *row, TreeNode *node)
 {
-    bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), node->split_attr) != (params->cat_idx).end();
+    bool categorical = false;
+    for(auto cat_feature : params->cat_idx){
+        categorical |= (cat_feature == node->split_attr);
+    }
 
     double row_val = (*row)[node->split_attr];
 
@@ -297,7 +298,10 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VV
     vector<int> &live_samples, int feature_index, double feature_value)
 {
     // if the feature is categorical
-    bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
+    bool categorical = false;
+    for(auto cat_feature : params->cat_idx){
+        categorical |= (cat_feature == feature_index);
+    }
 
     // the resulting partition is stored in "lhs/rhs". 
     // - lhs[row]=1 means the row is live and goes to the left child on this split index/value
@@ -321,7 +325,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &candidates)
     // if no split has a positive gain -> return -1. Node will become a leaf
     int num_viable_candidates = 0;
     for(auto candidate : candidates){
-        num_viable_candidates += (candidate.gain > 0);
+        num_viable_candidates += (candidate.gain > 0);                    
     }
     bool no_split_available = (num_viable_candidates == 0);
 
@@ -344,7 +348,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &candidates)
         return no_split_available ? -1 : std::distance(probabilities.begin(), max_elem);
     }
 
-    // create a cumulative distribution function from the probabilities.
+    // create a cumulative distribution from the probabilities.
     // all values will be in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
