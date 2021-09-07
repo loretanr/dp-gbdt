@@ -525,7 +525,7 @@ create a lyx of the “known flaws” that Moritz an I talked about!
 			<rich_text foreground="#9090eeee9090">hilight the leaks in the pseudocode
     ask stackoverflow</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631029438.87" unique_id="36">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631030511.25" unique_id="36">
 			<rich_text scale="h2">Discussion Points</rich_text>
 			<rich_text>
 
@@ -574,7 +574,9 @@ create a lyx of the “known flaws” that Moritz an I talked about!
    •  sounds doable. easy for categorical, just try out all “animals” even if our dataset only has cats and dogs. -&gt; need to save that somewhere.
    •  for numerical we can have it as a hyperparameter. &quot; try splits on equal distance fixed values, params.gridsize
    •  then obviously adapt the “list of non dp things in the algorithm”
-        
+   • the grid should also be in the non-hardened cpp gbdt I guess
+      ◇ python shit will be even more behind.
+           
 
 ------------------------ what Kari will think about
 
@@ -584,7 +586,10 @@ rollback
 
 more directions
 
-ask what ivan thinks of our current approach</rich_text>
+ask what ivan thinks of our current approach
+
+------------------------ Esfandiar will also get back at me if something isn't the way he explained
+</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1628587224.68" unique_id="5">
