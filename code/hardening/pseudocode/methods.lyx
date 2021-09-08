@@ -3260,9 +3260,7 @@ Comment{
 \backslash
 texttt{X, gradients}}) {compute
 \backslash
-_gain(X, gradients, live
-\backslash
-_samples, feature
+_gain(X, gradients, feature
 \backslash
 _index, feature
 \backslash
@@ -3300,13 +3298,11 @@ texttt{
 \backslash
 emph{samples
 \backslash
-_l
+_left
 \backslash
-_r
+_right
 \backslash
-_partition(X, live
-\backslash
-_samples, feature
+_partition(X, feature
 \backslash
 _index, feature
 \backslash
@@ -3553,10 +3549,527 @@ end{algorithm}
 make_leaf_node
 \end_layout
 
+\begin_layout Paragraph
+Caller graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/make_leaf_node/class_d_p_tree_a3a716a075edfae470e0fe7511634e922_icgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\backslash
+setstretch{0.9}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{DPTree::make
+\backslash
+_leaf
+\backslash
+_node}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+boxi{red}{0}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function (
+\backslash
+Comment{
+\backslash
+var{live
+\backslash
+_samples} size}) {make
+\backslash
+_leaf
+\backslash
+_node(curr
+\backslash
+_depth, live
+\backslash
+_samples)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{leaf} = 
+\backslash
+texttt{new TreeNode(curr
+\backslash
+_depth)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{compute prediction} 
+\backslash
+boxit{red}{1.2}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For (
+\backslash
+Comment{
+\backslash
+var{live
+\backslash
+_samples} size}) {sample
+\backslash
+_index 
+\backslash
+KwInn live
+\backslash
+_samples} {
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{gradients.append(dataset.gradients[sample
+\backslash
+_index])}$ 
+\backslash
+Comment{
+\backslash
+var{dataset.gradients} memory access pattern}
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{leaf.prediction} = -
+\backslash
+frac{
+\backslash
+sum 
+\backslash
+var{gradients}}{
+\backslash
+var{gradients.size()} + 
+\backslash
+var{params.l2
+\backslash
+_lambda}}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+Return 
+\backslash
+var{leaf}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsubsection
 
 \family typewriter
 samples_left_right_partition
+\end_layout
+
+\begin_layout Paragraph
+Caller graph
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/samples_left_right_partition/class_d_p_tree_af16f3e0373e606fe42b2104890b2d036_icgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\backslash
+setstretch{0.9}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{DPTree::samples
+\backslash
+_left
+\backslash
+_right
+\backslash
+_partition}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+boxi{red}{0}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function (
+\backslash
+Comment{
+\backslash
+var{X} size}) {samples
+\backslash
+_left
+\backslash
+_right
+\backslash
+_partition(X, feature
+\backslash
+_index, feature
+\backslash
+_value)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+boxit{yellow}{15}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+eIf (
+\backslash
+Comment {cat/num feature split}) {feature
+\backslash
+_index 
+\backslash
+KwInn params.cat
+\backslash
+_idx} {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+tcp{categorical feature} 
+\backslash
+boxitt{red}{4.7}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+For (
+\backslash
+Comment{
+\backslash
+var{X} size}) {sample
+\backslash
+_index = 0 
+\backslash
+KwTo sample
+\backslash
+_index < X.num
+\backslash
+_rows} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+boxittt{red}{3}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+eIf (
+\backslash
+Comment{
+\backslash
+var{lhs,rhs} sizes and access pattern}) {X[sample
+\backslash
+_index][feature
+\backslash
+_index] == feature
+\backslash
+_value} {
+\end_layout
+
+\begin_layout Plain Layout
+
+				$
+\backslash
+var{lhs.append(sample
+\backslash
+_index)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+			} {	
+\end_layout
+
+\begin_layout Plain Layout
+
+				$
+\backslash
+var{rhs.append(sample
+\backslash
+_index)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+			}
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+	} {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+tcp{numerical feature} 
+\backslash
+boxitt{red}{4.7}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+For (
+\backslash
+Comment{
+\backslash
+var{X} size}) {sample 
+\backslash
+KwInn X[feature
+\backslash
+_index]} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+boxittt{red}{3}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+eIf (
+\backslash
+Comment{
+\backslash
+var{lhs,rhs} sizes and access pattern}) {X[sample
+\backslash
+_index][feature
+\backslash
+_index] < feature
+\backslash
+_value} {
+\end_layout
+
+\begin_layout Plain Layout
+
+				$
+\backslash
+var{lhs.append(sample
+\backslash
+_index)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+			} {	
+\end_layout
+
+\begin_layout Plain Layout
+
+				$
+\backslash
+var{rhs.append(sample
+\backslash
+_index)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+			}
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+Return 
+\backslash
+var{lhs,rhs}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Whether the yellow box is secret depends on the context from where the function
+ is called.
+ If it's from find_best_split / compute_gain where we're just trying out
+ all possible splits, then it's not secret.
+ However if we recreate the split that we found and chosen before, then
+ it's secret.
 \end_layout
 
 \begin_layout Subsubsection
@@ -3565,10 +4078,26 @@ samples_left_right_partition
 predict
 \end_layout
 
+\begin_layout Standard
+TODO
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 
 \family typewriter
 class DPEnsemble
+\end_layout
+
+\begin_layout Standard
+TODO can I get around doing it for DPEnsemble? because it should be largely
+ data independent.
 \end_layout
 
 \begin_layout Subsection
