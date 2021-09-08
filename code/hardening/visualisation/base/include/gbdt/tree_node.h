@@ -5,8 +5,8 @@
 class TreeNode {
 public:
     // constructors
-    TreeNode(bool is_leaf);
-    ~TreeNode();
+    TreeNode(bool _is_leaf): depth(0), split_attr(-1), split_value(-1), split_gain(-1), is_leaf(_is_leaf) {};
+    ~TreeNode() {};
 
     // fields
     TreeNode *left, *right;
@@ -15,10 +15,10 @@ public:
     double split_value;
     double split_gain;
     int lhs_size, rhs_size;
+    bool is_leaf;
     double prediction; // if it's a leaf
 
     // methods
-    bool is_leaf();
 };
 
 

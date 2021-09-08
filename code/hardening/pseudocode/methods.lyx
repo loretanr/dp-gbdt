@@ -93,7 +93,7 @@
 \colorlet{red}{red!30}
 
 % algorithm comments on the right side
-\usepackage{algpseudocode}
+\usepackage{algpseudocode, float}
 %\renewcommand{\algorithmiccomment}[1]{\bgroup\hfill\tiny//~#1\egroup}
 \end_preamble
 \use_default_options true
@@ -195,6 +195,54 @@ LatexCommand tableofcontents
 \end_inset
 
 
+\end_layout
+
+\begin_layout Paragraph
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hred{
+\end_layout
+
+\end_inset
+
+TODO
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+clean up color usage (probably use yellow to mark my 
+\begin_inset Quotes eld
+\end_inset
+
+unnecessary hardening
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+clean up right hand side comments
+\end_layout
+
+\begin_layout Itemize
+check function definitions, calls, arguments etc to be matching with each
+ other
 \end_layout
 
 \begin_layout Standard
@@ -1304,7 +1352,9 @@ _pred} =
 \backslash
 emph{
 \backslash
-var{ensemble.predict(split.test.X)}}$
+var{ensemble.predict
+\backslash
+_ensemble(split.test.X)}}$
 \backslash
 ;
 \end_layout
@@ -1381,7 +1431,14 @@ fit
 \end_layout
 
 \begin_layout Paragraph
-Caller graph
+Caller/call graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -1395,12 +1452,7 @@ Caller graph
 
 \end_layout
 
-\begin_layout Paragraph
-Call graph
-\begin_inset Newline newline
-\end_inset
-
-
+\begin_layout Standard
 \begin_inset Graphics
 	filename /home/loretanr/ma/code/hardening/visualisation/graphs/fit/class_d_p_tree_a82b9507f4f5d056b98f40871b304f943_cgraph.svg
 	scale 55
@@ -1732,7 +1784,14 @@ make_tree_dfs
 \end_layout
 
 \begin_layout Paragraph
-Caller graph
+Caller/call graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -1746,14 +1805,9 @@ Caller graph
 
 \end_layout
 
-\begin_layout Paragraph
-Call graph
-\begin_inset Newline newline
-\end_inset
-
-
+\begin_layout Standard
 \begin_inset Graphics
-	filename /home/loretanr/ma/code/hardening/visualisation/graphs/make_tree_DFS/class_d_p_tree_a07314c44bb7b7ca37c735b70de3ccb9e_cgraph.svg
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/make_tree_DFS/class_d_p_tree_a54cea43a3929249de4be25f607a16339_cgraph.svg
 	scale 55
 
 \end_inset
@@ -2261,6 +2315,13 @@ exponential_mechanism
 
 \begin_layout Paragraph
 Caller graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -2646,6 +2707,13 @@ find_best_split
 
 \begin_layout Paragraph
 Caller graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -2659,14 +2727,9 @@ Caller graph
 
 \end_layout
 
-\begin_layout Paragraph
-Call graph
-\begin_inset Newline newline
-\end_inset
-
-
+\begin_layout Standard
 \begin_inset Graphics
-	filename ../visualisation/graphs/find_best_split/call.svg
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/find_best_split/class_d_p_tree_ad7f8755be37ad10cf104fba2076dce5e_cgraph.svg
 	scale 55
 
 \end_inset
@@ -3168,7 +3231,14 @@ compute_gain
 \end_layout
 
 \begin_layout Paragraph
-Caller graph
+Caller/call graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -3182,12 +3252,7 @@ Caller graph
 
 \end_layout
 
-\begin_layout Paragraph
-Call graph
-\begin_inset Newline newline
-\end_inset
-
-
+\begin_layout Standard
 \begin_inset Graphics
 	filename /home/loretanr/ma/code/hardening/visualisation/graphs/compute_gain/class_d_p_tree_ab9426a6ac2e5122e29ecbb6e9c4cd050_cgraph.svg
 	scale 55
@@ -3551,6 +3616,13 @@ make_leaf_node
 
 \begin_layout Paragraph
 Caller graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -3743,6 +3815,13 @@ samples_left_right_partition
 
 \begin_layout Paragraph
 Caller graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
 \begin_inset Newline newline
 \end_inset
 
@@ -4075,11 +4154,479 @@ Whether the yellow box is secret depends on the context from where the function
 \begin_layout Subsubsection
 
 \family typewriter
-predict
+predict_tree
+\end_layout
+
+\begin_layout Paragraph
+Caller/call graph
 \end_layout
 
 \begin_layout Standard
-TODO
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/predict_tree/class_d_p_tree_a1e28d69924f6d57ea7e57ad8ee138f42_icgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/predict_tree/class_d_p_tree_a1e28d69924f6d57ea7e57ad8ee138f42_cgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}[]
+\backslash
+setstretch{0.9}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{DPTree::predict
+\backslash
+_tree}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+Function (
+\backslash
+Comment{
+\backslash
+var{X} size}) {predict
+\backslash
+_tree(X)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+For {row 
+\backslash
+KwInn X} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+var{predictions.append(
+\backslash
+emph{
+\backslash
+_predict(row, this
+\backslash
+ensuremath{
+\backslash
+rightarrow}root
+\backslash
+_node)})}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+Return 
+\backslash
+var{predictions}
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+boxi{red}{13}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+Function (
+\backslash
+Comment{must not leak whether a sample row goes left/right}) {
+\backslash
+_predict(row, node)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+If {node.is
+\backslash
+_leaf} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+Return 
+\backslash
+var{node.prediction}
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+eIf {node.split
+\backslash
+_attribute 
+\backslash
+KwInn params.cat
+\backslash
+_idx} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+tcp{categorical feature}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+If {row[split
+\backslash
+_attribute] == node.split
+\backslash
+_value} {
+\end_layout
+
+\begin_layout Plain Layout
+
+				
+\backslash
+Return 
+\backslash
+var{
+\backslash
+emph{
+\backslash
+_predict(row, node.left
+\backslash
+_child)}}
+\end_layout
+
+\begin_layout Plain Layout
+
+			}
+\end_layout
+
+\begin_layout Plain Layout
+
+		} {
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+tcp{numerical feature}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+If {row[split
+\backslash
+_attribute] < node.split
+\backslash
+_value} {
+\end_layout
+
+\begin_layout Plain Layout
+
+				
+\backslash
+Return 
+\backslash
+var{
+\backslash
+emph{
+\backslash
+_predict(row, node.left
+\backslash
+_child)}}
+\end_layout
+
+\begin_layout Plain Layout
+
+			}
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+Return 
+\backslash
+var{
+\backslash
+emph{
+\backslash
+_predict(row, node.right
+\backslash
+_child)}}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+
+\family typewriter
+add_laplacian_noise
+\end_layout
+
+\begin_layout Paragraph
+Caller/call graph
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/loretanr/ma/code/hardening/visualisation/graphs/add_laplacian_noise/class_d_p_tree_a468d249a3e55f1527e50daf13e550c79_icgraph.svg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithm}
+\backslash
+setstretch{0.9}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+caption{DPTree::add
+\backslash
+_laplacian
+\backslash
+_noise}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+Function {add
+\backslash
+_laplacian
+\backslash
+_noise(laplace
+\backslash
+_scale)}{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+var{lap} = 
+\backslash
+texttt{new LaplaceDistribution(laplace
+\backslash
+_scale)}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+tcp{add noise from laplace distribution to leaves} 
+\backslash
+boxit{yellow}{2}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+For (
+\backslash
+Comment{number of leaves}) {leaf 
+\backslash
+KwInn this.leaves} {
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{noise = lap.return
+\backslash
+_a
+\backslash
+_random
+\backslash
+_variable()}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+var{leaf.prediction += noise}$
+\backslash
+;
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithm}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -4098,6 +4645,20 @@ class DPEnsemble
 \begin_layout Standard
 TODO can I get around doing it for DPEnsemble? because it should be largely
  data independent.
+\end_layout
+
+\begin_layout Itemize
+I think it would be consequent to hide the GDF stuff as well, since it gradients
+ kinda depend on data.
+ However, possible that it is also 
+\begin_inset Quotes eld
+\end_inset
+
+unnecessary
+\begin_inset Quotes erd
+\end_inset
+
+ and already assumed leaking in the proof.
 \end_layout
 
 \begin_layout Subsection

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['predict',['predict',['../class_d_p_ensemble.html#a2971bb16cab5ab57322993048ea3a729',1,'DPEnsemble::predict()'],['../class_d_p_tree.html#a39f0f669f0e72d17e6177e2a7d6d7abd',1,'DPTree::predict()']]]
+  ['predict_5fensemble',['predict_ensemble',['../class_d_p_ensemble.html#a4c4302580bdbeaa4ca2c2091cad018c5',1,'DPEnsemble']]],
+  ['predict_5ftree',['predict_tree',['../class_d_p_tree.html#a1e28d69924f6d57ea7e57ad8ee138f42',1,'DPTree']]]
 ];

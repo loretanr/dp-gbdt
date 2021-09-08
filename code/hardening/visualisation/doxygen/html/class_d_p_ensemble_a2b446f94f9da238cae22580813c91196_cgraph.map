@@ -1,3 +1,5 @@
 <map id="DPEnsemble::update_gradients" name="DPEnsemble::update_gradients">
-<area shape="rect" id="node2" href="$class_d_p_ensemble.html#a2971bb16cab5ab57322993048ea3a729" title="DPEnsemble::predict" alt="" coords="200,13,347,39"/>
+<area shape="rect" id="node2" href="$class_d_p_ensemble.html#a4c4302580bdbeaa4ca2c2091cad018c5" title="DPEnsemble::predict\l_ensemble" alt="" coords="200,5,347,47"/>
+<area shape="rect" id="node3" href="$class_d_p_tree.html#a1e28d69924f6d57ea7e57ad8ee138f42" title="DPTree::predict_tree" alt="" coords="395,13,537,39"/>
+<area shape="rect" id="node4" href="$class_d_p_tree.html#ad8ad2f100c65b9961bd6b2c4af46636c" title="DPTree::_predict" alt="" coords="585,13,707,39"/>
 </map>

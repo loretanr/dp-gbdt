@@ -365,7 +365,8 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &candidates)
 }
 
 
-void DPTree::add_laplacian_noise(double laplace_scale)
+void DPTree::
+add_laplacian_noise(double laplace_scale)
 {
     if(VERIFICATION_MODE){
         int num_real_leaves = 0;

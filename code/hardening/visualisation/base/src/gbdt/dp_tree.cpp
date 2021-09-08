@@ -26,7 +26,7 @@ void DPTree::fit()
     vector<int> live_samples(dataset->length);
     std::iota(std::begin(live_samples), std::end(live_samples), 0);
 
-    this->root_node = make_tree_DFS(0, live_samples);
+    this->root_node = make_tree_dfs(0, live_samples);
 
     if(params->use_dp) {
 
@@ -47,7 +47,7 @@ void DPTree::fit()
 
 
 // Recursively build tree, DFS approach, first instance returns root node
-TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
+TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples)
 {
     // max depth reached or not enough samples -> leaf node
     if ( (current_depth == params->max_depth) or 
@@ -75,7 +75,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     TreeNode *node = find_best_split(X_live, gradients_live, current_depth);
 
     // no split found
-    if (node->is_leaf()) {
+    if (node->is_leaf) {
         return node;
     }
 
@@ -93,8 +93,8 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
         }
     }
 
-    node->left = make_tree_DFS(current_depth + 1, left_live_samples);
-    node->right = make_tree_DFS(current_depth + 1, right_live_samples);
+    node->left = make_tree_dfs(current_depth + 1, left_live_samples);
+    node->right = make_tree_dfs(current_depth + 1, right_live_samples);
 
     return node;
 }
@@ -118,7 +118,7 @@ TreeNode *DPTree::make_leaf_node(int current_depth, vector<int> &live_samples)
 }
 
 
-vector<double> DPTree::predict(VVD &X)
+vector<double> DPTree::predict_tree(VVD &X)
 {
     vector<double> predictions;
     // iterate over all samples
@@ -134,7 +134,7 @@ vector<double> DPTree::predict(VVD &X)
 // recursively walk through decision tree
 double DPTree::_predict(vector<double> *row, TreeNode *node)
 {
-    if(node->is_leaf()){
+    if(node->is_leaf){
         return node->prediction;
     }
     double row_val = (*row)[node->split_attr];
@@ -335,7 +335,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
 
     // add noise from laplace distribution to leaves
     for (auto &leaf : leaves) {
-        double noise = lap.return_a_random_variable(laplace_scale);
+        double noise = 42;
         leaf->prediction += noise;
     }
 }
@@ -344,7 +344,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
 // free allocated ressources
 void DPTree::delete_tree(TreeNode *node)
 {
-    if (not node->is_leaf()) {
+    if (not node->is_leaf) {
         delete_tree(node->left);
         delete_tree(node->right);
     }

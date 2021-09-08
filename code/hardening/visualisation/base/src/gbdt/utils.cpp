@@ -6,7 +6,6 @@
 
 /** Global Variables */
 size_t cv_fold_index;
-std::once_flag flag1;
 
 
 /** Methods */

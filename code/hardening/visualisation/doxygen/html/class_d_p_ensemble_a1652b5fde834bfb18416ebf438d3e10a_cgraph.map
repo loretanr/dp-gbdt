@@ -1,16 +1,16 @@
 <map id="DPEnsemble::train" name="DPEnsemble::train">
-<area shape="rect" id="node2" href="$class_d_p_ensemble.html#a2b446f94f9da238cae22580813c91196" title="DPEnsemble::update\l_gradients" alt="" coords="190,35,337,77"/>
-<area shape="rect" id="node4" href="$struct_data_set.html#afa2b0dcbd62ba4bf49ea37a1dcefeb83" title="DataSet::get_subset" alt="" coords="192,101,335,128"/>
-<area shape="rect" id="node5" href="$class_d_p_tree.html#a82b9507f4f5d056b98f40871b304f943" title="DPTree::fit" alt="" coords="220,152,307,179"/>
-<area shape="rect" id="node15" href="$struct_data_set.html#a30a01ecb39d3bfc9eb5e5923ed6f5d43" title="DataSet::remove_rows" alt="" coords="185,203,341,229"/>
-<area shape="rect" id="node3" href="$class_d_p_ensemble.html#a2971bb16cab5ab57322993048ea3a729" title="DPEnsemble::predict" alt="" coords="401,43,548,69"/>
-<area shape="rect" id="node6" href="$class_d_p_tree.html#a07314c44bb7b7ca37c735b70de3ccb9e" title="DPTree::make_tree_DFS" alt="" coords="389,123,560,149"/>
-<area shape="rect" id="node13" href="$class_d_p_tree.html#a468d249a3e55f1527e50daf13e550c79" title="DPTree::add_laplacian\l_noise" alt="" coords="397,199,552,241"/>
-<area shape="rect" id="node7" href="$class_d_p_tree.html#a3a716a075edfae470e0fe7511634e922" title="DPTree::make_leaf_node" alt="" coords="609,17,779,44"/>
-<area shape="rect" id="node8" href="$class_d_p_tree.html#ad7f8755be37ad10cf104fba2076dce5e" title="DPTree::find_best_split" alt="" coords="615,68,773,95"/>
-<area shape="rect" id="node10" href="$class_d_p_tree.html#af16f3e0373e606fe42b2104890b2d036" title="DPTree::samples_left\l_right_partition" alt="" coords="1032,57,1181,98"/>
-<area shape="rect" id="node12" href="$class_tree_node.html#ae671fa006ebb36f632b46b5aa1ec2899" title="TreeNode::is_leaf" alt="" coords="631,173,757,200"/>
-<area shape="rect" id="node9" href="$class_d_p_tree.html#ab9426a6ac2e5122e29ecbb6e9c4cd050" title="DPTree::compute_gain" alt="" coords="828,5,984,32"/>
-<area shape="rect" id="node11" href="$class_d_p_tree.html#a7ce368c3888736d660dcf09587df4512" title="DPTree::exponential\l_mechanism" alt="" coords="835,57,977,98"/>
-<area shape="rect" id="node14" href="$class_laplace.html#a357965a9024cbdb3866973b5ef22500c" title="Laplace::return_a_random\l_variable" alt="" coords="608,225,780,266"/>
+<area shape="rect" id="node2" href="$class_d_p_ensemble.html#a2b446f94f9da238cae22580813c91196" title="DPEnsemble::update\l_gradients" alt="" coords="190,5,337,47"/>
+<area shape="rect" id="node6" href="$struct_data_set.html#afa2b0dcbd62ba4bf49ea37a1dcefeb83" title="DataSet::get_subset" alt="" coords="192,71,335,98"/>
+<area shape="rect" id="node7" href="$class_d_p_tree.html#a82b9507f4f5d056b98f40871b304f943" title="DPTree::fit" alt="" coords="220,122,307,149"/>
+<area shape="rect" id="node15" href="$struct_data_set.html#a30a01ecb39d3bfc9eb5e5923ed6f5d43" title="DataSet::remove_rows" alt="" coords="185,173,341,199"/>
+<area shape="rect" id="node3" href="$class_d_p_ensemble.html#a4c4302580bdbeaa4ca2c2091cad018c5" title="DPEnsemble::predict\l_ensemble" alt="" coords="397,5,543,47"/>
+<area shape="rect" id="node4" href="$class_d_p_tree.html#a1e28d69924f6d57ea7e57ad8ee138f42" title="DPTree::predict_tree" alt="" coords="613,13,755,39"/>
+<area shape="rect" id="node5" href="$class_d_p_tree.html#ad8ad2f100c65b9961bd6b2c4af46636c" title="DPTree::_predict" alt="" coords="835,13,956,39"/>
+<area shape="rect" id="node8" href="$class_d_p_tree.html#a54cea43a3929249de4be25f607a16339" title="DPTree::make_tree_dfs" alt="" coords="389,122,551,149"/>
+<area shape="rect" id="node14" href="$class_d_p_tree.html#a468d249a3e55f1527e50daf13e550c79" title="DPTree::add_laplacian\l_noise" alt="" coords="393,173,547,215"/>
+<area shape="rect" id="node9" href="$class_d_p_tree.html#a3a716a075edfae470e0fe7511634e922" title="DPTree::make_leaf_node" alt="" coords="599,71,769,98"/>
+<area shape="rect" id="node10" href="$class_d_p_tree.html#ad7f8755be37ad10cf104fba2076dce5e" title="DPTree::find_best_split" alt="" coords="605,122,763,149"/>
+<area shape="rect" id="node12" href="$class_d_p_tree.html#af16f3e0373e606fe42b2104890b2d036" title="DPTree::samples_left\l_right_partition" alt="" coords="1021,115,1171,156"/>
+<area shape="rect" id="node11" href="$class_d_p_tree.html#ab9426a6ac2e5122e29ecbb6e9c4cd050" title="DPTree::compute_gain" alt="" coords="817,63,973,90"/>
+<area shape="rect" id="node13" href="$class_d_p_tree.html#a7ce368c3888736d660dcf09587df4512" title="DPTree::exponential\l_mechanism" alt="" coords="825,115,966,156"/>
 </map>

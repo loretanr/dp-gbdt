@@ -1,6 +1,0 @@
-<map id="DPEnsemble" name="DPEnsemble">
-<area shape="rect" id="node1" title=" " alt="" coords="50,184,154,211"/>
-<area shape="rect" id="node2" href="$struct_model_params.html" title=" " alt="" coords="5,95,116,121"/>
-<area shape="rect" id="node3" href="$struct_data_set.html" title=" " alt="" coords="141,95,215,121"/>
-<area shape="rect" id="node4" href="$struct_scaler.html" title=" " alt="" coords="147,5,209,32"/>
-</map>

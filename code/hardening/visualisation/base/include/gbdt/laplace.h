@@ -21,6 +21,7 @@ public:
     Laplace(int seed): generator(seed){};
     Laplace(double scale, int seed): scale(scale), generator(seed), distribution(1.0/scale){};
 
+    /// @private
     double return_a_random_variable()
     {
     double e1 = distribution(generator);
@@ -28,6 +29,7 @@ public:
     return e1-e2;
     }
 
+    /// @private
     double return_a_random_variable(double scale)
     {
     std::exponential_distribution<double> distribution1(1.0/scale);

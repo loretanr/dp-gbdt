@@ -9,15 +9,15 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 35)">
 <title>DPTree::compute_gain</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-35 269,-35 269,4 -4,4"/>
-<!-- Node12 -->
+<!-- Node14 -->
 <g id="node1" class="node">
-<title>Node12</title>
+<title>Node14</title>
 <polygon fill="#bfbfbf" stroke="#000000" points="0,-6 0,-25 117,-25 117,-6 0,-6"/>
 <text text-anchor="middle" x="58.5" y="-13" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">DPTree::compute_gain</text>
 </g>
-<!-- Node13 -->
+<!-- Node15 -->
 <g id="node2" class="node">
-<title>Node13</title>
+<title>Node15</title>
 <g id="a_node2"><a xlink:href="class_d_p_tree.html#af16f3e0373e606fe42b2104890b2d036" target="_top" xlink:title="DPTree::samples_left\l_right_partition">
 <polygon fill="#ffffff" stroke="#000000" points="153,-.5 153,-30.5 265,-30.5 265,-.5 153,-.5"/>
 <text text-anchor="start" x="161" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="#000000">DPTree::samples_left</text>
@@ -25,9 +25,9 @@
 </a>
 </g>
 </g>
-<!-- Node12&#45;&gt;Node13 -->
+<!-- Node14&#45;&gt;Node15 -->
 <g id="edge1" class="edge">
-<title>Node12&#45;&gt;Node13</title>
+<title>Node14&#45;&gt;Node15</title>
 <path fill="none" stroke="#191970" d="M117.1182,-15.5C125.4503,-15.5 134.0689,-15.5 142.5369,-15.5"/>
 <polygon fill="#191970" stroke="#191970" points="142.7621,-19.0001 152.7621,-15.5 142.762,-12.0001 142.7621,-19.0001"/>
 </g>

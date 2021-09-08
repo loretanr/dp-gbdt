@@ -149,22 +149,19 @@ void DPEnsemble::train(DataSet *dataset)
 
 
 // Predict values from the ensemble of gradient boosted trees
-vector<double>  DPEnsemble::predict(VVD &X)
+vector<double>  DPEnsemble::predict_ensemble(VVD &X)
 {
-    vector<double> predictions(X.size(),0);
-    for (auto tree : trees) {
-        vector<double> pred = tree.predict(X);
-        
-        std::transform(pred.begin(), pred.end(), 
-            predictions.begin(), predictions.begin(), std::plus<double>());
-    }
 
+    DPTree t = trees[0];
+    vector<double> pred = t.predict_tree(X);
+        
+  
     double innit_score = this->init_score;
     double learning_rate = params->learning_rate;
-    std::transform(predictions.begin(), predictions.end(), predictions.begin(), 
+    std::transform(pred.begin(), pred.end(), pred.begin(), 
             [learning_rate, innit_score](double &c){return c*learning_rate + innit_score;});
 
-    return predictions;
+    return pred;
 }
 
 
@@ -176,7 +173,7 @@ void DPEnsemble::update_gradients(vector<double> &gradients, int tree_index)
         gradients = params->task->compute_gradients(dataset->y, init_scores);
     } else { 
         // update gradients
-        vector<double> y_pred = predict(dataset->X);
+        vector<double> y_pred = predict_ensemble(dataset->X);
         gradients = (params->task)->compute_gradients(dataset->y, y_pred);
     }
 }

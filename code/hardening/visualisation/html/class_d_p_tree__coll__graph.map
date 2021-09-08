@@ -1,8 +1,0 @@
-<map id="DPTree" name="DPTree">
-<area shape="rect" id="node1" title=" " alt="" coords="246,187,313,213"/>
-<area shape="rect" id="node2" href="$struct_tree_params.html" title=" " alt="" coords="5,96,103,123"/>
-<area shape="rect" id="node3" href="$class_tree_node.html" title=" " alt="" coords="127,96,210,123"/>
-<area shape="rect" id="node4" href="$struct_model_params.html" title=" " alt="" coords="293,96,404,123"/>
-<area shape="rect" id="node5" href="$struct_data_set.html" title=" " alt="" coords="429,96,503,123"/>
-<area shape="rect" id="node6" href="$struct_scaler.html" title=" " alt="" coords="435,5,497,32"/>
-</map>

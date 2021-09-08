@@ -1,6 +1,6 @@
 <map id="DPTree::find_best_split" name="DPTree::find_best_split">
-<area shape="rect" id="node2" href="$class_d_p_tree.html#a07314c44bb7b7ca37c735b70de3ccb9e" title="DPTree::make_tree_DFS" alt="" coords="212,5,383,32"/>
-<area shape="rect" id="node3" href="$class_d_p_tree.html#a82b9507f4f5d056b98f40871b304f943" title="DPTree::fit" alt="" coords="431,5,517,32"/>
-<area shape="rect" id="node4" href="$class_d_p_ensemble.html#a1652b5fde834bfb18416ebf438d3e10a" title="DPEnsemble::train" alt="" coords="565,5,697,32"/>
-<area shape="rect" id="node5" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="745,5,796,32"/>
+<area shape="rect" id="node2" href="$class_d_p_tree.html#a54cea43a3929249de4be25f607a16339" title="DPTree::make_tree_dfs" alt="" coords="212,5,373,32"/>
+<area shape="rect" id="node3" href="$class_d_p_tree.html#a82b9507f4f5d056b98f40871b304f943" title="DPTree::fit" alt="" coords="421,5,508,32"/>
+<area shape="rect" id="node4" href="$class_d_p_ensemble.html#a1652b5fde834bfb18416ebf438d3e10a" title="DPEnsemble::train" alt="" coords="556,5,688,32"/>
+<area shape="rect" id="node5" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="736,5,787,32"/>
 </map>

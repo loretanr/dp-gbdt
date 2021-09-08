@@ -49,7 +49,7 @@ int main(int argc, char** argv)
         ensemble.train(&split->train);
         
         // predict with the test set
-        std::vector<double> y_pred = ensemble.predict(split->test.X);
+        std::vector<double> y_pred = ensemble.predict_ensemble(split->test.X);
 
         if(params.scale_y) {
             inverse_scale(params, split->train.scaler, y_pred);

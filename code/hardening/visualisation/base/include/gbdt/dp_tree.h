@@ -31,7 +31,7 @@ private:
     std::vector<TreeNode *> leaves;
 
     // methods
-    TreeNode *make_tree_DFS(int current_depth, std::vector<int> live_samples);
+    TreeNode *make_tree_dfs(int current_depth, std::vector<int> live_samples);
     TreeNode *make_leaf_node(int current_depth, std::vector<int> &live_samples);
     double _predict(std::vector<double> *row, TreeNode *node);
     TreeNode *find_best_split(VVD &X_live, std::vector<double> &gradients_live, int current_depth);
@@ -50,7 +50,7 @@ public:
     TreeNode *root_node;
 
     // methods
-    std::vector<double> predict(VVD &X);
+    std::vector<double> predict_tree(VVD &X);
     void fit();
     void delete_tree(TreeNode *node);
 };

@@ -1,6 +1,0 @@
-<map id="include/gbdt/dp_tree.h" name="include/gbdt/dp_tree.h">
-<area shape="rect" id="node2" href="$dp__ensemble_8h.html" title="include/gbdt/dp_ensemble.h" alt="" coords="81,80,265,107"/>
-<area shape="rect" id="node5" href="$dp__tree_8cpp.html" title="src/gbdt/dp_tree.cpp" alt="" coords="289,80,430,107"/>
-<area shape="rect" id="node3" href="$dp__ensemble_8cpp.html" title="src/gbdt/dp_ensemble.cpp" alt="" coords="5,155,180,181"/>
-<area shape="rect" id="node4" href="$main_8cpp.html" title="src/main.cpp" alt="" coords="204,155,301,181"/>
-</map>
