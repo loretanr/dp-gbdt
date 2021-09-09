@@ -497,7 +497,7 @@ remove duplicates. (loop over X_unique)
       ▪ ein datenpunkt kann exakt 2 bäume beeinflussen, und wir rechnen momentan nur mit einem
       ▪ </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="08_26" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629982682.21" ts_lastsave="1631027929.65" unique_id="35">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="08_26" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629982682.21" ts_lastsave="1631112480.52" unique_id="35">
 			<rich_text>Meeting with Kari
 
 Kari will get back to me with whether &quot;arithmetic leakage&quot; is a thing. on hold for now
@@ -516,16 +516,18 @@ make recursion in a way that it always goes down
 			<rich_text>
 
 </rich_text>
-			<rich_text foreground="#ffff00000000">write Kari on Tuesday</rich_text>
-			<rich_text>, so he can schedule a meeting with Mo and Es to discuss the 3 hardened Methods!
+			<rich_text foreground="#9090eeee9090">write Kari on Tuesday, so he can schedule a meeting with Mo and Es to discuss the 3 hardened Methods!</rich_text>
+			<rich_text>
 
-create a lyx of the “known flaws” that Moritz an I talked about!
+</rich_text>
+			<rich_text foreground="#9090eeee9090">create a lyx of the “known flaws” that Moritz and I talked about!</rich_text>
+			<rich_text>
 
 </rich_text>
 			<rich_text foreground="#9090eeee9090">hilight the leaks in the pseudocode
     ask stackoverflow</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631110155.61" unique_id="36">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631195306.08" unique_id="36">
 			<rich_text scale="h2">Discussion Points</rich_text>
 			<rich_text>
 
@@ -549,7 +551,7 @@ create a lyx of the “known flaws” that Moritz an I talked about!
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">arithmetic OP's cycles, either  TODO or note as weakness</rich_text>
 			<rich_text>
-      •   can be solved with masking
+      •   can be solved with masking (/blinding)
       •   C++ has operator overloading, so should be easy to add.
    
 ------------------------
@@ -1567,7 +1569,7 @@ expected results (randomness off):
 
 • seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1629730516.96" unique_id="21">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1631187385.62" unique_id="21">
 		<rich_text>Suddenly python problem (after apt update/upgrade I believe).
       </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">File &quot;/home/loretanr/.local/lib/python3.7/site-packages/matplotlib/__init__.py&quot;, line 107, in &lt;module&gt;
@@ -1632,7 +1634,11 @@ then could see such errors in the debug console
 
 
 ----------------------------------------------------------------
-global macro in utils.h had to be on top of the #include lists in every file. really stupid. maybe a global &amp; extern is better suited</rich_text>
+global macro in utils.h had to be on top of the #include lists in every file. really stupid. maybe a global &amp; extern is better suited
+
+
+--------------------------------------------------------------------
+g++ -S does only give the .s file, it does not update a.out</rich_text>
 	</node>
 	<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="Moritz's blutbad" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1628002202.81" ts_lastsave="1628669829.76" unique_id="27">
 		<rich_text foreground="#ffffa5a50000">Notice, all these plots have scaling turned off, so that's why no-2nd-split impact is compensated
@@ -1830,7 +1836,7 @@ for tree in n_trees:
    5) delete these rows from X_remain</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1631112312.86" unique_id="25">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1631173752.32" unique_id="25">
 		<rich_text scale="h2">preliminary TODOs</rich_text>
 		<rich_text>
 
@@ -1923,6 +1929,66 @@ for tree in n_trees:
 			<rich_text>
 • fault injection attack, (check notes for details)
 • hints on arithmetic overflow checked op's</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="cmov" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631173752.32" ts_lastsave="1631197936.7" unique_id="37">
+			<rich_text>need to look at assembly.
+    This guy also says that llvm introduces secret dependent branches as optimizations into code
+      •   </rich_text>
+			<rich_text link="webs https://dsprenkels.com/cmov-conversion.html">https://dsprenkels.com/cmov-conversion.html</rich_text>
+			<rich_text>
+      •   </rich_text>
+			<rich_text link="webs https://godbolt.org/">https://godbolt.org/</rich_text>
+			<rich_text> for output comparison of different compilers
+        
+        
+        
+n1 constant time compilation paper
+    </rich_text>
+			<rich_text link="webs https://hal.archives-ouvertes.fr/hal-01959560/document">https://hal.archives-ouvertes.fr/hal-01959560/document</rich_text>
+			<rich_text>
+   •  talks about      </rich_text>
+			<rich_text foreground="#ffffa5a50000">a   =   cond * b  + !cond * c</rich_text>
+			<rich_text>
+      ◇ clang sometimes optimizes this into a branch
+      ◇ also mentions that </rich_text>
+			<rich_text foreground="#ffffa5a50000" underline="single">string equality</rich_text>
+			<rich_text underline="single"> is a problem</rich_text>
+			<rich_text> because it's checked char by char until fail.
+      ◇ also logic chaining like  </rich_text>
+			<rich_text foreground="#ffffa5a50000">a  = b_cond  &amp;&amp;  c_cond</rich_text>
+			<rich_text>
+         ▪ as suspected, c_cond can be optimized away
+         ▪ </rich_text>
+			<rich_text foreground="#9090eeee9090">confirmed in assembly on my laptop</rich_text>
+			<rich_text>
+
+openssl has constant time code that is very similar to what I've been doing
+• </rich_text>
+			<rich_text link="webs https://github.com/openssl/openssl/blob/master/include/internal/constant_time.h">https://github.com/openssl/openssl/blob/master/include/internal/constant_time.h</rich_text>
+			<rich_text>
+
+
+• cmov is used for high-performance constant-time implementations
+   ◇ so not a problem in our case
+   ◇ it does the same as some constant time logic in software
+   ◇ </rich_text>
+			<rich_text link="webs https://lists.riscv.org/g/tech-bitmanip/message/484">https://lists.riscv.org/g/tech-bitmanip/message/484</rich_text>
+			<rich_text>
+
+• cmov operation:
+    can either be implemented through arithmetic operations on registers or
+through various different approaches that all boil down to loading from
+or storing to a secret address. 
+
+
+
+----------------------------------------------------------------------
+• </rich_text>
+			<rich_text foreground="#ffffa5a50000">volatile</rich_text>
+			<rich_text> keyword is a hint to the compiler that a variable might be changed from somewhere outside, so he needs to be careful when optimizing it</rich_text>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="assembly test" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631175841.16" ts_lastsave="1631175841.16" unique_id="38">
+				<rich_text></rich_text>
+			</node>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1629211472.17" unique_id="32">

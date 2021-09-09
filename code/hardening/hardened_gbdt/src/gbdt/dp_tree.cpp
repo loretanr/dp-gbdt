@@ -5,6 +5,7 @@
 #include "dp_tree.h"
 #include "laplace.h"
 #include "logging.h"
+#include "constant_time.h"
 #include "spdlog/spdlog.h"
 
 extern std::ofstream verification_logfile;
@@ -81,7 +82,8 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     // the following statements carry out the assignment in constant time:
     // case (1) or (3) -> use the random values
     // case (2) -> use the real split that was found
-    node->split_attr = fake_continuation * random_feature + !fake_continuation * node->split_attr;
+    // node->split_attr = fake_continuation * random_feature + !fake_continuation * node->split_attr;
+    node->split_attr = constant_time::select(fake_continuation, random_feature, node->split_attr);
     node->split_value = fake_continuation * random_feature_value + !fake_continuation * node->split_value;
 
     if(is_dummy) {
@@ -300,6 +302,7 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VV
 {
     // if the feature is categorical
     bool categorical = false;
+    // TODO i think this was unnecessarily hardened. Because the tree is given to the adversary anyways in the proof.
     for(auto cat_feature : params->cat_idx){
         categorical |= (cat_feature == feature_index);
     }

@@ -19,7 +19,6 @@ double Regression::compute_init_score(std::vector<double> &y)
 
 std::vector<double> Regression::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
     {
-        // TODO negative or positive gradient? what is this?
         std::vector<double> gradients(y.size());
         for (size_t i=0; i<y.size(); i++) {
             gradients[i] = y_pred[i] - y[i];
@@ -49,29 +48,20 @@ double Regression::compute_score(std::vector<double> &y, std::vector<double> &y_
 
 /* ---------- Binary Classification ---------- */
 
-// Uses Binomial Deviance
-// TODO, link between theory (expit/logit) and code
-
 double BinaryClassification::compute_init_score(std::vector<double> &y)
 {
     // count how many samples are in each of the 2 classes
-    std::map<double,double> occurrences;
-    for(auto elem : y) {
-        try {
-            occurrences.at(elem) += 1;
-        } catch (const std::out_of_range& oor) {
-            // new label encountered, create mapping
-            occurrences.insert({elem, 1});
-        }
+    double class1 = y[0];
+    int counter1 = 0, counter2 = 0;
+    for(auto elem : y){
+        bool is_class_1 = elem == class1;
+        counter1 += is_class_1;
+        counter2 += !is_class_1;
     }
-    // just need the smaller value   ????? TODO why
-    std::set<double, std::greater<double>> occs;
-    for(auto &elem : occurrences){
-        occs.insert( (double) elem.second / y.size());
-    }
-    double smaller_value = *occs.rbegin();
-    // "log(x / (1-x)) is the inverse of the sigmoid (expit) function"
-    double prediction = std::log(smaller_value / (1- smaller_value));
+    // just need the smaller value
+    bool cond = (counter1 < counter2);
+    int smaller_one = cond * counter1 + !cond * counter2;
+    double prediction = std::log(smaller_one / (1 - smaller_one));
     return prediction;
 }
 
