@@ -14,7 +14,11 @@ clean:
 	rm -r objs
 	touch run && rm run
 
-objs/%.o: src/%.cpp
+asm:
+	make clean
+	make CFLAGS="-c -std=c++11 -O0 -save-temps=obj"
+
+objs/%.o : src/%.cpp
 	$(COMPILER) $(CFLAGS) $(INC) $< -o $@
-objs/gbdt/%.o: src/gbdt/%.cpp
+objs/gbdt/%.o : src/gbdt/%.cpp
 	$(COMPILER) $(CFLAGS) $(INC) $< -o $@

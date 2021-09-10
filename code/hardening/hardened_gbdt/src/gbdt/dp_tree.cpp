@@ -65,7 +65,7 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     bool not_enough_live_samples = (live_size < params->min_samples_split);
     // "create_leaf_node" marks whether we would be in the base case of a normal recurstion,
     // i.e. whether a leaf should be created.
-    bool create_leaf_node = reached_max_depth + not_enough_live_samples;
+    bool create_leaf_node = constant_time::logical_or(reached_max_depth, not_enough_live_samples);
 
     // find best split
     TreeNode *node = find_best_split(X_transposed, dataset->gradients, live_samples, current_depth, is_dummy, create_leaf_node);
@@ -74,17 +74,16 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     // (2) a legitimate internal node
     // (3) a dummy node (if we already created a legitimate leaf node on this path)
 
-    bool fake_continuation = node->is_leaf or is_dummy;
+    bool fake_continuation = constant_time::logical_or(node->is_leaf, is_dummy);
     // in case (1) and (3) we still need to ensure the continuation of the recursion. For this a random 
     // feature and feature_value are selected.
     int random_feature = std::rand() % dataset->num_x_cols ;
-    int random_feature_value = X_transposed[random_feature][ std::rand() % live_samples.size() ];
+    double random_feature_value = X_transposed[random_feature][ std::rand() % live_samples.size() ];
     // the following statements carry out the assignment in constant time:
     // case (1) or (3) -> use the random values
     // case (2) -> use the real split that was found
-    // node->split_attr = fake_continuation * random_feature + !fake_continuation * node->split_attr;
     node->split_attr = constant_time::select(fake_continuation, random_feature, node->split_attr);
-    node->split_value = fake_continuation * random_feature_value + !fake_continuation * node->split_value;
+    node->split_value = constant_time::select(fake_continuation, random_feature_value, node->split_value);
 
     if(is_dummy) {
         LOG_DEBUG("noise recursion, curr_depth {1}", current_depth);
@@ -107,13 +106,15 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     vector<int> right_live_samples(live_samples.size(),0);
     for (size_t i=0; i<live_samples.size(); i++) {
         left_live_samples[i] = lhs[i] * (live_samples[i] == 1);
-        right_live_samples[i] = rhs[i] * (live_samples[i] == 1);
+        right_live_samples[i] = rhs[i] * (live_samples[i] == 1);        // TODO check comparison for ints/bool, whether also problematic like string
     }
 
     // always recurse until we reach max_depth
     if(current_depth < params->max_depth){
-        node->left = make_tree_dfs(current_depth + 1, left_live_samples, is_dummy || create_leaf_node);
-        node->right = make_tree_dfs(current_depth + 1, right_live_samples, is_dummy || create_leaf_node);
+        node->left = make_tree_dfs(current_depth + 1, left_live_samples, 
+            constant_time::logical_or(is_dummy, create_leaf_node));
+        node->right = make_tree_dfs(current_depth + 1, right_live_samples,
+            constant_time::logical_or(is_dummy, create_leaf_node));
     }
 
     return node;

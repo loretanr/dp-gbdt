@@ -1,6 +1,15 @@
 #include <random>
 
-bool __attribute__((noinline)) logic_chain()
+#define TURN_ON_INLINE false
+
+#if TURN_ON_INLINE
+    #define USE_INLINE __inline__
+#else
+    #define USE_INLINE __attribute__((noinline))
+#endif
+
+
+bool USE_INLINE logic_chain()
 {
     bool bool1 = std::rand() % 2;
     bool bool2 = std::rand() % 2;

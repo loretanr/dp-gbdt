@@ -1781,6 +1781,22 @@ end{algorithm}
 
 \family typewriter
 make_tree_dfs
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+
+\backslash
+hgreen{almost constant
+\backslash
+_timed}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Paragraph

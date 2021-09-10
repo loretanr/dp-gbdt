@@ -527,7 +527,7 @@ make recursion in a way that it always goes down
 			<rich_text foreground="#9090eeee9090">hilight the leaks in the pseudocode
     ask stackoverflow</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631195306.08" unique_id="36">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631271893.19" unique_id="36">
 			<rich_text scale="h2">Discussion Points</rich_text>
 			<rich_text>
 
@@ -553,6 +553,8 @@ make recursion in a way that it always goes down
 			<rich_text>
       •   can be solved with masking (/blinding)
       •   C++ has operator overloading, so should be easy to add.
+          • +, * obviously
+          • need the %, because i'm using it on the random values
    
 ------------------------
     
@@ -1986,8 +1988,19 @@ or storing to a secret address.
 • </rich_text>
 			<rich_text foreground="#ffffa5a50000">volatile</rich_text>
 			<rich_text> keyword is a hint to the compiler that a variable might be changed from somewhere outside, so he needs to be careful when optimizing it</rich_text>
-			<node custom_icon_id="0" foreground="" is_bold="False" name="assembly test" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631175841.16" ts_lastsave="1631175841.16" unique_id="38">
-				<rich_text></rich_text>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="assembly test" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631175841.16" ts_lastsave="1631272506.97" unique_id="38">
+				<rich_text>• the    a = b or c   is indeed a problem
+   ◇ in the small example as well as in my gbdt
+
+• inlining </rich_text>
+				<rich_text underline="single">does not change the assembly result</rich_text>
+				<rich_text>,
+   ◇ however turning it off allows easy finding in assembly file
+
+• leaving away the volatile value_barrier  did not affect select_int resp. select_double, even under -O3. My personal g++ at least did not create a jump or something from it.
+
+•  in general, without more knowledge about the operands the    a = c * b + !c * d    can and will not be optimized by the compiler. 
+   ◇ But since we cannot really guarantee that stuff in our big gbdt project, we should keep it -O0 and in a separate function for clarity.</rich_text>
 			</node>
 		</node>
 	</node>

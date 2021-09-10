@@ -1,40 +1,49 @@
 #ifndef CONSTANT_TIME_H
 #define CONSTANT_TIME_H
 
+
+// note -O0 turns off inlining anyways!
+#define DISABLE_INLINE true
+
+#if not DISABLE_INLINE
+    #define USE_INLINE __inline__
+#else
+    #define USE_INLINE __attribute__((noinline))
+#endif
+
+
 namespace constant_time
 {
-    /*
-    * hint to the compiler that "a" might be changed from somewhere
-    * outside. -> optimization disincentive
-    */
-    static __inline__ bool value_barrier(bool a)
+    // probably unnecessary, but keeping it to be safe
+    template <typename T>
+    static USE_INLINE T value_barrier(T a)
     {
-        volatile int v = a;
+        // volatile -> hint to the compiler that "a" might be changed 
+        //from somewhere outside. -> optimization disincentive
+        volatile T v = a;
         return v;
     }
 
-    static __inline__ bool select(bool mask, int a, int b)
+    template <typename T>
+    static USE_INLINE T select(bool condition, T a, T b)
     {
-        return (bool) (value_barrier(mask) & a) + (value_barrier(!mask) & b);
+        return value_barrier(condition) * value_barrier(a) + value_barrier(!condition) * value_barrier(b);
     }
 
-
-
-    // static __inline__ unsigned int value_barrier(unsigned int a)
+    // static USE_INLINE double select_double(bool mask, double a, double b)
     // {
-    //     volatile unsigned int v = a;
-    //     return v;
+    //     return (value_barrier(mask) * a) + (value_barrier(!mask) * b);
     // }
 
-    // static __inline__ unsigned int select(unsigned int mask, unsigned int a, unsigned int b)
-    // {
-    //     return (value_barrier(mask) & a) | (value_barrier(~mask) & b);
-    // }
 
-    // static __inline__ int select_int(unsigned int mask, int a, int b)
-    // {
-    //     return (int) select(mask, (unsigned)(a), (unsigned)(b));
-    // }
+    /** Logical operators */
+
+    static USE_INLINE bool logical_or(bool a, bool b)
+    {
+        // use bitwise for const time
+        return (value_barrier(a) | value_barrier(b));
+    }
+
 }
 
 #endif /* CONSTANT_TIME_H */
