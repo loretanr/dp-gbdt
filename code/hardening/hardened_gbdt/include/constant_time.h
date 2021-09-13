@@ -27,13 +27,9 @@ namespace constant_time
     template <typename T>
     static USE_INLINE T select(bool condition, T a, T b)
     {
+        // result = cond * a + !cond * b
         return value_barrier(condition) * value_barrier(a) + value_barrier(!condition) * value_barrier(b);
     }
-
-    // static USE_INLINE double select_double(bool mask, double a, double b)
-    // {
-    //     return (value_barrier(mask) * a) + (value_barrier(!mask) * b);
-    // }
 
 
     /** Logical operators */
@@ -42,6 +38,18 @@ namespace constant_time
     {
         // use bitwise for const time
         return (value_barrier(a) | value_barrier(b));
+    }
+
+    static USE_INLINE bool logical_and(bool a, bool b)
+    {
+        // use bitwise for const time
+        return (value_barrier(a) & value_barrier(b));
+    }
+
+    static USE_INLINE bool logical_not(bool a)
+    {
+        // use bitwise for const time
+        return (bool) (value_barrier((unsigned) a) ^ 1u);
     }
 
 }

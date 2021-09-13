@@ -1988,7 +1988,7 @@ or storing to a secret address.
 • </rich_text>
 			<rich_text foreground="#ffffa5a50000">volatile</rich_text>
 			<rich_text> keyword is a hint to the compiler that a variable might be changed from somewhere outside, so he needs to be careful when optimizing it</rich_text>
-			<node custom_icon_id="0" foreground="" is_bold="False" name="assembly test" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631175841.16" ts_lastsave="1631272506.97" unique_id="38">
+			<node custom_icon_id="0" foreground="" is_bold="False" name="assembly test" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631175841.16" ts_lastsave="1631523101.2" unique_id="38">
 				<rich_text>• the    a = b or c   is indeed a problem
    ◇ in the small example as well as in my gbdt
 
@@ -2000,7 +2000,26 @@ or storing to a secret address.
 • leaving away the volatile value_barrier  did not affect select_int resp. select_double, even under -O3. My personal g++ at least did not create a jump or something from it.
 
 •  in general, without more knowledge about the operands the    a = c * b + !c * d    can and will not be optimized by the compiler. 
-   ◇ But since we cannot really guarantee that stuff in our big gbdt project, we should keep it -O0 and in a separate function for clarity.</rich_text>
+   ◇ But since we cannot really guarantee that stuff in our big gbdt project, we should keep it -O0 and in a separate function for clarity.
+
+
+• integer / number comparison is not a problem, it's 1 compare instr and then uses the FLAGS, it's constant time.
+   ◇ default string comparison is a porblem.
+
+• constant_time::select with having one constant argument (like 0.0) should and does not affect the constant timing.
+
+• on my machine the logical not of a bool is compiled to a xor with 1 
+   ◇ which is constant time. however... would be nice to have later as constant_time::
+
+
+
+
+-----------------------------
+
+in theory my operations (constant_time::bla) should hold up optimizations like -O3.
+    and I made them easy to check (just turn off inline).
+    
+However other hardening like looping over entire loops is not so easy to check.</rich_text>
 			</node>
 		</node>
 	</node>

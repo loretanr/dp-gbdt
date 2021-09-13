@@ -1427,7 +1427,23 @@ Methods
 \begin_layout Subsubsection
 
 \family typewriter
-fit
+fit 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\family typewriter
+
+\backslash
+hgreen{constant
+\backslash
+_timed}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Paragraph
@@ -1789,7 +1805,7 @@ status open
 \family typewriter
 
 \backslash
-hgreen{almost constant
+hgreen{constant
 \backslash
 _timed}
 \end_layout

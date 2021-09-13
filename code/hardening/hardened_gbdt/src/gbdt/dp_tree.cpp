@@ -105,8 +105,8 @@ TreeNode *DPTree::make_tree_dfs(int current_depth, vector<int> live_samples, boo
     vector<int> left_live_samples(live_samples.size(),0);
     vector<int> right_live_samples(live_samples.size(),0);
     for (size_t i=0; i<live_samples.size(); i++) {
-        left_live_samples[i] = lhs[i] * (live_samples[i] == 1);
-        right_live_samples[i] = rhs[i] * (live_samples[i] == 1);        // TODO check comparison for ints/bool, whether also problematic like string
+        left_live_samples[i] = lhs[i] * (live_samples[i] == 1);     // number comparisons are constant time
+        right_live_samples[i] = rhs[i] * (live_samples[i] == 1);
     }
 
     // always recurse until we reach max_depth
@@ -158,23 +158,27 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
 {
     bool categorical = false;
     for(auto cat_feature : params->cat_idx){
-        categorical |= (cat_feature == node->split_attr);
+        categorical = constant_time::logical_or(categorical, cat_feature == node->split_attr);
     }
 
-    double row_val = (*row)[node->split_attr];
-
     double next_level_prediction;
+
     // always recurse to max_depth, but not further
     if(node->depth < params->max_depth){
-        // results from taking "wrong turns" will cancel out (they get multiplied by 0)
-        next_level_prediction = categorical * ((row_val == node->split_value) * _predict(row, node->left) + 
-                                                (row_val != node->split_value) * _predict(row, node->right)) + 
-                                !categorical * ((row_val < node->split_value) * _predict(row, node->left) +
-                                                (row_val >= node->split_value) * _predict(row, node->right));
+        double row_val = (*row)[node->split_attr];
+        // to hide the real path a sample row takes, we will go down both paths at every
+        // internal node. This sounds like a lot of overhead, however for our small trees with
+        // depth 6 it's not relevant at all. The bottleneck is testing/finding all splits.
+        // Further we double the overhead another time to hide whether the current node splits
+        // on a categorical/numerical feature. Which is kinda unnecessary, as the proof gives this
+        // to the adversary. however it might allow for a tighter proof later.
+        next_level_prediction = constant_time::select(categorical,
+                constant_time::select((row_val == node->split_value), _predict(row, node->left), _predict(row, node->right)),
+                constant_time::select((row_val < node->split_value), _predict(row, node->left), _predict(row, node->right)) );
     }
 
     // decide whether to take the current node's prediction, or the prediction of its sucessors
-    return (node->is_leaf) * (node->prediction) + !(node->is_leaf) * next_level_prediction;
+    return constant_time::select(node->is_leaf, node->prediction, next_level_prediction);
 }
 
 
@@ -207,11 +211,11 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
             // compute gain
             double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
 
-            bool row_not_live = !live_samples[row];
-            bool no_gain = (gain == -1);
-            // if either the row is not live, or the gain is -1 (aka the split guides all samples to the same child -> useless split)
-            // then the gain of this split is set to 0.
-            gain = gain * !no_gain * !row_not_live;
+            bool row_not_live = constant_time::logical_not(live_samples[row]);
+            bool no_gain = (gain == -1.);
+            // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
+            // same child -> useless split) then the gain of this split is set to 0.
+            gain = constant_time::select(constant_time::logical_or(no_gain, row_not_live), 0.0, gain);
 
             // Gi = epsilon_nleaf * Gi / (2 * delta_G)
             gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
@@ -230,14 +234,14 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
     TreeNode *node = make_leaf_node(current_depth, live_samples);
 
     // if an internal node should be created, change attributes accordingly
-    bool create_internal_node = !((index == -1) + create_leaf_node);
+    bool create_internal_node = constant_time::logical_and(index != -1, constant_time::logical_not(create_leaf_node));
 
-    node->split_attr = create_internal_node * probabilities[index].feature_index + !create_internal_node * node->split_attr;
-    node->split_value = create_internal_node * probabilities[index].split_value + !create_internal_node * node->split_value;
-    node->split_gain = create_internal_node * probabilities[index].gain + !create_internal_node * node->split_gain;
-    node->lhs_size = create_internal_node * probabilities[index].lhs_size + !create_internal_node * node->lhs_size;
-    node->rhs_size = create_internal_node * probabilities[index].rhs_size + !create_internal_node * node->rhs_size;
-    node->is_leaf = !create_internal_node;
+    node->split_attr = constant_time::select(create_internal_node, probabilities[index].feature_index, node->split_attr);
+    node->split_value = constant_time::select(create_internal_node, probabilities[index].split_value, node->split_value);
+    node->split_gain = constant_time::select(create_internal_node, probabilities[index].gain, node->split_gain);
+    node->lhs_size = constant_time::select(create_internal_node, probabilities[index].lhs_size, node->lhs_size);
+    node->rhs_size = constant_time::select(create_internal_node, probabilities[index].rhs_size, node->rhs_size);
+    node->is_leaf = constant_time::logical_not(create_internal_node);
     node->is_dummy = is_dummy;
 
     if(create_leaf_node && !is_dummy) {
@@ -272,7 +276,7 @@ double DPTree::compute_gain(VVD &X_transposed, vector<double> &gradients_live, v
     lhs_size = _lhs_size;
 
     // if all samples go on the same side it's useless to split on this value
-    bool useless_split = (_lhs_size == 0) + (_rhs_size == 0);
+    bool useless_split = constant_time::logical_or(_lhs_size == 0, _rhs_size == 0);
 
     double lhs_gain = 0, rhs_gain = 0;
     for (size_t index=0; index<live_samples.size(); index++) {
@@ -284,7 +288,7 @@ double DPTree::compute_gain(VVD &X_transposed, vector<double> &gradients_live, v
 
     double total_gain = lhs_gain + rhs_gain;
     // total_gain = max(total_gain, 0.0);
-    total_gain = (total_gain < 0.0) * 0.0 + !(total_gain < 0.0) * total_gain;
+    total_gain = constant_time::select(total_gain < 0.0, 0.0, total_gain);
 
     if(VERIFICATION_MODE){
         // round to 10 decimals to avoid numeric issues in verification
@@ -292,7 +296,7 @@ double DPTree::compute_gain(VVD &X_transposed, vector<double> &gradients_live, v
     }
 
     // useless split -> return (-1) instead
-    total_gain = useless_split * (-1) + !useless_split * total_gain;
+    total_gain = constant_time::select(useless_split, -1., total_gain);
 
     return total_gain;
 }
@@ -305,18 +309,17 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VV
     bool categorical = false;
     // TODO i think this was unnecessarily hardened. Because the tree is given to the adversary anyways in the proof.
     for(auto cat_feature : params->cat_idx){
-        categorical |= (cat_feature == feature_index);
+        categorical = constant_time::logical_or(categorical, cat_feature == feature_index);
     }
 
     // the resulting partition is stored in "lhs/rhs". 
     // - lhs[row]=1 means the row is live and goes to the left child on this split index/value
     // - rhs[row]=1 means the row is live and goes to the right child on this split index/value
     for(size_t row=0; row<live_samples.size(); row++){
-        bool row_is_live = live_samples[row];
-        lhs[row] = row_is_live * ((categorical * (samples[feature_index][row] == feature_value)) 
-                                    + (!categorical * (samples[feature_index][row] < feature_value)));
-        rhs[row] = row_is_live * ((categorical * (samples[feature_index][row] != feature_value))
-                                    + (!categorical * (samples[feature_index][row] >= feature_value)));
+        lhs[row] = constant_time::select(live_samples[row],
+            (int) constant_time::select(categorical, samples[feature_index][row] == feature_value, samples[feature_index][row] < feature_value), 0);
+        rhs[row] = constant_time::select(live_samples[row],
+            (int) constant_time::select(categorical, samples[feature_index][row] != feature_value, samples[feature_index][row] >= feature_value), 0);
     }
 }
 
@@ -342,7 +345,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &candidates)
     double lse = log_sum_exp(gains);
     for (auto prob : candidates) {
         // let probability be 0 when gain is <= 0
-        double probability = !(prob.gain <= 0) * exp(prob.gain - lse);
+        double probability = constant_time::select(prob.gain <= 0, 0.0, exp(prob.gain - lse));
         probabilities.push_back(probability);   
     }
 
@@ -362,10 +365,10 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &candidates)
     size_t result_index;
     bool found = false;
     for (size_t index=0; index<partials.size(); index++) {
-        result_index = !found * index + found * result_index;
+        result_index = constant_time::select(found, result_index, index);
         found = (partials[index] >= rand01);
     }
-    return no_split_available * (-1) + !no_split_available * result_index;
+    return constant_time::select(no_split_available, -1, (int) result_index);
 }
 
 
