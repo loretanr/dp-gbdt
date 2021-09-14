@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     parameters.push_back(current_params);
 
     // Choose your dataset
-    DataSet *dataset = Parser::get_abalone(parameters, 5000, false);
+    DataSet *dataset = Parser::get_abalone(parameters, 300, false);
 
     std::cout << dataset->name << std::endl;
 

@@ -199,7 +199,7 @@ DataSet DataSet::get_subset(std::vector<int> &indices)
 {
     DataSet dataset;
     for (int i=0; i<length; i++) {
-        if (std::find(indices.begin(), indices.end(), i) != indices.end()) {
+        if (indices[i]) {
             dataset.X.push_back(X[i]);
             dataset.y.push_back(y[i]);
             dataset.gradients.push_back(gradients[i]);
@@ -216,7 +216,7 @@ DataSet DataSet::remove_rows(std::vector<int> &indices)
 {
     DataSet dataset;
     for (int i=0; i<length; i++) {
-        if (std::find(indices.begin(), indices.end(), i) == indices.end()) {
+        if (!indices[i]) {
             dataset.X.push_back(X[i]);
             dataset.y.push_back(y[i]);
             dataset.gradients.push_back(gradients[i]);

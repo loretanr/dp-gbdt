@@ -85,8 +85,8 @@ std::vector<double> BinaryClassification::compute_gradients(std::vector<double> 
 double BinaryClassification::compute_score(std::vector<double> &y, std::vector<double> &y_pred)
 {
     // classification task -> transform continuous predictions back to labels
-    std::transform(y_pred.begin(), y_pred.end(), // expit
-        y_pred.begin(), [](double &c){ return 1 / (1 + std::exp(-c)); });
+    std::transform(y_pred.begin(), y_pred.end(),
+        y_pred.begin(), [](double &c){ return 1 / (1 + std::exp(-c)); });   // expit
     for(auto &elem : y_pred){
         elem = (elem < 1-elem) ? 0 : 1;
     }
