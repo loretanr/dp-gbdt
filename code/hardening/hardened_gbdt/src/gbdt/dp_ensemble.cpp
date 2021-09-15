@@ -55,8 +55,6 @@ void DPEnsemble::train(DataSet *dataset)
         // update/init gradients
         update_gradients(dataset->gradients, tree_index);
 
-        /* build a dp-tree */
-
         // sensitivity for internal nodes
         tree_params.delta_g = 3 * pow(params->l2_threshold, 2);
 
@@ -84,97 +82,96 @@ void DPEnsemble::train(DataSet *dataset)
             }
         }
 
+        // this vector indicates which sample rows will be used for the next tree
         vector<int> tree_indices(dataset->length);
 
         // gradient-based data filtering
         if(is_true(params->gradient_filtering)) {
+
+            // divide samples into rejected/remaining gradients
             std::vector<int> reject_indices(dataset->length,0), remaining_indices(dataset->length,0);
             for (int i=0; i<dataset->length; i++) {
                 double curr_grad = dataset->gradients[i];
-                bool reject = curr_grad < -params->l2_threshold or curr_grad > params->l2_threshold; // TODO
-                if (reject) {
-                    reject_indices[i] = 1;          // TODO
-                } else {
-                    remaining_indices[i] = 1;
-                }
+                bool reject = constant_time::logical_or(curr_grad < -params->l2_threshold, curr_grad > params->l2_threshold);
+                reject_indices[i] = reject;
+                remaining_indices[i] = constant_time::logical_not(reject);
             }
+
             int remaining_count = std::count(remaining_indices.begin(), remaining_indices.end(), 1);
-            int reject_count = std::count(reject_indices.begin(), reject_indices.end(), 1);
             LOG_INFO("GDF: {1} of {2} rows fulfill gradient criterion",
                 remaining_count, dataset->length);
 
-            if (number_of_rows <= remaining_count) {                            // TODO need to hide this
-                // we have enough samples that were not filtered out
+            /** first use as many "remaining" samples as possible */
 
-                // generate random index permutation
-                std::vector<int> shuffler(remaining_indices.size());
-                std::iota(std::begin(shuffler), std::end(shuffler), 1); // indices start at 1
-                std::random_shuffle(shuffler.begin(), shuffler.end());
-                // cancel out rejected ones
-                for(auto &elem : shuffler){
-                    elem *= remaining_indices[elem-1];
-                }
-                std::transform(shuffler.begin(), shuffler.end(), shuffler.begin(), [](int &c){return c-1;}); // make it 0-indexed
-
-                // construct tree_indices
-                int taken_rows = 0;
-                for(size_t i=0; i<shuffler.size(); i++){
-                    bool use_it = constant_time::logical_and(shuffler[i] != -1, taken_rows < number_of_rows);
-                    taken_rows += (int) use_it;
-                    // touch the entire tree_samples vector, to hide which one is added
-                    for(int j=0; j < (int) tree_indices.size(); j++){
-                        bool right_element = constant_time::logical_and(j == shuffler[i], use_it);
-                        tree_indices[j] = constant_time::select(right_element, 1, tree_indices[j]);
-                    }
-                }
-
-            } else {
-                // we don't have enough -> take all samples that were not filtered out
-                // and fill up with randomly chosen and clipped filtered ones
-                for(size_t i=0; i<remaining_indices.size(); i++) {
-                    for(size_t j=0; j<tree_indices.size(); j++){
-                        tree_indices[j] = constant_time::select(j == i, remaining_indices[i], tree_indices[j]);
-                    }
-                }
-
-                int num_additional_samples_required = number_of_rows - remaining_count;
-
-                // generate random index permutation
-                std::vector<int> shuffler(reject_indices.size());
-                std::iota(std::begin(shuffler), std::end(shuffler), 1); // indices start at 1
-                std::random_shuffle(shuffler.begin(), shuffler.end());
-                // cancel out non-rejected ones
-                for(auto &elem : shuffler){
-                    elem *= reject_indices[elem-1];
-                }
-                std::transform(shuffler.begin(), shuffler.end(), shuffler.begin(), [](int &c){return c-1;}); // make it 0-indexed
-                // fill up tree_indices, loop over all elements to hide how many we fill up with
-                int fill_counter = 0;
-                for(size_t i=0; i<shuffler.size(); i++) {
-                    bool use_it = constant_time::logical_and(shuffler[i] != -1, fill_counter < num_additional_samples_required);
-                    fill_counter += (int) use_it;
-                    // touch the entire tree_samples vector, to hide which one is added
-                    for(int j=0; j < (int) tree_indices.size(); j++){
-                        bool right_element = constant_time::logical_and(j == shuffler[i], use_it);
-                        tree_indices[j] = constant_time::select(right_element, 1, tree_indices[j]);
-                    }
-                }
-            }
-        } else { // no need to harden this, right?
-
-            // no GDF, just randomly select <number_of_rows> rows.
-            // Note, this causes the leaves to be clipped after building the tree.
-            vector<int> some_indices(dataset->length);
-            std::iota(std::begin(some_indices), std::end(some_indices), 0);
+            // generate random index permutation
+            std::vector<int> permutation(dataset->length);
+            std::iota(std::begin(permutation), std::end(permutation), 1);  // [1,2,3,...]
             if (!VERIFICATION_MODE) {
-                std::random_shuffle(some_indices.begin(), some_indices.end());
+                std::random_shuffle(permutation.begin(), permutation.end());
             }
-            for(int i=0; i< number_of_rows; i++){       
-                tree_indices[some_indices[i]] = 1;
+            // zero out all elements that are not part of the remaining array
+            for(auto &elem : permutation){
+                elem *= remaining_indices[elem-1];
+            }
+            std::transform(permutation.begin(), permutation.end(), permutation.begin(), [](int &c){return c-1;}); // make it 0-indexed
+
+            // put corresponding rows into tree_indices
+            int taken_rows = 0;
+            for(int i=0; i<dataset->length; i++){
+                bool use_row = constant_time::logical_and(permutation[i] != -1, taken_rows < number_of_rows);
+                taken_rows += (int) use_row;
+                // touch the entire tree_samples vector, to hide which one is added
+                for(int j=0; j < dataset->length; j++){
+                    tree_indices[j] = constant_time::select(constant_time::logical_and(j == permutation[i], use_row), 1, tree_indices[j]);
+                }
+            }
+
+            /** if necessary, fill up with (randomly chosen and clipped) rejected samples */
+
+            int num_additional_samples_required = std::max(number_of_rows - remaining_count, 0);
+            LOG_INFO("GDF: filling up with {1} rows (clipping those gradients)", num_additional_samples_required);
+
+            // generate random index permutation
+            std::iota(std::begin(permutation), std::end(permutation), 1);  // [1,2,3,...]
+            if (!VERIFICATION_MODE) {
+                std::random_shuffle(permutation.begin(), permutation.end());
+            }
+            // zero out all elements that are not part of the rejected array
+            for(auto &elem : permutation){
+                elem *= reject_indices[elem-1];
+            }
+            std::transform(permutation.begin(), permutation.end(), permutation.begin(), [](int &c){return c-1;}); // make it 0-indexed
+
+            // put corresponding rows into tree_indices
+            taken_rows = 0;
+            for(int i=0; i<dataset->length; i++) {
+                // use row iff the row is part of "rejected_indices" and we still need more samples
+                bool use_row = constant_time::logical_and(permutation[i] != -1, taken_rows < num_additional_samples_required);
+                taken_rows += (int) use_row;
+                // clip gradient if this row is used
+                double clipped_gradient = clamp(dataset->gradients[i],-params->l2_threshold, params->l2_threshold);
+                dataset->gradients[i] = constant_time::select(use_row, clipped_gradient, dataset->gradients[i]);
+                // touch the entire tree_indices vector, to hide which one is added
+                for(int j=0; j<dataset->length; j++){
+                    // if we are at the right element, write 1, otherwise keep content
+                    tree_indices[j] = constant_time::select(constant_time::logical_and(j == permutation[i], use_row), 1, tree_indices[j]);
+                }
+            }
+            
+        } else {
+            // no GDF, just randomly select <number_of_rows> rows. This should not require hardening.
+            // Note, this causes the leaves to be clipped after building the tree.
+            vector<int> all_indices(dataset->length);
+            std::iota(std::begin(all_indices), std::end(all_indices), 0);
+            if (!VERIFICATION_MODE) {
+                std::random_shuffle(all_indices.begin(), all_indices.end());
+            }
+            for(int i=0; i<number_of_rows; i++){       
+                tree_indices[all_indices[i]] = 1;
             }            
         }
 
-        DataSet tree_dataset = dataset->get_subset(tree_indices);   // TODO
+        DataSet tree_dataset = dataset->get_subset(tree_indices);   // TODO, maybe these don't have to be hidden
         
         LOG_DEBUG(YELLOW("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),
                 tree_index, tree_params.tree_privacy_budget, tree_dataset.length);
@@ -186,7 +183,7 @@ void DPEnsemble::train(DataSet *dataset)
         trees.push_back(tree);
 
         // remove rows
-        *dataset = dataset->remove_rows(tree_indices);  // TODO
+        *dataset = dataset->remove_rows(tree_indices);  // TODO, maybe these don't have to be hidden
 
         LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, dataset->length);
     }

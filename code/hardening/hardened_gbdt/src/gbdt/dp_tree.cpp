@@ -307,7 +307,6 @@ void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VV
 {
     // if the feature is categorical
     bool categorical = false;
-    // TODO i think this was unnecessarily hardened. Because the tree is given to the adversary anyways in the proof.
     for(auto cat_feature : params->cat_idx){
         categorical = constant_time::logical_or(categorical, cat_feature == feature_index);
     }

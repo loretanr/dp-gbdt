@@ -39,7 +39,7 @@ int Verification::main(int argc, char *argv[])
     ModelParams params = create_default_params();
     params.privacy_budget = 0.1;
     params.nb_trees = 5;
-    params.gradient_filtering = FALSE;
+    params.gradient_filtering = TRUE;
     params.balance_partition = TRUE;
     params.leaf_clipping = TRUE;
     parameters.push_back(params);

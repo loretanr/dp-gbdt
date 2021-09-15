@@ -107,7 +107,9 @@ void DPEnsemble::train(DataSet *dataset)
 
                 if ((size_t) number_of_rows <= remaining_indices.size()) {
                     // we have enough samples that were not filtered out
-                    std::random_shuffle(remaining_indices.begin(), remaining_indices.end());
+                    if (!VERIFICATION_MODE) {
+                        std::random_shuffle(remaining_indices.begin(), remaining_indices.end());
+                    }
                     for(int i=0; i<number_of_rows; i++){
                         tree_indices.push_back(remaining_indices[i]);
                     }
@@ -119,7 +121,9 @@ void DPEnsemble::train(DataSet *dataset)
                     }
                     LOG_INFO("GDF: filling up with {1} rows (clipping those gradients)",
                         number_of_rows - tree_indices.size());
-                    std::random_shuffle(reject_indices.begin(), reject_indices.end());
+                    if (!VERIFICATION_MODE) {
+                        std::random_shuffle(reject_indices.begin(), reject_indices.end());
+                    }
                     int reject_index = 0;
                     for(int i=tree_indices.size(); i<number_of_rows; i++){
                         int curr_index = reject_indices[reject_index++];

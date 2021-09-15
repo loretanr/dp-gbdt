@@ -1838,7 +1838,7 @@ for tree in n_trees:
    5) delete these rows from X_remain</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1631607567.0" unique_id="25">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1631691932.67" unique_id="25">
 		<rich_text scale="h2">preliminary TODOs</rich_text>
 		<rich_text>
 
@@ -1920,6 +1920,7 @@ for tree in n_trees:
 • </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">is seeding randomness problematic? can adversary control our random seed and thus randomness?</rich_text>
 		<rich_text>
+   ◇ does randomness generation need to be side channel free?
 
 ---------------------------------------------------------------------------------------
 </rich_text>
