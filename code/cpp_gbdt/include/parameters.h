@@ -24,6 +24,7 @@ struct ModelParams {
     int verbosity = -1;
     std::vector<int> cat_idx;
     std::vector<int> num_idx;
+    std::vector<std::vector<double>> cat_values;
 };
 
 // each tree has these additional parameters

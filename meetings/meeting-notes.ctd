@@ -527,7 +527,7 @@ make recursion in a way that it always goes down
 			<rich_text foreground="#9090eeee9090">hilight the leaks in the pseudocode
     ask stackoverflow</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631271893.19" unique_id="36">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631700434.54" unique_id="36">
 			<rich_text scale="h2">Discussion Points</rich_text>
 			<rich_text>
 
@@ -563,6 +563,10 @@ make recursion in a way that it always goes down
 			<rich_text>
    •   why they are using it, and whether we should be find on our sorce code level here.
       ◇ it kinda seems like we don't have any “real secret dependent branches”
+         ▪ </rich_text>
+			<rich_text foreground="#9090eeee9090">nope, we do
+         ▪ it's about performance</rich_text>
+			<rich_text>
     
 ------------------------
     
@@ -2025,7 +2029,7 @@ in theory my operations (constant_time::bla) should hold up optimizations like -
 However other hardening like looping over entire loops is not so easy to check.</rich_text>
 			</node>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="DP_Ensemble" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631538079.47" ts_lastsave="1631619098.52" unique_id="39">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="DP_Ensemble" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631538079.47" ts_lastsave="1631722159.5" unique_id="39">
 			<rich_text>• compute_score does not need to be hardened, because it's only called after creating our model
 
 • update_gradients resp. compute_gradients is const time (on the </rich_text>
@@ -2041,7 +2045,9 @@ However other hardening like looping over entire loops is not so easy to check.<
 
 
 -----
-turned on --verify GDF, non hardened should be turned off</rich_text>
+turned on --verify GDF, non hardened should be turned off
+
+also the python is not only missing GDF, but also the parsing stuff from cat_values</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1629211472.17" unique_id="32">

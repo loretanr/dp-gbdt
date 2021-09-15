@@ -1,9 +1,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "utils.h"
 #include "parameters.h"
 #include "data.h"
-#include "utils.h"
 
 
 class Parser
@@ -12,7 +12,7 @@ private:
     // methods
     static std::vector<std::string> split_string(const std::string &s, char delim);
     static DataSet *parse_file(std::string dataset_file, std::string dataset_name, int num_rows, int num_cols, int num_samples, 
-        std::shared_ptr<Task> task, std::vector<int> num_idx, std::vector<int> cat_idx, std::vector<int> target_idx, 
+        std::shared_ptr<Task> task, std::vector<int> num_idx, std::vector<int> cat_idx, std::vector<int> cat_values, std::vector<int> target_idx, 
         std::vector<int> drop_idx, std::vector<ModelParams> &parameters,bool use_default_params);
 
 public:

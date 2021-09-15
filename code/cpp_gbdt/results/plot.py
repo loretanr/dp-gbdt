@@ -24,7 +24,7 @@ def create_plot(filename):
     marker = '-^'
     label = 'DPGBDT (DFS)'
     plt.errorbar(values_dp['privacy_budget'], mean, yerr=std,
-                 fmt=marker, capsize=3, label=label)
+                 fmt=marker, capsize=3, label=label, markersize=1)
 
     # plot the non_dp line
     values_no_dp = data[(data['nb_samples'] == SAMPLES) & (data['privacy_budget'] == 0)]
@@ -34,7 +34,7 @@ def create_plot(filename):
         marker = '-v'
         label = 'GBDT (DFS) no-dp'
         plt.errorbar(values_dp['privacy_budget'], mean, yerr=std,
-                    fmt=marker, capsize=3, label=label)
+                    fmt=marker, capsize=3, label=label, markersize=1)
 
     plt.axis([0, int(max(privacy_budgets)), 0, int(max(
         data[data['nb_samples'] == SAMPLES]['mean']) * 1.1)])

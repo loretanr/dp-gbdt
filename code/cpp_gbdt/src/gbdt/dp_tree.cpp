@@ -186,12 +186,19 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
-        std::set<double> unique;
-        for (double feature_value : X_live[feature_index]) {
-            if (std::get<1>(unique.insert(feature_value)) == false){
-                // already had that value
-                continue;
-            }
+        //--------------------------------------
+        std::vector<double> splits;
+        if(categorical){
+            splits = params->cat_values[feature_index];     // maybe taking the fix order [1,2,0] makes the tiny difference compared to hardened.
+                                                            // -> adding the [1,2,0] to hardened   PROVEN CORRECT, will adjust this in hardened_gbdt once we're done here.
+        } else {
+            // double max_val = *std::max_element(X_live[feature_index].begin(), X_live[feature_index].end());
+            // double min_val = *std::min_element(X_live[feature_index].begin(), X_live[feature_index].end());
+            // TODO
+            splits = X_live[feature_index];
+        }
+        //--------------------------------------
+        for (double feature_value : splits) {
             // compute gain
             double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size, categorical);
             // feature cannot be chosen, skipping
