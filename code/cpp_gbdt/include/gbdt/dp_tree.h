@@ -27,9 +27,9 @@ private:
     ModelParams *params;
     TreeParams *tree_params;
     DataSet *dataset;
-    std::vector<double> grid;
     size_t tree_index;
     std::vector<TreeNode *> leaves;
+    std::vector<double> grid;
 
     // methods
     TreeNode *make_tree_DFS(int current_depth, std::vector<int> live_samples);

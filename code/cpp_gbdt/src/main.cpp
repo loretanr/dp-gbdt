@@ -61,9 +61,9 @@ int main(int argc, char** argv)
     current_params.balance_partition = true;
     current_params.leaf_clipping = false;
     current_params.scale_y = true;
-    current_params.use_grid = true;
-    current_params.grid_borders = std::make_tuple(0,1);
-    current_params.grid_step_size = 0.001;
+    // current_params.use_grid = true;
+    // current_params.grid_borders = std::make_tuple(0,1);
+    // current_params.grid_step_size = 0.001;
     parameters.push_back(current_params);
 
     // Choose your dataset

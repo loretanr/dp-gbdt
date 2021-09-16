@@ -26,12 +26,14 @@ DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
     }
 
     // prepare the linspace grid
-    double grid_range = std::get<1>(params->grid_borders) - std::get<0>(params->grid_borders);
-    double step_size = params->grid_step_size;
-    int grid_size = (int) grid_range / step_size;
-    this->grid = std::vector<double>(grid_size,0);
-    int counter = 0;
-    std::generate(this->grid.begin(), this->grid.end(), [&counter, &step_size]() mutable { return counter++ * step_size; });
+    if(params->use_grid) {
+        double grid_range = std::get<1>(params->grid_borders) - std::get<0>(params->grid_borders);
+        double step_size = params->grid_step_size;
+        int grid_size = (int) grid_range / step_size;
+        this->grid = std::vector<double>(grid_size,0);
+        int counter = 0;
+        std::generate(this->grid.begin(), this->grid.end(), [&counter, &step_size]() mutable { return counter++ * step_size; });
+    }
 }
     
 DPEnsemble::~DPEnsemble() {
