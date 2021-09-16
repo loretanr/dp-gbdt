@@ -527,7 +527,7 @@ make recursion in a way that it always goes down
 			<rich_text foreground="#9090eeee9090">hilight the leaks in the pseudocode
     ask stackoverflow</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631700434.54" unique_id="36">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631797030.47" unique_id="36">
 			<rich_text scale="h2">Discussion Points</rich_text>
 			<rich_text>
 
@@ -578,13 +578,15 @@ make recursion in a way that it always goes down
 ------------------------
 
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">we want the grid for compute_gain resp. find_split</rich_text>
+			<rich_text foreground="#9090eeee9090">we want the grid for compute_gain resp. find_split</rich_text>
 			<rich_text>
    •  sounds doable. easy for categorical, just try out all “animals” even if our dataset only has cats and dogs. -&gt; need to save that somewhere.
    •  for numerical we can have it as a hyperparameter. &quot; try splits on equal distance fixed values, params.gridsize
-   •  then obviously adapt the “list of non dp things in the algorithm”
+   •  </rich_text>
+			<rich_text foreground="#ffffa5a50000">then obviously adapt the “list of non dp things in the algorithm”
    • the grid should also be in the non-hardened cpp gbdt I guess
-      ◇ python shit will be even more behind.
+      ◇ python shit will be even more behind.</rich_text>
+			<rich_text>
 
 ------------------------
 
@@ -592,6 +594,12 @@ make recursion in a way that it always goes down
 			<rich_text foreground="#ffffc0c0cbcb">ask esfandiar about whether we should output the model, or whether score is enough</rich_text>
 			<rich_text>
    • does it fall into the category “not my problem enclave details”?
+
+------------------------
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">(done) harden DP Ensemble</rich_text>
+			<rich_text>
 
 ------------------------ what Kari will think about
 
@@ -605,6 +613,83 @@ ask what ivan thinks of our current approach
 
 ------------------------ Esfandiar will also get back at me if something isn't the way he explained
 </rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1631805575.82" unique_id="41">
+			<rich_text>
+• discussion about GDF trees on slides
+   ◇ Esfandiar thinks it's fine that we're just hiding whether it was chosen by GDF or without
+   ◇ and not which samples were used for a tree.
+
+→ Kari summarizes:
+    “we dont try to hide which data points were used, we try to hide just enough that our dp guarantees still hold.”
+
+</rich_text>
+			<rich_text scale="h2">TODOs</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">finish hardening, clean up and LaTeX</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">could make argument that we hardened by hand to be more efficient than auto hardening tools</rich_text>
+			<rich_text>
+   •  could measure raccoon performance or “obscuro”  obfuscuro, if their opens source
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">• make guidelines/rules out of our findings (tree stuff)</rich_text>
+			<rich_text>
+   ◇ &quot;rules for future people what they need to pay attention to when hardening GBDT's
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">scale_X introduces DP problems, investigate this (keyword 95% percentile)
+</rich_text>
+			<rich_text>    </rich_text>
+			<rich_text link="webs https://arxiv.org/abs/2001.02285">https://arxiv.org/abs/2001.02285</rich_text>
+			<rich_text foreground="#ffffffffffff">    
+    “one additional sample can mess the scaling up (like put all as virtually 0 -&gt; could get rid of features)”
+         ◇ if we just took the grid that includes all matrix values (not only per col, same problem)</rich_text>
+			<rich_text>
+         ◇ we also run into rerun problems, adversary could gather info like that over many runs.  
+  •  if it's too hard then stay with our hardcoded bounds for now
+      ▪   but have to, when writing, explicitely state assumption “we roughly know the data”
+    
+efficiency != performance in this context (dp)
+    </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">research this</rich_text>
+			<rich_text>
+    
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">checkout paper for dp algorithms inside TEEs</rich_text>
+			<rich_text>  (kari will also read it)
+    </rich_text>
+			<rich_text link="webs https://proceedings.neurips.cc/paper/2019/hash/376c6b9ff3bedbbea56751a84fffc10c-Abstract.html">https://proceedings.neurips.cc/paper/2019/hash/376c6b9ff3bedbbea56751a84fffc10c-Abstract.html</rich_text>
+			<rich_text>
+    
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">overload arithmetic operators</rich_text>
+			<rich_text>    
+    
+</rich_text>
+			<rich_text scale="h2">Writing</rich_text>
+			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">for next week: start with a </rich_text>
+			<rich_text foreground="#ffffa5a50000">thesis sketch</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb"> wo was wie lang
+</rich_text>
+			<rich_text>
+General:
+   ◇ a lot of </rich_text>
+			<rich_text underline="single">why</rich_text>
+			<rich_text> in the thesis
+   ◇ no need to reinvent the wheel if Theo already did it
+   ◇ write introduction at the end
+   ◇ background first
+   ◇ just write, instead of slow prefectionism
+          </rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1631777877.74" unique_id="5">
@@ -2042,7 +2127,7 @@ or storing to a secret address.
 • </rich_text>
 			<rich_text foreground="#ffffa5a50000">volatile</rich_text>
 			<rich_text> keyword is a hint to the compiler that a variable might be changed from somewhere outside, so he needs to be careful when optimizing it</rich_text>
-			<node custom_icon_id="0" foreground="" is_bold="False" name="assembly test" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631175841.16" ts_lastsave="1631523101.2" unique_id="38">
+			<node custom_icon_id="0" foreground="" is_bold="False" name="assembly test" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631175841.16" ts_lastsave="1631794062.95" unique_id="38">
 				<rich_text>• the    a = b or c   is indeed a problem
    ◇ in the small example as well as in my gbdt
 
@@ -2062,8 +2147,6 @@ or storing to a secret address.
 
 • constant_time::select with having one constant argument (like 0.0) should and does not affect the constant timing.
 
-• on my machine the logical not of a bool is compiled to a xor with 1 
-   ◇ which is constant time. however... would be nice to have later as constant_time::
 
 
 
