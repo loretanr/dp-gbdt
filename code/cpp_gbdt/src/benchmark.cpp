@@ -38,6 +38,7 @@ int Benchmark::main(int argc, char *argv[])
     // do that (it'll create and append some default ones to the vector)
     ModelParams params;
     params.use_dp = true;
+    params.use_grid = false;
     params.privacy_budget = 6;
     params.nb_trees = 10;
     parameters.push_back(params);
@@ -51,6 +52,10 @@ int Benchmark::main(int argc, char *argv[])
         ModelParams &param = parameters[i];
         std::cout << dataset->name << std::endl;
 
+        if(params.use_grid) {
+            (*dataset).scale_X(param);
+        }
+
         /* threaded cross validation */
 
         // split the data for each fold
@@ -63,7 +68,7 @@ int Benchmark::main(int argc, char *argv[])
         std::vector<DPEnsemble> ensembles;
         for (auto split : cv_inputs) {
             if(param.scale_y){
-                split->train.scale(param, -1, 1);
+                split->train.scale_y(param, -1, 1);
             }
             ensembles.push_back(DPEnsemble(&param) );
         }

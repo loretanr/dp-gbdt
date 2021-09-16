@@ -27,6 +27,7 @@ private:
     ModelParams *params;
     TreeParams *tree_params;
     DataSet *dataset;
+    std::vector<double> grid;
     size_t tree_index;
     std::vector<TreeNode *> leaves;
 
@@ -44,7 +45,7 @@ private:
 
 public:
     // constructors
-    DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index);
+    DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index, std::vector<double> grid);
     ~DPTree();
 
     // fields

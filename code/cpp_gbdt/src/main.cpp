@@ -54,47 +54,65 @@ int main(int argc, char** argv)
     ModelParams current_params = create_default_params();
 
     // change model params here if required:
-    current_params.privacy_budget = 10;
+    current_params.privacy_budget = 1;
     current_params.nb_trees = 5;
     current_params.use_dp = true;
     current_params.gradient_filtering = true;
     current_params.balance_partition = true;
     current_params.leaf_clipping = false;
-    current_params.scale_y = false;
+    current_params.scale_y = true;
+    current_params.use_grid = true;
+    current_params.grid_borders = std::make_tuple(0,1);
+    current_params.grid_step_size = 0.001;
     parameters.push_back(current_params);
 
     // Choose your dataset
     DataSet *dataset = Parser::get_abalone(parameters, 5000, false);
-
     std::cout << dataset->name << std::endl;
 
-    // create cross validation inputs
-    std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
-    delete dataset;
+    ModelParams params = parameters[0];
 
-    // do cross validation
-    std::vector<double> rmses;
-    for (auto split : cv_inputs) {
-        ModelParams params = parameters[0];
 
-        if(params.scale_y){
-            split->train.scale(params, -1, 1);
-        }
+    if(params.use_grid) {
+        // if we use a grid we should scale the numerical features of X to it
+        (*dataset).scale_X(params);
+    }
 
-        DPEnsemble ensemble = DPEnsemble(&params);
-        ensemble.train(&split->train);
-        
-        // predict with the test set
-        std::vector<double> y_pred = ensemble.predict(split->test.X);
+    // if 5-fold cv itself is not consistent enough, can run it multiple times
+    int NUM_REPS = 15;
 
-        if(params.scale_y) {
-            inverse_scale(params, split->train.scaler, y_pred);
-        }
+    std::vector<double> scores;
+    for(int i=0; i<NUM_REPS; i++){
 
-        // compute score
-        double score = params.task->compute_score(split->test.y, y_pred);
+        // create cross validation inputs
+        std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
 
-        std::cout << score << " " << std::flush;
-        delete split;
-    } std::cout << std::endl;
+        // do cross validation
+        for (auto split : cv_inputs) {
+            
+            if(params.scale_y){
+                split->train.scale_y(params, -1, 1);
+            }
+
+            DPEnsemble ensemble = DPEnsemble(&params);
+            ensemble.train(&split->train);
+            
+            // predict with the test set
+            std::vector<double> y_pred = ensemble.predict(split->test.X);
+
+            if(params.scale_y) {
+                inverse_scale(params, split->train.scaler, y_pred);
+            }
+
+            // compute score
+            double score = params.task->compute_score(split->test.y, y_pred);
+
+            std::cout << score << " " << std::flush;
+            scores.push_back(score);
+            delete split;
+        } std::cout << std::endl;
+    }
+    // average score
+    std::cout << "total avg score (" << scores.size() << " ensembles): " << 
+        std::accumulate(scores.begin(), scores.end(), 0.0) / scores.size() << std::endl;
 }

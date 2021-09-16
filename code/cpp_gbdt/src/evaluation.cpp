@@ -60,9 +60,14 @@ int Evaluation::main(int argc, char *argv[])
 
     // currently we use the same folds for all budgets. Not sure whether that's good or bad.
 
+    ModelParams param = parameters[0];
+    if(param.use_grid) {
+        // if we use a grid we should scale the numerical features of X to it
+        (*dataset).scale_X(param);
+    }
+
     // run the evaluations
     for(auto budget : budgets) {
-        ModelParams param = parameters[0];
         param.privacy_budget = budget;
         std::cout << dataset_name << " pb=" << budget << std::endl;
 
@@ -75,7 +80,7 @@ int Evaluation::main(int argc, char *argv[])
         std::vector<DPEnsemble> ensembles;
         for (auto split : cv_inputs) {
             if(param.scale_y){
-                split->train.scale(param, -1, 1);
+                split->train.scale_y(param, -1, 1);
             }
             ensembles.push_back(DPEnsemble(&param) );
         }

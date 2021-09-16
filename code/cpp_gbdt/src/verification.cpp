@@ -42,6 +42,7 @@ int Verification::main(int argc, char *argv[])
     params.balance_partition = true;
     params.leaf_clipping = true;
     params.use_dp = true;
+    params.use_grid = false;
     parameters.push_back(params);
     datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
     parameters.push_back(params);
@@ -61,6 +62,10 @@ int Verification::main(int argc, char *argv[])
         DataSet *dataset = datasets[i];
         ModelParams &param = parameters[i];
 
+        if(params.use_grid) {
+            (*dataset).scale_X(param);
+        }
+
         // Set up logging for verification
         verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset->name));
         std::cout << dataset->name << std::endl;
@@ -73,7 +78,7 @@ int Verification::main(int argc, char *argv[])
         for (auto split : cv_inputs) {
 
             if(params.scale_y){
-                split->train.scale(param, -1, 1);
+                split->train.scale_y(param, -1, 1);
             }
 
             // train the model

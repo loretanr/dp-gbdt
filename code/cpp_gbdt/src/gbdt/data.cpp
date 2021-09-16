@@ -40,7 +40,7 @@ DataSet::DataSet(VVD X, std::vector<double> y) : X(X), y(y)
 
 
 // scale y values to be in [lower,upper]
-void DataSet::scale(ModelParams &params, double lower, double upper)
+void DataSet::scale_y(ModelParams &params, double lower, double upper)
 {
     // only scale in dp mode
     if(params.use_dp or VERIFICATION_MODE){
@@ -68,6 +68,28 @@ void DataSet::scale(ModelParams &params, double lower, double upper)
             y[i] = (y[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
         }
         scaler = Scaler(minimum_y, maximum_y, lower, upper, true);
+    }
+}
+
+// scale numerical features of X into params.grid_borders
+void DataSet::scale_X(ModelParams &params)
+{
+    double lower = std::get<0>(params.grid_borders);
+    double upper = std::get<1>(params.grid_borders);
+    for(int col=0; col<num_x_cols; col++){
+        if(std::find(params.num_idx.begin(), params.num_idx.end(), col) == params.num_idx.end()){
+            continue;
+        }
+        double doublemax = std::numeric_limits<double>::max();
+        double doublemin = std::numeric_limits<double>::min();
+        double min_val = doublemax, max_val = doublemin;
+        for(int row=0; row<length; row++) {
+            min_val = std::min(min_val, X[row][col]);
+            max_val = std::max(max_val, X[row][col]);
+        }
+        for(int row=0; row<length; row++) {
+            X[row][col] = (X[row][col] - min_val)/(max_val-min_val) * (upper-lower) + lower;
+        }
     }
 }
 

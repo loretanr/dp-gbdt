@@ -28,6 +28,7 @@ ModelParams create_default_params()
     return params;
 };
 
+
 // put a value between two bounds, not in std::algorithm in c++11
 double clamp(double n, double lower, double upper)
 {

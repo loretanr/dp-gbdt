@@ -15,11 +15,12 @@ using namespace std;
 
 /** Constructors */
 
-DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index): 
+DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index, std::vector<double> grid): 
     params(params),
     tree_params(tree_params), 
     dataset(dataset),
-    tree_index(tree_index) {}
+    tree_index(tree_index),
+    grid(grid) {}
 
 DPTree::~DPTree() {}
 
@@ -186,18 +187,16 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
-        //--------------------------------------
         std::vector<double> splits;
-        if(categorical){
-            splits = params->cat_values[feature_index];     // maybe taking the fix order [1,2,0] makes the tiny difference compared to hardened.
-                                                            // -> adding the [1,2,0] to hardened   PROVEN CORRECT, will adjust this in hardened_gbdt once we're done here.
+        if(params->use_grid) {
+            if(categorical){
+                splits = params->cat_values[feature_index];
+            } else {
+                splits = this->grid;
+            }
         } else {
-            // double max_val = *std::max_element(X_live[feature_index].begin(), X_live[feature_index].end());
-            // double min_val = *std::min_element(X_live[feature_index].begin(), X_live[feature_index].end());
-            // TODO
             splits = X_live[feature_index];
         }
-        //--------------------------------------
         for (double feature_value : splits) {
             // compute gain
             double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size, categorical);

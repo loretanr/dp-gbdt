@@ -24,6 +24,9 @@ struct ModelParams {
     int verbosity = -1;
     std::vector<int> cat_idx;
     std::vector<int> num_idx;
+    bool use_grid = false;
+    std::tuple<double,double> grid_borders;
+    double grid_step_size;
     std::vector<std::vector<double>> cat_values;
 };
 

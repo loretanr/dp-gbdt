@@ -607,7 +607,7 @@ ask what ivan thinks of our current approach
 </rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1628587224.68" unique_id="5">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1631777877.74" unique_id="5">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">&quot;example.py&quot;</rich_text>
 		<rich_text>
 (</rich_text>
@@ -1494,6 +1494,53 @@ expected results (randomness off):
 • Then the leaf node sensitivity bounds can be combined when using both
    ◇ delta_v = min(sens GDF, sens GLC)
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="grid experiments" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631777877.74" ts_lastsave="1631787047.92" unique_id="40">
+			<rich_text>main (15x)  averages
+      •   the “categorical grid” does not change these!
+
+• abalone 5000, 5 trees,</rich_text>
+			<rich_text foreground="#bfbfbfbfbfbf"> pb 10</rich_text>
+			<rich_text>, gdf, balance, !leaf, </rich_text>
+			<rich_text foreground="#adadd8d8e6e6">scale_y</rich_text>
+			<rich_text>     -&gt; 2.857
+   ◇ with scale_X    -&gt; 2.86
+• abalone 5000, 5 trees, </rich_text>
+			<rich_text foreground="#bfbfbfbfbfbf">pb 1</rich_text>
+			<rich_text>, gdf, balance, !leaf, </rich_text>
+			<rich_text foreground="#adadd8d8e6e6">scale_y</rich_text>
+			<rich_text>     -&gt; 7.8
+   ◇ with scale_X    -&gt; 7.8
+
+• abalone 5000, 5 trees, </rich_text>
+			<rich_text foreground="#bfbfbfbfbfbf">pb 10</rich_text>
+			<rich_text>, gdf, balance, !leaf, </rich_text>
+			<rich_text foreground="#adadd8d8e6e6">!scale_y</rich_text>
+			<rich_text>     -&gt; 3.06
+   ◇ with scale_X    -&gt; 3.06
+• abalone 5000, 5 trees, </rich_text>
+			<rich_text foreground="#bfbfbfbfbfbf">pb 1</rich_text>
+			<rich_text>, gdf, balance, !leaf,</rich_text>
+			<rich_text foreground="#adadd8d8e6e6"> !scale_y</rich_text>
+			<rich_text>     -&gt; 3.13
+   ◇ with scale_X    -&gt; 3.13
+
+</rich_text>
+			<rich_text foreground="#9090eeee9090">Ok good, so the scale_X has no effect, as expected!</rich_text>
+			<rich_text>
+
+now </rich_text>
+			<rich_text foreground="#ffffa5a50000">with the grid</rich_text>
+			<rich_text>, we get about the </rich_text>
+			<rich_text foreground="#ffffa5a50000">same result, nice</rich_text>
+			<rich_text>
+   • </rich_text>
+			<rich_text foreground="#ffffa5a50000">rmse ever so slightly worse</rich_text>
+			<rich_text>, but that's expected because we might miss a few splits
+   • </rich_text>
+			<rich_text foreground="#ffffa5a50000">performance worse</rich_text>
+			<rich_text> obviously
+</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#0000ff" is_bold="False" name="Further TODOs" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624438358.97" ts_lastsave="1628587359.36" unique_id="19">
