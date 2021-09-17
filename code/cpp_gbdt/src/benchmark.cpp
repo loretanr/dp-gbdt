@@ -52,6 +52,11 @@ int Benchmark::main(int argc, char *argv[])
         ModelParams &param = parameters[i];
         std::cout << dataset->name << std::endl;
 
+        if(param.use_grid and param.scale_X) {
+            param.privacy_budget -= param.scale_X_privacy_budget;
+            (*dataset).scale_X_columns(param);
+        }
+
         /* threaded cross validation */
 
         // split the data for each fold
@@ -87,7 +92,7 @@ int Benchmark::main(int argc, char *argv[])
             std::vector<double> y_pred = ensemble->predict(split->test.X);
 
             if(param.scale_y){
-                inverse_scale(param, split->train.scaler, y_pred);
+                inverse_scale_y(param, split->train.scaler, y_pred);
             }
 
             // compute score            

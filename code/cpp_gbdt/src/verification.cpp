@@ -85,7 +85,7 @@ int Verification::main(int argc, char *argv[])
             std::vector<double> y_pred = ensemble.predict(split->test.X);
 
             if(params.scale_y){
-                inverse_scale(param, split->train.scaler, y_pred);
+                inverse_scale_y(param, split->train.scaler, y_pred);
             }
             
             // compute score

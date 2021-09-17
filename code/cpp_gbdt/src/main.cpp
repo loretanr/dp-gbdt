@@ -54,16 +54,21 @@ int main(int argc, char** argv)
     ModelParams current_params = create_default_params();
 
     // change model params here if required:
-    current_params.privacy_budget = 1;
+    current_params.privacy_budget = 10.4;
     current_params.nb_trees = 5;
     current_params.use_dp = true;
     current_params.gradient_filtering = true;
     current_params.balance_partition = true;
     current_params.leaf_clipping = false;
-    current_params.scale_y = true;
-    // current_params.use_grid = true;
-    // current_params.grid_borders = std::make_tuple(0,3);
-    // current_params.grid_step_size = 0.001;
+    current_params.scale_y = false;
+
+    current_params.use_grid = true;
+    current_params.grid_borders = std::make_tuple(0,1);
+    current_params.grid_step_size = 0.001;
+    current_params.scale_X = true;
+    current_params.scale_X_percentile = 95;
+    current_params.scale_X_privacy_budget = 0.4;
+
     parameters.push_back(current_params);
 
     // Choose your dataset
@@ -71,6 +76,11 @@ int main(int argc, char** argv)
     std::cout << dataset->name << std::endl;
 
     ModelParams params = parameters[0];
+
+    if(params.use_grid and params.scale_X) {
+        params.privacy_budget -= params.scale_X_privacy_budget;
+        (*dataset).scale_X_columns(params);
+    }
 
     // if 5-fold cv itself is not consistent enough, can run it multiple times
     int NUM_REPS = 15;
@@ -95,7 +105,7 @@ int main(int argc, char** argv)
             std::vector<double> y_pred = ensemble.predict(split->test.X);
 
             if(params.scale_y) {
-                inverse_scale(params, split->train.scaler, y_pred);
+                inverse_scale_y(params, split->train.scaler, y_pred);
             }
 
             // compute score

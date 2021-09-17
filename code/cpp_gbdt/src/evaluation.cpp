@@ -62,6 +62,11 @@ int Evaluation::main(int argc, char *argv[])
 
     ModelParams param = parameters[0];
 
+    if(param.use_grid and param.scale_X) {
+            param.privacy_budget -= param.scale_X_privacy_budget;
+            (*dataset).scale_X_columns(param);
+        }
+
     // run the evaluations
     for(auto budget : budgets) {
         param.privacy_budget = budget;
@@ -101,7 +106,7 @@ int Evaluation::main(int argc, char *argv[])
             std::vector<double> y_pred = ensemble->predict(split->test.X);
 
             if(param.scale_y){
-                inverse_scale(param, split->train.scaler, y_pred);
+                inverse_scale_y(param, split->train.scaler, y_pred);
             }
 
             // compute score            

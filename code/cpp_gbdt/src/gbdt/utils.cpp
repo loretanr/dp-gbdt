@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cmath>
 #include <numeric>
+#include <random>
 #include <mutex>
 #include "utils.h"
 
@@ -36,7 +37,6 @@ double clamp(double n, double lower, double upper)
 }
 
 
-// TODO formula
 double log_sum_exp(std::vector<double> vec)
 {
     size_t count = vec.size();
@@ -63,6 +63,7 @@ double compute_stdev(std::vector<double> &vec, double mean)
     double sq_sum = std::inner_product(vec.begin(), vec.end(), vec.begin(), 0.0);
     return std::sqrt(sq_sum / vec.size() - mean * mean);
 }
+
 
 std::string get_time_string()
 {

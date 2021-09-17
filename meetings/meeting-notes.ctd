@@ -527,7 +527,7 @@ make recursion in a way that it always goes down
 			<rich_text foreground="#9090eeee9090">hilight the leaks in the pseudocode
     ask stackoverflow</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631797030.47" unique_id="36">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_07" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631027922.43" ts_lastsave="1631868357.79" unique_id="36">
 			<rich_text scale="h2">Discussion Points</rich_text>
 			<rich_text>
 
@@ -559,7 +559,7 @@ make recursion in a way that it always goes down
 ------------------------
     
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">Research about CMOV</rich_text>
+			<rich_text foreground="#9090eeee9090">Research about CMOV</rich_text>
 			<rich_text>
    •   why they are using it, and whether we should be find on our sorce code level here.
       ◇ it kinda seems like we don't have any “real secret dependent branches”
@@ -571,9 +571,12 @@ make recursion in a way that it always goes down
 ------------------------
     
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">ask Moritz about X init size 4177 vs. 5000</rich_text>
-			<rich_text>    
-   •  keywords (from Esfandiar): bounded vs unbounded diff privacy
+			<rich_text foreground="#9090eeee9090">ask Moritz about X init size 4177 vs. 5000  </rich_text>
+			<rich_text>  
+   • keywords (from Esfandiar): bounded vs unbounded diff privacy
+   • </rich_text>
+			<rich_text foreground="#9090eeee9090">we're not gonna do it</rich_text>
+			<rich_text>
         
 ------------------------
 
@@ -614,7 +617,7 @@ ask what ivan thinks of our current approach
 ------------------------ Esfandiar will also get back at me if something isn't the way he explained
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1631805575.82" unique_id="41">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1631868276.8" unique_id="41">
 			<rich_text>
 • discussion about GDF trees on slides
    ◇ Esfandiar thinks it's fine that we're just hiding whether it was chosen by GDF or without
@@ -670,6 +673,11 @@ efficiency != performance in this context (dp)
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">overload arithmetic operators</rich_text>
 			<rich_text>    
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">have a look at synthetic datasets</rich_text>
+			<rich_text>
+
     
 </rich_text>
 			<rich_text scale="h2">Writing</rich_text>
@@ -690,6 +698,33 @@ General:
    ◇ background first
    ◇ just write, instead of slow prefectionism
           </rich_text>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="scale_X" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631864119.39" ts_lastsave="1631892987.32" unique_id="42">
+				<rich_text>The idea:
+• goal is to find the [95%] confidence interval of our data. So we want to know [a,b].
+   ◇ we need to do this in a dp fashion
+      ▪ that means for example that a and b must not correspond to real feature values
+   ◇ the paper </rich_text>
+				<rich_text link="webs https://arxiv.org/pdf/2001.02285.pdf">https://arxiv.org/pdf/2001.02285.pdf</rich_text>
+				<rich_text> does this for normal distributions
+• using those values we can then clip the “outliers”
+• then we could squash into [0,1]
+
+</rich_text>
+				<rich_text scale="h2">Questions:</rich_text>
+				<rich_text>
+•</rich_text>
+				<rich_text foreground="#ffffa5a50000"> is it reasonable to assume that our numerical features are all normal distributed?</rich_text>
+				<rich_text>
+   ◇ if it's distributed differently, it could make a column of X useless or even wrong if we clip stupidly
+      ▪ it wouldn't reveal anything about this column in particular, but could it jeopardize other parts of gbdt?
+
+</rich_text>
+				<rich_text foreground="#ffffa5a50000">• what about scale_y, why aren't there any dp problems?</rich_text>
+				<rich_text>
+
+
+</rich_text>
+			</node>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1631777877.74" unique_id="5">
