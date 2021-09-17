@@ -61,10 +61,6 @@ int Evaluation::main(int argc, char *argv[])
     // currently we use the same folds for all budgets. Not sure whether that's good or bad.
 
     ModelParams param = parameters[0];
-    if(param.use_grid) {
-        // if we use a grid we should scale the numerical features of X to it
-        (*dataset).scale_X(param);
-    }
 
     // run the evaluations
     for(auto budget : budgets) {

@@ -62,10 +62,6 @@ int Verification::main(int argc, char *argv[])
         DataSet *dataset = datasets[i];
         ModelParams &param = parameters[i];
 
-        if(params.use_grid) {
-            (*dataset).scale_X(param);
-        }
-
         // Set up logging for verification
         verification_logfile.open(fmt::format("verification_logs/{}.cpp.log", dataset->name));
         std::cout << dataset->name << std::endl;

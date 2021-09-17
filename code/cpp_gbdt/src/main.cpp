@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     current_params.leaf_clipping = false;
     current_params.scale_y = true;
     // current_params.use_grid = true;
-    // current_params.grid_borders = std::make_tuple(0,1);
+    // current_params.grid_borders = std::make_tuple(0,3);
     // current_params.grid_step_size = 0.001;
     parameters.push_back(current_params);
 
@@ -71,12 +71,6 @@ int main(int argc, char** argv)
     std::cout << dataset->name << std::endl;
 
     ModelParams params = parameters[0];
-
-
-    if(params.use_grid) {
-        // if we use a grid we should scale the numerical features of X to it
-        (*dataset).scale_X(params);
-    }
 
     // if 5-fold cv itself is not consistent enough, can run it multiple times
     int NUM_REPS = 15;

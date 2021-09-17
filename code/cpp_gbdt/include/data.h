@@ -38,7 +38,6 @@ struct DataSet {
     // methods
     void add_row(std::vector<double> xrow, double yval);
     void scale_y(ModelParams &params, double lower, double upper);
-    void scale_X(ModelParams &params);
     void shuffle_dataset();
     DataSet get_subset(std::vector<int> &indices);
     DataSet remove_rows(std::vector<int> &indices);

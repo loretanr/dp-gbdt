@@ -52,10 +52,6 @@ int Benchmark::main(int argc, char *argv[])
         ModelParams &param = parameters[i];
         std::cout << dataset->name << std::endl;
 
-        if(params.use_grid) {
-            (*dataset).scale_X(param);
-        }
-
         /* threaded cross validation */
 
         // split the data for each fold
