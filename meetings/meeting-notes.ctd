@@ -617,7 +617,7 @@ ask what ivan thinks of our current approach
 ------------------------ Esfandiar will also get back at me if something isn't the way he explained
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1631868276.8" unique_id="41">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1632129673.19" unique_id="41">
 			<rich_text>
 • discussion about GDF trees on slides
    ◇ Esfandiar thinks it's fine that we're just hiding whether it was chosen by GDF or without
@@ -645,7 +645,8 @@ ask what ivan thinks of our current approach
    ◇ &quot;rules for future people what they need to pay attention to when hardening GBDT's
 
 </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">scale_X introduces DP problems, investigate this (keyword 95% percentile)
+			<rich_text foreground="#9090eeee9090">scale_X introduces DP problems, investigate this (keyword 95% percentile)</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">
 </rich_text>
 			<rich_text>    </rich_text>
 			<rich_text link="webs https://arxiv.org/abs/2001.02285">https://arxiv.org/abs/2001.02285</rich_text>
@@ -656,7 +657,11 @@ ask what ivan thinks of our current approach
          ◇ we also run into rerun problems, adversary could gather info like that over many runs.  
   •  if it's too hard then stay with our hardcoded bounds for now
       ▪   but have to, when writing, explicitely state assumption “we roughly know the data”
-    
+   ◇ </rich_text>
+			<rich_text foreground="#ffffa5a50000">do I need to harden the new exp mechanism?</rich_text>
+			<rich_text>
+      ▪ and would be nice to reuse my own exp mechanism, but...
+          
 efficiency != performance in this context (dp)
     </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">research this</rich_text>
@@ -672,11 +677,20 @@ efficiency != performance in this context (dp)
     
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">overload arithmetic operators</rich_text>
-			<rich_text>    
+			<rich_text>
+    also std::max min need to be done (example in raluca paper)
 
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">have a look at synthetic datasets</rich_text>
 			<rich_text>
+
+</rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">could we have some sort of loop counters, that would alert if something was optimized away?</rich_text>
+			<rich_text>
+    because that, together with the constant_time:: could allow us to use -O1 and stuff, right?
+      • single core hardened abalone 300 -O0 = 16s
+      • single core hardened abalone 300 -O1 = 5s
+      • single core hardened abalone 300 -O3 = 4.5s
 
     
 </rich_text>
@@ -724,6 +738,38 @@ General:
 
 
 </rich_text>
+			</node>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="papers notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632127171.14" ts_lastsave="1632134297.03" unique_id="43">
+				<rich_text scale="h2">An Algorithmic Framework For DP Data Analysis with TEEs</rich_text>
+				<rich_text>
+
+• goal is the same
+• they create an abstraction
+• in their abstraction they mix DP definitions with mathematical notion of memory accesses, then apply it to 3 example algorithms (that are pretty short)
+• it seems to me that dp-gbdt is a bit large for this
+• can't get much out of it, no conclusion
+
+</rich_text>
+				<rich_text scale="h2">Secure XGBoost</rich_text>
+				<rich_text>
+
+• concisely written and very similar topic
+   ◇ </rich_text>
+				<rich_text foreground="#ffffa5a50000">Can definitely adopt some of their terminology</rich_text>
+				<rich_text>
+
+• Their attestation etc. scheme seems well thought out, but quite some stuff.
+   ◇ like multiple enclaves, tree based signature attestation
+
+• They go for memory-oblivious only. they don't care about constant time
+
+• Why do they have oblivious comparisons?
+   ◇ I guess it's what I'm using ::select for
+
+• They conceal their tree building with dummy operations and they always build the full binary tree, just like I did.
+   ◇ but why
+      ▪ I guess for the sake of makeing everything “data oblivious”
+         </rich_text>
 			</node>
 		</node>
 	</node>
@@ -1615,7 +1661,7 @@ expected results (randomness off):
    ◇ delta_v = min(sens GDF, sens GLC)
    ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="grid experiments" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631777877.74" ts_lastsave="1631787047.92" unique_id="40">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="grid experiments" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631777877.74" ts_lastsave="1631893753.15" unique_id="40">
 			<rich_text>main (15x)  averages
       •   the “categorical grid” does not change these!
 
@@ -1646,8 +1692,9 @@ expected results (randomness off):
    ◇ with scale_X    -&gt; 3.13
 
 </rich_text>
-			<rich_text foreground="#9090eeee9090">Ok good, so the scale_X has no effect, as expected!</rich_text>
+			<rich_text foreground="#9090eeee9090">Ok good, so the (legal!) scale_X has no effect, as expected!</rich_text>
 			<rich_text>
+   •  it has an effect in that it costs privacy budget
 
 now </rich_text>
 			<rich_text foreground="#ffffa5a50000">with the grid</rich_text>

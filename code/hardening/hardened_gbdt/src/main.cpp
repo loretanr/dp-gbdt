@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <chrono>
 #include "logging.h"
 #include "utils.h"
 #include "parameters.h"
@@ -20,7 +21,7 @@ int main(int argc, char** argv)
     // seed randomness once and for all
     srand(time(NULL));
 
-    // parse flags, currently supporting "--verify", "--bench", "--eval"
+    // parse flags, currently supporting "--verify"
     if(argc != 1){
         for(int i = 1; i < argc; i++){
             if ( ! std::strcmp(argv[i], "--verify") ){
@@ -57,6 +58,7 @@ int main(int argc, char** argv)
     DataSet *dataset = Parser::get_abalone(parameters, 300, false);
 
     std::cout << dataset->name << std::endl;
+    std::chrono::steady_clock::time_point time_begin = std::chrono::steady_clock::now();
 
     // create cross validation inputs
     std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
@@ -87,4 +89,8 @@ int main(int argc, char** argv)
         std::cout << score << " " << std::flush;
         delete split;
     } std::cout << std::endl;
+
+    std::chrono::steady_clock::time_point time_end = std::chrono::steady_clock::now();
+    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count();
+    std::cout << "(" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)" << std::endl;
 }

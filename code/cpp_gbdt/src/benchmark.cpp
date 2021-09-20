@@ -18,7 +18,6 @@
     - vectorization: code is written such that the compiler can do it's thing 
         - should work well for intel skylake or later
     - threading: each cv-fold get his own thread
-    - spicy speedup (>1200x measured compared to python)
 */
 
 int Benchmark::main(int argc, char *argv[])
