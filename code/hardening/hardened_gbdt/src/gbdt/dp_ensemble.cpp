@@ -18,8 +18,18 @@ using namespace std;
 
 DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
 {
-    if (parameters->privacy_budget == 0){
-        throw std::runtime_error("hardened gbdt cannot be run with pb=0");
+    if (parameters->privacy_budget <= 0){
+        throw std::runtime_error("hardened gbdt cannot be run with pb<=0");
+    }
+
+    // prepare the linspace grid
+    if(params->use_grid) {
+        double grid_range = std::get<1>(params->grid_borders) - std::get<0>(params->grid_borders);
+        double step_size = params->grid_step_size;
+        int grid_size = (int) grid_range / step_size;
+        this->grid = std::vector<double>(grid_size,0);
+        int counter = 0;
+        std::generate(this->grid.begin(), this->grid.end(), [&counter, &step_size]() mutable { return counter++ * step_size; });
     }
 }
     
@@ -178,7 +188,7 @@ void DPEnsemble::train(DataSet *dataset)
 
         // build tree
         LOG_INFO("Building dp-tree-{1} using {2} samples...", tree_index, tree_dataset.length);
-        DPTree tree = DPTree(params, &tree_params, &tree_dataset, tree_index);
+        DPTree tree = DPTree(params, &tree_params, &tree_dataset, tree_index, this->grid);
         tree.fit();
         trees.push_back(tree);
 

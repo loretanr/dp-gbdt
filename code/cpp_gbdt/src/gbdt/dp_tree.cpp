@@ -359,6 +359,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
         for (auto leaf : leaves) {
             sum += leaf->prediction;
         }
+        sum = sum < 0 && sum >= -1e-10 ? 0 : sum;
         LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", leaves.size(), sum);
         VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
         return;

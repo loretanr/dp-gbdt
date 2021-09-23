@@ -107,36 +107,41 @@ std::tuple<double,double> dp_confidence_interval(std::vector<double> &samples, d
 
         double q = quantile;
         int qi = std::floor((n-1)*q + 1.5);
-        std::vector<double> pre_probs(n+1);
-        std::iota(pre_probs.begin(), pre_probs.end(), 1.0);   // [1,2,...,n+1]
-        double *probs = pre_probs.data();
+        std::vector<double> probs(n+1);
+        std::iota(probs.begin(), probs.end(), 1.0);   // [1,2,...,n+1]
         double r = ((double)std::rand()/(double)RAND_MAX);
+        if(VERIFICATION_MODE) {
+            r = 0.5;
+        }
         int priv_qi;
         
+        // exponential mechanism
         // https://github.com/wxindu/dp-conf-int/blob/master/algorithms/exp_mech.c
         int m = qi;
-        for(int i = 0; i < m; i += 1) {
+        for(int i = 0; i < m; i++) {
             double utility = (i + 1) - m;
-            probs[i] = (db[i + 1] - db[i])*std::exp((e)*utility/2);
+            probs[i] = std::max(0.0, (db[i + 1] - db[i]) * std::exp(e * utility / 2.));
         }
-        for(int i = m; i <= n; i += 1) {
+        for(int i = m; i <= n; i++) {
             double utility = m - i;
-            probs[i] = (db[i + 1] - db[i])*std::exp((e)*utility/2);
+            probs[i] = std::max(0.0, (db[i + 1] - db[i]) * std::exp(e * utility / 2.));
         }
         double sum = 0;
-        for(int i = 0; i <= n; i += 1) sum += probs[i];
+        for(int i = 0; i <= n; i++) sum += probs[i];
         r *= sum;
-        for(int i = 0; i <= n; i += 1) {
+        for(int i = 0; i <= n; i++) {
             r -= probs[i];
             if(r < 0) {
-                priv_qi = i + 1;
+                priv_qi = i;
                 break;
             }
         }
-        priv_qi -= 1; // because R code is 1-indexed
         std::uniform_real_distribution<double> unif(db[priv_qi],db[priv_qi+1]);
         std::default_random_engine re;
         double a_random_double = unif(re);
+        if(VERIFICATION_MODE){
+            a_random_double = db[priv_qi];
+        }
         results.push_back(a_random_double);
     }
     return std::make_tuple(results[0],results[1]);

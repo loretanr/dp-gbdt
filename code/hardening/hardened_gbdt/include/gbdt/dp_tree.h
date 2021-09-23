@@ -30,6 +30,8 @@ private:
     VVD X_transposed; // for hardened gbdt, we always work on the full X, so we only transpose it once
     size_t tree_index;
     std::vector<TreeNode *> nodes;
+    std::vector<double> grid;
+
 
     // methods
     TreeNode *make_tree_dfs(int current_depth, std::vector<int> live_samples, bool is_dummy);
@@ -45,7 +47,7 @@ private:
 
 public:
     // constructors
-    DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index);
+    DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index, std::vector<double> grid);
     ~DPTree() {};
 
     // fields

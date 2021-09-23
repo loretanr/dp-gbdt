@@ -37,7 +37,8 @@ struct DataSet {
 
     // methods
     void add_row(std::vector<double> xrow, double yval);
-    void scale(ModelParams &params, double lower, double upper);
+    void scale_y(ModelParams &params, double lower, double upper);
+    void scale_X_columns(ModelParams &params);
     void shuffle_dataset();
     DataSet get_subset(std::vector<int> &indices);
     DataSet remove_rows(std::vector<int> &indices);
@@ -53,7 +54,7 @@ struct TrainTestSplit {
 
 
 // method declarations
-void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec);
+void inverse_scale_y(ModelParams &params, Scaler &scaler, std::vector<double> &vec);
 TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio = 0.70, bool shuffle = false);
 std::vector<TrainTestSplit *> create_cross_validation_inputs(DataSet *dataset, int folds);
 

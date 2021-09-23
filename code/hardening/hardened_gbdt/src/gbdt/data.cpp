@@ -1,6 +1,7 @@
 #include <vector>
 #include <numeric>
 #include <queue>
+#include <random>
 #include <algorithm>
 #include <sstream>
 #include <cmath>
@@ -40,7 +41,7 @@ DataSet::DataSet(VVD X, std::vector<double> y) : X(X), y(y)
 
 
 // scale y values to be in [lower,upper]
-void DataSet::scale(ModelParams &params, double lower, double upper)
+void DataSet::scale_y(ModelParams &params, double lower, double upper)
 {   
     // return if no scaling required (y already in [-1,1])
     bool scaling_required = false;
@@ -67,7 +68,7 @@ void DataSet::scale(ModelParams &params, double lower, double upper)
 }
 
 
-void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec)
+void inverse_scale_y(ModelParams &params, Scaler &scaler, std::vector<double> &vec)
 {
     // return if no scaling required
     if(not scaler.scaling_required){
@@ -77,6 +78,111 @@ void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec
     for(auto &elem : vec) {
         elem -= scaler.min_;
         elem /= scaler.scale;
+    }
+}
+
+
+// algorithm (EXPQ) from this paper:
+//      https://arxiv.org/pdf/2001.02285.pdf
+// corresponding code:
+//  https://github.com/wxindu/dp-conf-int/blob/master/algorithms/alg5_EXPQ.R
+std::tuple<double,double> dp_confidence_interval(std::vector<double> &samples, double percentile, double budget)
+{
+    // e.g.  95% -> {0.025, 0.975}
+    std::vector<double> quantiles = {(1.0-percentile/100.)/2., percentile/100. + (1.0-percentile/100.)/2.};
+    std::vector<double> results;
+
+    // set up inputs
+    std::sort(samples.begin(), samples.end());
+    double *db = samples.data();
+    int n = samples.size();
+    double e = budget / 2;  // half budget since we're doing it twice
+
+    // run the dp quantile calculation twice (to get the lower & upper bound)
+    for(auto quantile : quantiles) {
+
+        double q = quantile;
+        int m = std::floor((n-1)*q + 1.5);
+        std::vector<double> probs(n+1);
+        std::iota(probs.begin(), probs.end(), 1.0);   // [1,2,...,n+1]
+        double r = ((double)std::rand()/(double)RAND_MAX);
+        if(VERIFICATION_MODE) {
+            r = 0.5;
+        }
+        int priv_qi = 0;
+        
+        // exponential mechanism
+        // https://github.com/wxindu/dp-conf-int/blob/master/algorithms/exp_mech.c
+        for(int i = 0; i < m; i++) {
+            double utility = (i + 1) - m;
+            probs[i] = std::max(0.0, (db[i + 1] - db[i])*std::exp(e * utility / 2.));
+        }
+        for(int i = m; i <= n; i++) {
+            double utility = m - i;
+            probs[i] = std::max(0.0, (db[i + 1] - db[i])*std::exp(e * utility / 2.));
+        }
+        double sum = 0;
+        for(int i = 0; i <= n; i++) sum += probs[i];
+        r *= sum;
+        for(int i = 0; i <= n; i++) {
+            r -= probs[i];
+            if(r < 0) {
+                priv_qi = i;
+                break;
+            }
+        }
+        std::uniform_real_distribution<double> unif(db[priv_qi],db[priv_qi+1]);
+        std::default_random_engine re;
+        double a_random_double = unif(re);
+        if(VERIFICATION_MODE){
+            a_random_double = db[priv_qi];
+        }
+        results.push_back(a_random_double);
+    }
+    return std::make_tuple(results[0],results[1]);
+}
+
+
+// scale numerical features of X to fit our grid borders
+void DataSet::scale_X_columns(ModelParams &params)
+{
+    // in order to legally scale X into our grid, we first need to (dp-)compute 
+    // the [e.g. 95%] percentile borders, and clip all outliers.
+    for(int col=0; col<num_x_cols; col++){
+
+        // ignore categorical columns
+        if(std::find(params.num_idx.begin(), params.num_idx.end(), col) == params.num_idx.end()){
+            continue;
+        }
+
+        // get the column
+        std::vector<double> column;
+        for(int row=0; row<length; row++) {
+            column.push_back(X[row][col]);
+        }
+
+        // compute percentile borders on our data
+        std::tuple<double,double> borders = dp_confidence_interval(column, params.scale_X_percentile, params.scale_X_privacy_budget);
+        double lower = std::get<0>(borders);
+        double upper = std::get<1>(borders);
+
+        // clip outliers
+        for(int row=0; row<length; row++) {
+            X[row][col] = clamp(X[row][col], lower, upper);
+        }
+
+        // now we should be able to safely scale the feature into our grid
+        double min_val = std::numeric_limits<double>::max();
+        double max_val = std::numeric_limits<double>::min();
+        for(int row=0; row<length; row++) {
+            min_val = std::min(min_val, X[row][col]);
+            max_val = std::max(max_val, X[row][col]);
+        }
+        lower = std::get<0>(params.grid_borders);
+        upper = std::get<1>(params.grid_borders);
+        for(int row=0; row<length; row++) {
+            X[row][col] = (X[row][col]-min_val)/(max_val-min_val)*(upper-lower)+lower;
+        }
     }
 }
 

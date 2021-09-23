@@ -29,7 +29,7 @@ cd $CURR_DIR
 echo -e "${CYAN}Compiling non-hardened ...${NC}"
 cd $NON_HARDENED_PATH
 # make clean | eval "$SHIFT_RIGHT"
-make | eval "$SHIFT_RIGHT"
+make fast | eval "$SHIFT_RIGHT"
 echo -e "${CYAN}Running non-hardened verification ...${NC}"
 rm verification_logs/*.log 2> /dev/null
 ./run --verify | eval "$SHIFT_RIGHT"

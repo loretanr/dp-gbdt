@@ -70,7 +70,11 @@ int main(int argc, char** argv)
         ModelParams params = parameters[0];
 
         if(is_true(params.scale_y)){
-            split->train.scale(params, -1, 1);
+            split->train.scale_y(params, -1, 1);
+        }
+        if(is_true(params.use_grid) and is_true(params.scale_X)) {
+            params.privacy_budget -= params.scale_X_privacy_budget;
+            (*dataset).scale_X_columns(params);
         }
 
         DPEnsemble ensemble = DPEnsemble(&params);
@@ -80,7 +84,7 @@ int main(int argc, char** argv)
         std::vector<double> y_pred = ensemble.predict(split->test.X);
 
         if(is_true(params.scale_y)) {
-            inverse_scale(params, split->train.scaler, y_pred);
+            inverse_scale_y(params, split->train.scaler, y_pred);
         }
 
         // compute score
