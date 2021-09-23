@@ -16,11 +16,12 @@ using namespace std;
 
 /** Constructors */
 
-DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index): 
+DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index, std::vector<double> grid): 
     params(params),
     tree_params(tree_params), 
     dataset(dataset),
-    tree_index(tree_index)
+    tree_index(tree_index),
+    grid(grid)
 {
     // only need to transpose X once
     X_transposed = VVD(dataset->num_x_cols, vector<double>(dataset->length));
@@ -161,7 +162,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
         categorical = constant_time::logical_or(categorical, cat_feature == node->split_attr);
     }
 
-    double next_level_prediction;
+    double next_level_prediction = 0.0;
 
     // always recurse to max_depth, but not further
     if(node->depth < params->max_depth){
@@ -209,8 +210,9 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
         for(auto cat_feature : params->cat_idx){
             categorical = constant_time::logical_or(categorical, cat_feature == feature_index);
         }
+        
         if (categorical) {                              // TODO change this to work on cat_values, but do it once cpp_gbdt is complete. (after moritz answer)
-            for (double feature_value : {1.,2.,0.}) {
+            for (double feature_value : params->cat_values[feature_index]) {
                 // compute gain
                 double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
 
@@ -228,17 +230,15 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
                 candidate.rhs_size = std::accumulate(live_samples.begin(), live_samples.end(), 0) - lhs_size;
                 probabilities.push_back(candidate); 
             }
-
         } else {
-            for (size_t row=0; row<live_samples.size(); row++) {
+            for (double feature_value : this->grid) {
 
-                double feature_value = X_transposed[feature_index][row];
-
+                // double feature_value = X_transposed[feature_index][row];
 
                 // compute gain
                 double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
 
-                bool row_not_live = constant_time::logical_not(live_samples[row]);
+                bool row_not_live = false; //constant_time::logical_not(live_samples[row]);
                 bool no_gain = (gain == -1.);
                 // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
                 // same child -> useless split) then the gain of this split is set to 0.
@@ -255,28 +255,28 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
         }
         // **
 
-        for (size_t row=0; row<live_samples.size(); row++) {
+        // for (size_t row=0; row<live_samples.size(); row++) {
 
-            double feature_value = X_transposed[feature_index][row];
+        //     double feature_value = X_transposed[feature_index][row];
 
 
-            // compute gain
-            double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
+        //     // compute gain
+        //     double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
 
-            bool row_not_live = constant_time::logical_not(live_samples[row]);
-            bool no_gain = (gain == -1.);
-            // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
-            // same child -> useless split) then the gain of this split is set to 0.
-            gain = constant_time::select(constant_time::logical_or(no_gain, row_not_live), 0.0, gain);
+        //     bool row_not_live = constant_time::logical_not(live_samples[row]);
+        //     bool no_gain = (gain == -1.);
+        //     // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
+        //     // same child -> useless split) then the gain of this split is set to 0.
+        //     gain = constant_time::select(constant_time::logical_or(no_gain, row_not_live), 0.0, gain);
 
-            // Gi = epsilon_nleaf * Gi / (2 * delta_G)
-            gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
+        //     // Gi = epsilon_nleaf * Gi / (2 * delta_G)
+        //     gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
 
-            SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
-            candidate.lhs_size = lhs_size;
-            candidate.rhs_size = std::accumulate(live_samples.begin(), live_samples.end(), 0) - lhs_size;
-            probabilities.push_back(candidate);
-        }
+        //     SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
+        //     candidate.lhs_size = lhs_size;
+        //     candidate.rhs_size = std::accumulate(live_samples.begin(), live_samples.end(), 0) - lhs_size;
+        //     probabilities.push_back(candidate);
+        // }
     }
 
     // choose a split using the exponential mechanism
@@ -413,7 +413,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &candidates)
 
     double rand01 = ((double) std::rand() / (RAND_MAX));
 
-    size_t result_index;
+    size_t result_index = 0;
     bool found = false;
     for (size_t index=0; index<partials.size(); index++) {
         result_index = constant_time::select(found, result_index, index);
@@ -435,6 +435,7 @@ add_laplacian_noise(double laplace_scale)
                 num_real_leaves++;
             }
         }
+        sum = sum < 0 && sum >= -1e-10 ? 0 : sum;
         LOG_DEBUG("NUMLEAVES {1} LEAFSUM {2:.8f}", num_real_leaves, sum);
         VERIFICATION_LOG("LEAFVALUESSUM {0:.10f}", sum);
         return;

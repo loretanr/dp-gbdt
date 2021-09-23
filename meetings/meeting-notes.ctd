@@ -617,7 +617,7 @@ ask what ivan thinks of our current approach
 ------------------------ Esfandiar will also get back at me if something isn't the way he explained
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1632297501.67" unique_id="41">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1632385305.7" unique_id="41">
 			<rich_text>
 • discussion about GDF trees on slides
    ◇ Esfandiar thinks it's fine that we're just hiding whether it was chosen by GDF or without
@@ -633,11 +633,29 @@ ask what ivan thinks of our current approach
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">finish hardening, clean up and LaTeX</rich_text>
 			<rich_text>
+    </rich_text>
+			<rich_text foreground="#ffffa5a50000">noticed in midst of transferring cpp_gbdt use_grid and scale_X to hardened,
+      •   new exp mechanism needs huge privacy budget for abalone_300
+      • for abalone 4177 it works with much smaller budget :(
+      • wtf is this shit.
+         ◇ </rich_text>
+			<rich_text>fixed by making probs in new exp mechanism min 0
+         ◇ hardened and non hardened are now equal
+            ▪ problem: have side effects of multiple datasets!
+            ▪ cannot use fixed seed randomness for this, because of all the additional dummy OPs in hardened.
+               - -&gt; RNG will always be different. need to turn it off.
 
 </rich_text>
 			<rich_text foreground="#ffff00000000">could make argument that we hardened by hand to be more efficient than auto hardening tools</rich_text>
 			<rich_text>
    •  could measure raccoon performance or “obscuro”  obfuscuro, if their opens source
+   • obfuscuro sucks. only for a specific 3y old ubuntu, and only natively because of SGX
+      ◇ and even if I installed all that. I have doubts whether it works.
+         ▪ because their use cases are tiny. like 5lines of code functions (sum, fibonacci)
+⇒ Obfuscuro (unusable), raccoon (no src code), constantine (src code 2 be released)
+   </rich_text>
+			<rich_text foreground="#ffff00000000">• failed</rich_text>
+			<rich_text>
 
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">• make guidelines/rules out of our findings (tree stuff)</rich_text>
@@ -662,17 +680,13 @@ ask what ivan thinks of our current approach
 			<rich_text>
       ▪ and would be nice to reuse my own exp mechanism, but...
           
-efficiency != performance in this context (dp)
-    </rich_text>
-			<rich_text foreground="#ffffc0c0cbcb">research this</rich_text>
-			<rich_text>
-    
     
 </rich_text>
 			<rich_text foreground="#9090eeee9090">checkout paper for dp algorithms inside TEEs</rich_text>
 			<rich_text>  (kari will also read it)
-    </rich_text>
-			<rich_text link="webs https://proceedings.neurips.cc/paper/2019/hash/376c6b9ff3bedbbea56751a84fffc10c-Abstract.html">https://proceedings.neurips.cc/paper/2019/hash/376c6b9ff3bedbbea56751a84fffc10c-Abstract.html</rich_text>
+   •  subcherry paper_notes
+   •  </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">check out secure xgboost implementation of oblivious operations</rich_text>
 			<rich_text>
     
 </rich_text>

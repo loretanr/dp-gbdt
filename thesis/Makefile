@@ -22,7 +22,7 @@ MPOST = mpost
 
 all:  thesis
 
-texfiles = $(wildcard *.tex)
+texfiles = $(wildcard chapters/*.tex)
 
 .PHONY: thesis
 thesis: thesis.pdf thesis.ps
