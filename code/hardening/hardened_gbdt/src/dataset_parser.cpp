@@ -66,12 +66,12 @@ DataSet *Parser::get_adult(std::vector<ModelParams> &parameters,
     std::string file = "datasets/real/adult.data";
     std::string name = "adult";
     int num_rows = 48842;
-    int num_cols = 90;
+    int num_cols = 15;
     std::shared_ptr<BinaryClassification> task(new BinaryClassification());
-    std::vector<int> num_idx = {0,2,4,10,11,12};
+    std::vector<int> num_idx = {0,4,10,11,12};
     std::vector<int> cat_idx = {1,3,5,6,7,8,9,13};
     std::vector<int> target_idx = {14};
-    std::vector<int> drop_idx = {};
+    std::vector<int> drop_idx = {2};
     std::vector<int> cat_values = {}; // empty -> will be filled with the present values in the dataset
 
     return parse_file(file, name, num_rows, num_cols, num_samples, task, num_idx,

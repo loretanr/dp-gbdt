@@ -52,7 +52,7 @@ double BinaryClassification::compute_init_score(std::vector<double> &y)
 {
     // count how many samples are in each of the 2 classes
     double class1 = y[0];
-    int counter1 = 0, counter2 = 0;
+    double counter1 = 0, counter2 = 0;
     for(auto elem : y){
         bool is_class_1 = elem == class1;
         counter1 += is_class_1;
@@ -60,7 +60,7 @@ double BinaryClassification::compute_init_score(std::vector<double> &y)
     }
     // just need the smaller value
     bool cond = (counter1 < counter2);
-    int smaller_one = cond * counter1 + !cond * counter2;
+    double smaller_one = cond * (counter1/y.size()) + !cond * (counter2/y.size());
     double prediction = std::log(smaller_one / (1 - smaller_one));
     return prediction;
 }

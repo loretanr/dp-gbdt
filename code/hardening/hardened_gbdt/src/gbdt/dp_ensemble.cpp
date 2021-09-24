@@ -23,7 +23,7 @@ DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
     }
 
     // prepare the linspace grid
-    if(params->use_grid) {
+    if(is_true(params->use_grid)) {
         double grid_range = std::get<1>(params->grid_borders) - std::get<0>(params->grid_borders);
         double step_size = params->grid_step_size;
         int grid_size = (int) grid_range / step_size;
@@ -73,7 +73,7 @@ void DPEnsemble::train(DataSet *dataset)
             // you can only "turn off" leaf clipping if GDF is enabled!
             tree_params.delta_v = params->l2_threshold / (1 + params->l2_lambda);
         } else {
-            tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
+            tree_params.delta_v = constant_time::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
                     2 * params->l2_threshold * pow(1-params->learning_rate, tree_index));
         }
 
@@ -138,7 +138,7 @@ void DPEnsemble::train(DataSet *dataset)
 
             /** if necessary, fill up with (randomly chosen and clipped) rejected samples */
 
-            int num_additional_samples_required = std::max(number_of_rows - remaining_count, 0);
+            int num_additional_samples_required = constant_time::max(number_of_rows - remaining_count, 0);
             LOG_INFO("GDF: filling up with {1} rows (clipping those gradients)", num_additional_samples_required);
 
             // generate random index permutation
