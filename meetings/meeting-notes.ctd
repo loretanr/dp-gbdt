@@ -785,7 +785,7 @@ General:
          </rich_text>
 			</node>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1632487888.01" unique_id="44">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1632497611.97" unique_id="44">
 			<rich_text scale="h2">Questions</rich_text>
 			<rich_text>
 
@@ -800,10 +800,14 @@ priorities --------------------------------------
 • Results (privacy budgets)   RMSE, MAPE
 • Results runtime
 
-grid perfection is not absolutely mandatory!
-   •  my scale_X is correct algorithmically, however its side channel problematic -&gt; would need oblivious sort
+</rich_text>
+			<rich_text foreground="#9090eeee9090">grid perfection is not absolutely mandatory!
+   •  my scale_X is correct algorithmically, however its side channel problematic -&gt; would need oblivious sort</rich_text>
+			<rich_text>
 
 •  arithmetic library
+
+
 • fix stuff. get ready.
 
 
