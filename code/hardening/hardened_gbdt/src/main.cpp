@@ -52,13 +52,27 @@ int main(int argc, char** argv)
     current_params.balance_partition = TRUE;
     current_params.leaf_clipping = FALSE;
     current_params.scale_y = FALSE;
+
+    current_params.use_grid = TRUE;
+    current_params.grid_borders = std::make_tuple(0,1);
+    current_params.grid_step_size = 0.001;
+    current_params.scale_X = TRUE;
+    current_params.scale_X_percentile = 95;
+    current_params.scale_X_privacy_budget = 0.4;
+
     parameters.push_back(current_params);
 
     // Choose your dataset
     DataSet *dataset = Parser::get_abalone(parameters, 300, false);
+    ModelParams params = parameters[0];
 
     std::cout << dataset->name << std::endl;
     std::chrono::steady_clock::time_point time_begin = std::chrono::steady_clock::now();
+
+    if(is_true(params.use_grid) and is_true(params.scale_X)) {
+        params.privacy_budget -= params.scale_X_privacy_budget;
+        (*dataset).scale_X_columns(params);
+    }
 
     // create cross validation inputs
     std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
@@ -67,14 +81,9 @@ int main(int argc, char** argv)
     // do cross validation
     std::vector<double> rmses;
     for (auto split : cv_inputs) {
-        ModelParams params = parameters[0];
 
         if(is_true(params.scale_y)){
             split->train.scale_y(params, -1, 1);
-        }
-        if(is_true(params.use_grid) and is_true(params.scale_X)) {
-            params.privacy_budget -= params.scale_X_privacy_budget;
-            (*dataset).scale_X_columns(params);
         }
 
         DPEnsemble ensemble = DPEnsemble(&params);

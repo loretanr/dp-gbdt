@@ -617,7 +617,7 @@ ask what ivan thinks of our current approach
 ------------------------ Esfandiar will also get back at me if something isn't the way he explained
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1632385305.7" unique_id="41">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_16" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631797030.47" ts_lastsave="1632400965.98" unique_id="41">
 			<rich_text>
 • discussion about GDF trees on slides
    ◇ Esfandiar thinks it's fine that we're just hiding whether it was chosen by GDF or without
@@ -633,17 +633,16 @@ ask what ivan thinks of our current approach
 </rich_text>
 			<rich_text foreground="#ffffc0c0cbcb">finish hardening, clean up and LaTeX</rich_text>
 			<rich_text>
-    </rich_text>
-			<rich_text foreground="#ffffa5a50000">noticed in midst of transferring cpp_gbdt use_grid and scale_X to hardened,
-      •   new exp mechanism needs huge privacy budget for abalone_300
-      • for abalone 4177 it works with much smaller budget :(
-      • wtf is this shit.
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">      •  scale_X, new exp mechanism needs huge privacy budget for abalone_300
          ◇ </rich_text>
-			<rich_text>fixed by making probs in new exp mechanism min 0
-         ◇ hardened and non hardened are now equal
-            ▪ problem: have side effects of multiple datasets!
+			<rich_text foreground="#9090eeee9090">fixed by making probs in new exp mechanism min 0 and by if(VERIF){}</rich_text>
+			<rich_text>
             ▪ cannot use fixed seed randomness for this, because of all the additional dummy OPs in hardened.
                - -&gt; RNG will always be different. need to turn it off.
+      • </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">harden the 2 new functions</rich_text>
+			<rich_text>
 
 </rich_text>
 			<rich_text foreground="#ffff00000000">could make argument that we hardened by hand to be more efficient than auto hardening tools</rich_text>
@@ -785,6 +784,30 @@ General:
       ▪ I guess for the sake of makeing everything “data oblivious”
          </rich_text>
 			</node>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1632487888.01" unique_id="44">
+			<rich_text scale="h2">Questions</rich_text>
+			<rich_text>
+
+• Where put the documentation of the repository
+   ◇ how to choose parameters
+
+• ferie
+
+
+priorities --------------------------------------
+
+• Results (privacy budgets)   RMSE, MAPE
+• Results runtime
+
+grid perfection is not absolutely mandatory!
+   •  my scale_X is correct algorithmically, however its side channel problematic -&gt; would need oblivious sort
+
+•  arithmetic library
+• fix stuff. get ready.
+
+
+• look at synthetic datasets and write Theo if necessary</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1631777877.74" unique_id="5">

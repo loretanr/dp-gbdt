@@ -3,6 +3,7 @@
 #include <numeric>
 #include <mutex>
 #include "utils.h"
+#include "constant_time.h"
 
 
 /** Global Variables */
@@ -29,7 +30,9 @@ ModelParams create_default_params()
 // put a value between two bounds, not in std::algorithm in c++11
 double clamp(double n, double lower, double upper)
 {
-  return std::max(lower, std::min(n, upper));
+    n = constant_time::select(n < lower, lower, n);
+    n = constant_time::select(n > upper, upper, n);
+    return n;
 }
 
 
@@ -37,12 +40,15 @@ double log_sum_exp(std::vector<double> vec)
 {
     size_t count = vec.size();
     if (count > 0) {
-        double maxVal = *std::max_element(vec.begin(), vec.end());
+        double max_val = std::numeric_limits<double>::min();
+        for (auto elem : vec) {
+            max_val = constant_time::max(max_val, elem);
+        }
         double sum = 0;
         for (size_t i = 0; i < count; i++) {
-            sum += exp(vec[i] - maxVal);
+            sum += exp(vec[i] - max_val);
         }
-        return log(sum) + maxVal;
+        return log(sum) + max_val;
     } else {
         return 0.0;
     }

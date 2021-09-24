@@ -43,19 +43,19 @@ int Verification::main(int argc, char *argv[])
     params.balance_partition = TRUE;
     params.leaf_clipping = TRUE;
 
-    params.use_grid = true;
+    params.use_grid = TRUE;
     params.grid_borders = std::make_tuple(0,1);
     params.grid_step_size = 0.001;
-    params.scale_X = true;
+    params.scale_X = TRUE;
     params.scale_X_percentile = 95;
     params.scale_X_privacy_budget = 0.4;
 
     parameters.push_back(params);
     datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 150, false)); // small yearMSD
     // parameters.push_back(params);
-    // datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
+    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 150, false)); // small yearMSD
+    parameters.push_back(params);
+    datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_abalone(parameters, 4177, false)); // full abalone
     // --------------------------------------
@@ -70,7 +70,7 @@ int Verification::main(int argc, char *argv[])
         verification_logfile.open(fmt::format("verification/verification_logs/{}.hardened.log", dataset->name));
         std::cout << dataset->name << std::endl;
 
-        if(param.use_grid and param.scale_X) {
+        if(is_true(param.use_grid) and is_true(param.scale_X)) {
             param.privacy_budget -= param.scale_X_privacy_budget;
             (*dataset).scale_X_columns(param);
         }

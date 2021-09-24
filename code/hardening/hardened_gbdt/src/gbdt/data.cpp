@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cmath>
 #include "data.h"
+#include "constant_time.h"
 
 
 extern bool VERIFICATION_MODE;
@@ -58,8 +59,8 @@ void DataSet::scale_y(ModelParams &params, double lower, double upper)
     double doublemin = std::numeric_limits<double>::min();
     double minimum_y = doublemax, maximum_y = doublemin;
     for(int i=0; i<length; i++) {
-        minimum_y = std::min(minimum_y, y[i]);
-        maximum_y = std::max(maximum_y, y[i]);
+        minimum_y = constant_time::min(minimum_y, y[i]);
+        maximum_y = constant_time::max(maximum_y, y[i]);
     }
     for(int i=0; i<length; i++) {
         y[i] = (y[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
@@ -93,7 +94,7 @@ std::tuple<double,double> dp_confidence_interval(std::vector<double> &samples, d
     std::vector<double> results;
 
     // set up inputs
-    std::sort(samples.begin(), samples.end());
+    std::sort(samples.begin(), samples.end());      // TODO
     double *db = samples.data();
     int n = samples.size();
     double e = budget / 2;  // half budget since we're doing it twice
@@ -114,24 +115,29 @@ std::tuple<double,double> dp_confidence_interval(std::vector<double> &samples, d
         // exponential mechanism
         // https://github.com/wxindu/dp-conf-int/blob/master/algorithms/exp_mech.c
         for(int i = 0; i < m; i++) {
-            double utility = (i + 1) - m;
-            probs[i] = std::max(0.0, (db[i + 1] - db[i])*std::exp(e * utility / 2.));
+            double utility = (i+1) - m;
+            double prob = (db[i+1] - db[i]) * std::exp(e * utility / 2.);
+            probs[i] = constant_time::max(prob, 0.0);
         }
         for(int i = m; i <= n; i++) {
             double utility = m - i;
-            probs[i] = std::max(0.0, (db[i + 1] - db[i])*std::exp(e * utility / 2.));
+            double prob = (db[i+1] - db[i]) * std::exp(e * utility / 2.);
+            probs[i] = constant_time::max(prob, 0.0);
         }
-        double sum = 0;
-        for(int i = 0; i <= n; i++) sum += probs[i];
+        double sum = std::accumulate(probs.begin(), probs.end(), 0.0);
         r *= sum;
+        bool found = false;
         for(int i = 0; i <= n; i++) {
             r -= probs[i];
-            if(r < 0) {
-                priv_qi = i;
-                break;
-            }
+            priv_qi = constant_time::select(r < 0 and !found, i, priv_qi);
+            found = constant_time::select(r < 0, true, found);
         }
-        std::uniform_real_distribution<double> unif(db[priv_qi],db[priv_qi+1]);
+        double distr_lower = 0.0, distr_upper = 0.0;
+        for(int i = 0; i <= n; i++) {
+            distr_lower = constant_time::select(i == priv_qi, db[i], distr_lower);
+            distr_upper = constant_time::select(i == priv_qi+1, db[i], distr_upper);
+        }
+        std::uniform_real_distribution<double> unif(distr_lower, distr_upper);
         std::default_random_engine re;
         double a_random_double = unif(re);
         if(VERIFICATION_MODE){
@@ -175,13 +181,13 @@ void DataSet::scale_X_columns(ModelParams &params)
         double min_val = std::numeric_limits<double>::max();
         double max_val = std::numeric_limits<double>::min();
         for(int row=0; row<length; row++) {
-            min_val = std::min(min_val, X[row][col]);
-            max_val = std::max(max_val, X[row][col]);
+            min_val = constant_time::min(min_val, X[row][col]);
+            max_val = constant_time::max(max_val, X[row][col]);
         }
         lower = std::get<0>(params.grid_borders);
         upper = std::get<1>(params.grid_borders);
         for(int row=0; row<length; row++) {
-            X[row][col] = (X[row][col]-min_val)/(max_val-min_val)*(upper-lower)+lower;
+            X[row][col] = (X[row][col] - min_val) / (max_val - min_val) * (upper - lower) + lower;
         }
     }
 }

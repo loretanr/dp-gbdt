@@ -24,11 +24,11 @@ struct ModelParams {
     int verbosity = -1;
     std::vector<int> cat_idx;
     std::vector<int> num_idx;
-    bool use_grid = false;
+    unsigned use_grid = FALSE;
     std::tuple<double,double> grid_borders;
     double grid_step_size;
     std::vector<std::vector<double>> cat_values;
-    bool scale_X = false;
+    unsigned scale_X = FALSE;
     double scale_X_percentile = 95;
     double scale_X_privacy_budget = 0.4;
 };

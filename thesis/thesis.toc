@@ -1,6 +1,6 @@
 \changetocdepth {2}
 \babel@toc {english}{}
-\contentsline {chapter}{Contents}{iii}{section*.1}% 
+\contentsline {chapter}{Contents}{ii}{section*.1}% 
 \contentsline {chapter}{\chapternumberline {1}Introduction}{1}{chapter.1}% 
 \contentsline {chapter}{\chapternumberline {2}Background}{3}{chapter.2}% 
 \contentsline {section}{\numberline {2.1}Gradient boosted decision trees (GBDT)}{3}{section.2.1}% 
@@ -13,8 +13,10 @@
 \contentsline {chapter}{\chapternumberline {4}Methods and Implementation}{7}{chapter.4}% 
 \contentsline {section}{\numberline {4.1}Assembly}{7}{section.4.1}% 
 \contentsline {chapter}{\chapternumberline {5}Performance Evaluation}{9}{chapter.5}% 
-\contentsline {section}{\numberline {5.1}Accuracy}{9}{section.5.1}% 
-\contentsline {section}{\numberline {5.2}Performance}{9}{section.5.2}% 
-\contentsline {appendix}{\chapternumberline {A}Dummy Appendix}{11}{appendix.A}% 
-\contentsline {appendix}{\chapternumberline {B}Writing scientific texts in English}{13}{appendix.B}% 
-\contentsline {chapter}{Bibliography}{23}{appendix*.12}% 
+\contentsline {section}{\numberline {5.1}Methodology}{9}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Accuracy}{9}{section.5.2}% 
+\contentsline {section}{\numberline {5.3}Runtime}{9}{section.5.3}% 
+\contentsline {chapter}{\chapternumberline {6}Conclusion}{11}{chapter.6}% 
+\contentsline {appendix}{\chapternumberline {A}Dummy Appendix}{13}{appendix.A}% 
+\contentsline {appendix}{\chapternumberline {B}Writing scientific texts in English}{15}{appendix.B}% 
+\contentsline {chapter}{Bibliography}{25}{appendix*.12}% 

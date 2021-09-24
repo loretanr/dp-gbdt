@@ -205,13 +205,9 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
 
-        // **
-        bool categorical = false;  // TODO this is all new, had just the two loops for{for{..}} before
-        for(auto cat_feature : params->cat_idx){
-            categorical = constant_time::logical_or(categorical, cat_feature == feature_index);
-        }
+        bool categorical = std::find( params->cat_idx.begin(), params->cat_idx.end(), feature_index) != params->cat_idx.end();
         
-        if (categorical) {                              // TODO change this to work on cat_values, but do it once cpp_gbdt is complete. (after moritz answer)
+        if (categorical) {
             for (double feature_value : params->cat_values[feature_index]) {
                 // compute gain
                 double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);

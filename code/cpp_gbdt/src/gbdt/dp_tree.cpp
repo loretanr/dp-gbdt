@@ -385,9 +385,8 @@ void DPTree::recursive_print_tree(TreeNode* node) {
         return;
     }
     // check if split uses categorical attr
-    bool categorical = std::find( ((*params).cat_idx).begin(),
-        ((*params).cat_idx).end(), node->split_attr) != ((*params).cat_idx).end();
-    
+    bool categorical = std::find( params->cat_idx.begin(), params->cat_idx.end(), node->split_attr) != params->cat_idx.end();
+
     if (categorical) {
         std::cout << std::defaultfloat;
     } else {
