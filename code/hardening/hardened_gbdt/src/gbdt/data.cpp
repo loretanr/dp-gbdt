@@ -94,7 +94,7 @@ std::tuple<double,double> dp_confidence_interval(std::vector<double> &samples, d
     std::vector<double> results;
 
     // set up inputs
-    std::sort(samples.begin(), samples.end());      // TODO
+    constant_time::sort(samples);
     double *db = samples.data();
     int n = samples.size();
     double e = budget / 2;  // half budget since we're doing it twice
