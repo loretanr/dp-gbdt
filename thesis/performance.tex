@@ -2,7 +2,30 @@
 
 \section{Methodology}
 
-Dummy text.
+\paragraph{Datasets}
+Currently there are three datasets available to run cpp\_gbdt on. Abalone, Adult and YearMSD. But it is very easy to add more: There might be a small amount of manual preprocessing necessary to get a clean input file with comma separated values from a dataset. Once this is achieved, about 15 lines of code in the Parser class are required, to specify how the new dataset looks (size, target feature, feature type, regression/classification etc.). We can only do regression and binary classification though.
+
+\paragraph{Implementations}
+
+\begin{itemize}
+    \item python\_gbdt
+\end{itemize}
+
+\begin{itemize}
+    \item cpp\_gbdt
+\end{itemize}
+
+In terms of algorithm cpp\_gbdt does exactly the same as it's python equicalent. However, there are various benefits that C/C++ gives you: Compiler optimizations, threads.
+
+\begin{itemize}
+    \item enclave\_cpp\_gbdt
+\end{itemize}
+
+This shows the effect of putting running cpp\_gbdt inside a SGX enclave. That means: no multithreading, different ways to obtain randomness. More changes TODO.
+
+\begin{itemize}
+    \item hardened\_gbdt
+\end{itemize}
 
 \section{Accuracy}
 
@@ -10,4 +33,7 @@ Dummy text.
 
 \section{Runtime}
 
-Dummy text.
+Note, all runtime results describe the amount of time spent to perform 5-fold cross validation on a dataset.
+Note, many hyperparameters don't have a huge influence on 
+
+

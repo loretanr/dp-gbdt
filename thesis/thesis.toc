@@ -14,9 +14,11 @@
 \contentsline {section}{\numberline {4.1}Assembly}{7}{section.4.1}% 
 \contentsline {chapter}{\chapternumberline {5}Performance Evaluation}{9}{chapter.5}% 
 \contentsline {section}{\numberline {5.1}Methodology}{9}{section.5.1}% 
+\contentsline {paragraph}{Datasets}{9}{section*.2}% 
+\contentsline {paragraph}{Implementations}{9}{section*.3}% 
 \contentsline {section}{\numberline {5.2}Accuracy}{9}{section.5.2}% 
-\contentsline {section}{\numberline {5.3}Runtime}{9}{section.5.3}% 
+\contentsline {section}{\numberline {5.3}Runtime}{10}{section.5.3}% 
 \contentsline {chapter}{\chapternumberline {6}Conclusion}{11}{chapter.6}% 
 \contentsline {appendix}{\chapternumberline {A}Dummy Appendix}{13}{appendix.A}% 
 \contentsline {appendix}{\chapternumberline {B}Writing scientific texts in English}{15}{appendix.B}% 
-\contentsline {chapter}{Bibliography}{25}{appendix*.12}% 
+\contentsline {chapter}{Bibliography}{25}{appendix*.14}% 
