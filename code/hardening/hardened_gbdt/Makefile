@@ -16,7 +16,7 @@ clean:
 
 asm:
 	make clean
-	make CFLAGS="-c -std=c++11 -O0 -save-temps=obj"
+	make CFLAGS="-c -std=c++11 -O3 -save-temps=obj"
 
 objs/%.o : src/%.cpp
 	$(COMPILER) $(CFLAGS) $(INC) $< -o $@

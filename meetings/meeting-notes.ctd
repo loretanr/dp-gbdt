@@ -785,7 +785,7 @@ General:
          </rich_text>
 			</node>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1632497611.97" unique_id="44">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1632824145.69" unique_id="44">
 			<rich_text scale="h2">Questions</rich_text>
 			<rich_text>
 
@@ -812,6 +812,161 @@ priorities --------------------------------------
 
 
 • look at synthetic datasets and write Theo if necessary</rich_text>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="arithmetic changes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632817245.95" ts_lastsave="1632820240.5" unique_id="45">
+				<rich_text>to overload arithmetics I need my own type Fdouble everywhere
+
+need operations from/to Fdouble for scalars and for vectors
+
+or use the “fixed&quot; in the first place?
+
+
+maybe just put it into the </rich_text>
+				<rich_text foreground="#ffffa5a50000">bottleneck</rich_text>
+				<rich_text> function?
+
+------------------------------------------
+
+• update_gradients (loss.cpp)
+   ◇ basic arithmetics
+   ◇ std::accumulate (regression init_score)
+   ◇ comparison
+   ◇ logarithm
+   ◇ pow
+   ◇ sqrt
+   ◇ exp
+   ◇ negation
+
+• GDF in DPEnsemble
+   ◇ comparison
+   ◇ insied clamp()
+
+• make_tree_dfs
+
+• find_best_split
+   ◇ basic arithmetic
+
+</rich_text>
+				<rich_text foreground="#ffffa5a50000">• compute_gain</rich_text>
+				<rich_text>
+   ◇ basic
+   ◇ pow
+
+</rich_text>
+				<rich_text foreground="#ffffa5a50000">• samples_left_right_partition</rich_text>
+				<rich_text>
+   ◇ comparison
+
+• exponential algorithm
+   ◇ log_sum_exp various things
+   ◇ comparison
+   ◇ basic
+   ◇ exp</rich_text>
+			</node>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="verification numbers" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632818785.13" ts_lastsave="1632819803.6" unique_id="47">
+				<rich_text>abalone_size_300
+3.55834255 2.82754226 3.89863106 3.44607758 4.76144973 
+adult_size_320
+0.765625 0.734375 0.796875 0.734375 0.78125</rich_text>
+			</node>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="value_barrier" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632824145.69" ts_lastsave="1632824783.72" unique_id="49">
+				<rich_text foreground="#a0a02020f0f0">-O1 and not disable inline -&gt; value_barrier gets optimized away</rich_text>
+				<rich_text>
+
+looks like the volatile is working.
+However, it makes the code slower (vtune abalone_300 24s -&gt; 120s)
+
+_ZN13constant_time10</rich_text>
+				<rich_text foreground="#ffffa5a50000">logical_or</rich_text>
+				<rich_text>Ebb:
+.LFB820:
+	.cfi_startproc
+	movb	%dil, -1(%rsp)
+	movzbl	-1(%rsp), %edx
+	movb	%sil, -2(%rsp)
+	movzbl	-2(%rsp), %eax
+	orl	%edx, %eax
+	ret
+	
+-------------------------------------------------------------------
+</rich_text>
+				<rich_text foreground="#a0a02020f0f0">-O1 and value_barrier_v2 (__asm__)</rich_text>
+				<rich_text>
+
+_ZN13constant_time10</rich_text>
+				<rich_text foreground="#ffffa5a50000">logical_or</rich_text>
+				<rich_text>Ebb:
+.LFB820:
+	.cfi_startproc
+	movl	%edi, %eax
+	orl	%esi, %eax
+	ret
+	
+</rich_text>
+				<rich_text foreground="#a0a02020f0f0">-O0 and value_barrier_v2 (__asm__)</rich_text>
+				<rich_text> -&gt; huge code.
+
+_ZN13constant_time10</rich_text>
+				<rich_text foreground="#ffffa5a50000">logical_or</rich_text>
+				<rich_text>Ebb:
+.LFB820:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	pushq	%rbx
+	subq	$24, %rsp
+	.cfi_offset 3, -24
+	movl	%edi, %eax
+	movl	%esi, %edx
+	movb	%al, -20(%rbp)
+	movl	%edx, %eax
+	movb	%al, -24(%rbp)
+	movzbl	-20(%rbp), %eax
+	movl	%eax, %edi
+	call	_ZN13constant_time16value_barrier_v2IbEET_S1_
+	movl	%eax, %ebx
+	movzbl	-24(%rbp), %eax
+	movl	%eax, %edi
+	call	_ZN13constant_time16value_barrier_v2IbEET_S1_
+	orl	%ebx, %eax
+	addq	$24, %rsp
+	popq	%rbx
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	
+--------------------------------------------------------------------
+</rich_text>
+				<rich_text foreground="#a0a02020f0f0">-O1 and no value_barrier</rich_text>
+				<rich_text>
+
+_ZN13constant_time10</rich_text>
+				<rich_text foreground="#ffffa5a50000">logical_or</rich_text>
+				<rich_text>Ebb:
+.LFB820:
+	.cfi_startproc
+	movl	%esi, %eax
+	orl	%edi, %eax
+	ret
+	
+	
+	
+	</rich_text>
+			</node>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_30" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632818207.65" ts_lastsave="1632822707.26" unique_id="46">
+			<rich_text>• is the compute_score secret. Resp. will that even be run in a real usecase?
+• Ferie
+• value barrier turning off no_inline for the value_barrier under -O1 leads to it being optimized away.</rich_text>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1632819742.49" unique_id="48">
+				<rich_text scale="h2">TODOs</rich_text>
+				<rich_text>
+• re-enable libfixedtime optimization in makefile
+
+• use git commits to measure hardening performance decrease?</rich_text>
+			</node>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1631777877.74" unique_id="5">
@@ -2097,7 +2252,7 @@ for tree in n_trees:
    5) delete these rows from X_remain</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1631691932.67" unique_id="25">
+	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Hardening Notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1627973945.07" ts_lastsave="1632818740.67" unique_id="25">
 		<rich_text scale="h2">preliminary TODOs</rich_text>
 		<rich_text>
 
@@ -2166,12 +2321,6 @@ for tree in n_trees:
 		<rich_text foreground="#ffffa5a50000">• harden the DPEnsemble stuff</rich_text>
 		<rich_text>
 
-
-</rich_text>
-		<rich_text foreground="#ffffc0c0cbcb">• identify the really challenging parts (where some cmov or something will be necessary)</rich_text>
-		<rich_text>
-
-
 </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">• think about whether I want to highlight the function arguments. because they are not branches, however if they get passed by value then size would be observable
 </rich_text>
@@ -2180,6 +2329,7 @@ for tree in n_trees:
 		<rich_text foreground="#ffffc0c0cbcb">is seeding randomness problematic? can adversary control our random seed and thus randomness?</rich_text>
 		<rich_text>
    ◇ does randomness generation need to be side channel free?
+      ▪ yes
 
 ---------------------------------------------------------------------------------------
 </rich_text>

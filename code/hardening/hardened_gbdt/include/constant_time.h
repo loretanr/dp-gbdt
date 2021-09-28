@@ -18,13 +18,21 @@ namespace constant_time
 {
     // probably unnecessary, but keeping it to be safe
     template <typename T>
-    USE_INLINE T value_barrier(T a)
+    T value_barrier(T a)
     {
         // volatile -> hint to the compiler that "a" might be changed 
         //from somewhere outside. -> optimization disincentive
         volatile T v = a;
         return v;
     }
+
+    template <typename T>
+    T value_barrier_v2(T a)
+    {
+        T r;
+        __asm__("" : "=r"(r) : "0"(a));
+        return r;
+    }    
 
 
     /** oblivious assign aka select */
@@ -46,7 +54,7 @@ namespace constant_time
     USE_INLINE bool logical_not(bool a);
 
 
-    /** constant time max / min */
+    /** constant time max/min */
 
     template <typename T>
     USE_INLINE T max(T a, T b)

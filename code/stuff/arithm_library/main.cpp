@@ -1,18 +1,22 @@
 #include <iostream>
+#include "constant_time.h"
 
-using namespace std;
 
 int main()
 {
-    unsigned a = 1, b = 2, c;
+    double a = 1, b = 2, c;
 
     c = a + b;
 
-    cout << c << endl;
+    std::cout << c << std::endl;
 
     c = a * b;
 
-    cout << c << endl;
+    std::cout << c << std::endl;
+
+    c = constant_time::plus(a, b);
+
+    std::cout << c << std::endl;
 
     return c;
 

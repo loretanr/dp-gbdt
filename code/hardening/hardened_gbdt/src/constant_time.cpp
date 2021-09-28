@@ -7,7 +7,7 @@
 USE_INLINE bool constant_time::logical_or(bool a, bool b)
 {
     // use bitwise for const time
-    return (value_barrier(a) | value_barrier(b));
+    return (value_barrier_v2(a) | value_barrier_v2(b));
 }
 
 USE_INLINE bool constant_time::logical_and(bool a, bool b)
