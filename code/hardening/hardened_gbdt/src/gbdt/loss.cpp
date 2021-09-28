@@ -5,6 +5,7 @@
 #include <numeric>
 #include <algorithm>
 #include <iostream>
+#include "constant_time.h"
 
 extern bool VERIFICATION_MODE;
 
@@ -59,10 +60,8 @@ double BinaryClassification::compute_init_score(std::vector<double> &y)
         counter2 += !is_class_1;
     }
     // just need the smaller value
-    bool cond = (counter1 < counter2);
-    double smaller_one = cond * (counter1/y.size()) + !cond * (counter2/y.size());
-    double prediction = std::log(smaller_one / (1 - smaller_one));
-    return prediction;
+    double smaller_one = constant_time::select(counter1 < counter2, counter1/y.size(), counter2/y.size());
+    return std::log(smaller_one / (1 - smaller_one));
 }
 
 std::vector<double> BinaryClassification::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)

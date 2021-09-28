@@ -73,7 +73,7 @@ void DPEnsemble::train(DataSet *dataset)
             // you can only "turn off" leaf clipping if GDF is enabled!
             tree_params.delta_v = params->l2_threshold / (1 + params->l2_lambda);
         } else {
-            tree_params.delta_v = constant_time::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
+            tree_params.delta_v = std::min((double) (params->l2_threshold / (1 + params->l2_lambda)),
                     2 * params->l2_threshold * pow(1-params->learning_rate, tree_index));
         }
 
@@ -107,7 +107,7 @@ void DPEnsemble::train(DataSet *dataset)
                 remaining_indices[i] = constant_time::logical_not(reject);
             }
 
-            int remaining_count = std::count(remaining_indices.begin(), remaining_indices.end(), 1);
+            int remaining_count = std::accumulate(remaining_indices.begin(), remaining_indices.end(), 0);
             LOG_INFO("GDF: {1} of {2} rows fulfill gradient criterion",
                 remaining_count, dataset->length);
 

@@ -18,35 +18,48 @@ main:
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register 6
-	subq	$16, %rsp
-	movl	$1, -4(%rbp)
-	movl	$2, -8(%rbp)
-	movl	-4(%rbp), %edx
-	movl	-8(%rbp), %eax
-	addl	%edx, %eax
-	movl	%eax, -12(%rbp)
-	movl	-12(%rbp), %eax
-	movl	%eax, %esi
+	subq	$32, %rsp
+	movsd	.LC0(%rip), %xmm0
+	movsd	%xmm0, -8(%rbp)
+	movsd	.LC1(%rip), %xmm0
+	movsd	%xmm0, -16(%rbp)
+	movsd	-8(%rbp), %xmm0
+	addsd	-16(%rbp), %xmm0
+	movsd	%xmm0, -24(%rbp)
+	movsd	-24(%rbp), %xmm0
 	leaq	_ZSt4cout(%rip), %rdi
-	call	_ZNSolsEj@PLT
+	call	_ZNSolsEd@PLT
 	movq	%rax, %rdx
 	movq	_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax
 	movq	%rax, %rsi
 	movq	%rdx, %rdi
 	call	_ZNSolsEPFRSoS_E@PLT
-	movl	-4(%rbp), %eax
-	imull	-8(%rbp), %eax
-	movl	%eax, -12(%rbp)
-	movl	-12(%rbp), %eax
-	movl	%eax, %esi
+	movsd	-8(%rbp), %xmm0
+	mulsd	-16(%rbp), %xmm0
+	movsd	%xmm0, -24(%rbp)
+	movsd	-24(%rbp), %xmm0
 	leaq	_ZSt4cout(%rip), %rdi
-	call	_ZNSolsEj@PLT
+	call	_ZNSolsEd@PLT
 	movq	%rax, %rdx
 	movq	_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax
 	movq	%rax, %rsi
 	movq	%rdx, %rdi
 	call	_ZNSolsEPFRSoS_E@PLT
-	movl	-12(%rbp), %eax
+	movsd	.LC2(%rip), %xmm1
+	movsd	-24(%rbp), %xmm0
+	call	_ZN13constant_time4plusEdd@PLT
+	movq	%xmm0, %rax
+	movq	%rax, -24(%rbp)
+	movsd	-24(%rbp), %xmm0
+	leaq	_ZSt4cout(%rip), %rdi
+	call	_ZNSolsEd@PLT
+	movq	%rax, %rdx
+	movq	_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GOTPCREL(%rip), %rax
+	movq	%rax, %rsi
+	movq	%rdx, %rdi
+	call	_ZNSolsEPFRSoS_E@PLT
+	movsd	-24(%rbp), %xmm0
+	cvttsd2si	%xmm0, %eax
 	leave
 	.cfi_def_cfa 7, 8
 	ret
@@ -105,6 +118,19 @@ _GLOBAL__sub_I_main:
 	.section	.init_array,"aw"
 	.align 8
 	.quad	_GLOBAL__sub_I_main
+	.section	.rodata
+	.align 8
+.LC0:
+	.long	0
+	.long	1072693248
+	.align 8
+.LC1:
+	.long	0
+	.long	1073741824
+	.align 8
+.LC2:
+	.long	0
+	.long	1078263808
 	.hidden	__dso_handle
 	.ident	"GCC: (Debian 8.3.0-6) 8.3.0"
 	.section	.note.GNU-stack,"",@progbits
