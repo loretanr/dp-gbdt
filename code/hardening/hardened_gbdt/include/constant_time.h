@@ -26,15 +26,6 @@ namespace constant_time
         return v;
     }
 
-    template <typename T>
-    T value_barrier_v2(T a)
-    {
-        T r;
-        __asm__("" : "=r"(r) : "0"(a));
-        return r;
-    }    
-
-
     /** oblivious assign aka select */
 
     template <typename T>
