@@ -1,6 +1,7 @@
 #include <numeric>
 #include <iostream>
 #include <iomanip>
+#include <set>
 #include <cmath>
 #include "dp_tree.h"
 #include "laplace.h"
@@ -188,6 +189,7 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
         std::vector<double> splits;
+        std::set<double> unique;
         if(params->use_grid) {
             if(categorical){
                 splits = params->cat_values[feature_index];
@@ -198,6 +200,10 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
             splits = X_live[feature_index];
         }
         for (double feature_value : splits) {
+            if (std::get<1>(unique.insert(feature_value)) == false){
+                // already had that value, will never happen in grid
+                continue;
+            }
             // compute gain
             double gain = compute_gain(X_live, gradients_live, feature_index, feature_value, lhs_size, categorical);
             // feature cannot be chosen, skipping

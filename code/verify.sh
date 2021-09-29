@@ -46,7 +46,7 @@ if [ "$NRR" = false ] ; then
     # compile and run cpp
     echo -e "${CYAN}Compiling C++ ...${NC}"
     cd cpp_gbdt
-    make clean | eval "$SHIFT_RIGHT"
+    # make clean | eval "$SHIFT_RIGHT"
     make | eval "$SHIFT_RIGHT"
     echo -e "${CYAN}Running C++ verification ...${NC}"
     rm verification_logs/*.log 2> /dev/null

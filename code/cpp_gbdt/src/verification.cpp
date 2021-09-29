@@ -38,20 +38,20 @@ int Verification::main(int argc, char *argv[])
     ModelParams params = create_default_params();
     params.privacy_budget = 0.5;
     params.nb_trees = 5;
-    params.gradient_filtering = true;
+    params.gradient_filtering = false;
     params.balance_partition = true;
     params.leaf_clipping = true;
     params.use_dp = true;
 
-    params.use_grid = true;
+    params.use_grid = false;
     params.grid_borders = std::make_tuple(0,1);
     params.grid_step_size = 0.001;
-    params.scale_X = true;
+    params.scale_X = false;
     params.scale_X_percentile = 95;
     params.scale_X_privacy_budget = 0.4;
 
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 150, false)); // small yearMSD
     parameters.push_back(params);

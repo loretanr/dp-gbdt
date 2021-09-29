@@ -16,7 +16,7 @@ from sklearn.preprocessing import MinMaxScaler
 from data.parser.parser import Parser
 from evaluation import estimator
 
-PRIVACY_BUDGET = 0.1
+PRIVACY_BUDGET = 0.5
 NB_SPLITS = 5 # number of CV folds
 NB_TREES_PER_ENSEMBLE = 5
 NB_TREES = 5
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
     SAMPLES = [300]
-    # SAMPLES = []
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -71,8 +71,8 @@ if __name__ == '__main__':
 
     DATASET = 'yearMSD'
     parser = Parser(dataset=DATASET)
-    # SAMPLES = [300]
     SAMPLES = [150]
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -125,6 +125,7 @@ if __name__ == '__main__':
             use_bfs=False,
             use_3_trees=False,
             cat_idx=cat_idx, num_idx=num_idx,
+            binary_classification=True,
             verbosity=-1)
         scores = cross_val_score(
             m, X, y, scoring='accuracy', n_jobs=1) # -1 for multithreading
