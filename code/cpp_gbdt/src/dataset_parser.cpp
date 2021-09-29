@@ -184,6 +184,16 @@ DataSet *Parser::parse_file(std::string dataset_file, std::string dataset_name, 
         current_index++;
     }
 
+    // update num_idx / cat_idx if we dropped columns
+    for(auto drop_elem : drop_idx) {
+        for(auto &num_elem : parameters.back().num_idx){
+            num_elem = num_elem > drop_elem ? num_elem - 1 : num_elem;
+        }
+        for(auto &cat_elem : parameters.back().cat_idx){
+            cat_elem = cat_elem > drop_elem ? cat_elem - 1 : cat_elem;
+        }
+    }
+
     DataSet *dataset = new DataSet(X,y);
     dataset->name = std::string(dataset_name) + std::string("_size_") + std::to_string(num_samples);
 

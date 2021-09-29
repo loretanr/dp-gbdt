@@ -1267,7 +1267,9 @@ def AddLaplacianNoise(leaves: List[DecisionNode],
   
   logger.debug("NUMLEAVES {} LEAFSUM {:.8f}".format(len(leaves), np.sum([leaf.prediction for leaf in leaves])))
   if VERIFICATION_MODE:
-    verificationLogger.log("LEAFVALUESSUM {:.10f}".format(np.sum([leaf.prediction for leaf in leaves])))
+    summ = np.sum([leaf.prediction for leaf in leaves])
+    summ = 0 if (summ < 0 and summ >= 1e-10 * -1) else summ
+    verificationLogger.log("LEAFVALUESSUM {:.10f}".format(summ))
 
 
 def ComputePredictions(gradients: np.ndarray,

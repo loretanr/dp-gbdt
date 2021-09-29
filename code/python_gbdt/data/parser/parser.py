@@ -239,7 +239,7 @@ class Parser:
     adult = adult.append(
         pd.read_csv(test_real_path, header=None, skiprows=1, sep=', '))
     # Drop weight info
-    # adult.drop(columns=[2], axis=1, inplace=True)       # disabled this column
+    adult.drop(columns=[2], axis=1, inplace=True)       # disabled this column
     # Drop rows with missing information
     adult = adult[~(adult.astype(str) == '?').any(1)]
     if n_rows:
