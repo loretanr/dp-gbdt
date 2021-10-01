@@ -13,20 +13,20 @@ from evaluation import estimator
 # The dataset to use for evaluation
 DATASET = 'bcw'
 # The privacy budget to use for evaluation
-PRIVACY_BUDGETS = np.arange(0.1, 1.0, 0.1)
+PRIVACY_BUDGETS = [10]
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
 # Number of rows to use from the dataset
-SAMPLES = [300, 5000]
+SAMPLES = [700]
 # Nb trees for each ensemble
 NB_TREES_PER_ENSEMBLE = 50
 
 # The optimal parameters found through the grid search for the baseline model
-with open('./model_params.json') as json_file:
+with open('./results/bcw/model_params.json') as json_file:
   MODEL_PARAMS = json.load(json_file)
 
 if __name__ == '__main__':
-  output = open('data.csv', 'w')
+  output = open('./results/bcw/data.csv', 'w')
   output.write('dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,'
                'max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,'
                'model,config,balance_partition\n')
@@ -37,19 +37,19 @@ if __name__ == '__main__':
     X, y, cat_idx, num_idx, task = parser.Parse(n_rows=nb_samples)
 
     # Own model
-    models = [estimator.DPGBDT]
+    models = [estimator.DPGBDT] # seems not to work with DPRef, great.
 
     for model in models:
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
-      for config in ['Vanilla', 'BFS', 'DFS', '3-trees']:
+      for config in ['Vanilla', 'DFS']:
         for idx, budget in enumerate(PRIVACY_BUDGETS):
           if config == 'Vanilla' and idx != 0:
             continue
           if model_name == 'DPRef' and config != 'DFS':
             continue
           model_params = MODEL_PARAMS.get(model_name).get(config)
-          budget = np.around(np.float(budget), decimals=2)
+          budget = np.around(np.float64(budget), decimals=2)
           if config == 'Vanilla':
             budget = 0.
           nb_trees = model_params.get(

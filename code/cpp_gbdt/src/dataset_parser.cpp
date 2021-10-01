@@ -8,6 +8,8 @@
 #include "dataset_parser.h"
 #include "data.h"
 
+extern bool VERIFICATION_MODE;
+
 /* Parsing:
     - the data file needs to be comma separated
     - so far it only looks out for "?" as missing values, and then gets rid of those rows
@@ -79,6 +81,25 @@ DataSet *Parser::get_adult(std::vector<ModelParams> &parameters,
 }
 
 
+DataSet *Parser::get_bcw(std::vector<ModelParams> &parameters,
+        size_t num_samples, bool use_default_params)
+{
+    std::string file = "datasets/real/breast-cancer-wisconsin.data";
+    std::string name = "bcw";
+    int num_rows = 699;
+    int num_cols = 11;
+    std::shared_ptr<BinaryClassification> task(new BinaryClassification());
+    std::vector<int> num_idx = {};
+    std::vector<int> cat_idx = {1,2,3,4,5,6,7,8,9};
+    std::vector<int> target_idx = {10};
+    std::vector<int> drop_idx = {0};
+    std::vector<int> cat_values = {}; // empty -> will be filled with the present values in the dataset
+
+    return parse_file(file, name, num_rows, num_cols, num_samples, task, num_idx,
+        cat_idx, cat_values, target_idx, drop_idx, parameters, use_default_params);
+}
+
+
 
 /** Utility functions */
 
@@ -100,7 +121,6 @@ DataSet *Parser::parse_file(std::string dataset_file, std::string dataset_name, 
         std::vector<ModelParams> &parameters, bool use_default_params)
 {
     std::ifstream infile(dataset_file);
-    std::string line;
     VVD X;
     std::vector<double> y;
     num_samples = std::min(num_samples, num_rows);
@@ -122,12 +142,26 @@ DataSet *Parser::parse_file(std::string dataset_file, std::string dataset_name, 
         }
     }
 
+    // shuffle the whole dataset at the start. Otherwise, if we use a subset
+    // of a larger dataset, we always end up with the same samples.
+    std::string line;
+    std::vector<std::string> whole_dataset;
+    while (std::getline(infile, line,'\n')) {
+        whole_dataset.push_back(line);
+    }
+    if(not VERIFICATION_MODE) {
+        std::random_shuffle(whole_dataset.begin(), whole_dataset.end());
+    }
+
     // parse dataset, label-encode categorical features
     int current_index = 0;
     std::vector<std::map<std::string,double>> mappings(num_cols + 1); // last (additional) one is for y
 
-    while (std::getline(infile, line,'\n') && current_index < num_samples) {
-        std::stringstream ss(line);
+    for (auto line : whole_dataset) {
+        
+        if (current_index >= num_samples){
+            break;
+        }
         std::vector<std::string> strings = split_string(line, ',');
         std::vector<double> X_row;
 
