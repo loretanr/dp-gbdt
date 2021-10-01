@@ -23,6 +23,7 @@ public:
         size_t num_samples, bool use_default_params = false);
     static DataSet *get_adult(std::vector<ModelParams> &parameters, size_t num_samples,
         bool use_default_params = false);
+    static DataSet *get_bcw(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params);
 };
 
 #endif // PARSER_H

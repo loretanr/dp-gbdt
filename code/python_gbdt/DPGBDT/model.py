@@ -1077,7 +1077,14 @@ class DifferentiallyPrivateTree(BaseEstimator):  # type: ignore
     # Iterate over features
     for feature_index in range(X.shape[1]):
       # Iterate over unique value for this feature
+      unique = set()
       for idx, value in enumerate(X[:, feature_index]):
+
+        # avoid recomputing for the same values
+        if(value in unique):
+          continue
+        unique.add(value)
+
         # Find gain for that split
         gain = self.ComputeGain(
             feature_index, value, X, gradients, X_sibling=X_sibling,

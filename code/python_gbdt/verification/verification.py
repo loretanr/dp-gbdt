@@ -12,6 +12,7 @@ from sklearn.compose import TransformedTargetRegressor
 from sklearn.metrics import make_scorer
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.dummy import DummyClassifier
 
 from data.parser.parser import Parser
 from evaluation import estimator
@@ -105,7 +106,7 @@ if __name__ == '__main__':
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
     SAMPLES = [320]
-    # SAMPLES = []
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -131,4 +132,45 @@ if __name__ == '__main__':
             m, X, y, scoring='accuracy', n_jobs=1) # -1 for multithreading
         mean, std = 100 - (scores.mean() * 100), (scores.std() * 100 / 2)
         print(scores)
+        logging.CloseVerificationLogger()
+
+
+    DATASET = 'bcw'
+    parser = Parser(dataset=DATASET)
+    SAMPLES = [700]
+    PRIVACY_BUDGET = 0
+    # SAMPLES = []
+
+    for num_samples in SAMPLES:
+        DPGBDT.model.cv_fold_counter = 0
+        dataset_name = get_dataset_name(num_samples)
+        print(dataset_name)
+        logging.SetupVerificationLogger(dataset_name)
+        X, y, cat_idx, num_idx, task = parser.Parse(n_rows=num_samples)
+
+        # zeroR baseline
+        # dummy_clf = DummyClassifier(strategy="most_frequent")
+        # dummy_clf.fit(X,y)
+        # dummy_clf.predict(X)
+        # print("zeroR {:.4f}".format(dummy_clf.score(X, y)))
+        print("zeroR 0.6501")
+
+        rmse = make_scorer(metrics.mean_squared_error, squared=False)
+
+        m = estimator.DPGBDT(  # type: ignore
+            PRIVACY_BUDGET, NB_TREES, NB_TREES_PER_ENSEMBLE, MAX_DEPTH, LEARNING_RATE,
+            n_classes=len(set(y)) if task == 'classification' else None,
+            gradient_filtering=GRADIENT_FILTERING,
+            leaf_clipping=LEAF_CLIPPING,
+            min_samples_split=MIN_SAMPLES_SPLIT,
+            balance_partition=BALANCE_PARTITION,
+            use_bfs=False,
+            use_3_trees=False,
+            cat_idx=cat_idx, num_idx=num_idx,
+            binary_classification=True,
+            verbosity=-1)
+        scores = cross_val_score(
+            m, X, y, scoring='accuracy', n_jobs=1) # -1 for multithreading
+        # mean, std = 100 - (scores.mean() * 100), (scores.std() * 100 / 2)
+        print(scores, "-> mean {:.4f}".format(scores.mean()))
         logging.CloseVerificationLogger()

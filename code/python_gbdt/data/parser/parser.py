@@ -151,6 +151,7 @@ class Parser:
     numerical_indices = list(range(0, X.shape[1]))  # All
     return X, y, categorical_indices, numerical_indices, task
 
+
   def get_bcw(self,
               n_rows: Optional[int] = None) -> Any:
     """Return the breast cancer dataset."""
@@ -166,9 +167,10 @@ class Parser:
     y = np.where(y[:] == 4, 1, 0)
     del self.data['class']
     X = self.data.values.astype(np.float)
-    categorical_indices = []  # type: List[int]
-    numerical_indices = list(range(0, X.shape[1]))  # All
+    categorical_indices = list(range(0, X.shape[1]))  # type: List[int]
+    numerical_indices = []  # All
     return X, y, categorical_indices, numerical_indices, task
+
 
   def get_abalone(
       self,
