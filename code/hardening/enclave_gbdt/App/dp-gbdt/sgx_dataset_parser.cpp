@@ -38,6 +38,23 @@ sgx_dataset SGX_Parser::get_abalone(sgx_modelparams &parameters, int num_samples
         cat_idx, target_idx, drop_idx, parameters);
 }
 
+sgx_dataset SGX_Parser::get_adult(sgx_modelparams &parameters, int num_samples)
+{
+    const char *file = "datasets/real/adult.data";
+    const char *name = "adult";
+    int num_rows = 48842;
+    int num_cols = 15;
+    // std::shared_ptr<Regression> task(new Regression());
+    const char *task = "classification";
+    std::vector<int> num_idx = {0,4,10,11,12};
+    std::vector<int> cat_idx = {1,3,5,6,7,8,9,13};
+    int target_idx = {14};
+    std::vector<int> drop_idx = {2};
+
+    return parse_file(file, name, num_rows, num_cols, num_samples, task, num_idx,
+        cat_idx, target_idx, drop_idx, parameters);
+}
+
 
 /* helper functions */
 
@@ -155,6 +172,16 @@ sgx_dataset SGX_Parser::parse_file(const char *dataset_file, const char *dataset
     dataset.num_cols = (unsigned) num_used_cols;
     dataset.name = new char[strlen(dataset_name)];
     strcpy(dataset.name, dataset_name);
-    //  = (char *) (std::string(dataset_name) + std::string("_size_")); // + std::string(itoa(num_samples));// + (char *) itoa(num_samples);
+
+    // update num_idx / cat_idx if we dropped columns
+    for(auto drop_elem : drop_idx) {
+        for(unsigned i=0; i<modelparams.num_idx_len; i++){
+            modelparams.num_idx[i] = modelparams.num_idx[i] > drop_elem ? modelparams.num_idx[i] - 1 : modelparams.num_idx[i];
+        }
+        for(unsigned i=0; i<modelparams.cat_idx_len; i++){
+            modelparams.cat_idx[i] = modelparams.cat_idx[i] > drop_elem ? modelparams.cat_idx[i] - 1 : modelparams.cat_idx[i];
+        }
+    }
+
     return dataset;
 }

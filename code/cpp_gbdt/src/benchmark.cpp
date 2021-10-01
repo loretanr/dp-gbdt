@@ -38,15 +38,38 @@ int Benchmark::main(int argc, char *argv[])
     ModelParams params;
     params.use_dp = true;
     params.use_grid = false;
-    params.privacy_budget = 6;
+    params.privacy_budget = 0.1;
     params.nb_trees = 10;
+    params.leaf_clipping = true;
+    params.balance_partition = true;
+    params.gradient_filtering = false;
+    params.min_samples_split = 2;
+    params.learning_rate = 0.1;
+    params.max_depth = 6;
+    params.scale_X = false;
+
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_abalone(parameters, 300, false));
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_abalone(parameters, 1000, false));
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_abalone(parameters, 4177, false));
     parameters.push_back(params);
-    datasets.push_back(Parser::get_abalone(parameters, 5000, false)); // full abalone
+    datasets.push_back(Parser::get_adult(parameters, 300, false));
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_adult(parameters, 1000, false));
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_adult(parameters, 5000, false));
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 300, false));
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 1000, false));
     // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD
     // datasets.push_back(Parser::get_adult(parameters, 4000, true)); // medium adult
     // --------------------------------------
 
     for(size_t i=0; i<datasets.size(); i++) {
+
         DataSet *dataset = datasets[i];
         ModelParams &param = parameters[i];
         std::cout << dataset->name << std::endl;
@@ -103,7 +126,7 @@ int Benchmark::main(int argc, char *argv[])
         // print elapsed time (for 5 fold cv)
         std::chrono::steady_clock::time_point time_end = std::chrono::steady_clock::now();
         double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count();
-        std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)" << std::endl;
+        std::cout << "  (" << std::fixed << std::setprecision(2) << elapsed/1000 << "s)" << std::endl;
     }
     return 0;
 }

@@ -34,6 +34,26 @@ Dummy text.
 \section{Runtime}
 
 Note, all runtime results describe the amount of time spent to perform 5-fold cross validation on a dataset.
-Note, many hyperparameters don't have a huge influence on 
+Note, many hyperparameters don't have a huge influence on runtine. But some do.
 
 
+\begin{table}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{3.2cm}|c|c|c|c|c|c|c|c|}
+      \hline
+      \multirow{2}{3.2cm}{\textbf{Implementation}} & \multicolumn{3}{c|}{\textbf{abalone}} & \multicolumn{3}{c|}{\textbf{adult}} & \multicolumn{2}{c|}{\textbf{yearMSD}}\\
+      % \hline
+      % \textbf{Inactive Modes} & \textbf{Description}\\
+      \cline{2-9}
+      & \textbf{300} & \textbf{1000} & \textbf{4177} & \textbf{300} & \textbf{1000} & \textbf{5000} & \textbf{300} & \textbf{1000}\\
+      %\hhline{~--}
+      \hline
+      python\_gbdt & 1 & 2 & 3 & 1 & 2 & 3 & 2 & 3 \\ \hline
+      cpp\_gbdt & TBD & TBD & TBD & 1 & 2 & 3 & 2 & 3 \\ \hline
+      enclave\_gbdt & TBD & TBD & TBD & 1 & 2 & 3 & 2 & 3 \\ \hline
+      hardened\_gbdt & TBD & TBD & TBD & 1 & 2 & 3 & 2 & 3 \\ \hline
+      hardened\_sgx\_gbdt & 1 & 2 & 3 & 1 & 2 & 3 & 2 & 3 \\ \hline
+    \end{tabular}
+    \caption{Runtime [s] 5-fold cross validation}
+  \end{table}

@@ -42,6 +42,8 @@
 #include "App.h"
 #include "Enclave_u.h"
 #include "dp-gbdt/sgx_dataset_parser.h"
+#include <chrono>
+
 
 /* Global EID shared by multiple threads */
 sgx_enclave_id_t global_eid = 0;
@@ -186,11 +188,11 @@ void ocall_print_string(const char *str)
 sgx_modelparams create_some_modelparams()
 {
     sgx_modelparams params;
-    params.nb_trees = 5;
+    params.nb_trees = 10;
     params.privacy_budget = 10;
     // 1 means true/enable
     params.use_dp = 1;
-    params.gradient_filtering = 1;
+    params.gradient_filtering = 0;
     params.balance_partition = 1;
     params.leaf_clipping = 1;
     params.scale_y = 0;
@@ -214,7 +216,8 @@ int SGX_CDECL main(int argc, char *argv[])
  
     // load dataset and model parameters into enclave
     sgx_modelparams modelparams = create_some_modelparams();
-    sgx_dataset dataset = SGX_Parser::get_abalone(modelparams, 5000);
+    sgx_dataset dataset = SGX_Parser::get_abalone(modelparams, 300);
+    // sgx_dataset dataset = SGX_Parser::get_adult(modelparams, 300);
     ecall_load_modelparams_into_enclave(global_eid, &modelparams);
     free(modelparams.num_idx);
     free(modelparams.cat_idx);
@@ -224,12 +227,17 @@ int SGX_CDECL main(int argc, char *argv[])
     free(dataset.y);
 
     // start gbdt
+    std::chrono::steady_clock::time_point time_begin = std::chrono::steady_clock::now();
     ecall_start_gbdt(global_eid);
-    
+    std::chrono::steady_clock::time_point time_end = std::chrono::steady_clock::now();
+
     // destroy the enclave
     sgx_destroy_enclave(global_eid);
+
+    double elapsed = (double) std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count();
+    elapsed /= 1000;
     
-    printf("Info: Enclave successfully returned.\n");
+    printf("Info: Enclave successfully returned. (%.2fs) \n", elapsed);
     return 0;
 }
 

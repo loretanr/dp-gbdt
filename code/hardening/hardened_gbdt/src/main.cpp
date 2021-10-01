@@ -11,6 +11,7 @@
 #include "dataset_parser.h"
 #include "data.h"
 #include "verification.h"
+#include "benchmark.h"
 #include "spdlog/spdlog.h"
 
 extern bool VERIFICATION_MODE;
@@ -28,6 +29,10 @@ int main(int argc, char** argv)
                 // go into verification mode
                 VERIFICATION_MODE = true;
                 return Verification::main(argc, argv);
+            } else if ( ! std::strcmp(argv[i], "--bench") ){
+                // go into verification mode
+                VERIFICATION_MODE = false;
+                return Benchmark::main(argc, argv);
             } else {
                 throw std::runtime_error("unkown command line flag encountered");
             } 

@@ -211,6 +211,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/centernot.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/centernot.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/kastrup/binhex.tex
 INPUT /usr/share/texlive/texmf-dist/tex/generic/kastrup/binhex.tex
+INPUT /usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-t1.tfm
@@ -348,6 +350,8 @@ INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qhvb.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ts1-qtmr.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qhvb.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qhvr.tfm
 INPUT /home/loretanr/ma/thesis/conclusion.tex
 INPUT /home/loretanr/ma/thesis/conclusion.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-sc-t1.tfm
@@ -379,8 +383,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/boondox/zxxrl7z.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/public/txfonts/txr.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/rtxptmr.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/rtxr.tfm
-INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qhvb.tfm
-INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qhvr.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-t1.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/newtx/ntx-Regular-tlf-t1.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/newtx/t1ntxtt.fd

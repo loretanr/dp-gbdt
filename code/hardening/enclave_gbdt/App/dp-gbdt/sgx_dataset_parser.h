@@ -17,6 +17,8 @@ private:
 
 public:
     static sgx_dataset get_abalone(sgx_modelparams &parameters, int num_samples);
+    static sgx_dataset get_adult(sgx_modelparams &parameters, int num_samples);
+
 };
 
 

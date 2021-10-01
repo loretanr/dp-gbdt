@@ -16,9 +16,9 @@
 extern "C" {
 #endif
 
-void ecall_start_gbdt(void);
 void ecall_load_dataset_into_enclave(struct sgx_dataset* dset);
 void ecall_load_modelparams_into_enclave(struct sgx_modelparams* mparams);
+void ecall_start_gbdt(void);
 
 sgx_status_t SGX_CDECL ocall_print_string(const char* str);
 sgx_status_t SGX_CDECL sgx_oc_cpuidex(int cpuinfo[4], int leaf, int subleaf);
