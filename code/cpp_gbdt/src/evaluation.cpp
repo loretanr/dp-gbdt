@@ -32,20 +32,28 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // define ModelParams here
     ModelParams current_params;
-    current_params.nb_trees = 50;
-    current_params.gradient_filtering = true;
-    current_params.balance_partition = true;
+    current_params.use_dp = true;
+    current_params.privacy_budget = 0.5;
+    current_params.nb_trees = 10;
     current_params.leaf_clipping = true;
-    current_params.scale_y = false;
+    current_params.balance_partition = true;
+    current_params.gradient_filtering = false;
+    current_params.min_samples_split = 2;
+    current_params.learning_rate = 0.1;
+    current_params.max_depth = 6;
+    current_params.use_grid = false;
+    current_params.scale_X = false;
+
     parameters.push_back(current_params);
     // --------------------------------------
     // select 1 dataset here
-    DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    // DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    DataSet *dataset = Parser::get_adult(parameters, 5000, false);
     // DataSet dataset = Parser::get_YearPredictionMSD(parameters, 10000, false);
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
-    std::vector<double> budgets = {0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
+    std::vector<double> budgets = {0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
     // --------------------------------------
 
     // output file
@@ -70,6 +78,7 @@ int Evaluation::main(int argc, char *argv[])
     // run the evaluations
     for(auto budget : budgets) {
         param.privacy_budget = budget;
+        param.use_dp = budget != 0.;
         std::cout << dataset_name << " pb=" << budget << std::endl;
 
         std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);

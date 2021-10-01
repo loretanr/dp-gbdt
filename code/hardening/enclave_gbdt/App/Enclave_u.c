@@ -103,19 +103,12 @@ static const struct {
 		(void*)Enclave_sgx_thread_set_multiple_untrusted_events_ocall,
 	}
 };
-sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid)
-{
-	sgx_status_t status;
-	status = sgx_ecall(eid, 0, &ocall_table_Enclave, NULL);
-	return status;
-}
-
 sgx_status_t ecall_load_dataset_into_enclave(sgx_enclave_id_t eid, struct sgx_dataset* dset)
 {
 	sgx_status_t status;
 	ms_ecall_load_dataset_into_enclave_t ms;
 	ms.ms_dset = dset;
-	status = sgx_ecall(eid, 1, &ocall_table_Enclave, &ms);
+	status = sgx_ecall(eid, 0, &ocall_table_Enclave, &ms);
 	return status;
 }
 
@@ -124,7 +117,14 @@ sgx_status_t ecall_load_modelparams_into_enclave(sgx_enclave_id_t eid, struct sg
 	sgx_status_t status;
 	ms_ecall_load_modelparams_into_enclave_t ms;
 	ms.ms_mparams = mparams;
-	status = sgx_ecall(eid, 2, &ocall_table_Enclave, &ms);
+	status = sgx_ecall(eid, 1, &ocall_table_Enclave, &ms);
+	return status;
+}
+
+sgx_status_t ecall_start_gbdt(sgx_enclave_id_t eid)
+{
+	sgx_status_t status;
+	status = sgx_ecall(eid, 2, &ocall_table_Enclave, NULL);
 	return status;
 }
 

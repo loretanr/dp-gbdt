@@ -785,7 +785,7 @@ General:
          </rich_text>
 			</node>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1632824145.69" unique_id="44">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1632914838.8" unique_id="44">
 			<rich_text scale="h2">Questions</rich_text>
 			<rich_text>
 
@@ -811,7 +811,17 @@ priorities --------------------------------------
 • fix stuff. get ready.
 
 
-• look at synthetic datasets and write Theo if necessary</rich_text>
+• look at synthetic datasets and write Theo if necessary
+
+
+
+
+
+
+
+
+
+    TODO resultat überneh, check why adult failed</rich_text>
 			<node custom_icon_id="0" foreground="" is_bold="False" name="arithmetic changes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632817245.95" ts_lastsave="1632831786.86" unique_id="45">
 				<rich_text>• to overload arithmetics I need my own type Fdouble everywhere
    ◇ Fdouble being a wrapper around a double, such that i can overload the arithmetic operators
@@ -830,7 +840,9 @@ maybe, instead of putting it everywhere, to prove the point that it won't add mu
 				<rich_text>
 
 hardened abalone (only 300!!)
-
+</rich_text>
+				<rich_text justification="left"></rich_text>
+				<rich_text>
 
 </rich_text>
 				<rich_text foreground="#ffffffff0000">although find_best_split would be nice, then we can say 98%
@@ -1055,21 +1067,74 @@ let's see effects of not inlining constant_time::select
 	</rich_text>
 			</node>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_30" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632818207.65" ts_lastsave="1632831874.13" unique_id="46">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_30" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632818207.65" ts_lastsave="1633084448.74" unique_id="46">
 			<rich_text>• is the compute_score secret. Resp. will that even be run in a real usecase?
 • Ferie
-• value barrier turning off no_inline for the value_barrier under -O1 leads to it being optimized away.</rich_text>
-			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1632831853.43" unique_id="48">
+• value barrier turning off no_inline for the value_barrier under -O1 leads to it being optimized away.
+
+
+
+
+Wednessday 1pm Kari whiteboard drawing the high level model
+
+
+
+
+--------------------------------------------------------------
+
+mid oktober start writing
+
+at least 10 days before end send Kari and esfandiar the thing
+
+check out mattermost
+
+
+attestation
+
+then customer sends data. We need to ensure that the data sending cannot be replayed
+    probably standard key exchange mechanism (built into attestation)
+    shared key + nonce -&gt; no replay
+    
+cannot assume the enclave runs uninterrupted. need to save the different chunks froom different companys
+
+can start training once we have like 500 -&gt; decrypt
+
+training 
+
+output model
+
+
+---- problem -&gt;
+could train with subset of sealed stuff. 500, 499, 498, ...
+    -&gt; special sgx couunter that can only increase by one, each time we receive a chunk from a company
+    -&gt; only train if we have 500 (or whatever the counter is)
+    -&gt; we're fucked if we loose one
+    
+problem have 500 in 2022 then 700 in 2023 -&gt; have to pay pb because we reuse the 500
+    darf nicht rerun!
+    aber kann neue trees appenden, oder esfandiar works on a smarter tree adjust way.
+    
+need a runtime counter
+
+what if zurich insurance loses the model, they would want to redo it.
+    could make that assumption, that zurich should make backups. 
+    or be more flexible and pay privacy budget
+    or be able to rollback to create the exact same
+        with a master seed (encrypted)
+        
+→ create 1 master seed at the beginning and enclave cannot be tricked iinto creating another again.</rich_text>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1633005494.19" unique_id="48">
 				<rich_text scale="h2">TODOs</rich_text>
 				<rich_text>
 • re-enable libfixedtime optimization in makefile
 
 • use git commits to measure hardening performance decrease?
+    i guess just remember the branch name, but still merge to master
 
 
-</rich_text>
+TODO enclave gbdt's adult is wrong, and year yet to come (parser)</rich_text>
 			</node>
-			<node custom_icon_id="0" foreground="" is_bold="False" name="runtime" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632831874.13" ts_lastsave="1632836167.63" unique_id="50">
+			<node custom_icon_id="0" foreground="" is_bold="False" name="runtime" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632831874.13" ts_lastsave="1632906808.45" unique_id="50">
 				<rich_text scale="h2">PLots</rich_text>
 				<rich_text>
 
@@ -1082,7 +1147,24 @@ yearMSD 300, 1000
 adult 300, 1000, 5000
 
 
-sample sizes 100, 300, 500, 1000, 2000, 5000</rich_text>
+sample sizes 100, 300, 500, 1000, 2000, 5000
+
+
+
+</rich_text>
+			</node>
+			<node custom_icon_id="0" foreground="" is_bold="False" name="classification mess" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1633084448.74" ts_lastsave="1633087126.19" unique_id="51">
+				<rich_text>Adult's first 5000 have 
+    y 0's (3750) y 1's (1250). So predicting always 0 gives a cheatingly high score.
+    This is called (</rich_text>
+				<rich_text foreground="#e6e6e6e6fafa">Zero Rule (or 0R or ZeroR</rich_text>
+				<rich_text>)
+    Okay, so our adult is fucked. cpp_gbdt achieves exactly zeroR.
+        </rich_text>
+				<rich_text foreground="#a0a02020f0f0">TODO test with fucking BCW.</rich_text>
+				<rich_text>
+            add to parser and test away.
+            also check the python I guess.</rich_text>
 			</node>
 		</node>
 	</node>
@@ -2102,7 +2184,7 @@ now </rich_text>
 
 • seems like giovanna's github is very clean compared to ppml, so can ausmisten. maxbe ask theo in the end whether there is chlüg stuff to put in</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1631187385.62" unique_id="21">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="technical problems" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1625648902.91" ts_lastsave="1632999793.04" unique_id="21">
 		<rich_text>Suddenly python problem (after apt update/upgrade I believe).
       </rich_text>
 		<rich_text foreground="#ffffc0c0cbcb">File &quot;/home/loretanr/.local/lib/python3.7/site-packages/matplotlib/__init__.py&quot;, line 107, in &lt;module&gt;
@@ -2128,18 +2210,14 @@ import lightgbm was failing
 		<rich_text>
         
 -------------------------------------------------------------------------------------------------------
-
 stuuuuupid    </rich_text>
 		<rich_text family="monospace">'/usr/lib/python37.zip': No such file or directory</rich_text>
 		<rich_text>
         because I clicked on breakpoints “Raised Exceptions” in VScode
-        
 -------------------------------------------------------------------------------------------------------
-
 </rich_text>
 		<rich_text foreground="#ffff00000000">python's cross val shuffle is not a real shuffle, need to do it ourselves to be sure.</rich_text>
 		<rich_text>
-
 -----------------------------------------------------------------------------------------------------
 </rich_text>
 		<rich_text scale="h3" underline="single">Enclave debugging</rich_text>
@@ -2151,7 +2229,7 @@ then could see such errors in the debug console
         searched: /home/loretanr/ma/sgxsdk/lib64/gdb-sgx-plugin:$cdir:$cwd </rich_text>
 		<rich_text>
    • “solved” dirtily by putting a softlink to sgxsdk into ma/
-   • putting the env variables in launch.json dd not help whatsoever. maybe sgx-gdb overwrites some of them or something.
+   • putting the env variables in launch.json did not help whatsoever. maybe sgx-gdb overwrites some of them or something.
    • also had to make clean and make again after such (softlink blabla) changes.
 
 </rich_text>
@@ -2164,14 +2242,18 @@ then could see such errors in the debug console
             1. run sgx-gdb
             2. enable sgx_emmt
             3. run the app
-
-
 ----------------------------------------------------------------
 global macro in utils.h had to be on top of the #include lists in every file. really stupid. maybe a global &amp; extern is better suited
-
-
 --------------------------------------------------------------------
-g++ -S does only give the .s file, it does not update a.out</rich_text>
+g++ -S does only give the .s file, it does not update a.out
+----------------------------------------------------------------------
+adult drop weight column was turned off. but fixed it now for the cpp_gbdt ↔ python verify
+    -&gt; still broken in hardened / enclave
+--------------------------------------------------------------
+enclave running
+    /home/loretanr/ma/code/hardening/enclave_gbdt/Enclave/
+    make clean; make; ./app
+    softlink to ..../.. /datasets was broken. RED=BROKEN</rich_text>
 	</node>
 	<node custom_icon_id="0" foreground="#a020f0" is_bold="False" name="Moritz's blutbad" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1628002202.81" ts_lastsave="1628669829.76" unique_id="27">
 		<rich_text foreground="#ffffa5a50000">Notice, all these plots have scaling turned off, so that's why no-2nd-split impact is compensated
@@ -2570,7 +2652,7 @@ turned on --verify GDF, non hardened should be turned off
 also the python is not only missing GDF, but also the parsing stuff from cat_values</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1629211472.17" unique_id="32">
+	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1632930293.79" unique_id="32">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">Where to put stuff</rich_text>
 		<rich_text>
 </rich_text>
@@ -2638,6 +2720,15 @@ also the python is not only missing GDF, but also the parsing stuff from cat_val
 Enclave examples:
 • </rich_text>
 		<rich_text link="webs https://github.com/Liaojinghui/awesome-sgx">https://github.com/Liaojinghui/awesome-sgx</rich_text>
+		<rich_text>
+
+
+=================
+Running
+    source /home/loretanr/ma/code/cpp_gbdt/hardening/enclave_gbdt/.env
+    make clean &amp;&amp; make &amp;&amp; ./app
+    </rich_text>
+		<rich_text foreground="#ffffffff0000">still 0.00000 scores, very fuckin strange.</rich_text>
 	</node>
 	<node custom_icon_id="0" foreground="" is_bold="False" name="kari questions" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629116521.58" ts_lastsave="1629982506.67" unique_id="31">
 		<rich_text scale="h2">Thesis</rich_text>

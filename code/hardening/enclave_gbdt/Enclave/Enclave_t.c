@@ -67,14 +67,6 @@ typedef struct ms_sgx_thread_set_multiple_untrusted_events_ocall_t {
 	size_t ms_total;
 } ms_sgx_thread_set_multiple_untrusted_events_ocall_t;
 
-static sgx_status_t SGX_CDECL sgx_ecall_start_gbdt(void* pms)
-{
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	ecall_start_gbdt();
-	return status;
-}
-
 static sgx_status_t SGX_CDECL sgx_ecall_load_dataset_into_enclave(void* pms)
 {
 	CHECK_REF_POINTER(pms, sizeof(ms_ecall_load_dataset_into_enclave_t));
@@ -157,15 +149,23 @@ err:
 	return status;
 }
 
+static sgx_status_t SGX_CDECL sgx_ecall_start_gbdt(void* pms)
+{
+	sgx_status_t status = SGX_SUCCESS;
+	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
+	ecall_start_gbdt();
+	return status;
+}
+
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
 	struct {void* ecall_addr; uint8_t is_priv; uint8_t is_switchless;} ecall_table[3];
 } g_ecall_table = {
 	3,
 	{
-		{(void*)(uintptr_t)sgx_ecall_start_gbdt, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_load_dataset_into_enclave, 0, 0},
 		{(void*)(uintptr_t)sgx_ecall_load_modelparams_into_enclave, 0, 0},
+		{(void*)(uintptr_t)sgx_ecall_start_gbdt, 0, 0},
 	}
 };
 

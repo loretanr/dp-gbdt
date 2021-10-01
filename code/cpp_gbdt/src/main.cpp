@@ -54,26 +54,33 @@ int main(int argc, char** argv)
     ModelParams current_params = create_default_params();
 
     // change model params here if required:
-    current_params.privacy_budget = 10.4;
+    current_params.privacy_budget = 10;
     current_params.nb_trees = 5;
     current_params.use_dp = true;
-    current_params.gradient_filtering = true;
+    current_params.gradient_filtering = false;
     current_params.balance_partition = true;
     current_params.leaf_clipping = false;
     current_params.scale_y = false;
 
-    current_params.use_grid = true;
+    current_params.use_grid = false;
     current_params.grid_borders = std::make_tuple(0,1);
     current_params.grid_step_size = 0.001;
-    current_params.scale_X = true;
+    current_params.scale_X = false;
     current_params.scale_X_percentile = 95;
     current_params.scale_X_privacy_budget = 0.4;
 
     parameters.push_back(current_params);
 
     // Choose your dataset
-    DataSet *dataset = Parser::get_abalone(parameters, 5000, false);
+    // DataSet *dataset = Parser::get_abalone(parameters, 5000, false);
+    DataSet *dataset = Parser::get_adult(parameters, 5000, false);
     std::cout << dataset->name << std::endl;
+    int count1 = std::count_if(dataset->y.begin(), dataset->y.end(),
+        [](double c){ return c == 0.0; });
+    int count2 = std::count_if(dataset->y.begin(), dataset->y.end(),
+        [](double c){ return c == 1.0; });
+    std::cout << "y 0's (" << count1 << ") y 1's (" << count2 << ")" << std::endl;
+    std::cout << "-> zeroR = " << std::setprecision(4) << (double) std::max(count1, count2) / (double) dataset->length << std::endl;
 
     ModelParams params = parameters[0];
 
@@ -117,6 +124,6 @@ int main(int argc, char** argv)
         } std::cout << std::endl;
     }
     // average score
-    std::cout << "total avg score (" << scores.size() << " ensembles): " << 
-        std::accumulate(scores.begin(), scores.end(), 0.0) / scores.size() << std::endl;
+    std::cout << "total avg score (" << scores.size() << " ensembles): " << std::fixed << std::setprecision(4) <<
+        std::accumulate(scores.begin(), scores.end(), 0.0) / (double) scores.size() << std::endl;
 }

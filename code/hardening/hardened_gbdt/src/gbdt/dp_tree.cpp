@@ -207,34 +207,62 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
 
         bool categorical = std::find( params->cat_idx.begin(), params->cat_idx.end(), feature_index) != params->cat_idx.end();
         
-        if (categorical) {
-            for (double feature_value : params->cat_values[feature_index]) {
-                // compute gain
-                double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
+        if(is_true(params->use_grid)){
 
-                bool row_not_live = false;
-                bool no_gain = (gain == -1.);
-                // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
-                // same child -> useless split) then the gain of this split is set to 0.
-                gain = constant_time::select(constant_time::logical_or(no_gain, row_not_live), 0.0, gain);
+            if (categorical) {
+                for (double feature_value : params->cat_values[feature_index]) {
+                    // compute gain
+                    double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
 
-                // Gi = epsilon_nleaf * Gi / (2 * delta_G)
-                gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
+                    bool row_not_live = false;
+                    bool no_gain = (gain == -1.);
+                    // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
+                    // same child -> useless split) then the gain of this split is set to 0.
+                    gain = constant_time::select(constant_time::logical_or(no_gain, row_not_live), 0.0, gain);
 
-                SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
-                candidate.lhs_size = lhs_size;
-                candidate.rhs_size = std::accumulate(live_samples.begin(), live_samples.end(), 0) - lhs_size;
-                probabilities.push_back(candidate); 
+                    // Gi = epsilon_nleaf * Gi / (2 * delta_G)
+                    gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
+
+                    SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
+                    candidate.lhs_size = lhs_size;
+                    candidate.rhs_size = std::accumulate(live_samples.begin(), live_samples.end(), 0) - lhs_size;
+                    probabilities.push_back(candidate); 
+                }
+            } else {
+                for (double feature_value : this->grid) {
+
+                    // double feature_value = X_transposed[feature_index][row];
+
+                    // compute gain
+                    double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
+
+                    bool row_not_live = false; //constant_time::logical_not(live_samples[row]);
+                    bool no_gain = (gain == -1.);
+                    // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
+                    // same child -> useless split) then the gain of this split is set to 0.
+                    gain = constant_time::select(constant_time::logical_or(no_gain, row_not_live), 0.0, gain);
+
+                    // Gi = epsilon_nleaf * Gi / (2 * delta_G)
+                    gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
+
+                    SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
+                    candidate.lhs_size = lhs_size;
+                    candidate.rhs_size = std::accumulate(live_samples.begin(), live_samples.end(), 0) - lhs_size;
+                    probabilities.push_back(candidate);
+                }
             }
-        } else {
-            for (double feature_value : this->grid) {
 
-                // double feature_value = X_transposed[feature_index][row];
+        } else { // don't use grid
+
+            for (size_t row=0; row<live_samples.size(); row++) {
+
+                double feature_value = X_transposed[feature_index][row];
+
 
                 // compute gain
                 double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
 
-                bool row_not_live = false; //constant_time::logical_not(live_samples[row]);
+                bool row_not_live = constant_time::logical_not(live_samples[row]);
                 bool no_gain = (gain == -1.);
                 // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
                 // same child -> useless split) then the gain of this split is set to 0.
@@ -249,30 +277,7 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
                 probabilities.push_back(candidate);
             }
         }
-        // **
 
-        // for (size_t row=0; row<live_samples.size(); row++) {
-
-        //     double feature_value = X_transposed[feature_index][row];
-
-
-        //     // compute gain
-        //     double gain = compute_gain(X_transposed, gradients_live, live_samples, feature_index, feature_value, lhs_size);
-
-        //     bool row_not_live = constant_time::logical_not(live_samples[row]);
-        //     bool no_gain = (gain == -1.);
-        //     // if either the row is not live, or the gain is -1 (aka the split guides all samples to the
-        //     // same child -> useless split) then the gain of this split is set to 0.
-        //     gain = constant_time::select(constant_time::logical_or(no_gain, row_not_live), 0.0, gain);
-
-        //     // Gi = epsilon_nleaf * Gi / (2 * delta_G)
-        //     gain = (privacy_budget_for_node * gain) / (2 * tree_params->delta_g);
-
-        //     SplitCandidate candidate = SplitCandidate(feature_index, feature_value, gain);
-        //     candidate.lhs_size = lhs_size;
-        //     candidate.rhs_size = std::accumulate(live_samples.begin(), live_samples.end(), 0) - lhs_size;
-        //     probabilities.push_back(candidate);
-        // }
     }
 
     // choose a split using the exponential mechanism
@@ -284,11 +289,23 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, vector<double> &gradients_l
     // if an internal node should be created, change attributes accordingly
     bool create_internal_node = constant_time::logical_and(index != -1, constant_time::logical_not(create_leaf_node));
 
-    node->split_attr = constant_time::select(create_internal_node, probabilities[index].feature_index, node->split_attr);
-    node->split_value = constant_time::select(create_internal_node, probabilities[index].split_value, node->split_value);
-    node->split_gain = constant_time::select(create_internal_node, probabilities[index].gain, node->split_gain);
-    node->lhs_size = constant_time::select(create_internal_node, probabilities[index].lhs_size, node->lhs_size);
-    node->rhs_size = constant_time::select(create_internal_node, probabilities[index].rhs_size, node->rhs_size);
+    // go through all candidates, to hide which one was chosen
+    SplitCandidate chosen_one = SplitCandidate(0,0,0);
+    chosen_one.lhs_size = 0;
+    chosen_one.rhs_size = 0;
+    for (int i=0; i<(int)probabilities.size(); i++) {
+        bool cond = (i == index);
+        chosen_one.feature_index = constant_time::select(cond, probabilities[i].feature_index, chosen_one.feature_index);
+        chosen_one.split_value = constant_time::select(cond, probabilities[i].split_value, chosen_one.split_value);
+        chosen_one.gain = constant_time::select(cond, probabilities[i].gain, chosen_one.gain);
+        chosen_one.lhs_size = constant_time::select(cond, probabilities[i].lhs_size, chosen_one.lhs_size);
+        chosen_one.rhs_size = constant_time::select(cond, probabilities[i].rhs_size, chosen_one.rhs_size);
+    }
+    node->split_attr = constant_time::select(create_internal_node, chosen_one.feature_index, node->split_attr);
+    node->split_value = constant_time::select(create_internal_node, chosen_one.split_value, node->split_value);
+    node->split_gain = constant_time::select(create_internal_node, chosen_one.gain, node->split_gain);
+    node->lhs_size = constant_time::select(create_internal_node, chosen_one.lhs_size, node->lhs_size);
+    node->rhs_size = constant_time::select(create_internal_node, chosen_one.rhs_size, node->rhs_size);
     node->is_leaf = constant_time::logical_not(create_internal_node);
     node->is_dummy = is_dummy;
 

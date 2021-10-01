@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2021.1.31)  28 SEP 2021 15:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2021.1.31)  29 SEP 2021 12:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1117,68 +1117,74 @@ LaTeX Font Info:    Redeclaring math symbol \m@thbbch@rA on input line 1929.
 \ntx@imath=\count305
 \ntx@jmath=\count306
 LaTeX Info: Redefining \not on input line 2322.
+) (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2019/01/01 v2.4 Span multiple rows of a table
+\multirow@colwidth=\skip265
+\multirow@cntb=\count307
+\multirow@dima=\skip266
+\bigstrutjot=\dimen189
 )
-LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 90.
+LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 File: t1ntxtlf.fd 2015/01/17 v1.0 font definition file for T1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.95pt on input line 90.
+(Font)              scaled to size 10.95pt on input line 91.
  (/home/loretanr/ma/thesis/thesis.aux)
 \openout1 = `thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 90.
-LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 90.
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 91.
+LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 90.
-LaTeX Font Info:    Try loading font information for U+ntxexa on input line 90.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 91.
+LaTeX Font Info:    Try loading font information for U+ntxexa on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 90.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 90.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 91.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 90.
-LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 90.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 91.
+LaTeX Font Info:    Try loading font information for LMS+ntxsy on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/newtx/lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 90.
-LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 90.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 91.
+LaTeX Font Info:    Try loading font information for LMX+ntxexx on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/newtx/lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    ... okay on input line 91.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count307
-\scratchdimen=\dimen189
+\scratchcounter=\count308
+\scratchdimen=\dimen190
 \scratchbox=\box38
-\nofMPsegments=\count308
-\nofMParguments=\count309
+\nofMPsegments=\count309
+\nofMParguments=\count310
 \everyMPshowfont=\toks61
-\MPscratchCnt=\count310
-\MPscratchDim=\dimen190
-\MPnumerator=\count311
-\makeMPintoPDFobject=\count312
+\MPscratchCnt=\count311
+\MPscratchDim=\dimen191
+\MPnumerator=\count312
+\makeMPintoPDFobject=\count313
 \everyMPtoPDFconversion=\toks62
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -1200,8 +1206,8 @@ Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 )
-\c@lstlisting=\count313
-LaTeX Info: Redefining \microtypecontext on input line 90.
+\c@lstlisting=\count314
+LaTeX Info: Redefining \microtypecontext on input line 91.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1214,55 +1220,55 @@ Package microtype Info: No adjustment of character kerning.
  (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
-Package hyperref Info: Link coloring ON on input line 90.
+Package hyperref Info: Link coloring ON on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count314
+\c@section@level=\count315
 LaTeX Info: Redefining \Ref on input line 515.
 )
 Redoing nameref's sectioning
 Redoing nameref's label
-LaTeX Info: Redefining \nameref on input line 90.
-LaTeX Info: Redefining \ref on input line 90.
-LaTeX Info: Redefining \pageref on input line 90.
-LaTeX Info: Redefining \nameref on input line 90.
+LaTeX Info: Redefining \nameref on input line 91.
+LaTeX Info: Redefining \ref on input line 91.
+LaTeX Info: Redefining \pageref on input line 91.
+LaTeX Info: Redefining \nameref on input line 91.
 (/home/loretanr/ma/thesis/thesis.out) (/home/loretanr/ma/thesis/thesis.out)
 \@outlinefile=\write4
 \openout4 = `thesis.out'.
 
-LaTeX Info: Redefining \Ref on input line 90.
-\c@mv@tabular=\count315
-\c@mv@boldtabular=\count316
+LaTeX Info: Redefining \Ref on input line 91.
+\c@mv@tabular=\count316
+\c@mv@boldtabular=\count317
 <ETHlogo.pdf, id=84, 179.67125pt x 45.16875pt>
 File: ETHlogo.pdf Graphic file (type pdf)
 <use ETHlogo.pdf>
-Package pdftex.def Info: ETHlogo.pdf  used on input line 102.
+Package pdftex.def Info: ETHlogo.pdf  used on input line 103.
 (pdftex.def)             Requested size: 179.67079pt x 45.16862pt.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 24.88pt on input line 102.
-LaTeX Font Info:    Try loading font information for T1+qhv on input line 102.
+(Font)              scaled to size 24.88pt on input line 103.
+LaTeX Font Info:    Try loading font information for T1+qhv on input line 103.
  (/usr/share/texmf/tex/latex/tex-gyre/t1qhv.fd
 File: t1qhv.fd 2009/09/25 v1.2 font definition file for T1/qhv
 )
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 22.39185pt on input line 102.
+(Font)              scaled to size 22.39185pt on input line 103.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `qhv' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/qhv/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/qhv/b/n' tried instead on input line 102.
+(Font)              Font shape `T1/qhv/b/n' tried instead on input line 103.
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 22.39185pt on input line 102.
+(Font)              scaled to size 22.39185pt on input line 103.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 14.4pt on input line 102.
+(Font)              scaled to size 14.4pt on input line 103.
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 12.9599pt on input line 102.
+(Font)              scaled to size 12.9599pt on input line 103.
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 9.85492pt on input line 102.
+(Font)              scaled to size 9.85492pt on input line 103.
  [1
 
 
@@ -1278,18 +1284,18 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 )pdfTeX warning (ext4): destination with the same identifier (name{page.i}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.112 \clearpage
+l.113 \clearpage
                  [1
 
 ]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 20.74pt on input line 117.
+(Font)              scaled to size 20.74pt on input line 118.
 LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 18.66588pt on input line 117.
+(Font)              scaled to size 18.66588pt on input line 118.
 LaTeX Font Info:    Font shape `T1/qhv/bx/n' in size <20.74> not available
-(Font)              Font shape `T1/qhv/b/n' tried instead on input line 117.
+(Font)              Font shape `T1/qhv/b/n' tried instead on input line 118.
 LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 18.66588pt on input line 117.
+(Font)              scaled to size 18.66588pt on input line 118.
  (/home/loretanr/ma/thesis/thesis.toc
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 3.
@@ -1388,7 +1394,14 @@ File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.95pt on input line 11.
-) (/home/loretanr/ma/thesis/conclusion.tex [9]
+ [9]
+LaTeX Font Info:    Font shape `T1/qhv/bx/n' in size <9> not available
+(Font)              Font shape `T1/qhv/b/n' tried instead on input line 58.
+LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
+(Font)              scaled to size 8.09995pt on input line 58.
+LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
+(Font)              scaled to size 8.09995pt on input line 58.
+) (/home/loretanr/ma/thesis/conclusion.tex
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/sc' will be
 (Font)              scaled to size 10.95pt on input line 1.
 Package microtype Info: Character `029' is missing
@@ -1401,19 +1414,13 @@ Package microtype Info: Character `029' is missing
 ]) (/home/loretanr/ma/thesis/stuff.tex [13] [14
 
 ]
-\c@currRulectr=\count317
-\c@endRulectr=\count318
+\c@currRulectr=\count318
+\c@endRulectr=\count319
 Package hyperref Info: bookmark level for unknown Rule defaults to 0 on input line 21.
  [15]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
 (Font)              scaled to size 10.95pt on input line 63.
  [16] [17] [18]
-LaTeX Font Info:    Font shape `T1/qhv/bx/n' in size <9> not available
-(Font)              Font shape `T1/qhv/b/n' tried instead on input line 262.
-LaTeX Font Info:    Font shape `T1/qhv/b/n' will be
-(Font)              scaled to size 8.09995pt on input line 262.
-LaTeX Font Info:    Font shape `T1/qhv/m/n' will be
-(Font)              scaled to size 8.09995pt on input line 262.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 9.0pt on input line 267.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
@@ -1458,38 +1465,38 @@ Package hyperref Info: bookmark level for unknown proof defaults to 0 on input l
 ] (/home/loretanr/ma/thesis/thesis.bbl
 bibitemlist
 )
-<declaration-originality.pdf, id=299, 597.55246pt x 845.07718pt>
+<declaration-originality.pdf, id=300, 597.55246pt x 845.07718pt>
 File: declaration-originality.pdf Graphic file (type pdf)
 <use declaration-originality.pdf>
-Package pdftex.def Info: declaration-originality.pdf  used on input line 138.
+Package pdftex.def Info: declaration-originality.pdf  used on input line 139.
 (pdftex.def)             Requested size: 597.551pt x 845.07512pt.
 File: declaration-originality.pdf Graphic file (type pdf)
 <use declaration-originality.pdf>
-Package pdftex.def Info: declaration-originality.pdf  used on input line 138.
+Package pdftex.def Info: declaration-originality.pdf  used on input line 139.
 (pdftex.def)             Requested size: 597.551pt x 845.07512pt.
-<declaration-originality.pdf, id=302, page=1, 597.55246pt x 845.07718pt>
+<declaration-originality.pdf, id=303, page=1, 597.55246pt x 845.07718pt>
 File: declaration-originality.pdf Graphic file (type pdf)
 <use declaration-originality.pdf, page 1>
-Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 138.
+Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 139.
 (pdftex.def)             Requested size: 597.551pt x 845.07512pt.
 File: declaration-originality.pdf Graphic file (type pdf)
 <use declaration-originality.pdf, page 1>
-Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 138.
+Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 139.
 (pdftex.def)             Requested size: 597.57834pt x 845.1138pt.
  [25
 
 ]
 File: declaration-originality.pdf Graphic file (type pdf)
 <use declaration-originality.pdf, page 1>
-Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 138.
+Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 139.
 (pdftex.def)             Requested size: 597.57834pt x 845.1138pt.
 File: declaration-originality.pdf Graphic file (type pdf)
 <use declaration-originality.pdf, page 1>
-Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 138.
+Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 139.
 (pdftex.def)             Requested size: 597.57834pt x 845.1138pt.
 File: declaration-originality.pdf Graphic file (type pdf)
 <use declaration-originality.pdf, page 1>
-Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 138.
+Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 139.
 (pdftex.def)             Requested size: 597.57834pt x 845.1138pt.
  [26 </home/loretanr/ma/thesis/declaration-originality.pdf>]
 \tf@thm=\write5
@@ -1498,27 +1505,27 @@ Package pdftex.def Info: declaration-originality.pdf , page1 used on input line 
 \tf@toc=\write6
 \openout6 = `thesis.toc'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 140.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 140.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 141.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 141.
  (/home/loretanr/ma/thesis/thesis.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 140.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 140.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 141.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 141.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
 (rerunfilecheck)             Checksum: 584F05A03ED441240659F70033A2F635;1187.
  ) 
 Here is how much of TeX's memory you used:
- 20081 strings out of 494394
- 292337 string characters out of 6172448
+ 20136 strings out of 494394
+ 293191 string characters out of 6172448
  497812 words of memory out of 5000000
- 23119 multiletter control sequences out of 15000+600000
+ 23169 multiletter control sequences out of 15000+600000
  106421 words of font info for 171 fonts, out of 8000000 for 9000
  81 hyphenation exceptions out of 8191
  62i,18n,122p,1035b,1876s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf-sc.enc}{/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ec.enc}</usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvr.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmri.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/newtx/rntxmi.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/newtx/rntxmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/newtx/rntxmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/newtx/txexs.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/txsya.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/newtx/txsys.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on /home/loretanr/ma/thesis/thesis.pdf (29 pages, 359631 bytes).
+Output written on /home/loretanr/ma/thesis/thesis.pdf (29 pages, 360967 bytes).
 PDF statistics:
- 440 PDF objects out of 1000 (max. 8388607)
- 373 compressed objects within 4 object streams
- 98 named destinations out of 1000 (max. 500000)
+ 441 PDF objects out of 1000 (max. 8388607)
+ 374 compressed objects within 4 object streams
+ 99 named destinations out of 1000 (max. 500000)
  29882 words of extra memory for PDF output out of 35830 (max. 10000000)
 
