@@ -218,12 +218,23 @@ DataSet *Parser::parse_file(std::string dataset_file, std::string dataset_name, 
         current_index++;
     }
 
+    // if we have more 1's than 0's switch the labels
+    // otherwise our predict function assigns the wrong/opposite labels sometimes
+    if(dynamic_cast<BinaryClassification*>(task.get())) {
+        int count_zero = std::count(y.begin(), y.end(), 0.0);
+        int count_one = std::count(y.begin(), y.end(), 1.0);
+        if(count_one > count_zero){
+            // switches 1 <-> 0
+            std::transform(y.begin(),y.end(),y.begin(), [](double &d) { return 1.0 - d; } );
+        }
+    }
+
     // update num_idx / cat_idx if we dropped columns
     for(auto drop_elem : drop_idx) {
-        for(auto &num_elem : parameters.back().num_idx){
+        for(auto &num_elem : num_idx){
             num_elem = num_elem > drop_elem ? num_elem - 1 : num_elem;
         }
-        for(auto &cat_elem : parameters.back().cat_idx){
+        for(auto &cat_elem : cat_idx){
             cat_elem = cat_elem > drop_elem ? cat_elem - 1 : cat_elem;
         }
     }
@@ -258,6 +269,9 @@ DataSet *Parser::parse_file(std::string dataset_file, std::string dataset_name, 
             parameters.back().cat_values.push_back(keys);
         }
     }
+
+    parameters.back().num_idx = num_idx;
+    parameters.back().cat_idx = cat_idx;
 
     return dataset;
 }

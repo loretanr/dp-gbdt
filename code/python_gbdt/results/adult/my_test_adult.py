@@ -6,20 +6,19 @@ import json
 import numpy as np
 
 from sklearn.model_selection import cross_val_score
+from sklearn.dummy import DummyClassifier
+
 
 from data.parser.parser import Parser
 from evaluation import estimator
 
 # The dataset to use for evaluation
-DATASET = 'bcw'
+DATASET = 'adult'
 # The privacy budget to use for evaluation
 PRIVACY_BUDGETS = [10]
-# The number of time to repeat the experiment to get an average accuracy
-NB_SPLITS = 5
 # Number of rows to use from the dataset
-SAMPLES = [700]
+SAMPLES = [10000]
 # Nb trees for each ensemble
-NB_TREES_PER_ENSEMBLE = 5
 
 if __name__ == '__main__':
 
@@ -27,7 +26,8 @@ if __name__ == '__main__':
     # Read the data
     parser = Parser(dataset=DATASET)
     X, y, cat_idx, num_idx, task = parser.Parse(n_rows=nb_samples)
-    print("bcw, zeroR 0.6501")
+    print("zeroR 0.7500")
+
 
 
     # Own model
@@ -36,7 +36,8 @@ if __name__ == '__main__':
     for model in models:
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
-      for config in ['Vanilla','DFS']:
+    #   for config in ['Vanilla','DFS']:
+      for config in ['DFS']:
         for idx, budget in enumerate(PRIVACY_BUDGETS):
           if config == 'Vanilla' and idx != 0:
             continue
@@ -46,9 +47,9 @@ if __name__ == '__main__':
           if config == 'Vanilla':
             budget = 0.
           m = model(
-              privacy_budget=100,
-              nb_trees=30,
-              nb_trees_per_ensemble=30,
+              privacy_budget=budget,
+              nb_trees=50,
+              nb_trees_per_ensemble=50,
               max_depth=6,
               learning_rate=0.1,
               n_classes=len(set(y)) if task == 'classification' else None,

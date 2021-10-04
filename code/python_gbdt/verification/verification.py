@@ -105,8 +105,8 @@ if __name__ == '__main__':
     DATASET = 'adult'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
-    SAMPLES = [320]
     SAMPLES = []
+    SAMPLES = [320]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -138,8 +138,8 @@ if __name__ == '__main__':
     DATASET = 'bcw'
     parser = Parser(dataset=DATASET)
     SAMPLES = [700]
+    SAMPLES = []
     PRIVACY_BUDGET = 0
-    # SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
