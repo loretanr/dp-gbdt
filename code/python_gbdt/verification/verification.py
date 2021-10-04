@@ -17,15 +17,14 @@ from sklearn.dummy import DummyClassifier
 from data.parser.parser import Parser
 from evaluation import estimator
 
-PRIVACY_BUDGET = 0.5
+PRIVACY_BUDGET = 100
 NB_SPLITS = 5 # number of CV folds
-NB_TREES_PER_ENSEMBLE = 5
-NB_TREES = 5
+NB_TREES = 50
 MIN_SAMPLES_SPLIT = 2
 LEARNING_RATE = 0.1
 MAX_DEPTH = 6
 GRADIENT_FILTERING = False
-LEAF_CLIPPING = True
+LEAF_CLIPPING = False
 BALANCE_PARTITION = True
 
 def get_dataset_name(num_samples):
@@ -51,7 +50,7 @@ if __name__ == '__main__':
         rmse = make_scorer(metrics.mean_squared_error, squared=False)
 
         m = estimator.DPGBDT(  # type: ignore
-            PRIVACY_BUDGET, NB_TREES, NB_TREES_PER_ENSEMBLE, MAX_DEPTH, LEARNING_RATE,
+            PRIVACY_BUDGET, NB_TREES, NB_TREES, MAX_DEPTH, LEARNING_RATE,
             n_classes=len(set(y)) if task == 'classification' else None,
             gradient_filtering=GRADIENT_FILTERING,
             leaf_clipping=LEAF_CLIPPING,
@@ -84,7 +83,7 @@ if __name__ == '__main__':
         rmse = make_scorer(metrics.mean_squared_error, squared=False)
 
         m = estimator.DPGBDT(  # type: ignore
-            PRIVACY_BUDGET, NB_TREES, NB_TREES_PER_ENSEMBLE, MAX_DEPTH, LEARNING_RATE,
+            PRIVACY_BUDGET, NB_TREES, NB_TREES, MAX_DEPTH, LEARNING_RATE,
             n_classes=len(set(y)) if task == 'classification' else None,
             gradient_filtering=GRADIENT_FILTERING,
             leaf_clipping=LEAF_CLIPPING,
@@ -106,7 +105,8 @@ if __name__ == '__main__':
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
     SAMPLES = []
-    SAMPLES = [320]
+    # SAMPLES = [320]
+    SAMPLES = [10000]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -117,7 +117,7 @@ if __name__ == '__main__':
         rmse = make_scorer(metrics.mean_squared_error, squared=False)
 
         m = estimator.DPGBDT(  # type: ignore
-            PRIVACY_BUDGET, NB_TREES, NB_TREES_PER_ENSEMBLE, MAX_DEPTH, LEARNING_RATE,
+            PRIVACY_BUDGET, NB_TREES, NB_TREES, MAX_DEPTH, LEARNING_RATE,
             n_classes=len(set(y)) if task == 'classification' else None,
             gradient_filtering=GRADIENT_FILTERING,
             leaf_clipping=LEAF_CLIPPING,
@@ -158,7 +158,7 @@ if __name__ == '__main__':
         rmse = make_scorer(metrics.mean_squared_error, squared=False)
 
         m = estimator.DPGBDT(  # type: ignore
-            PRIVACY_BUDGET, NB_TREES, NB_TREES_PER_ENSEMBLE, MAX_DEPTH, LEARNING_RATE,
+            PRIVACY_BUDGET, NB_TREES, NB_TREES, MAX_DEPTH, LEARNING_RATE,
             n_classes=len(set(y)) if task == 'classification' else None,
             gradient_filtering=GRADIENT_FILTERING,
             leaf_clipping=LEAF_CLIPPING,

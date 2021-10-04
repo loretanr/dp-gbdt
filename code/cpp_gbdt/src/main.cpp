@@ -54,11 +54,11 @@ int main(int argc, char** argv)
     ModelParams current_params = create_default_params();
 
     // change model params here if required:
-    current_params.privacy_budget = 1000;
-    current_params.nb_trees = 50;
+    current_params.privacy_budget = 10;
+    current_params.nb_trees = 30;
     current_params.use_dp = true;
     current_params.learning_rate = 0.1;
-    current_params.gradient_filtering = false;
+    current_params.gradient_filtering = true;
     current_params.balance_partition = true;
     current_params.leaf_clipping = false;
     current_params.scale_y = false;

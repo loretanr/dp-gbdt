@@ -98,8 +98,10 @@ double BinaryClassification::compute_score(std::vector<double> &y, std::vector<d
     std::transform(y_pred.begin(), y_pred.end(), // expit
         y_pred.begin(), [](double &c){ return 1 / (1 + std::exp(-c)); });
     for(auto &elem : y_pred){
-        elem = (elem < 1-elem) ? 0 : 1;
+        elem = (elem < 1.-elem) ? 0.0 : 1.0;
     }
+
+    // std::cout << "1-preds: " << std::count(y_pred.begin(), y_pred.end(), 1.0) << std::endl;
 
     // accuracy
     std::vector<bool> correct_preds(y.size());
