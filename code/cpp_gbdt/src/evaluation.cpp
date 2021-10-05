@@ -45,9 +45,9 @@ int Evaluation::main(int argc, char *argv[])
     parameters.push_back(current_params);
     // --------------------------------------
     // select 1 dataset here
-    DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    // DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
     // DataSet *dataset = Parser::get_adult(parameters, 5000, false);
-    // DataSet dataset = Parser::get_YearPredictionMSD(parameters, 10000, false);
+    DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 10000, false);
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
@@ -63,6 +63,10 @@ int Evaluation::main(int argc, char *argv[])
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
     output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std,glc,gdf" << std::endl;
+
+
+    double summm = std::accumulate(dataset->y.begin(), dataset->y.end(), 0.0);
+    
 
     // currently we use the same folds for all budgets. Not sure whether that's good or bad.
 
