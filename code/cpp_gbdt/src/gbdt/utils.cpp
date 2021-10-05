@@ -70,6 +70,6 @@ std::string get_time_string()
     time_t t = time(0);
     struct tm *now = localtime(&t);
     char buffer [80];
-    strftime(buffer,80,"%m.%d_%H:%M",now);
+    strftime(buffer,80,"%m.%d_%H:%M:%S",now);
     return std::string(buffer);
 }
