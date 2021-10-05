@@ -32,12 +32,10 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // define ModelParams here
     ModelParams current_params;
-    current_params.use_dp = true;
-    current_params.privacy_budget = 0.5;
     current_params.nb_trees = 10;
-    current_params.leaf_clipping = true;
+    current_params.leaf_clipping = false;
     current_params.balance_partition = true;
-    current_params.gradient_filtering = false;
+    current_params.gradient_filtering = true;
     current_params.min_samples_split = 2;
     current_params.learning_rate = 0.1;
     current_params.max_depth = 6;
@@ -47,8 +45,8 @@ int Evaluation::main(int argc, char *argv[])
     parameters.push_back(current_params);
     // --------------------------------------
     // select 1 dataset here
-    // DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
-    DataSet *dataset = Parser::get_adult(parameters, 5000, false);
+    DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    // DataSet *dataset = Parser::get_adult(parameters, 5000, false);
     // DataSet dataset = Parser::get_YearPredictionMSD(parameters, 10000, false);
     // --------------------------------------
     // select privacy budgets
@@ -60,11 +58,11 @@ int Evaluation::main(int argc, char *argv[])
     std::string time_string = get_time_string();
     std::string dataset_name = dataset->name;
     int dataset_length = dataset->length;
-    std::string outfile_name = fmt::format("results/{}_{}.csv", dataset_name, time_string);
+    std::string outfile_name = fmt::format("results/abalone_RMSE/{}_{}.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
-    output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std" << std::endl;
+    output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std,glc,gdf" << std::endl;
 
     // currently we use the same folds for all budgets. Not sure whether that's good or bad.
 
@@ -133,8 +131,8 @@ int Evaluation::main(int argc, char *argv[])
         // write mean score to file
         double mean = compute_mean(scores);
         double stdev = compute_stdev(scores, mean);
-        output << fmt::format("{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
-            param.privacy_budget, mean, stdev) << std::endl;
+        output << fmt::format("{},{},{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
+            param.privacy_budget, mean, stdev, param.leaf_clipping, param.gradient_filtering) << std::endl;
     }
 
     delete dataset;

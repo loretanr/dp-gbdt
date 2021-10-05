@@ -1123,7 +1123,7 @@ what if zurich insurance loses the model, they would want to redo it.
         with a master seed (encrypted)
         
 → create 1 master seed at the beginning and enclave cannot be tricked iinto creating another again.</rich_text>
-			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1633005494.19" unique_id="48">
+			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1633356866.28" unique_id="48">
 				<rich_text scale="h2">TODOs</rich_text>
 				<rich_text>
 • re-enable libfixedtime optimization in makefile
@@ -1131,8 +1131,59 @@ what if zurich insurance loses the model, they would want to redo it.
 • use git commits to measure hardening performance decrease?
     i guess just remember the branch name, but still merge to master
 
+</rich_text>
+				<rich_text foreground="#ffff00000000">TODO enclave gbdt's adult is wrong, and year yet to come (parser)</rich_text>
+				<rich_text>
 
-TODO enclave gbdt's adult is wrong, and year yet to come (parser)</rich_text>
+</rich_text>
+				<rich_text foreground="#ffff00000000">TODO now possible: accuracy plots</rich_text>
+				<rich_text>
+    can do it all in cpp_gbdt
+   
+------------------------------------------------ 
+</rich_text>
+				<rich_text scale="h2">Accuracy plots</rich_text>
+				<rich_text>
+------------------------------------------------ 
+    
+abalone:
+  • pb's wie bisher
+  • log x scale
+  • GLC no GDF
+  • GDF no GLC
+  • pb=0 (Vanilla)
+  • zeroR resp. average 3.1..
+
+• same for MAPE
+
+• tabelle for hyperparams
+
+adult:
+  • full dataset should be doable (only non-dp will take long)
+  • pb's wie bisher
+  • log x scale
+  • GLC no GDF
+  • GDF no GLC
+  • pb=0 (Vanilla)
+  • zeroR
+  
+• same for MAPE
+
+• tabelle for hyperparams
+
+bcw:
+  • pb's wie bisher
+  • log x scale
+  • GLC no GDF
+  • GDF no GLC
+  • pb=0 (Vanilla)
+  • zeroR
+  
+• same for MAPE
+
+• tabelle for hyperparams
+
+yearMSD: not sure about full if possible. Prolly not</rich_text>
 			</node>
 			<node custom_icon_id="0" foreground="" is_bold="False" name="runtime" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632831874.13" ts_lastsave="1632906808.45" unique_id="50">
 				<rich_text scale="h2">PLots</rich_text>
