@@ -21,7 +21,6 @@ abalone_size_4177,4177,10,true,7,2.94885,0.145703,true,false
 abalone_size_4177,4177,10,true,8,2.94284,0.0936554,true,false
 abalone_size_4177,4177,10,true,9,2.92956,0.14366,true,false
 abalone_size_4177,4177,10,true,10,2.93625,0.0834948,true,false
-abalone_size_4177,4177,10,false,0,2.34625,0.0797419,true,true
 abalone_size_4177,4177,10,true,0.1,7.75155,0.328309,true,true
 abalone_size_4177,4177,10,true,0.2,5.08648,0.966044,true,true
 abalone_size_4177,4177,10,true,0.3,3.97219,0.292074,true,true
@@ -43,7 +42,6 @@ abalone_size_4177,4177,10,true,7,3.0252,0.098144,true,true
 abalone_size_4177,4177,10,true,8,3.04473,0.0591711,true,true
 abalone_size_4177,4177,10,true,9,3.03097,0.155977,true,true
 abalone_size_4177,4177,10,true,10,3.0414,0.128569,true,true
-abalone_size_4177,4177,10,false,0,2.34612,0.0795991,false,true
 abalone_size_4177,4177,10,true,0.1,7.85503,1.15717,false,true
 abalone_size_4177,4177,10,true,0.2,4.80972,0.338094,false,true
 abalone_size_4177,4177,10,true,0.3,4.13325,0.409713,false,true
