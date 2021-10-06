@@ -34,7 +34,7 @@ std::vector<double> Regression::compute_gradients(std::vector<double> &y, std::v
         return gradients;
     }
     
-double Regression::compute_score(std::vector<double> &y, std::vector<double> &y_pred)
+double Regression::compute_rmse(std::vector<double> &y, std::vector<double> y_pred)
 {
     // RMSE
     std::transform(y.begin(), y.end(), 
@@ -46,11 +46,18 @@ double Regression::compute_score(std::vector<double> &y, std::vector<double> &y_
     return rmse;
 }
 
+double Regression::compute_mape(std::vector<double> &y, std::vector<double> y_pred)
+{
+    // MAPE
+    for(size_t i=0; i<y.size(); i++) {
+        y_pred[i] = std::abs((y[i] - y_pred[i]) / y[i]);
+    }
+    return std::accumulate(y_pred.begin(),y_pred.end(), 0.0) * 100 / y_pred.size();
+}
 
 /* ---------- Binary Classification ---------- */
 
-// Uses Binomial Deviance
-// TODO, link between theory (expit/logit) and code
+// Uses Binomial Deviancec
 
 double BinaryClassification::compute_init_score(std::vector<double> &y)
 {
@@ -92,7 +99,7 @@ std::vector<double> BinaryClassification::compute_gradients(std::vector<double> 
         return gradients;
     }
 
-double BinaryClassification::compute_score(std::vector<double> &y, std::vector<double> &y_pred)
+double BinaryClassification::compute_rmse(std::vector<double> &y, std::vector<double> y_pred)
 {
     // classification task -> transform continuous predictions back to labels
     std::transform(y_pred.begin(), y_pred.end(), // expit
@@ -110,4 +117,9 @@ double BinaryClassification::compute_score(std::vector<double> &y, std::vector<d
     }
     double true_preds = std::count(correct_preds.begin(), correct_preds.end(), true);
     return true_preds / y.size();
+}
+
+double BinaryClassification::compute_mape(std::vector<double> &y, std::vector<double> y_pred)
+{
+    return 0;
 }

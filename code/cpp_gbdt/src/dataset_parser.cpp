@@ -45,9 +45,28 @@ DataSet *Parser::get_abalone(std::vector<ModelParams> &parameters,
 DataSet *Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters, 
         size_t num_samples, bool use_default_params)
 {
-    std::string file = "datasets/real/YearPredictionMSD.txt";
+    std::string file = "datasets/real/YearPredictionMSD.train";
     std::string name = "yearMSD";
-    int num_rows = 515345;
+    int num_rows = 463715;
+    int num_cols = 91;
+    std::shared_ptr<Regression> task(new Regression());
+    std::vector<int> num_idx(90);
+    std::iota(std::begin(num_idx)++, std::end(num_idx), 1); // num_idx = {1,...,90}
+    std::vector<int> cat_idx = {};
+    std::vector<int> target_idx = {0};
+    std::vector<int> drop_idx = {};
+    std::vector<int> cat_values = {}; // empty -> will be filled with the present values in the dataset
+
+    return parse_file(file, name, num_rows, num_cols, num_samples, task, num_idx,
+        cat_idx, cat_values, target_idx, drop_idx, parameters, use_default_params);
+}
+
+DataSet *Parser::get_YearPredictionMSD_test(std::vector<ModelParams> &parameters, 
+        size_t num_samples, bool use_default_params)
+{
+    std::string file = "datasets/real/YearPredictionMSD.test";
+    std::string name = "yearMSD";
+    int num_rows = 51630;
     int num_cols = 91;
     std::shared_ptr<Regression> task(new Regression());
     std::vector<int> num_idx(90);

@@ -119,7 +119,7 @@ int main(int argc, char** argv)
             }
 
             // compute score
-            double score = params.task->compute_score(split->test.y, y_pred);
+            double score = params.task->compute_rmse(split->test.y, y_pred);
 
             std::cout << score << " " << std::flush;
             scores.push_back(score);
