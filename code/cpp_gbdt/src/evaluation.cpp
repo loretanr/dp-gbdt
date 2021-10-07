@@ -33,7 +33,7 @@ int Evaluation::main(int argc, char *argv[])
     // define ModelParams here
     ModelParams current_params;
     current_params.nb_trees = 20;
-    current_params.leaf_clipping = true;
+    current_params.leaf_clipping = false;
     current_params.balance_partition = true;
     current_params.gradient_filtering = true;
     current_params.min_samples_split = 2;
@@ -51,8 +51,7 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
-    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,0};
-    std::vector<double> budgets = {0};     // TODO
+    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
     // --------------------------------------
 
     // output file
