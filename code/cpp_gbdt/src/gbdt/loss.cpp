@@ -52,7 +52,7 @@ double Regression::compute_mape(std::vector<double> &y, std::vector<double> y_pr
     for(size_t i=0; i<y.size(); i++) {
         y_pred[i] = std::abs((y[i] - y_pred[i]) / y[i]);
     }
-    return std::accumulate(y_pred.begin(),y_pred.end(), 0.0) * 100 / y_pred.size();
+    return std::accumulate(y_pred.begin(),y_pred.end(), 0.0) * 100. / y_pred.size();
 }
 
 /* ---------- Binary Classification ---------- */

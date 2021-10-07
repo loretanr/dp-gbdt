@@ -47,7 +47,7 @@ int Evaluation::main(int argc, char *argv[])
     // select 1 dataset here
     // DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
     // DataSet *dataset = Parser::get_adult(parameters, 5000, false);
-    DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 10000, false);
+    DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 1000, false);
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
@@ -129,7 +129,7 @@ int Evaluation::main(int argc, char *argv[])
 
             // THIS WILL GET YOU THE BASELINE ("PREDICT WITH MEAN")
             // for(auto &elem : y_pred) {
-            //     elem = summm / dataset->y.size();
+            //     elem = summm / y_pred.size();
             // }
 
             // compute score
