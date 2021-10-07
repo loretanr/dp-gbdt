@@ -1125,7 +1125,7 @@ what if zurich insurance loses the model, they would want to redo it.
         with a master seed (encrypted)
         
 → create 1 master seed at the beginning and enclave cannot be tricked iinto creating another again.</rich_text>
-			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1633531118.25" unique_id="48">
+			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1633606475.72" unique_id="48">
 				<rich_text scale="h2">TODOs</rich_text>
 				<rich_text>
 • re-enable libfixedtime optimization in makefile
@@ -1186,13 +1186,13 @@ bcw:
 • tabelle for hyperparams
 
 </rich_text>
-				<rich_text foreground="#ffff00000000">TODO, before continuing, should also output the MAPE to the .csv</rich_text>
-				<rich_text>
-    otherwise need to do everything twice
-    adapt evaluation.cpp
-    </rich_text>
 				<rich_text foreground="#ffff00000000">somehow the no_dp line must be on top in the .csv file!!!</rich_text>
 				<rich_text>
+
+</rich_text>
+				<rich_text foreground="#ffff00000000">if plot lines are glued to top/bottom, it's likely because our log log plots starts from 0
+</rich_text>
+				<rich_text>        need to start from 0.01 or something
 
 yearMSD: 
     full takes too long for me.
