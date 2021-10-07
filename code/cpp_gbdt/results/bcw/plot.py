@@ -32,6 +32,9 @@ def create_plot(filename, ymin, ymax):
             return val_str
 
     def my_y_formatter(x, pos):
+        if x >= 30:
+            if x % 10 != 0:
+                return ""
         val_str = '{:g}'.format(x)
         return val_str
 
@@ -86,8 +89,8 @@ def create_plot(filename, ymin, ymax):
                     fmt=marker, capsize=3, label=label, markersize=1, color='indianred', ecolor='dimgrey', elinewidth=1)
 
     # plot the baseline
-    plt.axhline(y = 0.403, color = 'mediumseagreen', linestyle = '--')
-    plt.annotate('baseline', xy=(0.11, 0.406), xycoords='data', color = 'mediumseagreen')
+    plt.axhline(y = 35.55, color = 'mediumseagreen', linestyle = '--')
+    plt.annotate('baseline (0-R)', xy=(0.11, 31.5), xycoords='data', color = 'mediumseagreen')
 
     plt.axis([0.09, float(max(privacy_budgets))+1, ymin, ymax ])
 
@@ -97,7 +100,7 @@ def create_plot(filename, ymin, ymax):
     ax.yaxis.set_major_formatter(my_y_formatter)
 
     plt.xticks([elem for elem in privacy_budgets if elem != 0 and elem != 1.5 and elem != 2.5])
-    plt.yticks(np.arange(ymin, ymax, 5))
+    plt.yticks([4,5,6,8] + np.arange(10, ymax+1, 5).tolist())
 
     plt.legend(loc='upper right')
     plt.title('dataset={0!s}, samples={1!s}, trees={2!s}'.format(
@@ -121,7 +124,7 @@ if __name__ == '__main__':
             ymax = max(y_max,ymax)
 
     ymin = 4
-    ymax = 70
+    ymax = 60
 
     for filename in os.listdir(os.getcwd()):
         if filename.endswith(".csv"):

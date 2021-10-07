@@ -87,79 +87,95 @@ int Evaluation::main(int argc, char *argv[])
         param.use_dp = budget != 0.;
         std::cout << dataset_name << " pb=" << budget << std::endl;
 
-        std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
 
-        // YEAR MSD SHIT
-        // for(auto split : cv_inputs){
-        //     split->test = *(Parser::get_YearPredictionMSD_test(parameters, split->test.length, false));
-        // }
 
-        Timer time_begin = std::chrono::steady_clock::now();
-        
-        // prepare the ressources for each thread
-        std::vector<std::thread> threads(cv_inputs.size());
-        std::vector<DPEnsemble> ensembles;
-        for (auto split : cv_inputs) {
-            if(param.scale_y){
-                split->train.scale_y(param, -1, 1);
-            }
-            ensembles.push_back(DPEnsemble(&param) );
-        }
+        // more iterations for more stable results
+        int ITERATIONS = 10;
+        std::vector<double> means;
+        std::vector<double> means_stds;
+        for(int it=0; it < ITERATIONS; it++){
 
-        // threads start training on ther respective folds
-        for(size_t thread_id=0; thread_id<threads.size(); thread_id++){
-            threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id],
-                &(cv_inputs[thread_id]->train));
-        }
-        for (auto &thread : threads) {
-            thread.join(); // join once done
-        }
+            std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
 
-        /* compute scores */
-
-        std::vector<double> scores_rmse;
-        std::vector<double> scores_mape;
-        for (size_t ensemble_id = 0; ensemble_id < ensembles.size(); ensemble_id++) {
-            DPEnsemble *ensemble = &ensembles[ensemble_id];
-            TrainTestSplit *split = cv_inputs[ensemble_id];
-            
-            // predict with the test set
-            std::vector<double> y_pred = ensemble->predict(split->test.X);
-
-            if(param.scale_y){
-                inverse_scale_y(param, split->train.scaler, y_pred);
-            }
-
-            // THIS WILL GET YOU THE regression BASELINE ("PREDICT WITH MEAN")
-            // for(auto &elem : y_pred) {
-            //     elem = summm / y_pred.size();
+            // YEAR MSD SHIT
+            // for(auto split : cv_inputs){
+            //     split->test = *(Parser::get_YearPredictionMSD_test(parameters, split->test.length, false));
             // }
 
-            // CLASSIFICATION BASELINE
-            // in loss.cpp
+            // Timer time_begin = std::chrono::steady_clock::now();
+            
+            // prepare the ressources for each thread
+            std::vector<std::thread> threads(cv_inputs.size());
+            std::vector<DPEnsemble> ensembles;
+            for (auto split : cv_inputs) {
+                if(param.scale_y){
+                    split->train.scale_y(param, -1, 1);
+                }
+                ensembles.push_back(DPEnsemble(&param) );
+            }
 
-            // compute score
-            double score_rmse = param.task->compute_rmse(split->test.y, y_pred);
-            double score_mape = param.task->compute_mape(split->test.y, y_pred);
+            // threads start training on ther respective folds
+            for(size_t thread_id=0; thread_id<threads.size(); thread_id++){
+                threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id],
+                    &(cv_inputs[thread_id]->train));
+            }
+            for (auto &thread : threads) {
+                thread.join(); // join once done
+            }
 
-            std::cout << std::fixed << std::setprecision(3) << "(" << score_rmse << "," << score_mape << ") " << std::flush;
-            scores_rmse.push_back(score_rmse);
-            scores_mape.push_back(score_mape);
-            delete split;
-        } 
-        double mean_rmse = compute_mean(scores_rmse);
+            /* compute scores */
+
+            std::vector<double> scores_rmse;
+            std::vector<double> scores_mape;
+            for (size_t ensemble_id = 0; ensemble_id < ensembles.size(); ensemble_id++) {
+                DPEnsemble *ensemble = &ensembles[ensemble_id];
+                TrainTestSplit *split = cv_inputs[ensemble_id];
+                
+                // predict with the test set
+                std::vector<double> y_pred = ensemble->predict(split->test.X);
+
+                if(param.scale_y){
+                    inverse_scale_y(param, split->train.scaler, y_pred);
+                }
+
+                // THIS WILL GET YOU THE regression BASELINE ("PREDICT WITH MEAN")
+                // for(auto &elem : y_pred) {
+                //     elem = summm / y_pred.size();
+                // }
+
+                // CLASSIFICATION BASELINE
+                // in loss.cpp
+
+                // compute score
+                double score_rmse = param.task->compute_rmse(split->test.y, y_pred);
+                double score_mape = param.task->compute_mape(split->test.y, y_pred);
+
+                std::cout << std::fixed << std::setprecision(3) << "(" << score_rmse << "," << score_mape << ") " << std::flush;
+                scores_rmse.push_back(score_rmse);
+                scores_mape.push_back(score_mape);
+                delete split;
+            } 
+            double mean_rmse = compute_mean(scores_rmse);
+            means.push_back(mean_rmse);
+            double stdev_rmse = compute_stdev(scores_rmse, mean_rmse);
+            means_stds.push_back(stdev_rmse);
+        }
+
+        double mean_rmse = compute_mean(means);
+        double stdev_rmse = compute_mean(means_stds);
 
         // print elapsed time
-        Timer time_end = std::chrono::steady_clock::now();
-        double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count();
-        std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)  " << mean_rmse << std::endl;
+        // Timer time_end = std::chrono::steady_clock::now();
+        // double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count();
+        // std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)  " << mean_rmse << std::endl;
 
         // write mean score to file
-        double mean_mape = compute_mean(scores_mape);
-        double stdev_rmse = compute_stdev(scores_rmse, mean_rmse);
-        double stdev_mape = compute_stdev(scores_mape, mean_mape);
-        output << fmt::format("{},{},{},{},{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
-            param.privacy_budget, mean_rmse, stdev_rmse, param.leaf_clipping, param.gradient_filtering, mean_mape, stdev_mape) << std::endl;
+        // double mean_mape = compute_mean(scores_mape);
+        // double stdev_mape = compute_stdev(scores_mape, mean_mape);
+        // output << fmt::format("{},{},{},{},{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
+        //     param.privacy_budget, mean_rmse, stdev_rmse, param.leaf_clipping, param.gradient_filtering, mean_mape, stdev_mape) << std::endl;
+        output << fmt::format("{},{},{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
+            param.privacy_budget, mean_rmse, stdev_rmse, param.leaf_clipping, param.gradient_filtering) << std::endl;
     }
 
     delete dataset;
