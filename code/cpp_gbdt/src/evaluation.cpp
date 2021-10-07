@@ -32,7 +32,7 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // define ModelParams here
     ModelParams current_params;
-    current_params.nb_trees = 20;
+    current_params.nb_trees = 40;
     current_params.leaf_clipping = false;
     current_params.balance_partition = true;
     current_params.gradient_filtering = true;
@@ -46,27 +46,30 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // select 1 dataset here
     // DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    DataSet *dataset = Parser::get_bcw(parameters, 700, false); // full bcw
     // DataSet *dataset = Parser::get_adult(parameters, 5000, false);
-    DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 1000, false);
+    // DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 1000, false);
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
-    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
+    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,0};
+    // budgets = {0,1,2,10};
     // --------------------------------------
 
     // output file
     std::string time_string = get_time_string();
     std::string dataset_name = dataset->name;
     int dataset_length = dataset->length;
-    std::string outfile_name = fmt::format("results/year/{}_{}.csv", dataset_name, time_string);
+    std::string outfile_name = fmt::format("results/bcw/{}_{}.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
     output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std,glc,gdf,mean_mape,std_mape" << std::endl;
 
 
-    double summm = std::accumulate(dataset->y.begin(), dataset->y.end(), 0.0);
-    std::cout << "average y of training set: " << summm / dataset->y.size() << std::endl;
+    // regression baseline / mean
+    // double summm = std::accumulate(dataset->y.begin(), dataset->y.end(), 0.0);
+    // std::cout << "average y of training set: " << summm / dataset->y.size() << std::endl;
 
 
     // currently we use the same folds for all budgets. Not sure whether that's good or bad.
@@ -87,9 +90,9 @@ int Evaluation::main(int argc, char *argv[])
         std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
 
         // YEAR MSD SHIT
-        for(auto split : cv_inputs){
-            split->test = *(Parser::get_YearPredictionMSD_test(parameters, split->test.length, false));
-        }
+        // for(auto split : cv_inputs){
+        //     split->test = *(Parser::get_YearPredictionMSD_test(parameters, split->test.length, false));
+        // }
 
         Timer time_begin = std::chrono::steady_clock::now();
         
@@ -127,10 +130,13 @@ int Evaluation::main(int argc, char *argv[])
                 inverse_scale_y(param, split->train.scaler, y_pred);
             }
 
-            // THIS WILL GET YOU THE BASELINE ("PREDICT WITH MEAN")
+            // THIS WILL GET YOU THE regression BASELINE ("PREDICT WITH MEAN")
             // for(auto &elem : y_pred) {
             //     elem = summm / y_pred.size();
             // }
+
+            // CLASSIFICATION BASELINE
+            // in loss.cpp
 
             // compute score
             double score_rmse = param.task->compute_rmse(split->test.y, y_pred);
@@ -141,14 +147,14 @@ int Evaluation::main(int argc, char *argv[])
             scores_mape.push_back(score_mape);
             delete split;
         } 
+        double mean_rmse = compute_mean(scores_rmse);
 
         // print elapsed time
         Timer time_end = std::chrono::steady_clock::now();
         double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (time_end - time_begin).count();
-        std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)" << std::endl;
+        std::cout << "  (" << std::fixed << std::setprecision(1) << elapsed/1000 << "s)  " << mean_rmse << std::endl;
 
         // write mean score to file
-        double mean_rmse = compute_mean(scores_rmse);
         double mean_mape = compute_mean(scores_mape);
         double stdev_rmse = compute_stdev(scores_rmse, mean_rmse);
         double stdev_mape = compute_stdev(scores_mape, mean_mape);

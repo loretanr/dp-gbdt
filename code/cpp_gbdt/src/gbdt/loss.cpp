@@ -108,15 +108,21 @@ double BinaryClassification::compute_rmse(std::vector<double> &y, std::vector<do
         elem = (elem < 1.-elem) ? 0.0 : 1.0;
     }
 
+    // CLASSIFICATION BASELINE (zeroR) TODO REMOVE
+    // int count0 = std::count(y.begin(), y.end(), 0.0);
+    // int count1 = std::count(y.begin(), y.end(), 1.0);
+    // double majority = (count0 >= count1) ? 0.0 : 1.0;
+    // std::fill(y_pred.begin(),y_pred.end(), majority);
+
     // std::cout << "1-preds: " << std::count(y_pred.begin(), y_pred.end(), 1.0) << std::endl;
 
-    // accuracy
+    // misclassification rate
     std::vector<bool> correct_preds(y.size());
     for(size_t i=0; i<y.size();i++) {
         correct_preds[i] = (y[i] == y_pred[i]);
     }
     double true_preds = std::count(correct_preds.begin(), correct_preds.end(), true);
-    return true_preds / y.size();
+    return (1 - true_preds / y.size()) * 100;
 }
 
 double BinaryClassification::compute_mape(std::vector<double> &y, std::vector<double> y_pred)

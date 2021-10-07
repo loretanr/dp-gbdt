@@ -1125,7 +1125,7 @@ what if zurich insurance loses the model, they would want to redo it.
         with a master seed (encrypted)
         
 → create 1 master seed at the beginning and enclave cannot be tricked iinto creating another again.</rich_text>
-			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1633606475.72" unique_id="48">
+			<node custom_icon_id="0" foreground="" is_bold="False" name="measurements" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632819515.28" ts_lastsave="1633618472.89" unique_id="48">
 				<rich_text scale="h2">TODOs</rich_text>
 				<rich_text>
 • re-enable libfixedtime optimization in makefile
@@ -1179,7 +1179,8 @@ bcw:
   • GLC no GDF
   • GDF no GLC
   • pb=0 (Vanilla)
-  • zeroR
+  • zeroR = 64.45
+  interesting: bcw gets better and better, even 200 trees seem to work
   
 • same for MAPE
 
