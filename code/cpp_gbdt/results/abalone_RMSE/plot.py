@@ -51,7 +51,7 @@ def create_plot(filename):
 
     # plot the baseline
     plt.axhline(y = 3.2205, color = 'mediumseagreen', linestyle = '--')
-    plt.annotate('baseline', xy=(0.11, 3.33), xycoords='data', color = 'mediumseagreen')
+    plt.annotate('baseline (mean)', xy=(0.1, 2.96), xycoords='data', color = 'mediumseagreen')
 
     # plot the dp curve (GDF)
     values_dp = data[(data['nb_samples'] == SAMPLES) & (data['privacy_budget'] != 0) & (data['glc'] == False) & (data['gdf'] == True)]
