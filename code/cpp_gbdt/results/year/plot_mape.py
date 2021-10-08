@@ -87,7 +87,7 @@ def create_plot(filename, ymin, ymax):
 
     # plot the baseline
     plt.axhline(y = 0.403, color = 'mediumseagreen', linestyle = '--')
-    plt.annotate('baseline', xy=(0.11, 0.406), xycoords='data', color = 'mediumseagreen')
+    plt.annotate('baseline (mean)', xy=(0.1, 0.387), xycoords='data', color = 'mediumseagreen')
 
     plt.axis([0.09, float(max(privacy_budgets))+1, ymin, ymax ])
 
