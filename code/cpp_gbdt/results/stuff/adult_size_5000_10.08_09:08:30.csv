@@ -1,0 +1,5 @@
+dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std,glc,gdf,mean_mape,std_mape
+adult_size_5000,5000,10,false,0,25.84,1.14647,false,true
+adult_size_5000,5000,10,true,1,25.84,1.00319,false,true
+adult_size_5000,5000,10,true,2,25.84,0.557136,false,true
+adult_size_5000,5000,10,true,10,25.84,0.833307,false,true
