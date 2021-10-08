@@ -95,7 +95,9 @@ void DPEnsemble::train(DataSet *dataset)
                         std::pow(1 - params->learning_rate, tree_index)) / 
                         (1 - std::pow(1 - params->learning_rate, params->nb_trees));
                 if (number_of_rows == 0) {
-                    throw std::runtime_error("Warning: tree is not getting any samples");
+                    std::cout << "warning, tree with no samples left" << std::endl;
+                    return;
+                    // throw std::runtime_error("Warning: tree is not getting any samples");
                 }
             }
 

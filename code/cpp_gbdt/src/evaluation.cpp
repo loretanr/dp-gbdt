@@ -32,8 +32,8 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // define ModelParams here
     ModelParams current_params;
-    current_params.nb_trees = 40;
-    current_params.leaf_clipping = false;
+    current_params.nb_trees = 30;
+    current_params.leaf_clipping = true;
     current_params.balance_partition = true;
     current_params.gradient_filtering = true;
     current_params.min_samples_split = 2;
@@ -46,21 +46,21 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // select 1 dataset here
     // DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
-    DataSet *dataset = Parser::get_bcw(parameters, 700, false); // full bcw
-    // DataSet *dataset = Parser::get_adult(parameters, 5000, false);
+    // DataSet *dataset = Parser::get_bcw(parameters, 700, false); // full bcw
+    DataSet *dataset = Parser::get_adult(parameters, 5000, false);
     // DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 1000, false);
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
-    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,0};
-    // budgets = {0,1,2,10};
+    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
+    // budgets = {1,2,10};
     // --------------------------------------
 
     // output file
     std::string time_string = get_time_string();
     std::string dataset_name = dataset->name;
     int dataset_length = dataset->length;
-    std::string outfile_name = fmt::format("results/bcw/{}_{}.csv", dataset_name, time_string);
+    std::string outfile_name = fmt::format("results/adult/{}_{}.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
@@ -90,7 +90,7 @@ int Evaluation::main(int argc, char *argv[])
 
 
         // more iterations for more stable results
-        int ITERATIONS = 10;
+        int ITERATIONS = 5;
         std::vector<double> means;
         std::vector<double> means_stds;
         for(int it=0; it < ITERATIONS; it++){
@@ -156,6 +156,7 @@ int Evaluation::main(int argc, char *argv[])
                 delete split;
             } 
             double mean_rmse = compute_mean(scores_rmse);
+            std::cout << "   " << mean_rmse << std::endl;
             means.push_back(mean_rmse);
             double stdev_rmse = compute_stdev(scores_rmse, mean_rmse);
             means_stds.push_back(stdev_rmse);
