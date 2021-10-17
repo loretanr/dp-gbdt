@@ -21,7 +21,6 @@ struct ModelParams {
     bool use_decay = false;
     double l2_threshold = 1.0;
     double l2_lambda = 0.1;
-    int verbosity = -1;
     std::vector<int> cat_idx;
     std::vector<int> num_idx;
     bool use_grid = false;
