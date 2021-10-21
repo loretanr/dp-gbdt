@@ -787,7 +787,7 @@ General:
          </rich_text>
 			</node>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1632914838.8" unique_id="44">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_23" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632400965.99" ts_lastsave="1634544207.64" unique_id="44">
 			<rich_text scale="h2">Questions</rich_text>
 			<rich_text>
 
@@ -816,14 +816,7 @@ priorities --------------------------------------
 • look at synthetic datasets and write Theo if necessary
 
 
-
-
-
-
-
-
-
-    TODO resultat überneh, check why adult failed</rich_text>
+</rich_text>
 			<node custom_icon_id="0" foreground="" is_bold="False" name="arithmetic changes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632817245.95" ts_lastsave="1632831786.86" unique_id="45">
 				<rich_text>• to overload arithmetics I need my own type Fdouble everywhere
    ◇ Fdouble being a wrapper around a double, such that i can overload the arithmetic operators
@@ -1069,16 +1062,10 @@ let's see effects of not inlining constant_time::select
 	</rich_text>
 			</node>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="09_30" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632818207.65" ts_lastsave="1633597169.14" unique_id="46">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="09_30" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1632818207.65" ts_lastsave="1634544160.47" unique_id="46">
 			<rich_text>• is the compute_score secret. Resp. will that even be run in a real usecase?
 • Ferie
 • value barrier turning off no_inline for the value_barrier under -O1 leads to it being optimized away.
-
-
-
-
-Wednessday 1pm Kari whiteboard drawing the high level model
-
 
 
 
