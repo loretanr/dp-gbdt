@@ -370,7 +370,7 @@ double DPTree::compute_gain(VVD &X_transposed, vector<double> &gradients_live, v
 void DPTree::samples_left_right_partition(vector<int> &lhs, vector<int> &rhs, VVD &samples,
     vector<int> &live_samples, int feature_index, double feature_value)
 {
-    // if the feature is categorical
+    // if the feature is categorical, was an unnecessary harden.
     bool categorical = false;
     for(auto cat_feature : params->cat_idx){
         categorical = constant_time::logical_or(categorical, cat_feature == feature_index);

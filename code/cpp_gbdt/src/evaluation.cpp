@@ -33,7 +33,7 @@ int Evaluation::main(int argc, char *argv[])
     // define ModelParams here
     ModelParams current_params;
     current_params.nb_trees = 30;
-    current_params.leaf_clipping = true;
+    current_params.leaf_clipping = false;
     current_params.balance_partition = true;
     current_params.gradient_filtering = true;
     current_params.min_samples_split = 2;
@@ -45,14 +45,14 @@ int Evaluation::main(int argc, char *argv[])
     parameters.push_back(current_params);
     // --------------------------------------
     // select 1 dataset here
-    // DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
     // DataSet *dataset = Parser::get_bcw(parameters, 700, false); // full bcw
-    DataSet *dataset = Parser::get_adult(parameters, 5000, false);
+    // DataSet *dataset = Parser::get_adult(parameters, 5000, false);
     // DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 1000, false);
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
-    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
+    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,0};
     // budgets = {1,2,10};
     // --------------------------------------
 
@@ -60,11 +60,11 @@ int Evaluation::main(int argc, char *argv[])
     std::string time_string = get_time_string();
     std::string dataset_name = dataset->name;
     int dataset_length = dataset->length;
-    std::string outfile_name = fmt::format("results/adult/{}_{}.csv", dataset_name, time_string);
+    std::string outfile_name = fmt::format("results/abalone_RMSE_balanced/{}_{}_balance.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
-    output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std,glc,gdf,mean_mape,std_mape" << std::endl;
+    output << "dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std,glc,gdf,balanced,mean_mape,std_mape" << std::endl;
 
 
     // regression baseline / mean
@@ -175,8 +175,8 @@ int Evaluation::main(int argc, char *argv[])
         // double stdev_mape = compute_stdev(scores_mape, mean_mape);
         // output << fmt::format("{},{},{},{},{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
         //     param.privacy_budget, mean_rmse, stdev_rmse, param.leaf_clipping, param.gradient_filtering, mean_mape, stdev_mape) << std::endl;
-        output << fmt::format("{},{},{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
-            param.privacy_budget, mean_rmse, stdev_rmse, param.leaf_clipping, param.gradient_filtering) << std::endl;
+        output << fmt::format("{},{},{},{},{},{},{},{},{},{}", dataset_name, dataset_length, param.nb_trees, param.use_dp,
+            param.privacy_budget, mean_rmse, stdev_rmse, param.leaf_clipping, param.gradient_filtering, param.balance_partition) << std::endl;
     }
 
     delete dataset;
