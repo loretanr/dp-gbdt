@@ -1395,17 +1395,33 @@ So, vanilla (no-dp) cpp_gbdt seems to be fine. parameters were fucked up. need l
 			<rich_text foreground="#9090eeee9090"> •   solution idea.  Need the “counter id” in the log! 
          ◇ As we discussed, but I forgot.</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="10_14" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1634120065.78" ts_lastsave="1634220193.89" unique_id="56">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="10_14" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1634120065.78" ts_lastsave="1635331336.71" unique_id="56">
 			<rich_text>Esfandiar Questions
    ◇ how should I mention the tree rejection / 2nd split issue we uncovered
       ▪ it's kind of work in progress
+   ◇ is 499x companyA and 2x companyB a DP problem?
+     </rich_text>
+			<rich_text foreground="#9090eeee9090"> ▪ nope, you only jeopardize your own privacy!</rich_text>
+			<rich_text>
+   ◇ what results in appendix and which ones not
+      ▪ can put some MAPE in text
 
 
 Kari Questions
-   ◇ should I mention the bugs I found in python (e.g. short list in appendix). 
-      ▪ I don't want to be rude
-      ▪ But people should know, o/w they might waste time again
-      ▪ I have fixed most of them in the python version that is in my repo, but not all (because it's a tedious task)
+   </rich_text>
+			<rich_text foreground="#9090eeee9090">◇ should I mention the bugs I found in python (e.g. short list in appendix). </rich_text>
+			<rich_text>
+      </rich_text>
+			<rich_text foreground="#9090eeee9090">▪ yes</rich_text>
+			<rich_text>
+   ◇ Do we need, Related work section? kind of broad spectrum of topics ML/side-channel hardening
+      ▪ apparently kari would put it at the end somewhere
+         - tips from Esfandiar?
+
+General questions
+   ◇ background. Theo. 
+      ▪ fine? paraphrase? change the text and keep the defs?
+   ◇ how to cite his thesis because it's not public
 
 Moritz Questions
  </rich_text>
@@ -1440,7 +1456,7 @@ remaining 35d - 5 off = 30
 → think the plate is full
 -------------------------------------------------------------------
 </rich_text>
-			<rich_text scale="h2">Notes from Live meeting</rich_text>
+			<rich_text scale="h2">Notes from Live meeting 1 (only kari)</rich_text>
 			<rich_text>
 problem we're bound to 1 pc, if that one goes kaputt we're screwed.
      would need some possiblility to migrate to other pc in practice. Kari will send link  “Migrating SGX enclaves with persistent state”
@@ -1453,6 +1469,61 @@ extra section for migration resp replication
         (handy picture)
     
 write in the text that the counter id's are hardcoded and hte other things like the mappings....
+
+
+-----------------------------
+</rich_text>
+			<rich_text scale="h2">Notes from Live meeting 2 (kari + Esfandiar)</rich_text>
+			<rich_text>
+
+related work -&gt; find the stuff in mattermost
+    master thesis from ralucas group
+    esfandiar did something in enclaves
+    
+“together with moritz we found issue xy 2nd split” write that in the implementation part
+
+requirements first overview “i din't invent the setup, python + idea was there” 
+requirement get </rich_text>
+			<rich_text underline="single">quickly to the point</rich_text>
+			<rich_text>, mix of overview and problem statement
+    
+    
+Esfandiar: In general: redundancy is OK! different abstraction layers.
+    
+intro should be a self contained snapshot. sometimes people only read this.
+
+chapter 4 Implementation should start with: we didn't start with nothing, we had xy , bla bla and it's now nice
+
+show performance with the bug! -&gt; tiny bug can have big impact put it into performance section but reference it from implementation section
+
+
+Hardening chapter
+    hilight that our hardening is a bit special. because its a saturated research topic. in our case. not liike AES, much bigger, ALL data should be secret.
+    The goal is not to make sure nothing leaks. the goal is to only leak so much that DP still holds.
+
+If I want to talk about implementation details
+    Mark it as such, such that other people can skip it
+
+results
+    mark the good runtime results!
+    rmse says how well can we capture the worse cases
+    mape presents the average case
+    if big gap between rmse and mape we should show it and try to find the samples that cause it. -&gt; our algorithm is bad with xy
+    
+    identifying good/bad datasets would be a bonus
+    
+    interpretation of the results:
+        goals were xy: implement it and show that it works
+           grid, GLC
+           
+ultimately we need privacy budget 0.1 or 0.2. So we need optimization of the whole thing!
+           
+adversarial customer -&gt; use some form of tokens -&gt; bloom filter ? .   Write that in deployment chapter, that in order to prevent adversarial customer, we take different adversarial model.
+
+→ different attacker models
+    → customers want privacy even if zurich is malicious
+    → zurich wants good results even if customers are malicious
+        
 </rich_text>
 		</node>
 	</node>
