@@ -32,10 +32,10 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // define ModelParams here
     ModelParams current_params;
-    current_params.nb_trees = 30;
-    current_params.leaf_clipping = false;
+    current_params.nb_trees = 50;
+    current_params.leaf_clipping = true;
     current_params.balance_partition = true;
-    current_params.gradient_filtering = true;
+    current_params.gradient_filtering = false;
     current_params.min_samples_split = 2;
     current_params.learning_rate = 0.1;
     current_params.max_depth = 6;
@@ -52,7 +52,7 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
-    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10,0};
+    std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
     // budgets = {1,2,10};
     // --------------------------------------
 
@@ -60,7 +60,7 @@ int Evaluation::main(int argc, char *argv[])
     std::string time_string = get_time_string();
     std::string dataset_name = dataset->name;
     int dataset_length = dataset->length;
-    std::string outfile_name = fmt::format("results/abalone_RMSE_balanced/{}_{}_balance.csv", dataset_name, time_string);
+    std::string outfile_name = fmt::format("results/2ndsplit.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
