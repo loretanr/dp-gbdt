@@ -1,4 +1,5 @@
 dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std,glc,gdf,balanced,rejection
+abalone_size_4177,4177,50,false,0,2.17248,0.0484281,true,false,true,false
 abalone_size_4177,4177,50,true,0.1,9.25132,0.765441,true,false,true,false
 abalone_size_4177,4177,50,true,0.2,5.29101,0.400209,true,false,true,false
 abalone_size_4177,4177,50,true,0.3,4.15675,0.289306,true,false,true,false

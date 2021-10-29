@@ -53,14 +53,14 @@ int Evaluation::main(int argc, char *argv[])
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
     std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
-    // budgets = {1,2,10};
+    budgets = {0};
     // --------------------------------------
 
     // output file
     std::string time_string = get_time_string();
     std::string dataset_name = dataset->name;
     int dataset_length = dataset->length;
-    std::string outfile_name = fmt::format("results/2ndsplit.csv", dataset_name, time_string);
+    std::string outfile_name = fmt::format("results/2ndsplit_graph_nodp.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
@@ -90,7 +90,7 @@ int Evaluation::main(int argc, char *argv[])
 
 
         // more iterations for more stable results
-        int ITERATIONS = 5;
+        int ITERATIONS = 1;
         std::vector<double> means;
         std::vector<double> means_stds;
         for(int it=0; it < ITERATIONS; it++){
