@@ -18,7 +18,7 @@ from evaluation import estimator
 # The dataset to use for evaluation
 DATASET = 'abalone'
 # The privacy budget to use for evaluation
-PRIVACY_BUDGETS = [0.1]
+PRIVACY_BUDGETS = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10]
 # PRIVACY_BUDGETS = [0.1, 0.3, 0.6, 1, 1.5, 2, 3, 5, 7, 9]
 # The number of time to repeat the experiment to get an average accuracy
 NB_SPLITS = 5
@@ -35,7 +35,7 @@ with open(PATH + 'model_params.json') as json_file:
 
 if __name__ == '__main__':
   now = datetime.now().strftime("%d-%m-%y_%H:%M")
-  output = open(PATH + 'results_AFTERMORITZ_' + now + '.csv', 'a')
+  output = open(PATH + 'results_AFTERMORITZ_VSGRAPH' + now + '.csv', 'a')
   output.write('dataset,nb_samples,privacy_budget,nb_tree,nb_tree_per_ensemble,'
                'max_depth,max_leaves,learning_rate,nb_of_runs,mean,std,'
                'model,config,balance_partition\n')
@@ -46,7 +46,8 @@ if __name__ == '__main__':
     X, y, cat_idx, num_idx, task = parser.Parse(n_rows=nb_samples)
 
     # Own model
-    models = [estimator.DPGBDT, estimator.DPRef]
+    # models = [estimator.DPGBDT, estimator.DPRef]
+    models = [estimator.DPGBDT]
 
     rmse = make_scorer(
         metrics.mean_squared_error, squared=False)
@@ -54,7 +55,8 @@ if __name__ == '__main__':
     for model in models:
       model_name = str(model).split('.')[-1][:-2]
       print('------------ Processing model: {0:s}'.format(model_name))
-      for config in ['Vanilla', 'DFS']:
+      # for config in ['Vanilla', 'DFS']:
+      for config in ['DFS']:
         for idx, budget in enumerate(PRIVACY_BUDGETS):
           if config == 'Vanilla' and idx != 0:
             continue
@@ -80,11 +82,11 @@ if __name__ == '__main__':
               use_3_trees=False,
               cat_idx=cat_idx,
               num_idx=num_idx,
-              verbosity=1)  # type: ignore
+              verbosity=-1)  # type: ignore
           regressor = TransformedTargetRegressor(regressor=m)     # REMOVED MINMAXSCALER
           validator = model_selection.KFold(n_splits=NB_SPLITS, random_state=np.random.randint(0,100000) ,shuffle=True)               # somehow shuffle=True did not shuffle!!!!
           scores = cross_val_score(                                           # leaving it away now shuffles!
-              regressor, X, y, cv=validator, scoring=rmse, n_jobs=1)
+              regressor, X, y, cv=validator, scoring=rmse, n_jobs=-1)
           mean, std = scores.mean(), (scores.std() / 2)
           output.write(
               '{0:s},{1:d},{2:f},{3:d},{4:d},{5:d},{6:d},{7:f},'  # type: ignore
