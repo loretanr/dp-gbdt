@@ -1395,7 +1395,7 @@ So, vanilla (no-dp) cpp_gbdt seems to be fine. parameters were fucked up. need l
 			<rich_text foreground="#9090eeee9090"> •   solution idea.  Need the “counter id” in the log! 
          ◇ As we discussed, but I forgot.</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="10_14" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1634120065.78" ts_lastsave="1635331336.71" unique_id="56">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="10_14" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1634120065.78" ts_lastsave="1635688150.65" unique_id="56">
 			<rich_text>Esfandiar Questions
    ◇ how should I mention the tree rejection / 2nd split issue we uncovered
       ▪ it's kind of work in progress
@@ -1524,6 +1524,22 @@ adversarial customer -&gt; use some form of tokens -&gt; bloom filter ? .   Writ
     → customers want privacy even if zurich is malicious
     → zurich wants good results even if customers are malicious
         
+</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="11_04" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688150.65" ts_lastsave="1635692593.02" unique_id="57">
+			<rich_text>TODO Montag
+   ◇  ask about next meeting
+   ◇  send part 4
+
+
+</rich_text>
+			<rich_text scale="h2">Questions:</rich_text>
+			<rich_text>
+
+• Brainstorm conclusion inhalt?
+
+• Can we save all this hardening hassle if we just oblivious shuffle at the start?
+   ◇ found data-oblivious shuffle in dp_in_TEEs.pdf
 </rich_text>
 		</node>
 	</node>
@@ -2307,7 +2323,7 @@ and maybe test if verification is actually correct!
 			<rich_text foreground="#9090eeee9090"> (already in tree 1)
        - last column of X (nationality) theo uses USA and !USA instead of all countries !!!!!!!! boah</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1628520045.75" unique_id="23">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 3.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1626955257.0" ts_lastsave="1635688618.75" unique_id="23">
 			<rich_text foreground="#9090eeee9090">TODO 
     right score for cpp classification
     some function on the loss I guess (for usage in main and verification)
@@ -2401,6 +2417,64 @@ expected results (randomness off):
 
     
     
+</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 9.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688618.75" ts_lastsave="1635695226.61" unique_id="58">
+			<rich_text>\paragraph{Goal}
+   •  remove side-channels such that DP holds.
+
+\section{Known techniques and tools}
+         ◇ auto hardening with tools
+         ◇ timing
+            ▪ constant time programming (general, gilchner intro)
+            ▪ </rich_text>
+			<rich_text link="webs https://www.chosenplaintext.ca/articles/beginners-guide-constant-time-cryptography.html">https://www.chosenplaintext.ca/articles/beginners-guide-constant-time-cryptography.html</rich_text>
+			<rich_text>
+         ◇ memory/ access pattern
+            ▪ data-oblivious algorithms (dp_in_TEEs.pdf)
+            ▪ Oblivious RAM (ORAM) (dp_in_TEEs.pdf)
+         ◇ Manual hardening
+            ▪ different levels, assembly / ..
+            ▪ list of general hardening rules
+
+\section{Chosen approach}
+      ◇ manual hardening (ConstTime + memory), because ...
+         ▪  arithmetic leakage (part of CT) -&gt; 90%
+         ▪ oblivious access mostly through oblivious assign / ternary
+      ◇ general rules (what I did of it) and takeaways
+         ▪ allgemein
+         ▪ DP-GBDT things that need to be hidden
+            - omg, secure XGBoost has a lot on this.
+      ◇ compiler off and verification
+         ▪ example short circuit evaluation
+
+\section{Technical details}
+      ◇  manual general: logic, comparators, ternary, min/max
+      ◇  manual </rich_text>
+			<rich_text weight="heavy">DP-GBDT</rich_text>
+			<rich_text>
+         ▪ sort
+      ◇  compiler and verification </rich_text>
+			<rich_text weight="heavy">details</rich_text>
+			<rich_text>
+      ◇  arithmetic leakage 90% </rich_text>
+			<rich_text weight="heavy">details</rich_text>
+			<rich_text>
+      ◇ Bonus
+         ▪ recursion hiding
+         ▪  fault injection
+            - intro from 201708_Riscure_Whitepaper_Side_Channel_Patterns.pdf 
+
+
+--------------- Background hardening -------------------
+
+option 1: only talk about TEE side-channels in background
+      ◇    -&gt; sinde channels from space18_side_channel_introduction.pdf
+
+option 2: general side channel intro. example could be:
+   •  gilchner
+      ◇ intro, timing, cache,  ok seems fine
+      ◇ constant time programming    No, don't want to put that effort in there
 </rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
