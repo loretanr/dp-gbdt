@@ -52,7 +52,7 @@ enclave {
     untrusted {
         void ocall_print_string([in, string] const char *str);
     };
-
+    
     trusted {
         public void ecall_load_dataset_into_enclave([in] struct sgx_dataset *dset);
         public void ecall_load_modelparams_into_enclave([in] struct sgx_modelparams *mparams);
