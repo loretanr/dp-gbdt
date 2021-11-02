@@ -36,13 +36,13 @@ int Benchmark::main(int argc, char *argv[])
     // "false" to the parsing function), or let the get_xy function
     // do that (it'll create and append some default ones to the vector)
     ModelParams params;
-    params.use_dp = false;
+    params.use_dp = true;
     params.use_grid = false;
     params.privacy_budget = 10;
     params.nb_trees = 20;
-    params.leaf_clipping = false;
+    params.leaf_clipping = true;
     params.balance_partition = true;
-    params.gradient_filtering = true;
+    params.gradient_filtering = false;
     params.min_samples_split = 2;
     params.learning_rate = 0.1;
     params.max_depth = 6;
@@ -63,7 +63,7 @@ int Benchmark::main(int argc, char *argv[])
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 300, false));
     parameters.push_back(params);
-    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 10000, false));
+    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 20000, false));
     // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD
     // datasets.push_back(Parser::get_adult(parameters, 4000, true)); // medium adult
     // --------------------------------------

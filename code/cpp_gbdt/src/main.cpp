@@ -58,9 +58,9 @@ int main(int argc, char** argv)
     current_params.nb_trees = 30;
     current_params.use_dp = true;
     current_params.learning_rate = 0.1;
-    current_params.gradient_filtering = true;
+    current_params.gradient_filtering = false;
     current_params.balance_partition = true;
-    current_params.leaf_clipping = false;
+    current_params.leaf_clipping = true;
     current_params.scale_y = false;
 
     current_params.use_grid = false;
@@ -75,15 +75,15 @@ int main(int argc, char** argv)
     // Choose your dataset
     // DataSet *dataset = Parser::get_abalone(parameters, 5000, false);
     // DataSet *dataset = Parser::get_bcw(parameters, 700, false);
-    DataSet *dataset = Parser::get_adult(parameters, 10000, false);
+    DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 17000, false);
 
     std::cout << dataset->name << std::endl;
-    int count1 = std::count_if(dataset->y.begin(), dataset->y.end(),
-        [](double c){ return c == 0.0; });
-    int count2 = std::count_if(dataset->y.begin(), dataset->y.end(),
-        [](double c){ return c == 1.0; });
-    std::cout << "y 0's (" << count1 << ") y 1's (" << count2 << ")" << std::endl;
-    std::cout << "-> zeroR = " << std::setprecision(4) << (double) std::max(count1, count2) / (double) dataset->length << std::endl;
+    // int count1 = std::count_if(dataset->y.begin(), dataset->y.end(),
+    //     [](double c){ return c == 0.0; });
+    // int count2 = std::count_if(dataset->y.begin(), dataset->y.end(),
+    //     [](double c){ return c == 1.0; });
+    // std::cout << "y 0's (" << count1 << ") y 1's (" << count2 << ")" << std::endl;
+    // std::cout << "-> zeroR = " << std::setprecision(4) << (double) std::max(count1, count2) / (double) dataset->length << std::endl;
 
     ModelParams params = parameters[0];
 
@@ -93,7 +93,7 @@ int main(int argc, char** argv)
     }
 
     // if 5-fold cv itself is not consistent enough, can run it multiple times
-    int NUM_REPS = 7;
+    int NUM_REPS = 1;
 
     std::vector<double> scores;
     for(int i=0; i<NUM_REPS; i++){

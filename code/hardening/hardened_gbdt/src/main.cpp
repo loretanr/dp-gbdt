@@ -51,14 +51,14 @@ int main(int argc, char** argv)
     ModelParams current_params = create_default_params();
 
     // change model params here if required:
-    current_params.privacy_budget = 10;
-    current_params.nb_trees = 5;
-    current_params.gradient_filtering = TRUE;
+    current_params.privacy_budget = 0.5;
+    current_params.nb_trees = 30;
+    current_params.gradient_filtering = FALSE;
     current_params.balance_partition = TRUE;
-    current_params.leaf_clipping = FALSE;
+    current_params.leaf_clipping = TRUE;
     current_params.scale_y = FALSE;
 
-    current_params.use_grid = TRUE;
+    current_params.use_grid = FALSE;
     current_params.grid_borders = std::make_tuple(0,1);
     current_params.grid_step_size = 0.001;
     current_params.scale_X = TRUE;
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
     parameters.push_back(current_params);
 
     // Choose your dataset
-    DataSet *dataset = Parser::get_abalone(parameters, 300, false);
+    DataSet *dataset = Parser::get_abalone(parameters, 1000, false);
     ModelParams params = parameters[0];
 
     std::cout << dataset->name << std::endl;

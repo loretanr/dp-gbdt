@@ -32,7 +32,7 @@ int Evaluation::main(int argc, char *argv[])
     // --------------------------------------
     // define ModelParams here
     ModelParams current_params;
-    current_params.nb_trees = 50;
+    current_params.nb_trees = 25;
     current_params.leaf_clipping = true;
     current_params.balance_partition = true;
     current_params.gradient_filtering = false;
@@ -45,22 +45,22 @@ int Evaluation::main(int argc, char *argv[])
     parameters.push_back(current_params);
     // --------------------------------------
     // select 1 dataset here
-    DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
+    // DataSet *dataset = Parser::get_abalone(parameters, 5000, false); // full abalone
     // DataSet *dataset = Parser::get_bcw(parameters, 700, false); // full bcw
-    // DataSet *dataset = Parser::get_adult(parameters, 5000, false);
+    DataSet *dataset = Parser::get_adult(parameters, 50000, false);
     // DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 1000, false);
     // --------------------------------------
     // select privacy budgets
     // Note: pb=0 takes much much longer than dp-trees, because we're always using all samples
     std::vector<double> budgets = {0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.5,2,2.5,3,4,5,6,7,8,9,10};
-    budgets = {0};
+    // budgets = {0};
     // --------------------------------------
 
     // output file
     std::string time_string = get_time_string();
     std::string dataset_name = dataset->name;
     int dataset_length = dataset->length;
-    std::string outfile_name = fmt::format("results/2ndsplit_graph_nodp.csv", dataset_name, time_string);
+    std::string outfile_name = fmt::format("results/adult/FULL_{}_{}.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
@@ -90,7 +90,7 @@ int Evaluation::main(int argc, char *argv[])
 
 
         // more iterations for more stable results
-        int ITERATIONS = 1;
+        int ITERATIONS = 5;
         std::vector<double> means;
         std::vector<double> means_stds;
         for(int it=0; it < ITERATIONS; it++){
