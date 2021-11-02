@@ -1395,7 +1395,7 @@ So, vanilla (no-dp) cpp_gbdt seems to be fine. parameters were fucked up. need l
 			<rich_text foreground="#9090eeee9090"> •   solution idea.  Need the “counter id” in the log! 
          ◇ As we discussed, but I forgot.</rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="10_14" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1634120065.78" ts_lastsave="1635688150.65" unique_id="56">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="10_14" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1634120065.78" ts_lastsave="1635849906.34" unique_id="56">
 			<rich_text>Esfandiar Questions
    ◇ how should I mention the tree rejection / 2nd split issue we uncovered
       ▪ it's kind of work in progress
@@ -1492,17 +1492,24 @@ Esfandiar: In general: redundancy is OK! different abstraction layers.
     
 intro should be a self contained snapshot. sometimes people only read this.
 
-chapter 4 Implementation should start with: we didn't start with nothing, we had xy , bla bla and it's now nice
+</rich_text>
+			<rich_text foreground="#9090eeee9090">chapter 4 Implementation should start with: we didn't start with nothing, we had xy , bla bla and it's now nice
 
 show performance with the bug! -&gt; tiny bug can have big impact put it into performance section but reference it from implementation section
+</rich_text>
+			<rich_text>
 
-
-Hardening chapter
+</rich_text>
+			<rich_text foreground="#9090eeee9090">Hardening chapter
     hilight that our hardening is a bit special. because its a saturated research topic. in our case. not liike AES, much bigger, ALL data should be secret.
-    The goal is not to make sure nothing leaks. the goal is to only leak so much that DP still holds.
+    The goal is not to make sure nothing leaks. the goal is to only leak so much that DP still holds.</rich_text>
+			<rich_text>
 
-If I want to talk about implementation details
-    Mark it as such, such that other people can skip it
+</rich_text>
+			<rich_text foreground="#9090eeee9090">If I want to talk about implementation details
+    Mark it as such, such that other people can skip it</rich_text>
+			<rich_text>
+        TODO maybe also in hardening chapter
 
 results
     mark the good runtime results!
@@ -1526,13 +1533,7 @@ adversarial customer -&gt; use some form of tokens -&gt; bloom filter ? .   Writ
         
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="11_04" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688150.65" ts_lastsave="1635692593.02" unique_id="57">
-			<rich_text>TODO Montag
-   ◇  ask about next meeting
-   ◇  send part 4
-
-
-</rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="11_04" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688150.65" ts_lastsave="1635793068.18" unique_id="57">
 			<rich_text scale="h2">Questions:</rich_text>
 			<rich_text>
 
@@ -1540,7 +1541,17 @@ adversarial customer -&gt; use some form of tokens -&gt; bloom filter ? .   Writ
 
 • Can we save all this hardening hassle if we just oblivious shuffle at the start?
    ◇ found data-oblivious shuffle in dp_in_TEEs.pdf
-</rich_text>
+
+• it's a bit stupid that we always say “we only harden for DP”, but runtime measurements are for DP + recursion hardening
+• in general im very close if not fully in the “harden everything base”
+   ◇ I did faaaaaaaar to much. seems like pretty simple to go for barely-dp
+
+
+
+
+TODO überarbeiten chosen approach
+
+then details</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1633684808.93" unique_id="5">
@@ -2419,7 +2430,7 @@ expected results (randomness off):
     
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 9.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688618.75" ts_lastsave="1635695226.61" unique_id="58">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 9.0" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688618.75" ts_lastsave="1635848921.46" unique_id="58">
 			<rich_text>\paragraph{Goal}
    •  remove side-channels such that DP holds.
 
@@ -2427,6 +2438,7 @@ expected results (randomness off):
          ◇ auto hardening with tools
          ◇ timing
             ▪ constant time programming (general, gilchner intro)
+               - arithmetic intro
             ▪ </rich_text>
 			<rich_text link="webs https://www.chosenplaintext.ca/articles/beginners-guide-constant-time-cryptography.html">https://www.chosenplaintext.ca/articles/beginners-guide-constant-time-cryptography.html</rich_text>
 			<rich_text>
@@ -2475,6 +2487,12 @@ option 2: general side channel intro. example could be:
    •  gilchner
       ◇ intro, timing, cache,  ok seems fine
       ◇ constant time programming    No, don't want to put that effort in there
+</rich_text>
+		</node>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 9.1" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635848921.46" ts_lastsave="1635848926.36" unique_id="59">
+			<rich_text scale="h2">Evaluation</rich_text>
+			<rich_text>
+
 </rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">

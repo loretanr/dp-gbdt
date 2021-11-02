@@ -168,8 +168,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
     if(node->depth < params->max_depth){
         double row_val = (*row)[node->split_attr];
         // to hide the real path a sample row takes, we will go down both paths at every
-        // internal node. This sounds like a lot of overhead, however for our small trees with
-        // depth 6 it's not relevant at all. The bottleneck is testing/finding all splits.
+        // internal node. This is stupid and should be improved.
         // Further we double the overhead another time to hide whether the current node splits
         // on a categorical/numerical feature. Which is kinda unnecessary, as the proof gives this
         // to the adversary. however it might allow for a tighter proof later.
