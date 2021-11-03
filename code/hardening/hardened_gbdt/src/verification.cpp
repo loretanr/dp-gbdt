@@ -39,14 +39,14 @@ int Verification::main(int argc, char *argv[])
     ModelParams params = create_default_params();
     params.privacy_budget = 0.5;
     params.nb_trees = 5;
-    params.gradient_filtering = TRUE;
+    params.gradient_filtering = FALSE;
     params.balance_partition = TRUE;
     params.leaf_clipping = TRUE;
 
-    params.use_grid = TRUE;
+    params.use_grid = FALSE;
     params.grid_borders = std::make_tuple(0,1);
     params.grid_step_size = 0.001;
-    params.scale_X = TRUE;
+    params.scale_X = FALSE;
     params.scale_X_percentile = 95;
     params.scale_X_privacy_budget = 0.4;
 

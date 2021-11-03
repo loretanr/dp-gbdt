@@ -124,7 +124,7 @@ if __name__ == '__main__':
             ymax = max(y_max,ymax)
 
     ymin = 13
-    ymax = 60
+    ymax = 52
 
     for filename in os.listdir(os.getcwd()):
         if filename.endswith(".csv"):
