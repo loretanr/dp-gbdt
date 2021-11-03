@@ -22,3 +22,8 @@ int main()
 
     // TODO do the floatmath import here
 }
+
+/*
+ Need
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/loretanr/ma/code/stuff/arithm_library/libfixedtime
+*/

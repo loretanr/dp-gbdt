@@ -1,5 +1,5 @@
 COMPILER=g++
-CFLAGS=-c -Wall -std=c++11 -g -O0 -I.
+CFLAGS=-c -Wall -std=c++11 -g -O0
 MAKEFLAGS+="-j 8"
 DEPS = constant_time.h
 INC=-I. -I./libfixedtime
@@ -18,3 +18,6 @@ run: main.o constant_time.o
 clean:
 	rm *.o
 	touch run && rm run
+
+
+# Need    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/loretanr/ma/code/stuff/arithm_library/libfixedtime

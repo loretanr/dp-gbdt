@@ -167,14 +167,17 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
     // always recurse to max_depth, but not further
     if(node->depth < params->max_depth){
         double row_val = (*row)[node->split_attr];
+
+        double left_result = _predict(row, node->left);
+        double right_result = _predict(row, node->right);
         // to hide the real path a sample row takes, we will go down both paths at every
-        // internal node. This is stupid and should be improved.
-        // Further we double the overhead another time to hide whether the current node splits
-        // on a categorical/numerical feature. Which is kinda unnecessary, as the proof gives this
+        // internal node.
+        // Further we hide whether the current node splits on a categorical/numerical feature. 
+        // Which is kinda unnecessary, as the proof gives this
         // to the adversary. however it might allow for a tighter proof later.
         next_level_prediction = constant_time::select(categorical,
-                constant_time::select((row_val == node->split_value), _predict(row, node->left), _predict(row, node->right)),
-                constant_time::select((row_val < node->split_value), _predict(row, node->left), _predict(row, node->right)) );
+                constant_time::select((row_val == node->split_value), left_result, right_result),
+                constant_time::select((row_val < node->split_value), left_result, right_result) );
     }
 
     // decide whether to take the current node's prediction, or the prediction of its sucessors

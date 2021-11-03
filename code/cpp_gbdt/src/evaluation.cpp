@@ -35,7 +35,7 @@ int Evaluation::main(int argc, char *argv[])
     current_params.nb_trees = 25;
     current_params.leaf_clipping = true;
     current_params.balance_partition = true;
-    current_params.gradient_filtering = false;
+    current_params.gradient_filtering = true;
     current_params.min_samples_split = 2;
     current_params.learning_rate = 0.1;
     current_params.max_depth = 6;
