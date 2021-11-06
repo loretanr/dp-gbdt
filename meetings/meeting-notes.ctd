@@ -1533,7 +1533,7 @@ adversarial customer -&gt; use some form of tokens -&gt; bloom filter ? .   Writ
         
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="11_04" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688150.65" ts_lastsave="1635880924.68" unique_id="57">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="11_04" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688150.65" ts_lastsave="1636043098.89" unique_id="57">
 			<rich_text scale="h2">Questions:</rich_text>
 			<rich_text>
 
@@ -1541,13 +1541,50 @@ adversarial customer -&gt; use some form of tokens -&gt; bloom filter ? .   Writ
 
 • Can we save all this hardening hassle if we just oblivious shuffle at the start?
    ◇ found data-oblivious shuffle in dp_in_TEEs.pdf
+</rich_text>
+			<rich_text foreground="#9090eeee9090">      ▪ then we would still publish chunks, resp single tree chains
+      ▪ it would be more of a k-Anonymity problem
+</rich_text>
+			<rich_text foreground="#ffffa5a50000">      ▪ ask esfandiar in chat if interested, maybe related work?</rich_text>
+			<rich_text>
 
 • it's a bit stupid that we always say “we only harden for DP”, but runtime measurements are for DP + recursion hardening
 • in general im very close if not fully in the “harden everything base”
    ◇ I did faaaaaaaar to much. seems like pretty simple to go for barely-dp
+  </rich_text>
+			<rich_text foreground="#9090eeee9090"> ◇ “yeah, we are not perfect”</rich_text>
+			<rich_text>   </rich_text>
+			<rich_text foreground="#ffffa5a50000">-&gt; see if I'll have time left</rich_text>
+			<rich_text>
 
 
-• Talk Ferie / vortrag again</rich_text>
+• should I use an acronym table
+   </rich_text>
+			<rich_text foreground="#9090eeee9090">◇ whatever</rich_text>
+			<rich_text>
+
+• Talk Ferie / vortrag again
+   ◇ </rich_text>
+			<rich_text foreground="#9090eeee9090">write Srdjan in my pre-Fin week, that I wanna do it in the two weeks before Christmas</rich_text>
+			<rich_text>
+
+
+
+------------- Overview
+ 
+ -&gt; our adversary is a subset of malicious insurance, and service provider etc.  we don't really assume insurance is eve.
+    after that we don't care how he got there.
+    
+    
+</rich_text>
+			<rich_text foreground="#9090eeee9090">mail theo, to ref his thesis</rich_text>
+			<rich_text>
+
+must reference the proof, or explain better
+
+const time means we must also hide the control flow so it's not only about time. it's confudsing
+
+k anonymity esfandiar</rich_text>
 		</node>
 	</node>
 	<node custom_icon_id="0" foreground="#ff0000" is_bold="True" name="Implementation notes" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1621427507.64" ts_lastsave="1633684808.93" unique_id="5">
@@ -2485,26 +2522,76 @@ option 2: general side channel intro. example could be:
       ◇ constant time programming    No, don't want to put that effort in there
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 9.1" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635848921.46" ts_lastsave="1635938508.57" unique_id="59">
-			<rich_text scale="h2">Background</rich_text>
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 9.1" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635848921.46" ts_lastsave="1636187842.81" unique_id="59">
+			<rich_text>Related Work
+
+----------- arithmetics -------------
+his paper (2015) discusses leakage from arithmetic operations
+</rich_text>
+			<rich_text link="webs https://chat.syssec.inf.ethz.ch/syssec-collab/pl/bqn1nuaj3trr7myp8zh359twnh">5:00 PM</rich_text>
+			<rich_text link="webs https://homes.cs.washington.edu/~dkohlbre/papers/subnormal.pdf">https://homes.cs.washington.edu/~dkohlbre/papers/subnormal.pdf</rich_text>
+			<rich_text>
+    As a fix, they propose a library of constant time math operations
+</rich_text>
+			<rich_text link="webs https://github.com/kmowery/libfixedtimefixedpoint">https://github.com/kmowery/libfixedtimefixedpoint</rich_text>
 			<rich_text>
 
-Goal: explain Decision Tree
+Here's a follow-up analysis from 2017: </rich_text>
+			<rich_text link="webs https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-kohlbrenner.pdf">https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-kohlbrenner.pdf</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text link="webs https://chat.syssec.inf.ethz.ch/syssec-collab/pl/ztigbgsxgpbumpddcc7n8a3yso">5:19 PM</rich_text>
+			<rich_text>They also recommed the above lib as mitigation
 
-• say its good and widely used
+</rich_text>
+			<rich_text foreground="#dddfe4">One more paper on the same topic (2018): </rich_text>
+			<rich_text link="webs https://dl.acm.org/doi/pdf/10.1145/3243734.3243766">https://dl.acm.org/doi/pdf/10.1145/3243734.3243766</rich_text>
+			<rich_text>
+-------------------------------------------
 
-• give basic example
 
-• terminology (leaf/root/internal etc) </rich_text>
-			<rich_text link="webs https://www.kdnuggets.com/2020/01/decision-tree-algorithm-explained.html">https://www.kdnuggets.com/2020/01/decision-tree-algorithm-explained.html</rich_text>
+---------------- DP + TEE ------------------
+Algorithmic framework for DP mechanism that are run inside a TEE
+</rich_text>
+			<rich_text link="webs https://proceedings.neurips.cc/paper/2019/hash/376c6b9ff3bedbbea56751a84fffc10c-Abstract.html">https://proceedings.neurips.cc/paper/2019/hash/376c6b9ff3bedbbea56751a84fffc10c-Abstract.html</rich_text>
+			<rich_text>
+</rich_text>
+			<rich_text foreground="#9090eeee9090">           I had now time to check this. Their high-level goal and architecture are the same as ours. Run DP algorithms inside SGX enclaves, assuming that the leakage consists of outputted model and memory accesses, and in this setting ensure that DP guarantees hold. They call it &quot;oblivious DP&quot;
+          The main difference is the algorithms they consider: counting items, histogram... No decision trees
+        Also, they just focus on the algorithm (as we so far) and don't consider an entire system with data provisioning from users, disk as persistent storage, and so on (what I would like us to do next)</rich_text>
 			<rich_text>
 
-• information gain -&gt; </rich_text>
-			<rich_text link="webs https://www.kdnuggets.com/2020/01/decision-tree-algorithm-explained.html">https://www.kdnuggets.com/2020/01/decision-tree-algorithm-explained.html</rich_text>
+            </rich_text>
+			<rich_text foreground="#ffffc0c0cbcb">• their abstraction mixes dp definition with mathematical notion of memory accesses, then they apply it to 3 (short) example algorithms
+            • it seems to me that the dp-gbdt is a bit large/complex for this
+            • I can't get much out of it, there's no conclusion to me whether that was worth it
+             Secure XGBoost (Raluca) 
+            • it's nice, and very similar to what we are doing (except no dp, as Kari said). I'll adopt some of their terminology for the thesis/code
+            • they aim for complete data obliviousness, while we do it selectively at certain points• so they do conceal the shape of the trees for example (which is what I did as well, though we categorized as &quot;not necessary&quot; as it's given to the adversary in our proof)
+
+            • their oblivious operations described in section 6 (access/assign/comparison etc.) is pretty much exactly what we have now in the hardened code. So I'll check out their implementation details to compare
+            • They seem to present quite a well thought out provisioning/attestation system. With multiple hierarchical enclaves. It could be a good base for our discussion about these things next Thursday. To implement it though it feels like quite a big task, even though there's code on gihub. I think it would probably be another master's thesis to assemble these puzzle pieces into a working and decent looking demo system.</rich_text>
 			<rich_text>
 
-• strengths / weaknesses
-   ◇ -&gt; ensemble
+
+
+This is the other related work we discussed last time (from Raluca): </rich_text>
+			<rich_text link="webs https://arxiv.org/pdf/2010.02524.pdf">https://arxiv.org/pdf/2010.02524.pdf</rich_text>
+			<rich_text>
+That considers trees (XGBoost) and SGX side channels (data oblivious implementation), but not DP
+-----------------------------------------------
+
+
+
+--------------------- confidence intervalls --------------
+</rich_text>
+			<rich_text foreground="#dddfe4">Differentially Private Confidence Intervals by Wenxin Du, Canyon Foot, Monica Moniot, Andrew Bray, Adam Groce </rich_text>
+			<rich_text link="webs https://arxiv.org/abs/2001.02285">https://arxiv.org/abs/2001.02285</rich_text>
+			<rich_text>
+--------------------------------------------------
+
+
+
 </rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
