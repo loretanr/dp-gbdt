@@ -1533,11 +1533,10 @@ adversarial customer -&gt; use some form of tokens -&gt; bloom filter ? .   Writ
         
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="11_04" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688150.65" ts_lastsave="1636043098.89" unique_id="57">
+		<node custom_icon_id="0" foreground="" is_bold="False" name="11_04" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635688150.65" ts_lastsave="1636467882.31" unique_id="57">
 			<rich_text scale="h2">Questions:</rich_text>
 			<rich_text>
 
-• Brainstorm conclusion inhalt?
 
 • Can we save all this hardening hassle if we just oblivious shuffle at the start?
    ◇ found data-oblivious shuffle in dp_in_TEEs.pdf
@@ -2522,8 +2521,9 @@ option 2: general side channel intro. example could be:
       ◇ constant time programming    No, don't want to put that effort in there
 </rich_text>
 		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 9.1" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635848921.46" ts_lastsave="1636187842.81" unique_id="59">
-			<rich_text>Related Work
+		<node custom_icon_id="0" foreground="" is_bold="False" name="scratch 9.1" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1635848921.46" ts_lastsave="1636378534.21" unique_id="59">
+			<rich_text scale="h2">Related Work</rich_text>
+			<rich_text>
 
 ----------- arithmetics -------------
 his paper (2015) discusses leakage from arithmetic operations
@@ -2593,18 +2593,6 @@ That considers trees (XGBoost) and SGX side channels (data oblivious implementat
 
 
 </rich_text>
-		</node>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="DPBoost" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1624435164.19" ts_lastsave="1624435968.45" unique_id="18">
-			<rich_text>• GDF suffices for the delta_g and delta_v formulas that we use
-   ◇ So leaf_clipping seems optional?
-   ◇ And the way theo implemented GDF seems wrong??
-      ▪ GDF provides same sensitivities across all trees, unlike GLC.
-
-• GLC's sensitivity bound gets tighter with the iterations
-
-• Then the leaf node sensitivity bounds can be combined when using both
-   ◇ delta_v = min(sens GDF, sens GLC)
-   ◇ sensitivity (&quot;range of function&quot;) determines how much noise has to be added for DP</rich_text>
 		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="grid experiments" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631777877.74" ts_lastsave="1631893753.15" unique_id="40">
 			<rich_text>main (15x)  averages
@@ -3058,12 +3046,6 @@ for tree in n_trees:
 
 •  Google if another compiler is better at not reordering, maybe ask ivan
 </rich_text>
-		<node custom_icon_id="0" foreground="" is_bold="False" name="Paper findings" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629706169.8" ts_lastsave="1629706182.85" unique_id="34">
-			<rich_text scale="h3">Plundervolt</rich_text>
-			<rich_text>
-• fault injection attack, (check notes for details)
-• hints on arithmetic overflow checked op's</rich_text>
-		</node>
 		<node custom_icon_id="0" foreground="" is_bold="False" name="cmov" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1631173752.32" ts_lastsave="1631197936.7" unique_id="37">
 			<rich_text>need to look at assembly.
     This guy also says that llvm introduces secret dependent branches as optimizations into code
@@ -3173,7 +3155,7 @@ turned on --verify GDF, non hardened should be turned off
 also the python is not only missing GDF, but also the parsing stuff from cat_values</rich_text>
 		</node>
 	</node>
-	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1632930293.79" unique_id="32">
+	<node custom_icon_id="0" foreground="#8b6914" is_bold="False" name="First Enclave" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629190844.25" ts_lastsave="1636475167.92" unique_id="32">
 		<rich_text foreground="#a0a02020f0f0" scale="h2">Where to put stuff</rich_text>
 		<rich_text>
 </rich_text>
@@ -3251,24 +3233,34 @@ Running
     </rich_text>
 		<rich_text foreground="#ffffffff0000">still 0.00000 scores, very fuckin strange.</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="kari questions" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1629116521.58" ts_lastsave="1629982506.67" unique_id="31">
-		<rich_text scale="h2">Thesis</rich_text>
-		<rich_text>
-• thesis template?
+	<node custom_icon_id="0" foreground="" is_bold="False" name="FINAL COUNTDOWN" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1636475167.98" ts_lastsave="1636475477.4" unique_id="60">
+		<rich_text>TODO order
 
-thesis expectations?
-   •  length
-   •  depth
-   •  probably would send a table of contents for kari and esfandiar to verify
-   •  how about “identical” passages from theo
-   •  big fat appendix with hardenting details I guess
+• finish overhaul hardening chapter
 
+• write abstract
 
-</rich_text>
-		<rich_text scale="h2">Hardening</rich_text>
-		<rich_text>
+• write acknowledgement
 
-• individual floating-point operations can also have variable runtime, even if they are just adds, multiplies, and FMAs.
-   ◇ Only in secret dependanet situations, but still</rich_text>
+• Program
+   ◇ enclave bug
+   ◇ hardened enclave
+   ◇ -&gt; measurements
+   ◇ libftp
+   ◇ -&gt; measurements+ use_grid
+
+• overhaul evaluation
+
+• overhaul implementation chapter
+
+• overhaul background
+
+• overhaul related work
+
+===========
+
+• cosmetics
+
+• full read throughs</rich_text>
 	</node>
 </cherrytree>
