@@ -22,3 +22,4 @@ objs/%.o : src/%.cpp
 	$(COMPILER) $(CFLAGS) $(INC) $< -o $@
 objs/gbdt/%.o : src/gbdt/%.cpp
 	$(COMPILER) $(CFLAGS) $(INC) $< -o $@
+f

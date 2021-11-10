@@ -36,8 +36,8 @@ int Verification::main(int argc, char *argv[])
     // "false" to the parsing function), or let the get_xy function
     // do that (it'll create and append some default ones to the vector)
     ModelParams params = create_default_params();
-    params.privacy_budget = 0.5;
-    params.nb_trees = 5;                // TODO those are shit
+    params.privacy_budget = 10;
+    params.nb_trees = 10;                // TODO those are shit
     params.gradient_filtering = false;
     params.balance_partition = true;
     params.leaf_clipping = true;
@@ -50,12 +50,13 @@ int Verification::main(int argc, char *argv[])
     params.scale_X_percentile = 95;
     params.scale_X_privacy_budget = 0.4;
 
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
     // parameters.push_back(params);
-    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 150, false)); // small yearMSD
+    // datasets.push_back(Parser::get_adult(parameters, 300, false)); parameters.push_back(params);
+    // datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
+    parameters.push_back(params);
+    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 2000, false)); // small yearMSD
     // datasets.push_back(Parser::get_adult(parameters, 10000, false)); // small adult
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_abalone(parameters, 4177, false)); // full abalone

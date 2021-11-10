@@ -156,7 +156,7 @@ void ecall_start_gbdt()
         sgx_printf("%f\n", score);
         delete split;
     }
-    for(auto elem : scores){
-        sgx_printf("%f ", elem);
-    } sgx_printf("\n");
+    // for(auto elem : scores){
+    //     sgx_printf("%f ", elem);
+    // } sgx_printf("\n");
 }
