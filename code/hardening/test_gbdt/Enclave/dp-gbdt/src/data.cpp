@@ -5,7 +5,6 @@
 #include <cmath>
 #include "data.h"
 #include "utils.h"
-#include "constant_time.h"
 
 
 Scaler::Scaler(double min_val, double max_val, double fmin, double fmax, bool _scaling_required) : data_min(min_val), data_max(max_val),
@@ -37,42 +36,49 @@ DataSet::DataSet(VVD _X, std::vector<double> _y) : X(_X), y(_y)
 
 // scale y values to be in [lower,upper]
 void DataSet::scale(ModelParams &params, double lower, double upper)
-{   
-    // return if no scaling required (y already in [-1,1])
-    bool scaling_required = false;
-    for(auto elem : y) {
-        if (elem < lower or elem > upper) {
-            scaling_required = true; break;
+{
+    // only scale in dp mode
+    if(params.use_dp){
+        
+        // return if no scaling required (y already in [-1,1])
+        bool scaling_required = false;
+        for(auto elem : y) {
+            if (elem < lower or elem > upper) {
+                scaling_required = true; break;
+            }
         }
+        if (not scaling_required) {
+            scaler = Scaler(0,0,0,0,false);
+            return;
+        }
+
+        double doublemax = std::numeric_limits<double>::max();
+        double doublemin = std::numeric_limits<double>::min();
+        double minimum_y = doublemax, maximum_y = doublemin;
+        for(int i=0; i<length; i++) {
+            minimum_y = std::min(minimum_y, y[i]);
+            maximum_y = std::max(maximum_y, y[i]);
+        }
+        for(int i=0; i<length; i++) {
+            y[i] = (y[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
+        }
+        scaler = Scaler(minimum_y, maximum_y, lower, upper, true);
     }
-    if (not scaling_required) {
-        scaler = Scaler(0,0,0,0,false);
-        return;
-    }
-    double doublemax = std::numeric_limits<double>::max();
-    double doublemin = std::numeric_limits<double>::min();
-    double minimum_y = doublemax, maximum_y = doublemin;
-    for(int i=0; i<length; i++) {
-        minimum_y = constant_time::min(minimum_y, y[i]);
-        maximum_y = constant_time::max(maximum_y, y[i]);
-    }
-    for(int i=0; i<length; i++) {
-        y[i] = (y[i]- minimum_y)/(maximum_y-minimum_y) * (upper-lower) + lower;
-    }
-    scaler = Scaler(minimum_y, maximum_y, lower, upper, true);
 }
 
 
 void inverse_scale(ModelParams &params, Scaler &scaler, std::vector<double> &vec)
 {
-    // return if no scaling required
-    if(not scaler.scaling_required){
-        return;
-    }
+    if(params.use_dp){
+        // return if no scaling required
+        if(not scaler.scaling_required){
+            return;
+        }
 
-    for(auto &elem : vec) {
-        elem -= scaler.min_;
-        elem /= scaler.scale;
+        for(auto &elem : vec) {
+            elem -= scaler.min_;
+            elem /= scaler.scale;
+        }
     }
 }
 

@@ -3233,7 +3233,7 @@ Running
     </rich_text>
 		<rich_text foreground="#ffffffff0000">still 0.00000 scores, very fuckin strange.</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="FINAL COUNTDOWN" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1636475167.98" ts_lastsave="1636534778.14" unique_id="60">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="FINAL COUNTDOWN" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1636475167.98" ts_lastsave="1636576562.31" unique_id="60">
 		<rich_text>TODO order
 
 </rich_text>
@@ -3274,6 +3274,46 @@ Running
 
 • cosmetics
 
-• full read throughs</rich_text>
+• full read throughs
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------
+
+hardened sgx gbdt
+
+Things that are not the problem for the bad scores: (tested by plugging in functions from hardened_gbdt)
+
+• samples_left_right_partition
+• _predict
+• dp_ensemble  (tested via test_gbdt)
+• find_best_split
+• make_tree_DFS
+• compute_gain
+
+====================================
+</rich_text>
+		<rich_text scale="h2">→ starting from enclave GBDT again and gradually moving the non workiing stuff there</rich_text>
+		<rich_text>
+
+• copying both dp_ensemble and constant_time  already fucked up the results -&gt; seems to be the culprit?
+
+    -&gt; found bug in data.cpp,  the get_subset and remove_rows wrongly operated on index vectors instead of 0,1,0,1,1,...
+    -&gt; also fixed in hardened_sgx_gbdt
+    
+•  TODO start GRADUALLY copying the dp_tree stuff over
+ 
+
+
+
+
+
+
+
+
+</rich_text>
 	</node>
 </cherrytree>
