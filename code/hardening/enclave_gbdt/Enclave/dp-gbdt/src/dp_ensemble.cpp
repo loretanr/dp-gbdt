@@ -135,7 +135,7 @@ void DPEnsemble::train(DataSet *_dataset)
             tree.fit();
             trees.push_back(tree);
         }
-        sgx_printf("Tree %i done. Instances left: %i\n", tree_index, dataset->length);
+        // sgx_printf("Tree %i done. Instances left: %i\n", tree_index, dataset->length);
     }
 }
 

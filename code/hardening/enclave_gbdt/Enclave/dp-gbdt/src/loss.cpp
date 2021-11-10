@@ -28,16 +28,14 @@ double Regression::compute_init_score(std::vector<double> &y)
 
 double Regression::compute_score(std::vector<double> &y, std::vector<double> &y_pred)
 {
-
-    sgx_printf("y: ");
-    for(auto elem : y){
-        sgx_printf("%.2f ", elem);
-    } sgx_printf("\n");
-    
-    sgx_printf("y_pred: ");
-    for(auto elem : y_pred){
-        sgx_printf("%.2f ", elem);
-    } sgx_printf("\n");
+    // sgx_printf("y: ");
+    // for(auto elem : y){
+    //     sgx_printf("%.2f ", elem);
+    // } sgx_printf("\n");
+    // sgx_printf("y_pred: ");
+    // for(auto elem : y_pred){
+    //     sgx_printf("%.2f ", elem);
+    // } sgx_printf("\n");
 
     // RMSE
     std::transform(y.begin(), y.end(), 
@@ -89,17 +87,14 @@ double BinaryClassification::compute_init_score(std::vector<double> &y)
 
 double BinaryClassification::compute_score(std::vector<double> &y, std::vector<double> &y_pred)
 {
-
-    sgx_printf("y: ");
-    for(auto elem : y){
-        sgx_printf("%.2f ", elem);
-    } sgx_printf("\n");
-    
-    sgx_printf("y_pred: ");
-    for(auto elem : y_pred){
-        sgx_printf("%.2f ", elem);
-    } sgx_printf("\n");
-
+    // sgx_printf("y: ");
+    // for(auto elem : y){
+    //     sgx_printf("%.2f ", elem);
+    // } sgx_printf("\n");
+    // sgx_printf("y_pred: ");
+    // for(auto elem : y_pred){
+    //     sgx_printf("%.2f ", elem);
+    // } sgx_printf("\n");
 
     // classification task -> transform continuous predictions back to labels
     std::transform(y_pred.begin(), y_pred.end(), // expit

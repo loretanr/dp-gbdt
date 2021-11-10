@@ -64,7 +64,7 @@ DataSet *Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters,
 DataSet *Parser::get_YearPredictionMSD_test(std::vector<ModelParams> &parameters, 
         size_t num_samples, bool use_default_params)
 {
-    std::string file = "datasets/real/YearPredictionMSD.test";
+    std::string file = "datasets/real/YearPredictionMSD.train";
     std::string name = "yearMSD";
     int num_rows = 51630;
     int num_cols = 91;

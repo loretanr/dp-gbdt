@@ -55,6 +55,25 @@ sgx_dataset SGX_Parser::get_adult(sgx_modelparams &parameters, int num_samples)
         cat_idx, target_idx, drop_idx, parameters);
 }
 
+sgx_dataset SGX_Parser::get_year(sgx_modelparams &parameters, int num_samples)
+{
+    const char *file = "datasets/real/YearPredictionMSD.train";
+    const char *name = "yearMSD";
+    int num_rows = 51630;
+    int num_cols = 91;
+    // std::shared_ptr<Regression> task(new Regression());
+    const char *task = "regression";
+    std::vector<int> num_idx(90);
+    std::iota(std::begin(num_idx)++, std::end(num_idx), 1); // num_idx = {1,...,90}
+    std::vector<int> cat_idx = {};
+    int target_idx = 0;
+    std::vector<int> drop_idx = {};
+
+    return parse_file(file, name, num_rows, num_cols, num_samples, task, num_idx,
+        cat_idx, target_idx, drop_idx, parameters);
+}
+
+
 
 /* helper functions */
 
@@ -110,11 +129,16 @@ sgx_dataset SGX_Parser::parse_file(const char *dataset_file, const char *dataset
 
     // parse dataset, label-encode categorical features
     int current_index = 0;
-    std::vector<std::map<std::string,double>> mappings(num_used_cols + 1); // last (additional) one is for y
+    std::vector<std::map<std::string,double>> mappings(num_cols + 1); // last (additional) one is for y
 
     while (std::getline(infile, line,'\n') && current_index < num_samples) {
         std::stringstream ss(line);
         std::vector<std::string> strings = split_string(line, ',');
+
+        // drop dataset rows that contain missing entries ("?")
+        if (line.find('?') < line.length() or line.empty()) {
+            continue;
+        }
 
         // go through each column
         int current_used_col = 0;
