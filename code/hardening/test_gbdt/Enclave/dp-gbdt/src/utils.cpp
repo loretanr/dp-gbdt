@@ -3,7 +3,6 @@
 #include <numeric>
 #include <mutex>
 #include "utils.h"
-#include "constant_time.h"
 
 #include <sgx_trts.h>   /* sgx_read_rand */
 
@@ -34,9 +33,7 @@ ModelParams create_default_params()
 // put a value between two bounds, not in std::algorithm in c++11
 double clamp(double n, double lower, double upper)
 {
-    n = constant_time::select(n < lower, lower, n);
-    n = constant_time::select(n > upper, upper, n);
-    return n;
+  return std::max(lower, std::min(n, upper));
 }
 
 bool double_equality(double d1, double d2)
@@ -50,15 +47,12 @@ double log_sum_exp(std::vector<double> vec)
 {
     size_t count = vec.size();
     if (count > 0) {
-        double max_val = std::numeric_limits<double>::min();
-        for (auto elem : vec) {
-            max_val = constant_time::max(max_val, elem);
-        }
+        double maxVal = *std::max_element(vec.begin(), vec.end());
         double sum = 0;
         for (size_t i = 0; i < count; i++) {
-            sum += exp(vec[i] - max_val);
+            sum += exp(vec[i] - maxVal);
         }
-        return log(sum) + max_val;
+        return log(sum) + maxVal;
     } else {
         return 0.0;
     }

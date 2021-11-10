@@ -27,7 +27,6 @@ private:
     ModelParams *params;
     TreeParams *tree_params;
     DataSet *dataset;
-    VVD X_transposed; // for hardened gbdt, we always work on the full X, so we only transpose it once
     size_t tree_index;
     std::vector<TreeNode *> leaves;
 
@@ -35,16 +34,18 @@ private:
     TreeNode *make_tree_DFS(int current_depth, std::vector<int> live_samples);
     TreeNode *make_leaf_node(int current_depth, std::vector<int> &live_samples);
     double _predict(std::vector<double> *row, TreeNode *node);
-    TreeNode *find_best_split(VVD &X_transposed, std::vector<double> &gradients_live, std::vector<int> &live_samples, int current_depth, bool create_leaf_node);
-    void samples_left_right_partition(std::vector<int> &lhs, std::vector<int> &rhs, VVD &samples, std::vector<int> &live_samples, int feature_index, double feature_value, bool categorical);
-    double compute_gain(VVD &X_transposed, std::vector<double> &gradients_live, std::vector<int> &live_samples, int feature_index, double feature_value, int &lhs_size, bool categorical);
-    int exponential_mechanism(std::vector<SplitCandidate> &candidates);
+    TreeNode *find_best_split(VVD &X_live, std::vector<double> &gradients_live, int current_depth);
+    void samples_left_right_partition(std::vector<int> &lhs, VVD &samples,
+                int feature_index, double feature_value, bool categorical);
+    double compute_gain(VVD &samples, std::vector<double> &gradients_live, int feature_index,
+                double feature_value, int &lhs_size, bool categorical);
+    int exponential_mechanism(std::vector<SplitCandidate> &probs);
     void add_laplacian_noise(double laplace_scale);
 
 public:
     // constructors
     DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index);
-    ~DPTree() {};
+    ~DPTree();
 
     // fields
     TreeNode *root_node;
@@ -52,6 +53,7 @@ public:
     // methods
     std::vector<double> predict(VVD &X);
     void fit();
+    void recursive_print_tree(TreeNode* node);
     void delete_tree(TreeNode *node);
 };
 
