@@ -35,7 +35,7 @@ DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
     
 DPEnsemble::~DPEnsemble() {
     for (auto tree : trees) {
-        tree.delete_tree(tree.root_node);
+        tree.delete_tree();
     }
 }
 
@@ -181,7 +181,7 @@ void DPEnsemble::train(DataSet *dataset)
             }            
         }
 
-        DataSet tree_dataset = dataset->get_subset(tree_indices);
+        DataSet tree_dataset = dataset->get_subset(tree_indices);   // TODO, maybe these don't have to be hidden
         
         LOG_DEBUG(YELLOW("Tree {1:2d}: receives pb {2:.2f} and will train on {3} instances"),
                 tree_index, tree_params.tree_privacy_budget, tree_dataset.length);
@@ -193,7 +193,7 @@ void DPEnsemble::train(DataSet *dataset)
         trees.push_back(tree);
 
         // remove rows
-        *dataset = dataset->remove_rows(tree_indices);
+        *dataset = dataset->remove_rows(tree_indices);  // TODO, maybe these don't have to be hidden
 
         LOG_INFO(YELLOW("Tree {1:2d} done. Instances left: {2}"), tree_index, dataset->length);
     }
