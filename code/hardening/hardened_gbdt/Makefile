@@ -1,5 +1,5 @@
 COMPILER=g++
-CFLAGS=-c -Wall -std=c++11 -O0
+CFLAGS=-c -Wall -std=c++11 -O1
 MAKEFLAGS+="-j 8"
 SOURCES=$(wildcard src/*.cpp src/gbdt/*.cpp)
 INC=-I./include/ -I./include/gbdt/# -L ./src/ -lfmt
