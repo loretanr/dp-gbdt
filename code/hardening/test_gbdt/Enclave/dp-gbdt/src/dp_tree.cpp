@@ -13,9 +13,17 @@ DPTree::DPTree(ModelParams *_params, TreeParams *_tree_params, DataSet *_dataset
     params(_params),
     tree_params(_tree_params), 
     dataset(_dataset),
-    tree_index(_tree_index) {}
+    tree_index(_tree_index) 
+{
+    // only need to transpose X once
+    X_transposed = VVD(dataset->num_x_cols, vector<double>(dataset->length));
+    for (int row=0; row<dataset->length; row++) {
+        for(int col=0; col < dataset->num_x_cols; col++) {
+            X_transposed[col][row] = (dataset->X)[row][col];
+        }
+    }
+}
 
-DPTree::~DPTree() {}
 
 
 /** Methods */
@@ -23,7 +31,7 @@ DPTree::~DPTree() {}
 // Fit the tree to the data
 void DPTree::fit()
 {
-    // keep track which samples will be available in a node for spliting
+    /* // keep track which samples will be available in a node for spliting
     vector<int> live_samples(dataset->length);
     std::iota(std::begin(live_samples), std::end(live_samples), 0);
 
@@ -43,13 +51,41 @@ void DPTree::fit()
         double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
         double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
         add_laplacian_noise(laplace_scale);
+    } */
+    // keep track which samples will be available in a node for spliting (1=live)
+    vector<int> live_samples(dataset->length, 1);
+    std::iota(std::begin(live_samples), std::end(live_samples), 0);
+
+    this->root_node = make_tree_DFS(0, live_samples);
+
+
+    // leaf clipping. Note, it can only be disabled if GDF is enabled.
+    if (params->leaf_clipping or !params->gradient_filtering) {
+        double threshold = params->l2_threshold * std::pow((1 - params->learning_rate), tree_index);
+        for (auto &leaf : this->leaves) {
+            leaf->prediction = clamp(leaf->prediction, -threshold, threshold);
+        }
     }
+
+    // add laplace noise to leaf values
+    double privacy_budget_for_leaf_nodes = tree_params->tree_privacy_budget  / 2;
+    double laplace_scale = tree_params->delta_v / privacy_budget_for_leaf_nodes;
+    add_laplacian_noise(laplace_scale);
 }
 
 
 // Recursively build tree, DFS approach, first instance returns root node
 TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 {
+    vector<int> fixed_live_samples = {};
+    for(int i=0; i<live_samples.size(); i++){
+        if(live_samples[i] == 1){
+            fixed_live_samples.push_back(i);
+        }
+    }
+    live_samples = fixed_live_samples;
+    //--------
+
     // max depth reached or not enough samples -> leaf node
     if ( (current_depth == params->max_depth) or 
             live_samples.size() < (size_t) params->min_samples_split) {
