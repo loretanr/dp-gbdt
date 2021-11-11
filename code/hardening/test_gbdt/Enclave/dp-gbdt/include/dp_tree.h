@@ -27,6 +27,7 @@ private:
     ModelParams *params;
     TreeParams *tree_params;
     DataSet *dataset;
+    VVD X_transposed; // for hardened gbdt, we always work on the full X, so we only transpose it once
     size_t tree_index;
     std::vector<TreeNode *> leaves;
 
@@ -45,7 +46,7 @@ private:
 public:
     // constructors
     DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index);
-    ~DPTree();
+    ~DPTree() {};
 
     // fields
     TreeNode *root_node;

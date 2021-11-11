@@ -25,7 +25,7 @@ DPEnsemble::~DPEnsemble() {
 
 /** Methods */
 
-void DPEnsemble::train(DataSet *_dataset)              // TODO continue here;
+void DPEnsemble::train(DataSet *_dataset)
 {   
     this->dataset = _dataset;
     int original_length = dataset->length;

@@ -4,6 +4,7 @@
 #include "dp_tree.h"
 #include "laplace.h"
 #include "constant_time.h"
+#include "Enclave.h"
 
 using namespace std;
 
@@ -57,6 +58,7 @@ void DPTree::fit()
 TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
 {
     int live_size = std::accumulate(live_samples.begin(), live_samples.end(), 0);
+    // sgx_printf("live_size: %i\n", live_size);
     bool reached_max_depth = (current_depth == params->max_depth);
     bool not_enough_live_samples = (live_size < params->min_samples_split);
     bool create_leaf_node = constant_time::logical_or(reached_max_depth, not_enough_live_samples);
@@ -68,7 +70,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     TreeNode *node = find_best_split(X_transposed, dataset->gradients, live_samples, current_depth, create_leaf_node);
 
     // no split found or should create leaf node anyways
-    if (constant_time::logical_or(node->is_leaf(), create_leaf_node)) {
+    if (constant_time::logical_or(node->is_leaf, create_leaf_node)) {
         TreeNode *return_node = (TreeNode *) constant_time::select(create_leaf_node, (unsigned long) leaf, (unsigned long) node);
         return return_node;
     }
@@ -83,7 +85,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     vector<int> left_live_samples(live_samples.size(),0);
     vector<int> right_live_samples(live_samples.size(),0);
     for (size_t i=0; i<live_samples.size(); i++) {
-        left_live_samples[i] = lhs[i] * (live_samples[i] == 1);     // number comparisons are constant time
+        left_live_samples[i] = lhs[i] * (live_samples[i] == 1);
         right_live_samples[i] = rhs[i] * (live_samples[i] == 1);
     }
 
@@ -128,7 +130,7 @@ vector<double> DPTree::predict(VVD &X)
 // recursively walk through decision tree
 double DPTree::_predict(vector<double> *row, TreeNode *node)
 {
-    if(node->is_leaf()){
+    if(node->is_leaf){
         return node->prediction;
     }
 
@@ -152,7 +154,7 @@ double DPTree::_predict(vector<double> *row, TreeNode *node)
     }
 
     // decide whether to take the current node's prediction, or the prediction of its sucessors
-    return constant_time::select(node->is_leaf(), node->prediction, next_level_prediction);
+    return constant_time::select(node->is_leaf, node->prediction, next_level_prediction);
 }
 
 
@@ -228,6 +230,7 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, std::vector<double> &gradie
     node->split_gain = constant_time::select(create_internal_node, chosen_one.gain, node->split_gain);
     node->lhs_size = constant_time::select(create_internal_node, chosen_one.lhs_size, node->lhs_size);
     node->rhs_size = constant_time::select(create_internal_node, chosen_one.rhs_size, node->rhs_size);
+    node->is_leaf = constant_time::logical_not(create_internal_node);
 
     if(create_leaf_node) {
         int live_size = std::accumulate(live_samples.begin(), live_samples.end(), 0);
@@ -354,7 +357,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
 // free allocated ressources
 void DPTree::delete_tree(TreeNode *node)
 {
-    if (not node->is_leaf()) {
+    if (not node->is_leaf) {
         delete_tree(node->left);
         delete_tree(node->right);
     }
