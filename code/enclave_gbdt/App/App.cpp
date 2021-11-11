@@ -189,7 +189,7 @@ sgx_modelparams create_some_modelparams()
 {
     sgx_modelparams params;
     params.nb_trees = 10;
-    params.privacy_budget = 10;
+    params.privacy_budget = 0.5;
     // 1 means true/enable
     params.use_dp = 1;
     params.gradient_filtering = 0;
