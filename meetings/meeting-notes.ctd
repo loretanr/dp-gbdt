@@ -3233,7 +3233,7 @@ Running
     </rich_text>
 		<rich_text foreground="#ffffffff0000">still 0.00000 scores, very fuckin strange.</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="FINAL COUNTDOWN" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1636475167.98" ts_lastsave="1636576562.31" unique_id="60">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="FINAL COUNTDOWN" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1636475167.98" ts_lastsave="1636638100.55" unique_id="60">
 		<rich_text>TODO order
 
 </rich_text>
@@ -3248,11 +3248,17 @@ Running
 • write acknowledgement
 
 • Program
-   ◇ enclave bug
+</rich_text>
+		<rich_text foreground="#9090eeee9090">   ◇ enclave bug
    ◇ hardened enclave
-   ◇ -&gt; measurements
+   ◇ -&gt; measurements</rich_text>
+		<rich_text>
    ◇ libftp
    ◇ -&gt; measurements+ use_grid
+
+send intro + ???  hardening   to kevin
+
+send abstract + implementation to schmop
 
 </rich_text>
 		<rich_text foreground="#ffff00000000">========== Sa Abend, besser Fri</rich_text>
@@ -3277,8 +3283,9 @@ Running
 • full read throughs
 
 
+send intro + ???  hardening   to kevin
 
-
+send abstract + implementation to schmop
 
 
 --------------------------------------------------------------------------------------------------
