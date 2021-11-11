@@ -76,7 +76,7 @@ TreeNode *DPTree::make_tree_DFS(int current_depth, vector<int> live_samples)
     TreeNode *node = find_best_split(X_live, gradients_live, current_depth);
 
     // no split found
-    if (node->is_leaf()) {
+    if (node->is_leaf) {
         return node;
     }
 
@@ -135,7 +135,7 @@ vector<double> DPTree::predict(VVD &X)
 // recursively walk through decision tree
 double DPTree::_predict(vector<double> *row, TreeNode *node)
 {
-    if(node->is_leaf()){
+    if(node->is_leaf){
         return node->prediction;
     }
     double row_val = (*row)[node->split_attr];
@@ -345,7 +345,7 @@ void DPTree::add_laplacian_noise(double laplace_scale)
 // free allocated ressources
 void DPTree::delete_tree(TreeNode *node)
 {
-    if (not node->is_leaf()) {
+    if (not node->is_leaf) {
         delete_tree(node->left);
         delete_tree(node->right);
     }

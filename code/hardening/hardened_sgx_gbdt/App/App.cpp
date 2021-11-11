@@ -189,7 +189,7 @@ sgx_modelparams create_some_modelparams()
 {
     sgx_modelparams params;
     params.nb_trees = 10;
-    params.privacy_budget = 10;
+    params.privacy_budget = 0.5;
     // 1 means true/enable
     params.use_dp = 1;
     params.gradient_filtering = 0;
@@ -218,7 +218,7 @@ int SGX_CDECL main(int argc, char *argv[])
     sgx_modelparams modelparams = create_some_modelparams();
     // sgx_dataset dataset = SGX_Parser::get_abalone(modelparams, 4177);
     // sgx_dataset dataset = SGX_Parser::get_year(modelparams, 1000);
-    sgx_dataset dataset = SGX_Parser::get_adult(modelparams, 300);
+    sgx_dataset dataset = SGX_Parser::get_adult(modelparams, 5000);
     ecall_load_modelparams_into_enclave(global_eid, &modelparams);
     free(modelparams.num_idx);
     free(modelparams.cat_idx);
