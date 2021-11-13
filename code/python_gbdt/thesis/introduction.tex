@@ -1,0 +1,52 @@
+\chapter{Introduction}
+
+\section{Motivation}
+
+In many scenarios where machine learning (ML) is involved, the responsible developing team strives to have an accurate, explainable model. Accurate, because the end goal of an ML model is to help the team in understanding a problem better. Inaccurate outputs would not be helpful. Explainable, because if the team cannot understand the decisions made by the model, in particular the steps involved in these decisions, the problem would remain as complex as it was. Any machine learning model needs a starting point. This starting point usually takes the form of a \textit{training set}. 
+
+The training set contains data about the problem to be learned about, and sometimes data about the solution to be found (\textit{unsupervised} vs. \textit{supervised} learning). In some cases, leakage of the training data creates serious privacy issues, which for some applications is unacceptable. This leads the model to not only require being accurate and explainable, but also to prevent such privacy leaks. One way to prevent these leaks is to train the model in a privacy preserving fashion. Privacy preserving machine learning models can offer guarantees that prevent information about the training data to be extracted. An example application where privacy of the training data is important can be found in assessing \textit{cyber risk}, which we focus on in this thesis.
+
+In recent years, cyber attacks and data breaches have surged, as outlined by recent reports (\cite{verizon_report}, \cite{ibm_report}, \cite{cisco_report}). Companies, large and small, have an increasing need for protection. Such protection not only extends to their technical infrastructure and ability to respond to incidents, but also to potential financial losses that they may face. To cover the latter, insurance companies have come up with cyber insurance products. From the insurer perspective's however, assessing the cyber risk that a particular customer is exposed to is highly challenging. The understanding of cyber risk, i.e. how to describe or model the risk, is not yet as understood as other risks, such as the ones covered by car insurance products.
+
+One major issue that insurers face is trustworthiness when it comes to data provided by their customers. Indeed, customers are often unwilling to disclose their true security practices, fearing that such information could be used to discriminate against them, should they not be complying with or implementing these practices according to the latest industry standards. Currently, these information are collected by insurers through questionnaires that the customers need to fill in. These questionnaires will typically include questions about their security management practices, e.g. details about their software patching process or remote access policy.
+
+\section{Example setting}
+
+One way to address above problems is for insurers to give customers access to an interface allowing them to answer their questionnaires, within a protected space (such as an Intel SGX enclave). This protected space:
+
+\begin{itemize}
+	\item can be used to collect sensitive data, while reassuring both the insurers and the customers that no party has direct access to the data.
+	\item can be leveraged by customers through remote attestation to verify the correctness of the protected space (i.e. the integrity of any code running within the enclave).
+	\item can give customers privacy guarantees with respect to the data they provide.
+\end{itemize}
+
+This is represented on the left hand side of Figure ~\ref{fig:big_picture}. In this thesis, we focus on enabling a trustworthy evaluation of the data collected within the protected space. The goal of this evaluation is to train a machine learning model that can be used by insurers to help them evaluate the risk and potential losses associated to the onboarding of a new customer, while providing customers peace of mind about their data. This is represented on the right hand side of Figure ~\ref{fig:big_picture}.
+
+\begin{figure}[h!]
+	\center
+	\includegraphics[scale=0.75]{images/introduction/big_picture}
+	\caption{\label{fig:big_picture} The SGX application on the left hand side, and the privacy preserving machine learning operating within the SGX enclave, zoomed in on the right hand side. SGX application schematic adapted from \cite{sgx_fig}.}
+\end{figure}
+
+The insurance company hosts the enclave. The data that the customers send are sent encrypted to the enclave, and never leave it. The data cannot be queried directly, be it by the customers or the insurance company. The SGX enclave can then release the trained model to the insurance company, which can leverage it to learn various kinds of information about the customers. However, due to the privacy preserving properties of the model, the insurance company cannot retrieve information about any single customer.
+
+
+
+\section{Chosen approach}
+
+Gradient Boosted Decision Tree (GBDT) models have attracted a lot of attention in recent years and have successfully been used as a winning model in various machine learning competitions\footnote{\href{https://github.com/dmlc/xgboost/tree/master/demo\#machine-learning-challenge-winning-solutions}{https://github.com/dmlc/xgboost/tree/master/demo\#machine-learning-challenge-winning-solutions}}. GBDT models have been shown to be performant, and easily explainable due to their tree structure. In addition, research work (e.g. of Qinbin et al. (2020) \cite{dpgbdt} or Liu et al. (2018) \cite{liu}) has pushed GBDT models towards becoming privacy preserving by leveraging differential privacy. While differential privacy is not the only way to provide privacy (see Chapter ~\ref{chap:related_work}), its strong mathematical foundations and provable properties have made it a de-facto choice in many research work. Although our example setting justifies the attack model that we consider in Chapter ~\ref{chap:security_analysis}, this thesis focuses on the improvement and evaluation of the algorithmic parts: differential privacy applied to gradient boosted decision trees.
+
+\section{Contributions}
+
+While recent work shows encouraging results, developing gradient boosted decision tree models that satisfy $\epsilon$-differential privacy while remaining as accurate as non-private models is still an open challenge, especially when the training data is small, such as in the case of cyber risk evaluation. This thesis aims at addressing the current shortcomings of previous approachs, with the following contributions:
+
+\begin{enumerate} 
+	\item We propose a new decision tree induction method, called \textit{2-nodes}, that enhances accuracy over low-populated datasets, while satisfying $\epsilon$-differential privacy. In particular, we propose to make use of extra data in the tree induction process, by finding the optimal splitting point over a node and its sibling's data rather than just the node itself. We use this induction method in an implementation of DP-GBDT that we implement from the literature. This is covered in Chapter ~\ref{chap:2-nodes}.
+
+	\item In Chapter ~\ref{chap:synthetic_data}, and since real data is lacking, we propose a way to generate synthetic datasets that mimic cyber insurance questionnaire answers. To achieve this, we collect figures from cyber security reports written by different vendors in the security and insurance sector, and derive a Bayesian network that we use to compute the dataset's features and targets.
+
+	\item We show in Chapter ~\ref{sec:evaluation} that our model can successfully be used to accurately evaluate cyber risk on 4 different synthetic datasets, as well as improve predictions over low-populated datasets. 
+	
+	\item We explore privacy attacks on machine learning models in Chapter ~\ref{chap:security_analysis} and apply them to our DP-GBDT model, and show that in some cases it can reduce attack accuracy under strong privacy constraints.
+\end{enumerate}
+
