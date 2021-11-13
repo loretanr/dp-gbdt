@@ -27,6 +27,8 @@ code/stuff/github_gbdts/DPBoost/
 
 # datasets
 **/YearPredictionMSD.txt*
+**/YearPredictionMSD.train
+**/YearPredictionMSD.test
 
 # logs
 code/verification/outputs/*.log
