@@ -3233,7 +3233,7 @@ Running
     </rich_text>
 		<rich_text foreground="#ffffffff0000">still 0.00000 scores, very fuckin strange.</rich_text>
 	</node>
-	<node custom_icon_id="0" foreground="" is_bold="False" name="FINAL COUNTDOWN" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1636475167.98" ts_lastsave="1636638100.55" unique_id="60">
+	<node custom_icon_id="0" foreground="" is_bold="False" name="FINAL COUNTDOWN" prog_lang="custom-colors" readonly="False" tags="" ts_creation="1636475167.98" ts_lastsave="1636734893.7" unique_id="60">
 		<rich_text>TODO order
 
 </rich_text>
@@ -3253,18 +3253,19 @@ Running
    ◇ hardened enclave
    ◇ -&gt; measurements</rich_text>
 		<rich_text>
-   ◇ libftp
-   ◇ -&gt; measurements+ use_grid
+   </rich_text>
+		<rich_text foreground="#9090eeee9090">◇ libftp
+   ◇ -&gt; measurements+ use_grid</rich_text>
+		<rich_text>
 
-send intro + ???  hardening   to kevin
-
-send abstract + implementation to schmop
 
 </rich_text>
 		<rich_text foreground="#ffff00000000">========== Sa Abend, besser Fri</rich_text>
 		<rich_text>
 
-• overhaul evaluation
+• </rich_text>
+		<rich_text foreground="#9090eeee9090">overhaul evaluation</rich_text>
+		<rich_text>
 
 • overhaul implementation chapter
 
