@@ -102,7 +102,7 @@ def create_plot(filename, ymin, ymax):
     plt.xticks([elem for elem in privacy_budgets if elem != 0 and elem != 1.5 and elem != 2.5])
     plt.yticks([4,5,6,8] + np.arange(10, ymax+1, 5).tolist())
 
-    plt.legend(loc='upper right')
+    plt.legend(loc='best')
     plt.title('dataset={0!s}, samples={1!s}, trees={2!s}'.format(
         param_values['dataset'].split('_')[0], SAMPLES,
         data[data['nb_samples'] == SAMPLES].iloc[0]['nb_trees']))
