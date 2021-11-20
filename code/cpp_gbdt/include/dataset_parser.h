@@ -25,11 +25,6 @@ public:
         bool use_default_params = false);
     static DataSet *get_bcw(std::vector<ModelParams> &parameters, size_t num_samples, bool use_default_params);
 
-
-
-
-    static DataSet *get_YearPredictionMSD_test(std::vector<ModelParams> &parameters, 
-        size_t num_samples, bool use_default_params);
 };
 
 #endif // PARSER_H

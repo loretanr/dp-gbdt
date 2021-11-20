@@ -90,7 +90,7 @@ void DPEnsemble::train(DataSet *dataset)
                 // num_unused_rows / num_remaining_trees
                 number_of_rows = dataset->length / (params->nb_trees - tree_index);
             } else {
-                // line 8 of Algorithm 2 from the paper
+                // line 8 of Algorithm 2 from DPBoost paper
                 number_of_rows = (original_length * params->learning_rate *
                         std::pow(1 - params->learning_rate, tree_index)) / 
                         (1 - std::pow(1 - params->learning_rate, params->nb_trees));

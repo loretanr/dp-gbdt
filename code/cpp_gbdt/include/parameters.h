@@ -23,6 +23,8 @@ struct ModelParams {
     double l2_lambda = 0.1;
     std::vector<int> cat_idx;
     std::vector<int> num_idx;
+
+    // these are all for grid usage
     bool use_grid = false;
     std::tuple<double,double> grid_borders;
     double grid_step_size;

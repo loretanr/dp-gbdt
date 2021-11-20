@@ -15,8 +15,8 @@ extern bool VERIFICATION_MODE;
     - so far it only looks out for "?" as missing values, and then gets rid of those rows
     - you need to specify stuff like size, which features are numerical/categorical,
       which feature is the target and which features you want to drop.
-    - cat_values allows specifying how many values each categorical feature may have. This allows 
-      us to hide the fact whether some feature value is actually present in our dataset.
+    - cat_values is only relevant when using the grid. allows specifying how many values each 
+      categorical feature may have. This allows hiding whether feature values are actually present in our dataset.
 
     Given these requirements, it should be easy to add new datasets in the same 
     fashion as the ones below. But make sure to double check what you get.
@@ -48,25 +48,6 @@ DataSet *Parser::get_YearPredictionMSD(std::vector<ModelParams> &parameters,
     std::string file = "datasets/real/YearPredictionMSD.train";
     std::string name = "yearMSD";
     int num_rows = 463715;
-    int num_cols = 91;
-    std::shared_ptr<Regression> task(new Regression());
-    std::vector<int> num_idx(90);
-    std::iota(std::begin(num_idx)++, std::end(num_idx), 1); // num_idx = {1,...,90}
-    std::vector<int> cat_idx = {};
-    std::vector<int> target_idx = {0};
-    std::vector<int> drop_idx = {};
-    std::vector<int> cat_values = {}; // empty -> will be filled with the present values in the dataset
-
-    return parse_file(file, name, num_rows, num_cols, num_samples, task, num_idx,
-        cat_idx, cat_values, target_idx, drop_idx, parameters, use_default_params);
-}
-
-DataSet *Parser::get_YearPredictionMSD_test(std::vector<ModelParams> &parameters, 
-        size_t num_samples, bool use_default_params)
-{
-    std::string file = "datasets/real/YearPredictionMSD.train";
-    std::string name = "yearMSD";
-    int num_rows = 51630;
     int num_cols = 91;
     std::shared_ptr<Regression> task(new Regression());
     std::vector<int> num_idx(90);

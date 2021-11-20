@@ -10,7 +10,6 @@ public:
     virtual std::vector<double> compute_gradients(std::vector<double> &y, std::vector<double> &y_pred) = 0;
     virtual double compute_init_score(std::vector<double> &y) = 0;
     virtual double compute_rmse(std::vector<double> &y, std::vector<double> y_pred) = 0;
-    virtual double compute_mape(std::vector<double> &y, std::vector<double> y_pred) = 0;
 };
 
 
@@ -26,9 +25,6 @@ public:
 
     // RMSE
     virtual double compute_rmse(std::vector<double> &y, std::vector<double> y_pred);
-
-    // MAPE
-    virtual double compute_mape(std::vector<double> &y, std::vector<double> y_pred);
 };
 
 // uses Binomial Deviance as cost/loss function
@@ -44,9 +40,6 @@ public:
 
     // misclassification rate
     virtual double compute_rmse(std::vector<double> &y, std::vector<double> y_pred);
-
-    // MAPE
-    virtual double compute_mape(std::vector<double> &y, std::vector<double> y_pred);
 };
 
 

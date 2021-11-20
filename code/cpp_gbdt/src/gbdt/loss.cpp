@@ -46,14 +46,6 @@ double Regression::compute_rmse(std::vector<double> &y, std::vector<double> y_pr
     return rmse;
 }
 
-double Regression::compute_mape(std::vector<double> &y, std::vector<double> y_pred)
-{
-    // MAPE
-    for(size_t i=0; i<y.size(); i++) {
-        y_pred[i] = std::abs((y[i] - y_pred[i]) / y[i]);
-    }
-    return std::accumulate(y_pred.begin(),y_pred.end(), 0.0) * 100. / y_pred.size();
-}
 
 /* ---------- Binary Classification ---------- */
 
@@ -71,7 +63,6 @@ double BinaryClassification::compute_init_score(std::vector<double> &y)
             occurrences.insert({elem, 1});
         }
     }
-    // just need the smaller value   ????? TODO why
     std::set<double, std::greater<double>> occs;
     for(auto &elem : occurrences){
         occs.insert( (double) elem.second / y.size());
@@ -108,14 +99,6 @@ double BinaryClassification::compute_rmse(std::vector<double> &y, std::vector<do
         elem = (elem < 1.-elem) ? 0.0 : 1.0;
     }
 
-    // CLASSIFICATION BASELINE (zeroR) TODO REMOVE
-    // int count0 = std::count(y.begin(), y.end(), 0.0);
-    // int count1 = std::count(y.begin(), y.end(), 1.0);
-    // double majority = (count0 >= count1) ? 0.0 : 1.0;
-    // std::fill(y_pred.begin(),y_pred.end(), majority);
-
-    // std::cout << "1-preds: " << std::count(y_pred.begin(), y_pred.end(), 1.0) << std::endl;
-
     // misclassification rate
     std::vector<bool> correct_preds(y.size());
     for(size_t i=0; i<y.size();i++) {
@@ -123,9 +106,4 @@ double BinaryClassification::compute_rmse(std::vector<double> &y, std::vector<do
     }
     double true_preds = std::count(correct_preds.begin(), correct_preds.end(), true);
     return (1 - true_preds / y.size()) * 100;
-}
-
-double BinaryClassification::compute_mape(std::vector<double> &y, std::vector<double> y_pred)
-{
-    return 0;
 }

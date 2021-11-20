@@ -52,8 +52,8 @@ int Benchmark::main(int argc, char *argv[])
     // datasets.push_back(Parser::get_abalone(parameters, 300, false));
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_abalone(parameters, 1000, false));
-    // parameters.push_back(params);
-    // datasets.push_back(Parser::get_abalone(parameters, 4177, false));
+    parameters.push_back(params);
+    datasets.push_back(Parser::get_abalone(parameters, 4177, false));
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_adult(parameters, 300, false));
     // parameters.push_back(params);
@@ -62,10 +62,9 @@ int Benchmark::main(int argc, char *argv[])
     // datasets.push_back(Parser::get_adult(parameters, 5000, false));
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 300, false));
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 20000, false));
-    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 10000, true)); // medium yearMSD
-    // datasets.push_back(Parser::get_adult(parameters, 4000, true)); // medium adult
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 20000, false));
+
     // --------------------------------------
 
     for(size_t i=0; i<datasets.size(); i++) {
@@ -100,8 +99,10 @@ int Benchmark::main(int argc, char *argv[])
         for(size_t thread_id=0; thread_id<threads.size(); thread_id++){
             threads[thread_id] = std::thread(&DPEnsemble::train, &ensembles[thread_id], &(cv_inputs[thread_id]->train));
         }
+
+        // join once done
         for (auto &thread : threads) {
-            thread.join(); // join once done
+            thread.join();
         }
 
         /* compute scores */

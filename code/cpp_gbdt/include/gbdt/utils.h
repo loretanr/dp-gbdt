@@ -5,7 +5,6 @@
 #include <string>
 typedef std::vector<std::vector<double>> VVD;
 #include "parameters.h"
-// #include "data.h"
 
 
 // method declarations

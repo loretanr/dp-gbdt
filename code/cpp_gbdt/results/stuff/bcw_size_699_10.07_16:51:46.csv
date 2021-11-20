@@ -1,5 +1,0 @@
-dataset,nb_samples,nb_trees,use_dp,privacy_budget,mean,std,glc,gdf,mean_mape,std_mape
-bcw_size_699,683,40,false,0,92.821,2.88405,false,true,0,0
-bcw_size_699,683,40,true,1,67.7769,9.45264,false,true,0,0
-bcw_size_699,683,40,true,2,80.8201,2.23688,false,true,0,0
-bcw_size_699,683,40,true,10,89.1584,4.89925,false,true,0,0
