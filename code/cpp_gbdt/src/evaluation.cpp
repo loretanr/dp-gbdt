@@ -58,7 +58,7 @@ int Evaluation::main(int argc, char *argv[])
     std::string time_string = get_time_string();
     std::string dataset_name = dataset->name;
     int dataset_length = dataset->length;
-    std::string outfile_name = fmt::format("results/test/{}_{}.csv", dataset_name, time_string);
+    std::string outfile_name = fmt::format("results/TODO_create_me/{}_{}.csv", dataset_name, time_string);
     std::ofstream output;
     output.open(outfile_name);
     std::cout << "evaluation, writing results to " << outfile_name << std::endl;
