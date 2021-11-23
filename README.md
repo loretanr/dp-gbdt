@@ -4,13 +4,13 @@ This is the implementation of DP-GBDT as described in `resources/thesis.pdf` (ch
 
 ## Versions
 
-To keep the code clean there are 5 versions:
+To keep the code clean there exist 5 different versions:
 
-`python_gbdt`: This is the (moastly) patched version of the DP-GBDT reference implementation that was created by T. Giovanna.
+`python_gbdt`: This is the (mostly) patched version of the DP-GBDT reference implementation that was created by T. Giovanna.
 
 `cpp_gbdt`: the base C++ version. It does not run inside an enclave and is not hardened. It mainly exists for experimentation with the underlying algorithm. Several measures (e.g. multithreading) have been undertaken to boost its performance.
 
-`enclave_gbdt`: This is essentially cpp_gbdt but ported into an SGX enclave.
+`enclave_gbdt`: This is cpp_gbdt but ported into an SGX enclave.
 
 `hardened_gbdt`: the hardened version of cpp_gbdt. It reflects the minimum changes that are needed to achieve ε-differential privacy. The code does not run inside an SGX enclave.
 
@@ -24,7 +24,10 @@ as of right now:
   - **regression** can be performed on abalone & yearMSD
   - **classification** can be performed on the adult & BCW
   - though it is easy to add new datasets (have a look at _dataset_parser.cpp_)
-- The python_gbdt is missing the correct GDF functionality
+- python_gbdt is missing the correct GDF functionality
+- There are still small DP problems, such as
+  - init\_score is leaking information about what values are present in a dataset
+  - constant time floating point operations are only partially adopted
 
 
 ## Requirements
