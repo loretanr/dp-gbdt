@@ -17,17 +17,6 @@ To keep the code clean there exist 5 different versions:
 `hardened_sgx_gbdt`: the final combination of hardened_gbdt and enclave_gbdt.
 
 
-## Limitations
-as of right now:
-
-- C++ algorithm can do **regression** and **binary classification**.
-  - **regression** can be performed on abalone & yearMSD
-  - **classification** can be performed on the adult & BCW
-  - though it is easy to add new datasets (have a look at _dataset_parser.cpp_)
-- python_gbdt is missing the correct GDF functionality
-- There are still small DP problems, such as
-  - init\_score is leaking information about what values are present in a dataset
-  - constant time floating point operations are only partially adopted
 
 
 ## Requirements
@@ -73,15 +62,15 @@ make
 (./run --bench)
 ```
 
-## Python-DP-GBDT
+## Limitations
+as of right now:
 
-### Running
+- C++ algorithm can do **regression** and **binary classification**.
+  - **regression** can be performed on abalone & yearMSD
+  - **classification** can be performed on the adult & BCW
+  - though it is easy to add new datasets (have a look at _dataset_parser.cpp_)
+- python_gbdt is missing the correct GDF functionality
+- There are still small DP problems, such as
+  - init\_score is leaking information about what values are present in a dataset
+  - constant time floating point operations are only partially adopted
 
-- **Running python gbdt**
-```bash
-cd code/python_gbdt/
-python3 results/abalone/cross_val.py
-python3 verification/verification.py
-...
-```
-whichever you want to run
