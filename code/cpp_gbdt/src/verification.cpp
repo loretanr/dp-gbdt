@@ -36,8 +36,8 @@ int Verification::main(int argc, char *argv[])
     // "false" to the parsing function), or let the get_xy function
     // do that (it'll create and append some default ones to the vector)
     ModelParams params = create_default_params();
-    params.privacy_budget = 10;
-    params.nb_trees = 10;
+    params.privacy_budget = 2;
+    params.nb_trees = 5;
     params.gradient_filtering = false;
     params.balance_partition = true;
     params.leaf_clipping = true;
@@ -52,8 +52,8 @@ int Verification::main(int argc, char *argv[])
 
     parameters.push_back(params);
     datasets.push_back(Parser::get_abalone(parameters, 300, false));
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_adult(parameters, 320, false));
+    // parameters.push_back(params);
+    // datasets.push_back(Parser::get_adult(parameters, 320, false));
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
     // parameters.push_back(params);

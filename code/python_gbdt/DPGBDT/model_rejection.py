@@ -2,7 +2,7 @@
 # gtheo@ethz.ch
 """Implement ensemble of differentially private gradient boosted trees.
 
-Phoenix
+umbau zu 2nd split for thesis graph
 """
 
 import math
@@ -202,6 +202,11 @@ class GradientBoostingEnsemble:
     self.init_score = self.loss_.get_init_raw_predictions(
         X, self.init_)  # (n_samples, K)
     logger.debug('Training initialized with score: {}'.format(self.init_score[0]))
+    update_gradients = True
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=0)
+    logger.debug('Using {0:d} instances for training and {1:d} instances for '
+                 'validation'.format(len(X_train), len(X_test)))
 
     # Number of ensembles in the model
     nb_ensembles = int(np.ceil(self.nb_trees / self.nb_trees_per_ensemble))
@@ -220,6 +225,7 @@ class GradientBoostingEnsemble:
         tree_privacy_budget, privacy_budget_per_tree)
 
     early_stop_round = self.early_stop
+    prev_score = np.inf
 
     # Train all trees
     for tree_index in range(self.nb_trees):
@@ -236,8 +242,10 @@ class GradientBoostingEnsemble:
       current_tree_for_ensemble = tree_index % self.nb_trees_per_ensemble
       if current_tree_for_ensemble == 0:
         # Initialize the dataset and the gradients
-        X_ensemble = np.copy(X)
-        y_ensemble = np.copy(y)
+        X_ensemble = np.copy(X_train)
+        y_ensemble = np.copy(y_train)
+        prev_score = np.inf
+        update_gradients = True
         # gradient initialization will happen later in the per-class-loop
 
       if self.use_dp:
@@ -246,16 +254,16 @@ class GradientBoostingEnsemble:
           # All trees will receive same amount of samples
           if self.nb_trees % self.nb_trees_per_ensemble == 0:
             # Perfect split
-            number_of_rows = int(len(X_ensemble) / (self.nb_trees_per_ensemble - tree_index))
+            number_of_rows = int(len(X_train) / self.nb_trees_per_ensemble)
           else:
             # Partitioning data across ensembles
             if np.ceil(tree_index / self.nb_trees_per_ensemble) == np.ceil(
                 self.nb_trees / self.nb_trees_per_ensemble):
-              number_of_rows = int(len(X) / (
+              number_of_rows = int(len(X_train) / (
                   self.nb_trees % self.nb_trees_per_ensemble))
             else:
-              number_of_rows = int(len(X) / self.nb_trees_per_ensemble) + int(
-                  len(X) / (self.nb_trees % self.nb_trees_per_ensemble))
+              number_of_rows = int(len(X_train) / self.nb_trees_per_ensemble) + int(
+                  len(X_train) / (self.nb_trees % self.nb_trees_per_ensemble))
         else:
           # Line 8 of Algorithm 2 from the paper
           number_of_rows = int((len(X) * self.learning_rate * math.pow(
@@ -274,13 +282,20 @@ class GradientBoostingEnsemble:
                          'not get any training samples. Try using '
                          'balance_partition=True or change your parameters.')
           continue
+        elif number_of_rows > len(X_ensemble):
+          number_of_rows = len(X_ensemble)
 
         if(VERIFICATION_MODE):
           # deterministically select first <number_of_rows> rows
           rows = np.array([elem for elem in range(number_of_rows)])
         else:
           # Select <number_of_rows> rows at random from the ensemble dataset
-          rows = np.random.randint(len(X_ensemble), size=number_of_rows)
+          rows = np.random.choice(range(len(X_ensemble)),
+                                size=number_of_rows,
+                                replace=False)
+                                
+        X_tree = X_ensemble[rows, :]
+        y_tree = y_ensemble[rows]
 
         # train for each class a separate tree on the same rows.
         # In regression or binary classification, K has been set to one.
@@ -290,39 +305,27 @@ class GradientBoostingEnsemble:
             # First tree, start with initial scores (mean of labels)
             assert self.init_score is not None
             gradients = self.ComputeGradientForLossFunction(
-                y, self.init_score[:len(y)], kth_tree)
+                y_train, self.init_score[:len(y_train)], kth_tree)
           else:
             # Update gradients of all training instances on loss l
-            gradients = self.ComputeGradientForLossFunction(
-                y_ensemble, self.Predict(
-                    X_ensemble), kth_tree)  # type: ignore
+            if update_gradients:
+              gradients = self.ComputeGradientForLossFunction(
+                  y_ensemble, self.Predict(
+                      X_ensemble), kth_tree)  # type: ignore
 
           assert gradients is not None
           gradients_tree = gradients[rows]
-          X_tree = X_ensemble[rows, :]
-          y_tree = y_ensemble[rows]
 
           # Gradient based data filtering
-          gdf_count = len(y_tree)
-          # On multi-class deactivated as gradients are reused thus
-          # a row has to be used on neither of all K trees to be of effect
-          # which is very unlikely in practice.
-          if self.gradient_filtering and not self.loss_.is_multi_class:
-            norm_1_gradient = np.abs(gradients_tree)
-            rows_gbf = norm_1_gradient <= self.l2_threshold
-            X_tree = X_tree[rows_gbf, :]
-            y_tree = y_tree[rows_gbf]
-            gradients_tree = gradients_tree[rows_gbf]
-            # Get back the original row index from the first filtering
-            selected_rows = rows[rows_gbf]
-          else:
-            selected_rows = rows
-          
-          logger.info("GDF rejected ({}/{})".format(gdf_count - len(y_tree),gdf_count))
+          if self.gradient_filtering:
+            gradients_tree[
+                gradients_tree > self.l2_threshold] = self.l2_threshold
+            gradients_tree[
+                gradients_tree < -self.l2_threshold] = -self.l2_threshold
 
           logger.debug('Tree {0:d} will receive a budget of epsilon={1:f} and '
                        'train on {2:d} instances.'.format(
-              tree_index, tree_privacy_budget, len(X_tree)))
+              tree_index, tree_privacy_budget, len(X_ensemble)))
           # Fit a differentially private decision tree
           tree = DifferentiallyPrivateTree(
               tree_index,
@@ -387,20 +390,34 @@ class GradientBoostingEnsemble:
           k_trees.append(tree)
       self.trees.append(k_trees)
 
-      logger.info('Tree {0:d} done'.format(tree_index))
+      score = self.loss_(y_test, self.Predict(X_test))  # i.e. mse or deviance
+      logger.info('Decision tree {0:d} fit. Current score: {1:f} - Best '
+                  'score so far: {2:f}'.format(tree_index, score, prev_score))
 
-      if self.use_dp:
-        logger.debug(
-            'Success fitting tree {0:d} on {1:d} instances. Instances left '
-            'for the ensemble: {2:d}'.format(
-                tree_index, len(selected_rows), len(X) - len(
-                    selected_rows)))
-        X_ensemble = np.delete(X_ensemble, selected_rows, axis=0)
-        y_ensemble = np.delete(y_ensemble, selected_rows)
+      if score >= prev_score:
+        # This tree doesn't improve overall prediction quality, removing from
+        # model
+        # not reusing gradients in multi-class as they are class-dependent
+        update_gradients = self.loss_.is_multi_class
+        self.trees.pop()
+        if not self.use_dp:
+          self.early_stop -= 1
+          if self.early_stop == 0:
+            logger.info('Early stop kicked in. No improvement, stopping.')
+            break
       else:
-        early_stop_round = self.early_stop
-
-    cv_fold_counter += 1
+        update_gradients = True
+        prev_score = score
+        # Remove the selected rows from the ensemble's dataset
+        # The instances that were filtered out by GBF can still be used for the
+        # training of the next trees
+        if self.use_dp:
+          logger.debug(
+              'Success fitting tree {0:d} on {1:d} instances. Instances left '
+              'for the ensemble: {2:d}'.format(
+                  tree_index, len(rows), len(X_ensemble) - len(rows)))
+          X_ensemble = np.delete(X_ensemble, rows, axis=0)
+          y_ensemble = np.delete(y_ensemble, rows)
     return self
 
   def Predict(self, X: np.array) -> np.array:

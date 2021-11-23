@@ -18,9 +18,9 @@ from data.parser.parser import Parser
 from DPGBDT import estimator
 # from evaluation import estimator
 
-PRIVACY_BUDGET = 10
+PRIVACY_BUDGET = 2
 NB_SPLITS = 5 # number of CV folds
-NB_TREES = 10
+NB_TREES = 5
 MIN_SAMPLES_SPLIT = 2
 LEARNING_RATE = 0.1
 MAX_DEPTH = 6
@@ -105,6 +105,7 @@ if __name__ == '__main__':
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
     SAMPLES = [320]
+    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
