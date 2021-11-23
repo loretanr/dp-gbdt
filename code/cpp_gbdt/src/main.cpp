@@ -73,17 +73,11 @@ int main(int argc, char** argv)
     parameters.push_back(current_params);
 
     // Choose your dataset
-    // DataSet *dataset = Parser::get_abalone(parameters, 5000, false);
+    DataSet *dataset = Parser::get_abalone(parameters, 5000, false);
     // DataSet *dataset = Parser::get_bcw(parameters, 700, false);
-    DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 17000, false);
+    // DataSet *dataset = Parser::get_YearPredictionMSD(parameters, 17000, false);
 
     std::cout << dataset->name << std::endl;
-    // int count1 = std::count_if(dataset->y.begin(), dataset->y.end(),
-    //     [](double c){ return c == 0.0; });
-    // int count2 = std::count_if(dataset->y.begin(), dataset->y.end(),
-    //     [](double c){ return c == 1.0; });
-    // std::cout << "y 0's (" << count1 << ") y 1's (" << count2 << ")" << std::endl;
-    // std::cout << "-> zeroR = " << std::setprecision(4) << (double) std::max(count1, count2) / (double) dataset->length << std::endl;
 
     ModelParams params = parameters[0];
 
@@ -92,41 +86,34 @@ int main(int argc, char** argv)
         (*dataset).scale_X_columns(params);
     }
 
-    // if 5-fold cv itself is not consistent enough, can run it multiple times
-    int NUM_REPS = 1;
-
     std::vector<double> scores;
-    for(int i=0; i<NUM_REPS; i++){
 
-        // create cross validation inputs
-        std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
+    // create cross validation inputs
+    std::vector<TrainTestSplit *> cv_inputs = create_cross_validation_inputs(dataset, 5);
 
-        // do cross validation
-        for (auto split : cv_inputs) {
-            
-            if(params.scale_y){
-                split->train.scale_y(params, -1, 1);
-            }
+    // do cross validation
+    for (auto split : cv_inputs) {
+        
+        if(params.scale_y){
+            split->train.scale_y(params, -1, 1);
+        }
 
-            DPEnsemble ensemble = DPEnsemble(&params);
-            ensemble.train(&split->train);
-            
-            // predict with the test set
-            std::vector<double> y_pred = ensemble.predict(split->test.X);
+        DPEnsemble ensemble = DPEnsemble(&params);
+        ensemble.train(&split->train);
+        
+        // predict with the test set
+        std::vector<double> y_pred = ensemble.predict(split->test.X);
 
-            if(params.scale_y) {
-                inverse_scale_y(params, split->train.scaler, y_pred);
-            }
+        if(params.scale_y) {
+            inverse_scale_y(params, split->train.scaler, y_pred);
+        }
 
-            // compute score
-            double score = params.task->compute_rmse(split->test.y, y_pred);
+        // compute score
+        double score = params.task->compute_rmse(split->test.y, y_pred);
 
-            std::cout << score << " " << std::flush;
-            scores.push_back(score);
-            delete split;
-        } std::cout << std::endl;
-    }
-    // average score
-    std::cout << "total avg score (" << scores.size() << " ensembles): " << std::fixed << std::setprecision(4) <<
-        std::accumulate(scores.begin(), scores.end(), 0.0) / (double) scores.size() << std::endl;
+        std::cout << score << " " << std::flush;
+        scores.push_back(score);
+        delete split;
+    } std::cout << std::endl;
+
 }

@@ -293,8 +293,9 @@ class GradientBoostingEnsemble:
           rows = np.random.choice(range(len(X_ensemble)),
                                 size=number_of_rows,
                                 replace=False)
-          X_tree = X_ensemble[rows, :]
-          y_tree = y_ensemble[rows]
+                                
+        X_tree = X_ensemble[rows, :]
+        y_tree = y_ensemble[rows]
 
         # train for each class a separate tree on the same rows.
         # In regression or binary classification, K has been set to one.

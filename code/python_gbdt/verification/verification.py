@@ -15,16 +15,17 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.dummy import DummyClassifier
 
 from data.parser.parser import Parser
-from evaluation import estimator
+from DPGBDT import estimator
+# from evaluation import estimator
 
-PRIVACY_BUDGET = 100
+PRIVACY_BUDGET = 10
 NB_SPLITS = 5 # number of CV folds
-NB_TREES = 50
+NB_TREES = 10
 MIN_SAMPLES_SPLIT = 2
 LEARNING_RATE = 0.1
 MAX_DEPTH = 6
 GRADIENT_FILTERING = False
-LEAF_CLIPPING = False
+LEAF_CLIPPING = True
 BALANCE_PARTITION = True
 
 def get_dataset_name(num_samples):
@@ -39,7 +40,6 @@ if __name__ == '__main__':
     DATASET = 'abalone'
     parser = Parser(dataset=DATASET)
     SAMPLES = [300]
-    SAMPLES = []
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0
@@ -104,9 +104,7 @@ if __name__ == '__main__':
     DATASET = 'adult'
     parser = Parser(dataset=DATASET)
     # SAMPLES = [300,1000]
-    SAMPLES = []
-    # SAMPLES = [320]
-    SAMPLES = [10000]
+    SAMPLES = [320]
 
     for num_samples in SAMPLES:
         DPGBDT.model.cv_fold_counter = 0

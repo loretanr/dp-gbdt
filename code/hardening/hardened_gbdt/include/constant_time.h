@@ -3,6 +3,11 @@
 
 #include <vector>
 
+// extern "C" {
+//     #include "ftfp.h"
+// }
+
+
 
 // note, -O0 turns off inlining anyways!
 #define DISABLE_INLINE true
@@ -77,6 +82,12 @@ namespace constant_time
         }
     }
 
+
+    // bool smaller(double a, double b) {
+    //     fixed aa = fix_convert_from_double(a);
+    //     fixed bb = fix_convert_from_double(b);
+    //     return (bool) fix_lt(a, b);
+    // }
 
 }
 

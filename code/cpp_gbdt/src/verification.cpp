@@ -37,7 +37,7 @@ int Verification::main(int argc, char *argv[])
     // do that (it'll create and append some default ones to the vector)
     ModelParams params = create_default_params();
     params.privacy_budget = 10;
-    params.nb_trees = 10;                // TODO those are shit
+    params.nb_trees = 10;
     params.gradient_filtering = false;
     params.balance_partition = true;
     params.leaf_clipping = true;
@@ -50,16 +50,14 @@ int Verification::main(int argc, char *argv[])
     params.scale_X_percentile = 95;
     params.scale_X_privacy_budget = 0.4;
 
-    // parameters.push_back(params);
-    // datasets.push_back(Parser::get_adult(parameters, 300, false)); parameters.push_back(params);
-    // datasets.push_back(Parser::get_adult(parameters, 320, false)); // small adult
+    parameters.push_back(params);
+    datasets.push_back(Parser::get_abalone(parameters, 300, false));
+    parameters.push_back(params);
+    datasets.push_back(Parser::get_adult(parameters, 320, false));
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_abalone(parameters, 300, false)); // full abalone
-    parameters.push_back(params);
-    datasets.push_back(Parser::get_YearPredictionMSD(parameters, 2000, false)); // small yearMSD
-    // datasets.push_back(Parser::get_adult(parameters, 10000, false)); // small adult
     // parameters.push_back(params);
-    // datasets.push_back(Parser::get_abalone(parameters, 4177, false)); // full abalone
+    // datasets.push_back(Parser::get_YearPredictionMSD(parameters, 2000, false)); // small yearMSD
     // --------------------------------------
 
     // use_dp (in combination with VERIFICATION_MODE, which disables dataset shuffling
