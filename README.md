@@ -1,18 +1,30 @@
 # Enclave hardening for private ML
 
-todo
+This is the implementation of DP-GBDT as described in `resources/thesis.pdf` (chapters 4,5 and 6 mainly)
 
-WIP: repo for sharing and backup
-- Happy for all kinds of feedback
+## Versions
+
+To keep the code clean there are 5 versions:
+
+`python_gbdt`: This is the (moastly) patched version of the DP-GBDT reference implementation that was created by T. Giovanna.
+
+`cpp_gbdt`: the base C++ version. It does not run inside an enclave and is not hardened. It mainly exists for experimentation with the underlying algorithm. Several measures (e.g. multithreading) have been undertaken to boost its performance.
+
+`enclave_gbdt`: This is essentially cpp_gbdt but ported into an SGX enclave.
+
+`hardened_gbdt`: the hardened version of cpp_gbdt. It reflects the minimum changes that are needed to achieve ε-differential privacy. The code does not run inside an SGX enclave.
+
+`hardened_sgx_gbdt`: the final combination of hardened_gbdt and enclave_gbdt.
+
 
 ## Limitations
 as of right now:
-- The python implementation is lacking some bugfixes that we did in the C++ code.
-  - Will apply these changes soon though
+
 - C++ algorithm can do **regression** and **binary classification**.
   - **regression** can be performed on abalone & yearMSD
-  - **classification** can be performed on the adult dataset
-  - though it should be easy to add new datasets (have a look at _dataset_parser.cpp_)
+  - **classification** can be performed on the adult & BCW
+  - though it is easy to add new datasets (have a look at _dataset_parser.cpp_)
+- The python_gbdt is missing the correct GDF functionality
 
 
 ## Requirements
