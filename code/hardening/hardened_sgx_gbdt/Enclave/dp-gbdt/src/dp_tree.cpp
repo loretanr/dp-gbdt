@@ -204,9 +204,9 @@ TreeNode *DPTree::find_best_split(VVD &X_transposed, std::vector<double> &gradie
         }
     }
 
-    // choose a split using the exponential mechanism                       // TODO check all other location for const time
-    int index = exponential_mechanism(probabilities);                       // TODO return a split candidate here, very inefficient
-                                                                            // or is it that bad ? überlege nomol
+    // choose a split using the exponential mechanism
+    int index = exponential_mechanism(probabilities);
+
     // start by constructing a leaf node
     TreeNode *node = make_leaf_node(current_depth, live_samples);
 

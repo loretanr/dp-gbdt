@@ -19,7 +19,6 @@ double Regression::compute_init_score(std::vector<double> &y)
 
 std::vector<double> Regression::compute_gradients(std::vector<double> &y, std::vector<double> &y_pred)
     {
-        // TODO negative or positive gradient? what is this?
         std::vector<double> gradients(y.size());
         for (size_t i=0; i<y.size(); i++) {
             gradients[i] = y_pred[i] - y[i];

@@ -343,7 +343,7 @@ int DPTree::exponential_mechanism(vector<SplitCandidate> &probs)
     // all values will be in [0,1]
     std::partial_sum(probabilities.begin(), probabilities.end(), partials.begin());
 
-    double rand01 = ((double) std::rand() / (RAND_MAX)); // [0,1] sollte nicht schiefgehen können TODO TODO
+    double rand01 = ((double) std::rand() / (RAND_MAX));
 
     // try to find a candidate at least 10 times before giving up and making the node a leaf node
     for (int tries=0; tries<10; tries++) {

@@ -80,7 +80,7 @@ if __name__ == '__main__':
               model_params.get('learning_rate'),
               n_classes=len(set(y)) if task == 'classification' else None,
               gradient_filtering=True,
-              leaf_clipping=False,   # TODO implement cpp, false for now
+              leaf_clipping=False,
               max_leaves=model_params.get('max_leaves'),
               min_samples_split=min_samples_split,
               balance_partition=model_params.get('balance_partition'),

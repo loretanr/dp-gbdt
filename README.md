@@ -36,7 +36,7 @@ export PYTHONPATH=$PYTHONPATH:/path/to/.../code/python_gbdt
 
 Components:
 - **main.cpp**
-If you just want to play around with different parameters, different logging levels etc. you can do this in here. Use `make`, then `./run`.
+If you just want to play around with different parameters, different logging levels etc. this is the place to do it. Use `make`, then `./run`.
 Note, this version does not use threads, to make stuff obvious to debug. So it's naturally slower.
 - **benchmark.cpp**
 this component demonstrates the potential speed of the CPP implementation. It e.g. takes advantage of multithreading. To use it, adjust _benchmark.cpp_ according to your needs, compile the project with `make fast`, then do `./run --bench`.
