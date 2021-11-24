@@ -6,7 +6,7 @@ This is the implementation of DP-GBDT as described in `resources/thesis.pdf` (ch
 
 To keep the code clean there exist 5 different versions:
 
-`python_gbdt`: This is the (mostly) patched version of the DP-GBDT reference implementation that was created by T. Giovanna.
+`python_gbdt`: This is the (mostly) patched version of the DP-GBDT reference implementation that was created by T. Giovanna (`resources/theo_thesis.pdf`).
 
 `cpp_gbdt`: the base C++ version. It does not run inside an enclave and is not hardened. It mainly exists for experimentation with the underlying algorithm. Several measures (e.g. multithreading) have been undertaken to boost its performance.
 
@@ -66,11 +66,12 @@ make
 as of right now:
 
 - C++ algorithm can do **regression** and **binary classification**.
-  - **regression** can be performed on abalone & yearMSD
-  - **classification** can be performed on the adult & BCW
-  - though it is easy to add new datasets (have a look at _dataset_parser.cpp_)
-- python_gbdt is missing the correct GDF functionality
-- There are still small DP problems, such as
+  - **regression** can be performed on abalone & yearMSD datasets
+  - **classification** can be performed on the adult & BCW dataset
+  - but it is easy to add new datasets (have a look at _dataset_parser.cpp_)
+- python_gbdt's GDF functionality is not correct
+- There are still small DP problems in all versions, such as
   - init\_score is leaking information about what values are present in a dataset
-  - constant time floating point operations are only partially adopted
+  - the partial use of constant-time floating point operations has only been explored in `hardened_gbdt`
+    - would be quite a task to use that everywhere
 
