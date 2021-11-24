@@ -1,7 +1,0 @@
-<map id="DPTree::_predict" name="DPTree::_predict">
-<area shape="rect" id="node2" href="$class_d_p_tree.html#a1e28d69924f6d57ea7e57ad8ee138f42" title="DPTree::predict_tree" alt="" coords="175,42,317,69"/>
-<area shape="rect" id="node3" href="$class_d_p_ensemble.html#a4c4302580bdbeaa4ca2c2091cad018c5" title="DPEnsemble::predict\l_ensemble" alt="" coords="365,35,512,76"/>
-<area shape="rect" id="node4" href="$class_d_p_ensemble.html#a2b446f94f9da238cae22580813c91196" title="DPEnsemble::update\l_gradients" alt="" coords="560,5,707,47"/>
-<area shape="rect" id="node6" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="935,46,985,73"/>
-<area shape="rect" id="node5" href="$class_d_p_ensemble.html#a1652b5fde834bfb18416ebf438d3e10a" title="DPEnsemble::train" alt="" coords="755,17,887,43"/>
-</map>

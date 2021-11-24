@@ -1,6 +1,0 @@
-<map id="Laplace::return_a_random_variable" name="Laplace::return_a_random_variable">
-<area shape="rect" id="node2" href="$class_d_p_tree.html#a468d249a3e55f1527e50daf13e550c79" title="DPTree::add_laplacian\l_noise" alt="" coords="225,5,380,47"/>
-<area shape="rect" id="node3" href="$class_d_p_tree.html#a82b9507f4f5d056b98f40871b304f943" title="DPTree::fit" alt="" coords="428,13,515,39"/>
-<area shape="rect" id="node4" href="$class_d_p_ensemble.html#a1652b5fde834bfb18416ebf438d3e10a" title="DPEnsemble::train" alt="" coords="563,13,695,39"/>
-<area shape="rect" id="node5" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="743,13,793,39"/>
-</map>

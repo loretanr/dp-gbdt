@@ -33,7 +33,7 @@ std::vector<double> Regression::compute_gradients(std::vector<double> &y, std::v
         return gradients;
     }
     
-double Regression::compute_rmse(std::vector<double> &y, std::vector<double> y_pred)
+double Regression::compute_score(std::vector<double> &y, std::vector<double> y_pred)
 {
     // RMSE
     std::transform(y.begin(), y.end(), 
@@ -89,7 +89,7 @@ std::vector<double> BinaryClassification::compute_gradients(std::vector<double> 
         return gradients;
     }
 
-double BinaryClassification::compute_rmse(std::vector<double> &y, std::vector<double> y_pred)
+double BinaryClassification::compute_score(std::vector<double> &y, std::vector<double> y_pred)
 {
     // classification task -> transform continuous predictions back to labels
     std::transform(y_pred.begin(), y_pred.end(), // expit

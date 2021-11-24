@@ -117,7 +117,7 @@ int Evaluation::main(int argc, char *argv[])
             }
 
             // compute score            
-            double score = param.task->compute_rmse(split->test.y, y_pred);
+            double score = param.task->compute_score(split->test.y, y_pred);
             std::cout << std::setprecision(9) << score << " " << std::flush;
             scores.push_back(score);
             delete split;

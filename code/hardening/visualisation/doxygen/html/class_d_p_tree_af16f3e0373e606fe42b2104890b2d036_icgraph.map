@@ -1,8 +1,0 @@
-<map id="DPTree::samples_left_right_partition" name="DPTree::samples_left_right_partition">
-<area shape="rect" id="node2" href="$class_d_p_tree.html#a54cea43a3929249de4be25f607a16339" title="DPTree::make_tree_dfs" alt="" coords="613,13,775,39"/>
-<area shape="rect" id="node6" href="$class_d_p_tree.html#ab9426a6ac2e5122e29ecbb6e9c4cd050" title="DPTree::compute_gain" alt="" coords="203,38,359,65"/>
-<area shape="rect" id="node3" href="$class_d_p_tree.html#a82b9507f4f5d056b98f40871b304f943" title="DPTree::fit" alt="" coords="823,13,909,39"/>
-<area shape="rect" id="node4" href="$class_d_p_ensemble.html#a1652b5fde834bfb18416ebf438d3e10a" title="DPEnsemble::train" alt="" coords="957,13,1089,39"/>
-<area shape="rect" id="node5" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title="main" alt="" coords="1137,13,1188,39"/>
-<area shape="rect" id="node7" href="$class_d_p_tree.html#ad7f8755be37ad10cf104fba2076dce5e" title="DPTree::find_best_split" alt="" coords="407,38,565,65"/>
-</map>

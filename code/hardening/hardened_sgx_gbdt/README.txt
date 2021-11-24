@@ -1,3 +1,16 @@
+Note:
+
+This code can be run in a VM in simulation mode, however, in that setting I couldn't get the only existing debugger for sgx (sgx-gdb) to work. And you can't really develop anything if you're not able to see what's going on inside the enclave.
+
+Therefore I really recommend running this on a native linux installation
+
+    Check the sgxsdk install guides for corresponding information
+
+Further, once the sdk is installed, I'd first try to run one of the sample enclaves included in sgxsdk.
+
+Once that works, you can use a softlink such that this project here finds the sdk.
+
+At this point you can use the commands below.
 
 ---------------------------------------------
 How to Build/Execute the C++11 sample program
