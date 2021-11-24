@@ -6,7 +6,7 @@ This is the implementation of DP-GBDT as described in `resources/thesis.pdf` (ch
 
 To keep the code clean there exist 5 different versions:
 
-`python_gbdt`: This is the (mostly) patched version of the DP-GBDT reference implementation that was created by T. Giovanna (`resources/theo_thesis.pdf`).
+`python_gbdt`: This is the (mostly) patched version of the DP-GBDT reference implementation that was created by T. Giovanna (resources/theo_thesis.pdf).
 
 `cpp_gbdt`: the base C++ version. It does not run inside an enclave and is not hardened. It mainly exists for experimentation with the underlying algorithm. Several measures (e.g. multithreading) have been undertaken to boost its performance.
 
@@ -37,7 +37,7 @@ export PYTHONPATH=$PYTHONPATH:/path/to/.../code/python_gbdt
 Components:
 - **main.cpp**
 If you just want to play around with different parameters, different logging levels etc. this is the place to do it. Use `make`, then `./run`.
-Note, this version does not use threads, to make stuff obvious to debug. So it's naturally slower.
+Note, this version does not use multithreading to make stuff obvious to debug. So it's naturally slower.
 - **benchmark.cpp**
 this component demonstrates the potential speed of the CPP implementation. It e.g. takes advantage of multithreading. To use it, adjust _benchmark.cpp_ according to your needs, compile the project with `make fast`, then do `./run --bench`.
 - **evaluation.cpp**
@@ -63,9 +63,8 @@ make
 ```
 
 ## Limitations
-as of right now:
 
-- C++ algorithm can do **regression** and **binary classification**.
+- the C++ implementations can only do **regression** and **binary classification**.
   - **regression** can be performed on abalone & yearMSD datasets
   - **classification** can be performed on the adult & BCW dataset
   - but it is easy to add new datasets (have a look at _dataset_parser.cpp_)
