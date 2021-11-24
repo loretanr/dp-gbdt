@@ -39,8 +39,6 @@ int Evaluation::main(int argc, char *argv[])
     current_params.min_samples_split = 2;
     current_params.learning_rate = 0.1;
     current_params.max_depth = 6;
-    current_params.use_grid = false;
-    current_params.scale_X = false;
 
     parameters.push_back(current_params);
     // --------------------------------------
@@ -67,11 +65,6 @@ int Evaluation::main(int argc, char *argv[])
     // currently we use the same folds for all budgets. Not sure whether that's good or bad.
 
     ModelParams param = parameters[0];
-
-    if(param.use_grid and param.scale_X) {
-            param.privacy_budget -= param.scale_X_privacy_budget;
-            (*dataset).scale_X_columns(param);
-        }
 
     // run the evaluations
     for(auto budget : budgets) {

@@ -27,7 +27,6 @@ private:
     ModelParams *params;
     DataSet *dataset;
     double init_score;
-    std::vector<double> grid;
 
     // methods
     void update_gradients(std::vector<double> &gradients, int tree_index);

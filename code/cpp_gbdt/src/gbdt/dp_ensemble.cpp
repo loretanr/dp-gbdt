@@ -24,16 +24,6 @@ DPEnsemble::DPEnsemble(ModelParams *parameters) : params(parameters)
         params->use_dp = false;
         params->privacy_budget = 0;
     }
-
-    // prepare the linspace grid
-    if(params->use_grid) {
-        double grid_range = std::get<1>(params->grid_borders) - std::get<0>(params->grid_borders);
-        double step_size = params->grid_step_size;
-        int grid_size = (int) grid_range / step_size;
-        this->grid = std::vector<double>(grid_size,0);
-        int counter = 0;
-        std::generate(this->grid.begin(), this->grid.end(), [&counter, &step_size]() mutable { return counter++ * step_size; });
-    }
 }
     
 DPEnsemble::~DPEnsemble() {
@@ -162,7 +152,7 @@ void DPEnsemble::train(DataSet *dataset)
 
             // build tree
             LOG_INFO("Building dp-tree-{1} using {2} samples...", tree_index, tree_dataset.length);
-            DPTree tree = DPTree(params, &tree_params, &tree_dataset, tree_index, this->grid);
+            DPTree tree = DPTree(params, &tree_params, &tree_dataset, tree_index);
             // DPTree tree = DPTree(params, &tree_params, dataset, tree_index);
             tree.fit();
             trees.push_back(tree);
@@ -177,7 +167,7 @@ void DPEnsemble::train(DataSet *dataset)
 
             // build tree
             LOG_INFO("Building non-dp-tree {1} using {2} samples...", tree_index, dataset->length);
-            DPTree tree = DPTree(params, &tree_params, dataset, tree_index, this->grid);
+            DPTree tree = DPTree(params, &tree_params, dataset, tree_index);
             tree.fit();
             trees.push_back(tree);
         }

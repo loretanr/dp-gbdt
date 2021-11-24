@@ -242,34 +242,6 @@ DataSet *Parser::parse_file(std::string dataset_file, std::string dataset_name, 
     DataSet *dataset = new DataSet(X,y);
     dataset->name = std::string(dataset_name) + std::string("_size_") + std::to_string(num_samples);
 
-    // adjust cat_values if necessary
-    if(cat_values.empty()) {
-        for (size_t i=0; i<mappings.size()-1; i++){
-            auto map = mappings[i];
-            std::vector<double> keys;
-            if (std::find(cat_idx.begin(), cat_idx.end(), i) == cat_idx.end()){
-                parameters.back().cat_values.push_back(keys);
-                continue;
-            }
-            for(auto it = map.begin(); it != map.end(); it++){
-                keys.push_back(it->second);
-            }
-            parameters.back().cat_values.push_back(keys);
-        }
-    } else {
-        for(int i=0; i<num_cols; i++) {
-            std::vector<double> keys;
-            if (std::find(cat_idx.begin(), cat_idx.end(), i) == cat_idx.end()){
-                parameters.back().cat_values.push_back(keys);
-                continue;
-            }
-            for(double j=0.0; j<cat_values[i]; j++){
-                keys.push_back(j);
-            }
-            parameters.back().cat_values.push_back(keys);
-        }
-    }
-
     parameters.back().num_idx = num_idx;
     parameters.back().cat_idx = cat_idx;
 

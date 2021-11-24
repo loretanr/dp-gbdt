@@ -37,7 +37,6 @@ int Benchmark::main(int argc, char *argv[])
     // do that (it'll create and append some default ones to the vector)
     ModelParams params;
     params.use_dp = true;
-    params.use_grid = false;
     params.privacy_budget = 10;
     params.nb_trees = 20;
     params.leaf_clipping = true;
@@ -46,7 +45,6 @@ int Benchmark::main(int argc, char *argv[])
     params.min_samples_split = 2;
     params.learning_rate = 0.1;
     params.max_depth = 6;
-    params.scale_X = false;
 
     // parameters.push_back(params);
     // datasets.push_back(Parser::get_abalone(parameters, 300, false));
@@ -72,11 +70,6 @@ int Benchmark::main(int argc, char *argv[])
         DataSet *dataset = datasets[i];
         ModelParams &param = parameters[i];
         std::cout << dataset->name << std::endl;
-
-        if(param.use_grid and param.scale_X) {
-            param.privacy_budget -= param.scale_X_privacy_budget;
-            (*dataset).scale_X_columns(param);
-        }
 
         /* threaded cross validation */
 

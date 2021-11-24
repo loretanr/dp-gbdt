@@ -16,12 +16,11 @@ using namespace std;
 
 /** Constructors */
 
-DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index, std::vector<double> grid): 
+DPTree::DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index): 
     params(params),
     tree_params(tree_params), 
     dataset(dataset),
-    tree_index(tree_index),
-    grid(grid) {}
+    tree_index(tree_index) {}
 
 DPTree::~DPTree() {}
 
@@ -188,18 +187,9 @@ TreeNode *DPTree::find_best_split(VVD &X_live, vector<double> &gradients_live, i
     // iterate over features
     for (int feature_index=0; feature_index < dataset->num_x_cols; feature_index++) {
         bool categorical = std::find((params->cat_idx).begin(), (params->cat_idx).end(), feature_index) != (params->cat_idx).end();
-        std::vector<double> splits;
         std::set<double> unique;
-        if(params->use_grid) {
-            if(categorical){
-                splits = params->cat_values[feature_index];
-            } else {
-                splits = this->grid;
-            }
-        } else {
-            splits = X_live[feature_index];
-        }
-        for (double feature_value : splits) {
+        
+        for (double feature_value : X_live[feature_index]) {
             if (std::get<1>(unique.insert(feature_value)) == false){
                 // already had that value, will never happen in grid
                 continue;

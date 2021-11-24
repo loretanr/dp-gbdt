@@ -23,15 +23,6 @@ struct ModelParams {
     double l2_lambda = 0.1;
     std::vector<int> cat_idx;
     std::vector<int> num_idx;
-
-    // these are all for grid usage
-    bool use_grid = false;
-    std::tuple<double,double> grid_borders;
-    double grid_step_size;
-    std::vector<std::vector<double>> cat_values;
-    bool scale_X = false;
-    double scale_X_percentile = 95;
-    double scale_X_privacy_budget = 0.4;
 };
 
 // each tree has these additional parameters

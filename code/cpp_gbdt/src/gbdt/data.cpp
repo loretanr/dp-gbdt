@@ -148,50 +148,6 @@ std::tuple<double,double> dp_confidence_interval(std::vector<double> &samples, d
 }
 
 
-// scale numerical features of X to fit our grid borders
-void DataSet::scale_X_columns(ModelParams &params)
-{
-    // in order to legally scale X into our grid, we first need to (dp-)compute 
-    // the [e.g. 95%] percentile borders, and clip all outliers.
-    for(int col=0; col<num_x_cols; col++){
-
-        // ignore categorical columns
-        if(std::find(params.num_idx.begin(), params.num_idx.end(), col) == params.num_idx.end()){
-            continue;
-        }
-
-        // get the column
-        std::vector<double> column;
-        for(int row=0; row<length; row++) {
-            column.push_back(X[row][col]);
-        }
-
-        // compute percentile borders on our data
-        std::tuple<double,double> borders = dp_confidence_interval(column, params.scale_X_percentile, params.scale_X_privacy_budget);
-        double lower = std::get<0>(borders);
-        double upper = std::get<1>(borders);
-
-        // clip outliers
-        for(int row=0; row<length; row++) {
-            X[row][col] = clamp(X[row][col], lower, upper);
-        }
-
-        // now we should be able to safely scale the feature into our grid
-        double min_val = std::numeric_limits<double>::max();
-        double max_val = std::numeric_limits<double>::min();
-        for(int row=0; row<length; row++) {
-            min_val = std::min(min_val, X[row][col]);
-            max_val = std::max(max_val, X[row][col]);
-        }
-        lower = std::get<0>(params.grid_borders);
-        upper = std::get<1>(params.grid_borders);
-        for(int row=0; row<length; row++) {
-            X[row][col] = (X[row][col]-min_val)/(max_val-min_val)*(upper-lower)+lower;
-        }
-    }
-}
-
-
 TrainTestSplit train_test_split_random(DataSet &dataset, double train_ratio, bool shuffle)
 {
     if(shuffle) {

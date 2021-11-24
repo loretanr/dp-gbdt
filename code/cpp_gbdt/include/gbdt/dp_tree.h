@@ -29,7 +29,6 @@ private:
     DataSet *dataset;
     size_t tree_index;
     std::vector<TreeNode *> leaves;
-    std::vector<double> grid;
 
     // methods
     TreeNode *make_tree_DFS(int current_depth, std::vector<int> live_samples);
@@ -45,7 +44,7 @@ private:
 
 public:
     // constructors
-    DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index, std::vector<double> grid);
+    DPTree(ModelParams *params, TreeParams *tree_params, DataSet *dataset, size_t tree_index);
     ~DPTree();
 
     // fields

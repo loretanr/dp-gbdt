@@ -63,13 +63,6 @@ int main(int argc, char** argv)
     current_params.leaf_clipping = true;
     current_params.scale_y = false;
 
-    current_params.use_grid = false;
-    current_params.grid_borders = std::make_tuple(0,1);
-    current_params.grid_step_size = 0.001;
-    current_params.scale_X = false;
-    current_params.scale_X_percentile = 95;
-    current_params.scale_X_privacy_budget = 0.4;
-
     parameters.push_back(current_params);
 
     // Choose your dataset
@@ -80,11 +73,6 @@ int main(int argc, char** argv)
     std::cout << dataset->name << std::endl;
 
     ModelParams params = parameters[0];
-
-    if(params.use_grid and params.scale_X) {
-        params.privacy_budget -= params.scale_X_privacy_budget;
-        (*dataset).scale_X_columns(params);
-    }
 
     std::vector<double> scores;
 
